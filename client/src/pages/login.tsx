@@ -12,6 +12,7 @@ import NextLink from "next/link";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
+  console.log(router);
   const [, login] = useLoginMutation();
   return (
     <Wrapper variant="small">
@@ -28,7 +29,12 @@ export const Login: React.FC<{}> = ({}) => {
             setErrors(toErrorMap(response.data.login.errors));
           } else if (response.data?.login.user) {
             // work we get the user!
-            router.push("/");
+            // If login, push to the previoius page
+            if (typeof router.query.next === "string") {
+              router.push(router.query.next);
+            } else {
+              router.push("/");
+            }
           }
         }}
       >

@@ -12,8 +12,10 @@ import { createUrqlClient } from "../../util/createUrqlClient";
 import { toErrorMap } from "../../util/toErrorMap";
 import NextLink from "next/link";
 
-export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
+export const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
+  // token is attached here, in the url as the file name indicated http://localhost:3000/change-password/8897c920-3e19-48d2-b24e-cf1e068445d4
+  console.log(router.query);
   const [, changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState("");
   return (
@@ -26,7 +28,8 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
           //   console.log(values);
           const response = await changePassword({
             newPassword: values.newPassword,
-            token,
+            token:
+              typeof router.query.token === "string" ? router.query.token : "",
           });
           // └ has to match what defined in graphqlmutation
           if (response.data?.changePassword.errors) {
@@ -80,10 +83,12 @@ export const ChangePassword: NextPage<{ token: string }> = ({ token }) => {
   );
 };
 
-ChangePassword.getInitialProps = ({ query }) => {
-  return {
-    token: query.token as string,
-  };
-};
+// page without the getInitialProps will be optimized by next, so if no need, better not use it
+// we need when we want to ssr based on query parameter which is the purpose of getinitial props
+// ChangePassword.getInitialProps = ({ query }) => {
+//   return {
+//     token: query.token as string,
+//   };
+// };
 
 export default withUrqlClient(createUrqlClient)(ChangePassword);

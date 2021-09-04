@@ -1,4 +1,9 @@
-import { dedupExchange, fetchExchange } from "urql";
+import {
+  dedupExchange,
+  Exchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
 import {
   LogoutMutation,
   MeQuery,
@@ -6,9 +11,65 @@ import {
   LoginMutation,
   RegisterMutation,
 } from "../generated/graphql";
-import { cacheExchange } from "@urql/exchange-graphcache";
+import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
 import { betterUpdateQuery } from "./betterUpdateQuery";
+import { pipe, tap } from "wonka";
+import Router from "next/router";
 
+const errorExchange: Exchange =
+  ({ forward }) =>
+  (ops$) => {
+    return pipe(
+      forward(ops$),
+      tap(({ error }) => {
+        if (error?.message.includes("not authenticated")) {
+          //replace is for redirection
+          Router.replace("/login");
+        }
+      })
+    );
+  };
+
+const cursorPagination = (): Resolver => {
+  return (_parent, fieldArgs, cache, info) => {
+    const { parentKey: entityKey, fieldName } = info; //parentKey = Query, fieldName = posts
+    console.log("entityKey, fieldName");
+    console.log(entityKey, fieldName);
+    const allFields = cache.inspectFields(entityKey); // field in the cache could be me from meQuery as well
+    console.log("allFields");
+    console.log(allFields);
+    const fieldInfos = allFields.filter((info) => info.fieldName === fieldName); //filter only the posts fieldname
+    console.log("fieldInfos");
+    console.log(fieldInfos);
+    const size = fieldInfos.length; //if size - 0, no cache with field name = posts -> no posts yet? pa wa
+    console.log("size");
+    console.log(size);
+    if (size === 0) {
+      return undefined;
+    }
+
+    const fieldKey = `${fieldName}(${stringifyVariables(fieldArgs)})`; //posts({"cursor":"192394123412", "limit":10})
+    const isItInTheCache = cache.resolve(entityKey, fieldKey);
+    info.partial = !isItInTheCache;
+    // let hasMore = true;
+    const results: string[] = [];
+    fieldInfos.forEach((fi) => {
+      const data = cache.resolve(entityKey, fi.fieldKey) as string[]; //meaning for the query, get posts\
+      results.push(...data);
+    });
+    console.log("______");
+    console.log("results");
+    console.log(results);
+    console.log("++++++");
+    return results;
+
+    // return {
+    //   __typename: "PaginatedPosts",
+    //   hasMore,
+    //   posts: results,
+    // };
+  };
+};
 export const createUrqlClient = (ssrExchange: any) => ({
   url: "http://localhost:4000/graphql",
   fetchOptions: {
@@ -17,6 +78,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      resolvers: {
+        Query: {
+          posts: cursorPagination(), //the name "posts" match what we have in posts in posts.graphql
+        },
+      },
       updates: {
         Mutation: {
           logout: (_result, args, cache, info) => {
@@ -78,6 +144,7 @@ export const createUrqlClient = (ssrExchange: any) => ({
         },
       },
     }),
+    errorExchange,
     ssrExchange,
     fetchExchange,
   ],
