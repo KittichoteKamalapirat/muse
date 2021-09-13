@@ -2,7 +2,9 @@ import { User } from "../entities/User";
 import {
   Arg,
   Ctx,
+  Root,
   Field,
+  FieldResolver,
   Mutation,
   ObjectType,
   Query,
@@ -17,6 +19,7 @@ import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
+import { ContainerInterface, getConnection } from "typeorm";
 
 @ObjectType()
 class FieldError {
@@ -34,8 +37,17 @@ class UserResponse {
   user?: User;
 }
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => String)
+  email(@Root() user: User, @Ctx() { req }: MyContext) {
+    if (user.id === req.session.userId) {
+      // This is the current user and its ok to show them their own emails
+      return user.email;
+    }
+    // current user watns to see someone elses email
+    return "";
+  }
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("newPassword") newPassword: string,
@@ -100,7 +112,7 @@ export class UserResolver {
     @Arg("email") email: string,
     @Ctx() { redis }: MyContext
   ) {
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       // do nothing and don't tell user anything
       return true;
@@ -130,15 +142,14 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { req }: MyContext) {
+  me(@Ctx() { req }: MyContext) {
     //Destructure the parameter array to req
     if (!req.session.userId) {
       return null;
     }
     console.log(req.session);
-    const user = await User.findOne(req.session.userId);
-    console.log(user);
-    return user;
+    // no need to await, why?
+    return User.findOne(req.session.userId);
   }
   @Mutation(() => UserResponse)
   async register(
@@ -152,14 +163,29 @@ export class UserResolver {
     }
 
     const hash = await argon2.hash(data.password);
-    const newUser = User.create({
-      username: data.username,
-      email: data.email,
-      password: hash,
-    });
+    // const newUser = User.create({
+    //   username: data.username,
+    //   email: data.email,
+    //   password: hash,
+    // });
+
+    let user;
     try {
-      await newUser.save();
+      const result = await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values([
+          { username: data.username, email: data.email, password: hash },
+        ])
+        .returning("*") //RETURNING is sql statement
+        .execute();
+
+      // This query builder is an alternative of the .create.save
+      user = result.raw[0];
+      // console.log("result", result);
     } catch (error) {
+      console.log("err", error);
       if (error.code === "23505") {
         //|| error.detail.includes("already exists"))
         return {
@@ -174,8 +200,8 @@ export class UserResolver {
     }
     // automatically logged in after register
     // set a cookie on the user
-    req.session.userId = newUser.id;
-    return { user: newUser };
+    req.session.userId = user.id;
+    return { user: user };
   }
 
   @Mutation(() => UserResponse)
@@ -189,6 +215,8 @@ export class UserResolver {
       usernameOrEmail.includes("@")
         ? { email: usernameOrEmail }
         : { username: usernameOrEmail }
+
+      // ben did{ where: {username: usernameOrEmail }}
     );
     if (!user) {
       return {

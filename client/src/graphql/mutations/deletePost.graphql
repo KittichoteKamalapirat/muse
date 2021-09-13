@@ -1,0 +1,5 @@
+mutation DeletePost($id: Int!) {
+  deletePost(id: $id)
+}
+
+# no need to return anything since we're returing boolearn

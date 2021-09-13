@@ -1,60 +1,93 @@
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../util/createUrqlClient";
-import { usePostsQuery } from "../generated/graphql";
+import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
 import { Link } from "@chakra-ui/layout";
-import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
+import { UpvoteSection } from "../components/UpvoteSection";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 
 const Index = () => {
   const [variables, setVariables] = useState({
-    limit: 10,
+    limit: 20,
     cursor: null as null | string,
   });
+  const [{ data: meData }] = useMeQuery(); //this is renaming synta when destructing data => meData
+
   // console.log(variables);
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data, error, fetching }] = usePostsQuery({
     variables,
   });
 
   if (!fetching && !data) {
-    return <div>query failed</div>;
+    return (
+      <div>
+        <div>query failed</div>
+        <div>{error?.message}</div>
+      </div>
+    );
   }
   return (
     <Layout>
-      <Flex align="center">
-        <Heading>Cookknow</Heading>
-        <NextLink href="/create-post">
-          <Link ml={"auto"} color={"green"} fontWeight={700}>
-            Create Post
-          </Link>
-        </NextLink>
-      </Flex>
-
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
       {!data && fetching ? (
         <div>loading ... </div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.map((post) => (
-            <div key={post.id}>
-              <Box key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
-                <Heading fontSize="xl">{post.title}</Heading>
-                <Text mt={4}>{post.textSnippet}</Text>
-              </Box>
-            </div>
-          ))}
+          {data!.posts.posts.map((post) =>
+            !post ? null : (
+              <div key={post.id}>
+                <Flex key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
+                  <UpvoteSection post={post} />
+                  <Box flex={1}>
+                    <NextLink
+                      href={{
+                        pathname: "/post/[id]",
+                        query: { id: post.id },
+                      }}
+                    >
+                      <Link>
+                        <Heading fontSize="xl">{post.title}</Heading>
+                      </Link>
+                    </NextLink>
+
+                    <Text>by {post.creator.username}</Text>
+                    <Flex justifyContent="space-between" alignItems="center">
+                      <Text mt={4}>{post.textSnippet}</Text>
+                      {/* show the box only if I own the post */}
+                      {meData?.me?.id !== post.creator.id ? null : (
+                        <Box>
+                          <EditDeletePostButtons id={post.id} />
+                        </Box>
+                      )}
+                    </Flex>
+                  </Box>
+                </Flex>
+              </div>
+            )
+          )}
         </Stack>
       )}
 
-      {data ? (
+      {data && data.posts.hasMore ? (
         <Flex>
           <Button
             onClick={() => {
               setVariables({
                 limit: variables.limit,
-                cursor: data.posts[data.posts.length - 1].createdAt,
+                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
               });
             }}
             isLoading={fetching}
