@@ -10,6 +10,7 @@ import {
   Flex,
   Heading,
   IconButton,
+  Image,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -52,6 +53,10 @@ const Index = () => {
                 <Flex key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
                   <UpvoteSection post={post} />
                   <Box flex={1}>
+                    <Box boxSize="sm">
+                      <Image src={post.thumbnailUrl} alt="image" />
+                    </Box>
+
                     <NextLink
                       href={{
                         pathname: "/post/[id]",

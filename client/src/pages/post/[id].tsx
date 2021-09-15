@@ -35,6 +35,10 @@ const Post = ({}) => {
       <Box boxSize="sm">
         <Image src={data?.post?.thumbnailUrl} alt="image" />
       </Box>
+      <video width="320" height="240" controls>
+        <source src={data?.post?.videoUrl} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
 
       {meData?.me?.id !== data.post.creator.id ? null : (
         <Box>
