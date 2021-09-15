@@ -4,6 +4,7 @@ query Post($id: Int!) {
     title
     text
     videoUrl
+    thumbnailUrl
     createdAt
     updatedAt
     points

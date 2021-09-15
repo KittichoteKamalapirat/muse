@@ -4,7 +4,7 @@ import React from "react";
 import { createUrqlClient } from "../../util/createUrqlClient";
 import { useMeQuery, usePostQuery } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Image } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 
@@ -32,6 +32,9 @@ const Post = ({}) => {
     <Layout>
       <Heading mb={4}>{data?.post?.title}</Heading>
       <Box mb={4}> {data?.post?.text}</Box>
+      <Box boxSize="sm">
+        <Image src={data?.post?.thumbnailUrl} alt="image" />
+      </Box>
 
       {meData?.me?.id !== data.post.creator.id ? null : (
         <Box>

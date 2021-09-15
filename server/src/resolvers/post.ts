@@ -16,11 +16,15 @@ import {
 } from "type-graphql";
 import { Post } from "../entities/Post";
 import { getConnection } from "typeorm";
-import { rootCertificates } from "tls";
 import { Upvote } from "../entities/Upvote";
-import { tmpdir } from "os";
 import { User } from "../entities/User";
-import { error } from "console";
+import {
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+  s3Bucket,
+  AWS_REGION,
+} from "../constants";
+import aws from "aws-sdk";
 
 @InputType()
 class PostInput {
@@ -30,6 +34,8 @@ class PostInput {
   text: string;
   @Field()
   videoUrl: string;
+  @Field()
+  thumbnailUrl: string;
 }
 
 @ObjectType()
@@ -38,6 +44,18 @@ class PaginatedPosts {
   posts: Post[];
   @Field()
   hasMore: boolean;
+}
+
+@ObjectType()
+class SignedS3 {
+  @Field()
+  videoSignedRequest: string;
+  @Field()
+  thumbnailSignedRequest: string;
+  @Field()
+  videoUrl: string;
+  @Field()
+  thumbnailUrl: string;
 }
 
 @Resolver(Post)
@@ -314,5 +332,54 @@ export class PostResolver {
 
     await Post.delete({ id: id, creatorId: req.session.userId });
     return true;
+  }
+
+  @Mutation(() => SignedS3)
+  async signS3(
+    @Arg("videoname") videoname: string,
+    @Arg("thumbnailname") thumbnailname: string,
+    @Arg("videoFiletype") videoFiletype: string,
+    @Arg("thumbnailFiletype") thumbnailFiletype: string
+  ) {
+    const s3 = new aws.S3({
+      signatureVersion: "v4",
+      region: AWS_REGION,
+      accessKeyId: AWS_ACCESS_KEY_ID,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    });
+
+    const s3VideoParams = {
+      Bucket: s3Bucket,
+      Key: videoname,
+      Expires: 60, //how to we have to send the request after we create the url (seconds)
+      ContentType: videoFiletype,
+      // ACL: "public-read", //this thing cause error somehow !!!!!
+    };
+
+    const s3ThumbnailParams = {
+      Bucket: s3Bucket,
+      Key: thumbnailname,
+      Expires: 60, //how to we have to send the request after we create the url (seconds)
+      ContentType: thumbnailFiletype,
+      // ACL: "public-read", //this thing cause error somehow !!!!!
+    };
+
+    const videoSignedRequest = await s3.getSignedUrl(
+      "putObject",
+      s3VideoParams
+    );
+    const thumbnailSignedRequest = await s3.getSignedUrl(
+      "putObject",
+      s3ThumbnailParams
+    );
+
+    const videoUrl = `https://${s3Bucket}.s3.amazonaws.com/${videoname}`;
+    const thumbnailUrl = `https://${s3Bucket}.s3.amazonaws.com/${thumbnailname}`;
+    return {
+      videoSignedRequest,
+      thumbnailSignedRequest,
+      videoUrl,
+      thumbnailUrl,
+    };
   }
 }

@@ -34,6 +34,7 @@ export type Mutation = {
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
+  signS3: SignedS3;
 };
 
 
@@ -82,6 +83,14 @@ export type MutationDeletePostArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationSignS3Args = {
+  thumbnailFiletype: Scalars['String'];
+  videoFiletype: Scalars['String'];
+  thumbnailname: Scalars['String'];
+  videoname: Scalars['String'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -95,6 +104,7 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
+  thumbnailUrl: Scalars['String'];
   videoUrl: Scalars['String'];
   creatorId: Scalars['Float'];
   creator: User;
@@ -107,6 +117,7 @@ export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
   videoUrl: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
 };
 
 export type Query = {
@@ -133,6 +144,14 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+export type SignedS3 = {
+  __typename?: 'SignedS3';
+  videoSignedRequest: Scalars['String'];
+  thumbnailSignedRequest: Scalars['String'];
+  videoUrl: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
 };
 
 export type User = {
@@ -214,6 +233,16 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
+export type SignS3MutationVariables = Exact<{
+  videoname: Scalars['String'];
+  thumbnailname: Scalars['String'];
+  videoFiletype: Scalars['String'];
+  thumbnailFiletype: Scalars['String'];
+}>;
+
+
+export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'SignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
+
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   title: Scalars['String'];
@@ -242,7 +271,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: number, username: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: number, username: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -369,6 +398,25 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const SignS3Document = gql`
+    mutation signS3($videoname: String!, $thumbnailname: String!, $videoFiletype: String!, $thumbnailFiletype: String!) {
+  signS3(
+    videoname: $videoname
+    thumbnailname: $thumbnailname
+    videoFiletype: $videoFiletype
+    thumbnailFiletype: $thumbnailFiletype
+  ) {
+    videoSignedRequest
+    thumbnailSignedRequest
+    videoUrl
+    thumbnailUrl
+  }
+}
+    `;
+
+export function useSignS3Mutation() {
+  return Urql.useMutation<SignS3Mutation, SignS3MutationVariables>(SignS3Document);
+};
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $title: String!, $text: String!, $videoUrl: String!) {
   updatePost(id: $id, title: $title, text: $text, videoUrl: $videoUrl) {
@@ -410,6 +458,7 @@ export const PostDocument = gql`
     title
     text
     videoUrl
+    thumbnailUrl
     createdAt
     updatedAt
     points
