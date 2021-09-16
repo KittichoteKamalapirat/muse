@@ -54,6 +54,11 @@ export class Post extends BaseEntity {
   // └the foreign Id will be creatorId
   // Many to one will create a foreign key, but we sitll ne to create the colum by ourself
 
+  // @Field(type => User) -> return User type?
+  // Why use function syntax and not a simple { type: User } config object?
+  // Because, by using function syntax we solve the problem of circular dependencies (e.g. Post <--> User), so it was adopted as a convention.
+  // You can use the shorthand syntax @Field(() => Rate) if you want to save some keystrokes but it might be less readable for others.
+
   @OneToMany((type) => Upvote, (upvote) => upvote.post)
   upvotes: Upvote[];
 

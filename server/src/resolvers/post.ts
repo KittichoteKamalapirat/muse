@@ -96,7 +96,10 @@ export class PostResolver {
     return upvote ? upvote.value : null;
   }
 
-  @Mutation(() => Boolean)
+  // to provide the return type.
+  // Since the method is async, the reflection metadata system shows the return type as a Promise,
+  // so we have to add the decorator's parameter as returns => [Recipe] to declare it resolves to an array of Recipe object types.
+  @Mutation(() => Boolean) //return Boolean -> vote returns boolean vote is an argument for Mutation()?
   @UseMiddleware(isAuth) //to protect the routh
   async vote(
     @Arg("postId", () => Int) postId: number,
