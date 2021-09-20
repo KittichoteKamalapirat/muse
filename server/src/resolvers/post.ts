@@ -107,7 +107,7 @@ export class PostResolver {
     @Ctx() { req }: MyContext
   ) {
     const { userId } = req.session; //userId = req.session.userId
-    const isUpvote = value !== -1; //happen to pass in valua = 12 -> make it 1 or -1, -12 will be 1 anyway
+    const isUpvote = value !== -1; //happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
     const realValue = isUpvote ? 1 : -1;
 
     const upvoted = await Upvote.findOne({ where: { postId, userId } });
@@ -130,7 +130,7 @@ export class PostResolver {
         set points = points + $1
         where id = $2;
         `,
-          [2 * realValue, postId]
+          [realValue, postId]
         ); //different 2 points, if upvoted, then points will be 1, downvoted, points will be -1
       });
     } else if (!upvoted) {
@@ -141,7 +141,7 @@ export class PostResolver {
       insert into upvote ("userId","postId","value")
       values ($1,$2,$3);
       `,
-          [userId, postId, realValue]
+          [userId, postId, 1]
         );
         await tm.query(
           `

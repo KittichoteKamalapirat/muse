@@ -133,7 +133,8 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   return; //do nothing if voteStatus = 1 and we're trying to vote 1 again via args
                 }
                 const newPoints =
-                  data.points + (!data.voteStatus ? 1 : 2) * value; //if we're changing the vote, it will be 2 points different
+                  // data.points + (!data.voteStatus ? 1 : 2) * value; //if we're changing the vote, it will be 2 points different
+                  data.points + value;
                 cache.writeFragment(
                   gql`
                     fragment _ on Post {
