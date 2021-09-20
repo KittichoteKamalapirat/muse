@@ -49,7 +49,7 @@ const Index = () => {
         <Stack spacing={8}>
           {data!.posts.posts.map((post) =>
             !post ? null : (
-              <Box key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
+              <Box key={post.id} shadow="md" borderWidth="1px">
                 <Text>by {post.creator.username}</Text>
                 <Flex key={post.id}>
                   <Box flex={1}>
@@ -57,11 +57,19 @@ const Index = () => {
                       <Image src={post.videoUrl} alt="image" />
                     </Box> */}
 
-                    <video width="320" height="240" controls>
+                    <video controls>
                       <source src={post.videoUrl} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
+                    <Flex justifyContent="space-between">
+                      <UpvoteSection post={post} />
 
+                      {meData?.me?.id !== post.creator.id ? null : (
+                        <Box>
+                          <EditDeletePostButtons id={post.id} />
+                        </Box>
+                      )}
+                    </Flex>
                     <NextLink
                       href={{
                         pathname: "/post/[id]",
@@ -72,15 +80,10 @@ const Index = () => {
                         <Heading fontSize="xl">{post.title}</Heading>
                       </Link>
                     </NextLink>
-                    <UpvoteSection post={post} />
+
                     <Flex justifyContent="space-between" alignItems="center">
                       <Text mt={4}>{post.textSnippet}</Text>
                       {/* show the box only if I own the post */}
-                      {meData?.me?.id !== post.creator.id ? null : (
-                        <Box>
-                          <EditDeletePostButtons id={post.id} />
-                        </Box>
-                      )}
                     </Flex>
                   </Box>
                 </Flex>

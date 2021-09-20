@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import { useRouter } from "next/router";
+import { PlusSquareIcon } from "@chakra-ui/icons";
 
 interface NavbarProps {}
 
@@ -50,8 +51,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     body = (
       <Flex align="center">
         <NextLink href="/create-post">
-          <Button as={Link} mr={2} fontWeight={700}>
-            Create Post
+          <Button as={Link} mr={2}>
+            <PlusSquareIcon />{" "}
           </Button>
         </NextLink>
 
@@ -62,7 +63,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             router.reload();
           }}
           isLoading={logoutFetching}
-          variant={"link"}
         >
           logout
         </Button>
@@ -76,7 +76,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       zIndex={1}
       position="sticky"
       top={0}
-      bg="tan"
+      bg={["white", "red"]}
       p={2}
       ml={"auto"}
       align="center"

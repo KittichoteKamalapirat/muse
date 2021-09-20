@@ -26,6 +26,23 @@ import {
 } from "../constants";
 import aws from "aws-sdk";
 
+const s3 = new aws.S3({
+  signatureVersion: "v4",
+  region: AWS_REGION,
+  accessKeyId: AWS_ACCESS_KEY_ID,
+  secretAccessKey: AWS_SECRET_ACCESS_KEY,
+});
+
+const s3Params = (key: string, contentType: string) => {
+  return {
+    Bucket: s3Bucket,
+    Key: key,
+    Expires: 60, //how to we have to send the request after we create the url (seconds)
+    ContentType: contentType,
+    // ACL: "public-read", //this thing cause error somehow !!!!!
+  };
+};
+
 @InputType()
 class PostInput {
   @Field()
@@ -47,7 +64,7 @@ class PaginatedPosts {
 }
 
 @ObjectType()
-class SignedS3 {
+class PostSignedS3 {
   @Field()
   videoSignedRequest: string;
   @Field()
@@ -56,6 +73,14 @@ class SignedS3 {
   videoUrl: string;
   @Field()
   thumbnailUrl: string;
+}
+
+@ObjectType()
+class SignedS3 {
+  @Field()
+  signedRequest: string;
+  @Field()
+  url: string;
 }
 
 @Resolver(Post)
@@ -337,35 +362,15 @@ export class PostResolver {
     return true;
   }
 
-  @Mutation(() => SignedS3)
+  @Mutation(() => PostSignedS3)
   async signS3(
     @Arg("videoname") videoname: string,
     @Arg("thumbnailname") thumbnailname: string,
     @Arg("videoFiletype") videoFiletype: string,
     @Arg("thumbnailFiletype") thumbnailFiletype: string
-  ) {
-    const s3 = new aws.S3({
-      signatureVersion: "v4",
-      region: AWS_REGION,
-      accessKeyId: AWS_ACCESS_KEY_ID,
-      secretAccessKey: AWS_SECRET_ACCESS_KEY,
-    });
-
-    const s3VideoParams = {
-      Bucket: s3Bucket,
-      Key: videoname,
-      Expires: 60, //how to we have to send the request after we create the url (seconds)
-      ContentType: videoFiletype,
-      // ACL: "public-read", //this thing cause error somehow !!!!!
-    };
-
-    const s3ThumbnailParams = {
-      Bucket: s3Bucket,
-      Key: thumbnailname,
-      Expires: 60, //how to we have to send the request after we create the url (seconds)
-      ContentType: thumbnailFiletype,
-      // ACL: "public-read", //this thing cause error somehow !!!!!
-    };
+  ): Promise<PostSignedS3> {
+    const s3VideoParams = s3Params(videoname, videoFiletype);
+    const s3ThumbnailParams = s3Params(thumbnailname, thumbnailFiletype);
 
     const videoSignedRequest = await s3.getSignedUrl(
       "putObject",
@@ -383,6 +388,21 @@ export class PostResolver {
       thumbnailSignedRequest,
       videoUrl,
       thumbnailUrl,
+    };
+  }
+
+  @Mutation(() => SignedS3)
+  async signAvatarS3(
+    @Arg("name") name: string,
+    @Arg("filetype") filetype: string
+  ): Promise<SignedS3> {
+    const s3AvatarParams = s3Params(name, filetype);
+    const signedRequest = await s3.getSignedUrl("putObject", s3AvatarParams);
+
+    const url = `https://${s3Bucket}.s3.amazonaws.com/${name}`;
+    return {
+      signedRequest,
+      url,
     };
   }
 }
