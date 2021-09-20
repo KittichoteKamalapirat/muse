@@ -49,13 +49,18 @@ const Index = () => {
         <Stack spacing={8}>
           {data!.posts.posts.map((post) =>
             !post ? null : (
-              <div key={post.id}>
-                <Flex key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
-                  <UpvoteSection post={post} />
+              <Box key={post.id} p={5} m={2} shadow="md" borderWidth="1px">
+                <Text>by {post.creator.username}</Text>
+                <Flex key={post.id}>
                   <Box flex={1}>
-                    <Box boxSize="sm">
-                      <Image src={post.thumbnailUrl} alt="image" />
-                    </Box>
+                    {/* <Box boxSize="sm">
+                      <Image src={post.videoUrl} alt="image" />
+                    </Box> */}
+
+                    <video width="320" height="240" controls>
+                      <source src={post.videoUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
 
                     <NextLink
                       href={{
@@ -67,8 +72,7 @@ const Index = () => {
                         <Heading fontSize="xl">{post.title}</Heading>
                       </Link>
                     </NextLink>
-
-                    <Text>by {post.creator.username}</Text>
+                    <UpvoteSection post={post} />
                     <Flex justifyContent="space-between" alignItems="center">
                       <Text mt={4}>{post.textSnippet}</Text>
                       {/* show the box only if I own the post */}
@@ -80,7 +84,7 @@ const Index = () => {
                     </Flex>
                   </Box>
                 </Flex>
-              </div>
+              </Box>
             )
           )}
         </Stack>
