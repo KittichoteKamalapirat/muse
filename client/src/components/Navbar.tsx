@@ -66,6 +66,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         >
           logout
         </Button>
+
+        <NextLink
+          href={{
+            pathname: "/user/[id]",
+            query: { id: data.me.id },
+          }}
+        >
+          <Link>My account</Link>
+        </NextLink>
       </Flex>
 
       // no need ? because it is implied that it exsists, put the ifs befire

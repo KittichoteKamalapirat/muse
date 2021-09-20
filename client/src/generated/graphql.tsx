@@ -16,6 +16,24 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type AccountInfo = {
+  __typename?: 'AccountInfo';
+  id: Scalars['Float'];
+  address: Scalars['String'];
+  mobileNumber: Scalars['String'];
+  avatarUrl: Scalars['String'];
+  userId: Scalars['Int'];
+  user: User;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type AccountInfoInput = {
+  address: Scalars['String'];
+  mobileNumber: Scalars['String'];
+  avatarUrl: Scalars['String'];
+};
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -34,7 +52,9 @@ export type Mutation = {
   createPost: Post;
   updatePost?: Maybe<Post>;
   deletePost: Scalars['Boolean'];
-  signS3: SignedS3;
+  signS3: PostSignedS3;
+  signAvatarS3: SignedS3;
+  createAccountInfo: AccountInfo;
 };
 
 
@@ -91,6 +111,17 @@ export type MutationSignS3Args = {
   videoname: Scalars['String'];
 };
 
+
+export type MutationSignAvatarS3Args = {
+  filetype: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationCreateAccountInfoArgs = {
+  input: AccountInfoInput;
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -120,6 +151,14 @@ export type PostInput = {
   thumbnailUrl: Scalars['String'];
 };
 
+export type PostSignedS3 = {
+  __typename?: 'PostSignedS3';
+  videoSignedRequest: Scalars['String'];
+  thumbnailSignedRequest: Scalars['String'];
+  videoUrl: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
@@ -128,6 +167,7 @@ export type Query = {
   me?: Maybe<User>;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
+  accountInfo: AccountInfo;
 };
 
 
@@ -148,10 +188,8 @@ export type QueryPostArgs = {
 
 export type SignedS3 = {
   __typename?: 'SignedS3';
-  videoSignedRequest: Scalars['String'];
-  thumbnailSignedRequest: Scalars['String'];
-  videoUrl: Scalars['String'];
-  thumbnailUrl: Scalars['String'];
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type User = {
@@ -191,6 +229,13 @@ export type ChangePasswordMutationVariables = Exact<{
 
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
+
+export type CreateAccountInfoMutationVariables = Exact<{
+  input: AccountInfoInput;
+}>;
+
+
+export type CreateAccountInfoMutation = { __typename?: 'Mutation', createAccountInfo: { __typename?: 'AccountInfo', userId: number, address: string, mobileNumber: string, avatarUrl: string } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -241,7 +286,7 @@ export type SignS3MutationVariables = Exact<{
 }>;
 
 
-export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'SignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
+export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'PostSignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
 
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -260,6 +305,11 @@ export type VoteMutationVariables = Exact<{
 
 
 export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
+
+export type AccountInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AccountInfoQuery = { __typename?: 'Query', accountInfo: { __typename?: 'AccountInfo', address: string, mobileNumber: string, avatarUrl: string, userId: number } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -330,6 +380,20 @@ export const ChangePasswordDocument = gql`
 
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
+};
+export const CreateAccountInfoDocument = gql`
+    mutation createAccountInfo($input: AccountInfoInput!) {
+  createAccountInfo(input: $input) {
+    userId
+    address
+    mobileNumber
+    avatarUrl
+  }
+}
+    `;
+
+export function useCreateAccountInfoMutation() {
+  return Urql.useMutation<CreateAccountInfoMutation, CreateAccountInfoMutationVariables>(CreateAccountInfoDocument);
 };
 export const CreatePostDocument = gql`
     mutation createPost($input: PostInput!) {
@@ -439,6 +503,20 @@ export const VoteDocument = gql`
 
 export function useVoteMutation() {
   return Urql.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument);
+};
+export const AccountInfoDocument = gql`
+    query accountInfo {
+  accountInfo {
+    address
+    mobileNumber
+    avatarUrl
+    userId
+  }
+}
+    `;
+
+export function useAccountInfoQuery(options: Omit<Urql.UseQueryArgs<AccountInfoQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AccountInfoQuery>({ query: AccountInfoDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

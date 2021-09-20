@@ -7,7 +7,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
+import { AccountInfo } from "./AccountInfo";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
 
@@ -42,6 +45,13 @@ export class User extends BaseEntity {
 
   @OneToMany((type) => Upvote, (upvote) => upvote.user)
   upvotes: Upvote[];
+
+  // relatioship with account starts
+  @OneToOne((type) => AccountInfo, (accountInfo) => accountInfo.user)
+  @JoinColumn()
+  accountInfo: AccountInfo;
+
+  // relatioship with account ends
 
   @CreateDateColumn()
   @Field()
