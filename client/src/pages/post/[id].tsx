@@ -1,18 +1,16 @@
-import { withUrqlClient } from "next-urql";
-import { useRouter } from "next/router";
 import React from "react";
-import { createUrqlClient } from "../../util/createUrqlClient";
-import { useMeQuery, usePostQuery } from "../../generated/graphql";
+import { useMeQuery } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
 import { Box, Heading, Image } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
+import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
-  const [{ data, fetching }] = useGetPostFromUrl();
-  const [{ data: meData }] = useMeQuery();
+  const { data, loading } = useGetPostFromUrl();
+  const { data: meData } = useMeQuery();
 
-  if (fetching) {
+  if (loading) {
     return (
       <Layout>
         <div>loading ...</div>
@@ -49,4 +47,4 @@ const Post = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Post); //want good SEO
+export default withApollo({ ssr: true })(Post); //want good SEO

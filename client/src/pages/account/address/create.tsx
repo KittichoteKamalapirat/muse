@@ -1,6 +1,5 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../../components/InputField";
@@ -9,14 +8,13 @@ import {
   AddressInput,
   useCreateAddressMutation,
 } from "../../../generated/graphql";
-
-import { createUrqlClient } from "../../../util/createUrqlClient";
 import { useIsAuth } from "../../../util/useIsAuth";
+import { withApollo } from "../../../util/withApollo";
 
 interface CreateAddressProps {}
 
 const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
-  const [, createAddress] = useCreateAddressMutation();
+  const [createAddress] = useCreateAddressMutation();
   const router = useRouter();
   useIsAuth();
 
@@ -30,10 +28,10 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
       country: values.country,
       postcode: values.postcode,
     };
-    const { error } = await createAddress({ input });
+    const { errors } = await createAddress({ variables: { input } });
     router.push("/account/address");
 
-    if (error) {
+    if (errors) {
       throw new Error();
     } else {
       router.back();
@@ -117,4 +115,4 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreateAddress);
+export default withApollo({ ssr: false })(CreateAddress);

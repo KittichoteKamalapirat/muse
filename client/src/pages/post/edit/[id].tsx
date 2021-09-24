@@ -1,6 +1,5 @@
 import { Box, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../../components/InputField";
@@ -10,20 +9,20 @@ import {
   usePostQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
-import { createUrqlClient } from "../../../util/createUrqlClient";
 import { useGetPostId } from "../../../util/useGetPostId";
+import { withApollo } from "../../../util/withApollo";
 
 const EditPost = ({}) => {
   const router = useRouter(); //for pushing after we finished updating
   const postId = useGetPostId();
-  const [{ data, fetching }] = usePostQuery({
-    pause: postId === -1, //-1 won't by an id of any posts, just indication that we got bad url parameter
+  const { data, loading } = usePostQuery({
+    skip: postId === -1, //-1 won't by an id of any posts, just indication that we got bad url parameter
     variables: {
       id: postId,
     },
   });
-  const [, updatePost] = useUpdatePostMutation();
-  if (fetching) {
+  const [updatePost] = useUpdatePostMutation();
+  if (loading) {
     return (
       <Layout>
         <div>loading ...</div>
@@ -56,7 +55,7 @@ const EditPost = ({}) => {
             // if (!error) {
             //   router.push("/");
             // }
-            await updatePost({ id: postId, ...values });
+            await updatePost({ variables: { id: postId, ...values } });
             router.back();
           }}
         >
@@ -90,4 +89,4 @@ const EditPost = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(EditPost);
+export default withApollo({ ssr: false })(EditPost);

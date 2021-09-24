@@ -1,23 +1,23 @@
 import { Box } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { withUrqlClient } from "next-urql";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { useCreatePostMutation, useSignS3Mutation } from "../generated/graphql";
-import { createUrqlClient } from "../util/createUrqlClient";
 import { useRouter } from "next/router";
 import { Layout } from "../components/Layout";
 import { useIsAuth } from "../util/useIsAuth";
 import Dropzone from "react-dropzone";
 import axios from "axios";
 import moment from "moment";
+import { withApollo } from "../util/withApollo";
 
 const CreatePost: React.FC<{}> = ({}) => {
   //router import for below, not for useIsAuth
-  const [, signS3] = useSignS3Mutation();
-  const [, createPost] = useCreatePostMutation();
+  useIsAuth();
+  const [signS3] = useSignS3Mutation();
+  const [createPost] = useCreatePostMutation();
   const router = useRouter();
 
   const [videoFile, setVideoFile] = useState({ file: null } as any);
@@ -67,8 +67,6 @@ const CreatePost: React.FC<{}> = ({}) => {
     return newFilename.substring(0, 60);
   };
 
-  useIsAuth();
-
   return (
     <Layout variant="small">
       <Wrapper variant="small">
@@ -82,11 +80,13 @@ const CreatePost: React.FC<{}> = ({}) => {
             try {
               // S3
               const response = await signS3({
+                variables: {
+                  videoname: videoFile.file.name,
+                  thumbnailname: thumbnailFile.file.name,
+                  videoFiletype: videoFile.file.type,
+                  thumbnailFiletype: thumbnailFile.file.type,
+                },
                 // filename: formatFilename(file.name),
-                videoname: videoFile.file.name,
-                thumbnailname: thumbnailFile.file.name,
-                videoFiletype: videoFile.file.type,
-                thumbnailFiletype: thumbnailFile.file.type,
               });
               let videoUrl = "";
               let videoSignedRequest = "";
@@ -109,18 +109,20 @@ const CreatePost: React.FC<{}> = ({}) => {
                 );
               }
               // S3 end
-              const { error } = await createPost({
-                input: {
-                  title: values.title,
-                  text: values.text,
-                  videoUrl: videoUrl,
-                  thumbnailUrl: thumbnailUrl,
+              const { errors } = await createPost({
+                variables: {
+                  input: {
+                    title: values.title,
+                    text: values.text,
+                    videoUrl: videoUrl,
+                    thumbnailUrl: thumbnailUrl,
+                  },
+                },
+                update: (cache) => {
+                  cache.evict({ fieldName: "posts:{}" });
                 },
               });
-              if (error) {
-                console.log("error", error);
-                throw new Error();
-              } else {
+              if (!errors) {
                 router.push("/");
               }
             } catch (error) {
@@ -149,7 +151,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                 >
                   {({ getRootProps, getInputProps }) => (
                     <Box mt={2}>
-                      <Box mb={2}>Video</Box>
+                      <Box mb={2}>Thumbnail Image</Box>
                       <Box
                         cursor="pointer"
                         border="1px"
@@ -212,4 +214,4 @@ const CreatePost: React.FC<{}> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(CreatePost);
+export default withApollo({ ssr: false })(CreatePost);

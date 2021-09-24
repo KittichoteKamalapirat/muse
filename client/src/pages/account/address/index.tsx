@@ -1,4 +1,3 @@
-import { withUrqlClient } from "next-urql";
 import React from "react";
 import { Layout } from "../../../components/Layout";
 import {
@@ -6,21 +5,21 @@ import {
   useDeleteAddressMutation,
   useMeQuery,
 } from "../../../generated/graphql";
-import { createUrqlClient } from "../../../util/createUrqlClient";
 import NextLink from "next/link";
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Link, Text } from "@chakra-ui/react";
 import { useIsAuth } from "../../../util/useIsAuth";
+import { withApollo } from "../../../util/withApollo";
 
 interface addressProps {}
 
 const Address: React.FC<addressProps> = ({}) => {
   useIsAuth();
-  const [{ data, fetching }] = useAddressQuery();
-  const [{ data: meData }] = useMeQuery();
-  const [, deleteAddress] = useDeleteAddressMutation();
+  const { data, loading } = useAddressQuery();
+  const { data: meData } = useMeQuery();
+  const [deleteAddress] = useDeleteAddressMutation();
 
-  if (fetching) {
+  if (loading) {
     return (
       <Layout>
         <div>loading ...</div>
@@ -66,7 +65,9 @@ const Address: React.FC<addressProps> = ({}) => {
           <IconButton
             aria-label="Delete post"
             icon={<DeleteIcon />}
-            onClick={() => deleteAddress({ id: data.address.id })}
+            onClick={() =>
+              deleteAddress({ variables: { id: data.address.id } })
+            }
           ></IconButton>
         </Box>
       )}
@@ -74,4 +75,4 @@ const Address: React.FC<addressProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Address);
+export default withApollo({ ssr: false })(Address);

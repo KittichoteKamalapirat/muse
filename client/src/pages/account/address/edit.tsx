@@ -1,24 +1,22 @@
 import { Flex, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout";
 import {
-  useCreateAddressMutation,
   AddressInput,
   useUpdateAddressMutation,
   useAddressQuery,
 } from "../../../generated/graphql";
-import { createUrqlClient } from "../../../util/createUrqlClient";
 import { useIsAuth } from "../../../util/useIsAuth";
+import { withApollo } from "../../../util/withApollo";
 
 interface EditAddressProps {}
 
 const EditAddress: React.FC<EditAddressProps> = ({}) => {
-  const [{ data, fetching }] = useAddressQuery();
-  const [, updateAddress] = useUpdateAddressMutation();
+  const { data, loading } = useAddressQuery();
+  const [updateAddress] = useUpdateAddressMutation();
 
   const router = useRouter();
   useIsAuth();
@@ -33,10 +31,12 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
       country: values.country,
       postcode: values.postcode,
     };
-    const { error } = await updateAddress({ input, id: data!.address.id });
+    const { errors } = await updateAddress({
+      variables: { input, id: data!.address.id },
+    });
     router.push("/account/address");
 
-    if (error) {
+    if (errors) {
       throw new Error();
     } else {
       router.back();
@@ -44,7 +44,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
     return;
   };
 
-  if (fetching) {
+  if (loading) {
     return (
       <Layout>
         <div>loading ...</div>
@@ -52,7 +52,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
     );
   }
 
-  if (!fetching && !data) {
+  if (!loading && !data) {
     return (
       <Layout>
         <div>ไม่พบที่อยู่ของคุณ</div>
@@ -136,4 +136,4 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(EditAddress);
+export default withApollo({ ssr: false })(EditAddress);

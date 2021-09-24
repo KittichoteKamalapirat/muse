@@ -1,37 +1,25 @@
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../util/createUrqlClient";
 import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
 import { Link } from "@chakra-ui/layout";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  IconButton,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import React from "react";
 import { UpvoteSection } from "../components/UpvoteSection";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
+import { withApollo } from "../util/withApollo";
 
 const Index = () => {
-  const [variables, setVariables] = useState({
-    limit: 20,
-    cursor: null as null | string,
-  });
-  const [{ data: meData }] = useMeQuery(); //this is renaming synta when destructing data => meData
+  const { data: meData } = useMeQuery(); //this is renaming synta when destructing data => meData
 
   // console.log(variables);
-  const [{ data, error, fetching }] = usePostsQuery({
-    variables,
+  const { data, error, loading, fetchMore, variables } = usePostsQuery({
+    variables: {
+      limit: 20,
+      cursor: null as null | string,
+    },
   });
 
-  if (!fetching && !data) {
+  if (!loading && !data) {
     return (
       <div>
         <div>query failed</div>
@@ -43,7 +31,7 @@ const Index = () => {
     <Layout>
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
-      {!data && fetching ? (
+      {!data && loading ? (
         <div>loading ... </div>
       ) : (
         <Stack spacing={8}>
@@ -97,12 +85,15 @@ const Index = () => {
         <Flex>
           <Button
             onClick={() => {
-              setVariables({
-                limit: variables.limit,
-                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+              fetchMore({
+                variables: {
+                  limit: variables?.limit,
+                  cursor:
+                    data.posts.posts[data.posts.posts.length - 1].createdAt,
+                },
               });
             }}
-            isLoading={fetching}
+            isLoading={loading}
             bgColor="lightgrey"
             m="auto"
             my={8}
@@ -115,4 +106,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default withApollo({ ssr: true })(Index);

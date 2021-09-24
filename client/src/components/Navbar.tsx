@@ -5,14 +5,16 @@ import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import { useRouter } from "next/router";
 import { PlusSquareIcon } from "@chakra-ui/icons";
+import { useApolloClient } from "@apollo/client";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data, fetching }] = useMeQuery({
-    pause: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
+  const [logout, { loading: logoutLoading }] = useLogoutMutation();
+  const apolloClient = useApolloClient();
+  const { data, loading } = useMeQuery({
+    skip: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
     // no need to request in the browser side, just on client, but the server still knows anyway due to cookei forwarding
   });
   // this is SSR so browser -> next.js -> graphql
@@ -26,12 +28,10 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   // server knows who is me, knows who voted
   // client knows who is me
 
-  console.log("data ", data);
-
   let body = null;
 
   // data is loading
-  if (fetching) {
+  if (loading) {
   } else if (!data?.me) {
     // this can return undefined, then ! turn it to true
     // user not logged in
@@ -60,9 +60,10 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         <Button
           onClick={async () => {
             await logout();
-            router.reload();
+            await apolloClient.resetStore();
+            // router.reload();
           }}
-          isLoading={logoutFetching}
+          isLoading={logoutLoading}
         >
           logout
         </Button>

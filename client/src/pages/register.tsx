@@ -3,17 +3,16 @@ import { Formik, Form } from "formik";
 import { Box, Button } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
-import { useRegisterMutation } from "../generated/graphql";
+import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/dist/client/router";
-import { withUrqlClient } from "next-urql";
-import { createUrqlClient } from "../util/createUrqlClient";
+import { withApollo } from "../util/withApollo";
 
 interface registerProps {}
 
 export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
   return (
     <Wrapper variant="small">
       <Formik
@@ -24,7 +23,18 @@ export const Register: React.FC<registerProps> = ({}) => {
         }}
         onSubmit={async (values, { setErrors }) => {
           console.log(values);
-          const response = await register({ data: values }); //the values here exactly match the params in graphql, no need to explicitly write {username: values.user}
+          const response = await register({
+            variables: { data: values },
+            update: (cache, { data }) => {
+              cache.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: {
+                  __typename: "Query",
+                  me: data?.register.user,
+                },
+              });
+            },
+          }); //the values here exactly match the params in graphql, no need to explicitly write {username: values.user}
           // └the types of response used to be "any", but with  codegen it's now RegisterMutation type
           // and this is good because typescript knwos what properties there are
 
@@ -89,4 +99,4 @@ export const Register: React.FC<registerProps> = ({}) => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);
+export default withApollo({ ssr: false })(Register);

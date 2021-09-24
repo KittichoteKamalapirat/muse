@@ -69,6 +69,7 @@ const main = async () => {
         httpOnly: true, //so that Javascript's front end can't access cookie
         sameSite: "lax", //csrf
         secure: __prod__, //cookie onl works in https
+        // domain: "http://localhost:3000/",
       },
       saveUninitialized: false,
       secret: "secret",

@@ -114,10 +114,6 @@ export class PostResolver {
       userId: req.session.userId,
     });
 
-    console.log(`post.id: ${post.id}`);
-    console.log(`userId: ${req.session.userId}`);
-    console.log(`upvoteValue: ${upvote}`);
-
     return upvote ? upvote.value : null;
   }
 
@@ -132,7 +128,7 @@ export class PostResolver {
     @Ctx() { req }: MyContext
   ) {
     const { userId } = req.session; //userId = req.session.userId
-    const isUpvote = value !== -1; //happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
+    const isUpvote = value !== 0; //happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
     const realValue = isUpvote ? 1 : -1;
 
     const upvoted = await Upvote.findOne({ where: { postId, userId } });
