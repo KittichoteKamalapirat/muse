@@ -10,7 +10,7 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { AccountInfo } from "./AccountInfo";
+import { Address } from "./Address";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
 
@@ -46,12 +46,11 @@ export class User extends BaseEntity {
   @OneToMany((type) => Upvote, (upvote) => upvote.user)
   upvotes: Upvote[];
 
-  // relatioship with account starts
-  @OneToOne((type) => AccountInfo, (accountInfo) => accountInfo.user)
+  // relatioship with profile starts
+  @OneToOne((type) => Address, (address) => address.user)
   @JoinColumn()
-  accountInfo: AccountInfo;
-
-  // relatioship with account ends
+  address: Address;
+  // relatioship with account ends -> profileId
 
   @CreateDateColumn()
   @Field()

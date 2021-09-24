@@ -6,45 +6,60 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   OneToOne,
 } from "typeorm";
-import { Post } from "./Post";
-import { Upvote } from "./Upvote";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class AccountInfo extends BaseEntity {
+export class Address extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
 
   @Column({ nullable: true })
   @Field()
-  address: string;
+  line1: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ nullable: true })
   @Field()
-  mobileNumber: string;
+  line2: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ nullable: true })
   @Field()
-  avatarUrl: string;
+  subdistrict: string;
+
+  @Column({ nullable: true })
+  @Field()
+  district: string;
+
+  @Column({ nullable: true })
+  @Field()
+  province: string;
+
+  @Column({ nullable: true })
+  @Field()
+  country: string;
+
+  @Column({ nullable: true })
+  @Field()
+  postcode: string;
 
   // relatioship with user start
 
+  // relationship with user
   @Column()
   @Field(() => Int)
   // @Field()
   userId: number;
 
-  @Field(() => User) //need to have explicit type
-  @OneToOne((type) => User, (user) => user.accountInfo)
-  //user.posts have to be added in the User type
+  @Field(() => User)
+  @OneToOne((type) => User, (user) => user.address)
   user: User;
 
   // relatioship with user ends
+
+  // relatioship with address start
 
   @CreateDateColumn()
   @Field()

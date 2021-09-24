@@ -6,11 +6,10 @@ export const useIsAuth = () => {
   const [{ data, fetching }] = useMeQuery();
 
   const router = useRouter();
-  console.log(router);
 
   useEffect(() => {
     // if login nothing happen
-    // if not log in, do this
+    // if not log in, do this`
     if (!fetching && !data?.me) {
       // replace => can't go back to login page
       router.replace("login?next=" + router.pathname);

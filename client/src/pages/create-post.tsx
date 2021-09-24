@@ -17,6 +17,7 @@ import moment from "moment";
 const CreatePost: React.FC<{}> = ({}) => {
   //router import for below, not for useIsAuth
   const [, signS3] = useSignS3Mutation();
+  const [, createPost] = useCreatePostMutation();
   const router = useRouter();
 
   const [videoFile, setVideoFile] = useState({ file: null } as any);
@@ -26,8 +27,6 @@ const CreatePost: React.FC<{}> = ({}) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
-    console.log("handleDrop");
-    console.log(acceptedFiles[0]);
     setVideoFile({ file: acceptedFiles[0] });
   };
 
@@ -35,8 +34,6 @@ const CreatePost: React.FC<{}> = ({}) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
-    console.log("handleDrop");
-    console.log(acceptedFiles[0]);
     setThumbnailFile({ file: acceptedFiles[0] });
   };
 
@@ -71,7 +68,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   };
 
   useIsAuth();
-  const [, createPost] = useCreatePostMutation();
+
   return (
     <Layout variant="small">
       <Wrapper variant="small">

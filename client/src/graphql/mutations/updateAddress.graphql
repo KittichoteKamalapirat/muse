@@ -1,0 +1,12 @@
+mutation updateAddress($input: AddressInput!, $id: Int!) {
+  updateAddress(input: $input, id: $id) {
+    userId
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
+  }
+}

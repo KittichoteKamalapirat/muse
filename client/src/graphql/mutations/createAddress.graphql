@@ -1,0 +1,12 @@
+mutation createAddress($input: AddressInput!) {
+  createAddress(input: $input) {
+    userId
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
+  }
+}

@@ -1,8 +1,0 @@
-mutation createAccountInfo($input: AccountInfoInput!) {
-  createAccountInfo(input: $input) {
-    userId
-    address
-    mobileNumber
-    avatarUrl
-  }
-}

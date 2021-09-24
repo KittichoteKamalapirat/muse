@@ -16,22 +16,30 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type AccountInfo = {
-  __typename?: 'AccountInfo';
+export type Address = {
+  __typename?: 'Address';
   id: Scalars['Float'];
-  address: Scalars['String'];
-  mobileNumber: Scalars['String'];
-  avatarUrl: Scalars['String'];
+  line1: Scalars['String'];
+  line2: Scalars['String'];
+  subdistrict: Scalars['String'];
+  district: Scalars['String'];
+  province: Scalars['String'];
+  country: Scalars['String'];
+  postcode: Scalars['String'];
   userId: Scalars['Int'];
   user: User;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
-export type AccountInfoInput = {
-  address: Scalars['String'];
-  mobileNumber: Scalars['String'];
-  avatarUrl: Scalars['String'];
+export type AddressInput = {
+  line1: Scalars['String'];
+  line2: Scalars['String'];
+  subdistrict: Scalars['String'];
+  district: Scalars['String'];
+  province: Scalars['String'];
+  country: Scalars['String'];
+  postcode: Scalars['String'];
 };
 
 
@@ -54,7 +62,9 @@ export type Mutation = {
   deletePost: Scalars['Boolean'];
   signS3: PostSignedS3;
   signAvatarS3: SignedS3;
-  createAccountInfo: AccountInfo;
+  createAddress: Address;
+  updateAddress?: Maybe<Address>;
+  deleteAddress: Scalars['Boolean'];
 };
 
 
@@ -118,8 +128,19 @@ export type MutationSignAvatarS3Args = {
 };
 
 
-export type MutationCreateAccountInfoArgs = {
-  input: AccountInfoInput;
+export type MutationCreateAddressArgs = {
+  input: AddressInput;
+};
+
+
+export type MutationUpdateAddressArgs = {
+  input: AddressInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteAddressArgs = {
+  id: Scalars['Int'];
 };
 
 export type PaginatedPosts = {
@@ -167,7 +188,7 @@ export type Query = {
   me?: Maybe<User>;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
-  accountInfo: AccountInfo;
+  address: Address;
 };
 
 
@@ -230,12 +251,12 @@ export type ChangePasswordMutationVariables = Exact<{
 
 export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: number, username: string }> } };
 
-export type CreateAccountInfoMutationVariables = Exact<{
-  input: AccountInfoInput;
+export type CreateAddressMutationVariables = Exact<{
+  input: AddressInput;
 }>;
 
 
-export type CreateAccountInfoMutation = { __typename?: 'Mutation', createAccountInfo: { __typename?: 'AccountInfo', userId: number, address: string, mobileNumber: string, avatarUrl: string } };
+export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -243,6 +264,13 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: number, createdAt: string, updatedAt: string } };
+
+export type DeleteAddressMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteAddressMutation = { __typename?: 'Mutation', deleteAddress: boolean };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -288,6 +316,14 @@ export type SignS3MutationVariables = Exact<{
 
 export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'PostSignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
 
+export type UpdateAddressMutationVariables = Exact<{
+  input: AddressInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
+
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   title: Scalars['String'];
@@ -306,10 +342,10 @@ export type VoteMutationVariables = Exact<{
 
 export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
 
-export type AccountInfoQueryVariables = Exact<{ [key: string]: never; }>;
+export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AccountInfoQuery = { __typename?: 'Query', accountInfo: { __typename?: 'AccountInfo', address: string, mobileNumber: string, avatarUrl: string, userId: number } };
+export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', id: number, userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -381,19 +417,23 @@ export const ChangePasswordDocument = gql`
 export function useChangePasswordMutation() {
   return Urql.useMutation<ChangePasswordMutation, ChangePasswordMutationVariables>(ChangePasswordDocument);
 };
-export const CreateAccountInfoDocument = gql`
-    mutation createAccountInfo($input: AccountInfoInput!) {
-  createAccountInfo(input: $input) {
+export const CreateAddressDocument = gql`
+    mutation createAddress($input: AddressInput!) {
+  createAddress(input: $input) {
     userId
-    address
-    mobileNumber
-    avatarUrl
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
   }
 }
     `;
 
-export function useCreateAccountInfoMutation() {
-  return Urql.useMutation<CreateAccountInfoMutation, CreateAccountInfoMutationVariables>(CreateAccountInfoDocument);
+export function useCreateAddressMutation() {
+  return Urql.useMutation<CreateAddressMutation, CreateAddressMutationVariables>(CreateAddressDocument);
 };
 export const CreatePostDocument = gql`
     mutation createPost($input: PostInput!) {
@@ -412,6 +452,15 @@ export const CreatePostDocument = gql`
 
 export function useCreatePostMutation() {
   return Urql.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument);
+};
+export const DeleteAddressDocument = gql`
+    mutation deleteAddress($id: Int!) {
+  deleteAddress(id: $id)
+}
+    `;
+
+export function useDeleteAddressMutation() {
+  return Urql.useMutation<DeleteAddressMutation, DeleteAddressMutationVariables>(DeleteAddressDocument);
 };
 export const DeletePostDocument = gql`
     mutation DeletePost($id: Int!) {
@@ -481,6 +530,24 @@ export const SignS3Document = gql`
 export function useSignS3Mutation() {
   return Urql.useMutation<SignS3Mutation, SignS3MutationVariables>(SignS3Document);
 };
+export const UpdateAddressDocument = gql`
+    mutation updateAddress($input: AddressInput!, $id: Int!) {
+  updateAddress(input: $input, id: $id) {
+    userId
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
+  }
+}
+    `;
+
+export function useUpdateAddressMutation() {
+  return Urql.useMutation<UpdateAddressMutation, UpdateAddressMutationVariables>(UpdateAddressDocument);
+};
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $title: String!, $text: String!, $videoUrl: String!) {
   updatePost(id: $id, title: $title, text: $text, videoUrl: $videoUrl) {
@@ -504,19 +571,24 @@ export const VoteDocument = gql`
 export function useVoteMutation() {
   return Urql.useMutation<VoteMutation, VoteMutationVariables>(VoteDocument);
 };
-export const AccountInfoDocument = gql`
-    query accountInfo {
-  accountInfo {
-    address
-    mobileNumber
-    avatarUrl
+export const AddressDocument = gql`
+    query address {
+  address {
+    id
     userId
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
   }
 }
     `;
 
-export function useAccountInfoQuery(options: Omit<Urql.UseQueryArgs<AccountInfoQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<AccountInfoQuery>({ query: AccountInfoDocument, ...options });
+export function useAddressQuery(options: Omit<Urql.UseQueryArgs<AddressQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AddressQuery>({ query: AddressDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

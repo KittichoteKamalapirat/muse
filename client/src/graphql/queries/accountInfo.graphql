@@ -1,8 +1,0 @@
-query accountInfo {
-  accountInfo {
-    address
-    mobileNumber
-    avatarUrl
-    userId
-  }
-}

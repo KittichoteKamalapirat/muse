@@ -20,8 +20,8 @@ import path from "path";
 import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
-import { AccountInfo } from "./entities/AccountInfo";
-import { AccountInfoResolver } from "./resolvers/accountInfo";
+import { Address } from "./entities/Address";
+import { AddressResolver } from "./resolvers/address";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
@@ -35,7 +35,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [User, Post, Upvote, AccountInfo],
+    entities: [User, Post, Upvote, Address],
   });
 
   // await conn.runMigrations();
@@ -77,7 +77,7 @@ const main = async () => {
   );
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, PostResolver, AccountInfoResolver],
+    resolvers: [HelloResolver, UserResolver, PostResolver, AddressResolver],
     validate: false,
   });
 

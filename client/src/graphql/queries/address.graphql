@@ -1,0 +1,13 @@
+query address {
+  address {
+    id
+    userId
+    line1
+    line2
+    subdistrict
+    district
+    province
+    country
+    postcode
+  }
+}

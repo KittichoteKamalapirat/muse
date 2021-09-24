@@ -110,7 +110,14 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
+            deleteAddress: (_result, args, cache, info) => {
+              console.log("delete Address");
+              cache.invalidate({
+                __typename: "Address",
+              });
+            },
             deletePost: (_result, args, cache, info) => {
+              console.log("delete post cache");
               cache.invalidate({
                 __typename: "Post",
                 id: (args as DeletePostMutationVariables).id,
@@ -133,8 +140,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
                   return; //do nothing if voteStatus = 1 and we're trying to vote 1 again via args
                 }
                 const newPoints =
-                  // data.points + (!data.voteStatus ? 1 : 2) * value; //if we're changing the vote, it will be 2 points different
-                  data.points + value;
+                  data.points + (!data.voteStatus ? 1 : 2) * value; //if we're changing the vote, it will be 2 points different
                 cache.writeFragment(
                   gql`
                     fragment _ on Post {
