@@ -70,7 +70,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
         <NextLink
           href={{
-            pathname: "/user/account-info/[id]",
+            pathname: "/account",
             query: { id: data.me.id },
           }}
         >

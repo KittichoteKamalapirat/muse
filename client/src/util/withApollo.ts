@@ -2,8 +2,6 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createWithApollo } from "./createWithApollo";
 import { PaginatedPosts } from "../generated/graphql";
-
-import { setContext } from "@apollo/client/link/context";
 import { NextPageContext } from "next";
 
 const createClient = (ctx: NextPageContext) =>
@@ -12,7 +10,9 @@ const createClient = (ctx: NextPageContext) =>
     credentials: "include",
     headers: {
       cookie:
-        (typeof window === "undefined" ? ctx.req?.headers.cookie : "") || "",
+        (typeof window === "undefined"
+          ? ctx?.req?.headers.cookie
+          : undefined) || "",
     },
     cache: new InMemoryCache({
       typePolicies: {
