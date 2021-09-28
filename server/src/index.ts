@@ -38,7 +38,8 @@ const main = async () => {
     entities: [User, Post, Upvote, Address],
   });
 
-  // await conn.runMigrations();
+  await conn.runMigrations();
+  // await Post.delete({});
   // console.log("delete all the data");
   // await Post.delete({})
   // await conn.runMigrations(); -> make sure the colume name with capital letter is "", put quatation "creatorId"

@@ -117,6 +117,50 @@ export class PostResolver {
     return upvote ? upvote.value : null;
   }
 
+  @Query(() => PaginatedPosts)
+  @UseMiddleware(isAuth)
+  async votedPosts(
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null,
+    @Ctx() { req }: MyContext
+  ): Promise<PaginatedPosts> {
+    const realLimit = Math.min(50, limit);
+    const realLimitPlusOne = realLimit + 1;
+    const replacements: any[] = [realLimitPlusOne];
+    if (cursor) {
+      replacements.push(new Date(parseInt(cursor)));
+    }
+    const upvoted = await Upvote.find({
+      where: { userId: req.session.userId },
+    });
+
+    const upvotedPostIds: number[] = [];
+
+    upvoted.forEach((upvoted) => {
+      upvotedPostIds.push(upvoted.postId);
+    });
+    const posts = await getConnection().query(
+      `
+      select p.*
+      from post p
+      ${
+        cursor
+          ? `where (p."createdAt" < $2) AND (p.id IN (${upvotedPostIds}))`
+          : ""
+      }
+
+      order by p."createdAt" DESC 
+      limit $1
+      `,
+      replacements
+    );
+    const slicedPosts = posts.slice(0, realLimit);
+    return {
+      posts: slicedPosts,
+      hasMore: posts.length === realLimitPlusOne,
+    };
+  }
+
   // to provide the return type.
   // Since the method is async, the reflection metadata system shows the return type as a Promise,
   // so we have to add the decorator's parameter as returns => [Recipe] to declare it resolves to an array of Recipe object types.
@@ -182,54 +226,18 @@ export class PostResolver {
   @Query(() => PaginatedPosts)
   async posts(
     @Arg("limit", () => Int) limit: number, //be defalt number -> Float in graphql
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null, //when we sset something nullable, we also has to set the type String excplicitly
-    @Ctx() { req }: MyContext
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null //when we sset something nullable, we also has to set the type String excplicitly
   ): Promise<PaginatedPosts> {
     // return await Post.find(); //will use query builder instead when complex query
     const realLimit = Math.min(50, limit); //if no limit specified, default is 50
     const realLimitPlusOne = realLimit + 1;
-
-    // console.log(`user is ${req.session.userId}`);
-
     const replacements: any[] = [realLimitPlusOne];
-    // console.log(`1 repalcements length:${replacements.length}`);
-
-    // console.log(`2 repalcements length:${replacements.length}`);
-
-    // if there is cursor -> cursorIndex =
-    // if there is NO cursor -> cursorIndex = 3
-
-    // if (req.session.userId) {
-    //   replacements.push(req.session.userId);
-    // }
 
     let cursorIndex = 3;
     if (cursor) {
       replacements.push(new Date(parseInt(cursor)));
       // cursorIndex = replacements.length;
     }
-
-    // console.log(`cursurIndex: ${cursorIndex}`);
-    // const posts = await getConnection().query(
-    //   `
-    // select p.*
-    // from post p
-    // ${cursor ? `where p."createdAt" < $2` : ""}
-    // order by p."createdAt" DESC
-    // limit $1
-    // `,
-    //   replacements
-    // );
-
-    // json_build_object(
-    //   'id', u.id,
-    //   'username', u.username,
-    //   'email', u.email,
-    //   'createdAt', u."createdAt",
-    //   'updatedAt', u."updatedAt",
-    // ) creator,
-
-    // inner join public.user u on u.id = p."creatorId"
 
     const posts = await getConnection().query(
       `
@@ -241,42 +249,14 @@ export class PostResolver {
       `,
       replacements
     );
+    console.log(posts);
 
-    //   `
-    // select p.*,
-    // ${
-    //   req.session.userId
-    //     ? '(select value from upvote where "userId" = $2 and "postId" = p.id) "voteStatus"'
-    //     : 'null as "voteStatus"'
-    // }
-    // from post p
-
-    // ${cursor ? `where p."createdAt" < $${cursorIndex}` : ""}
-    // order by p."createdAt" DESC
-    // limit $1
-    // `,
-    //   replacements
-    // );
-
-    // const qb = getConnection()
-    //   .getRepository(Post)
-    //   .createQueryBuilder("post") //alias
-    //   .orderBy('"createdAt"', "DESC") //two quotes because typeorm auto convert to createat which is not what we want
-    //   .take(realLimitPlusOne);
-
-    // if (cursor) {
-    //   // have to turn to 1) turn a string to an int 2) make ita date
-    //   qb.where('"createdAt" < :cursor', { cursor: new Date(parseInt(cursor)) });
-
-    //   // basically we're saying get the most recent {number} posts which are older than createdAt
-    // }
-
-    // const posts = await qb.getMany();
     const slicedPosts = posts.slice(0, realLimit);
 
     return {
-      posts: posts.slice(0, realLimit),
+      posts: slicedPosts,
       hasMore: posts.length === realLimitPlusOne,
+      // hasMore: true
     };
   }
 

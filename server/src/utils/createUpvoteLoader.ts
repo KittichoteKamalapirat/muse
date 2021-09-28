@@ -61,13 +61,11 @@ const createUpvoteLoader = async (keys: any) => {
   });
 
   return keys.map((key: any) => {
-    console.log(upvoteIdsToUpvote[`${key.userId}|${key.postId}`]);
-    console.log("+++++++++++++++++++++++++++++++++");
     return upvoteIdsToUpvote[`${key.userId}|${key.postId}`];
   });
 };
 
 export const upvoteLoader = () =>
-  new DataLoader<{ postId: number; userId: number }, Upvote | null>(
+  new DataLoader<{ postId: number; userId: string }, Upvote | null>(
     createUpvoteLoader
   );

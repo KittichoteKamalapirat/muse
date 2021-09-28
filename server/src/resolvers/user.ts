@@ -20,6 +20,8 @@ import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 import { ContainerInterface, getConnection } from "typeorm";
+import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/open-peeps";
 
 @ObjectType()
 class FieldError {
@@ -79,8 +81,8 @@ export class UserResolver {
       };
     }
 
-    const userIdNum = parseInt(userId);
-    const user = await User.findOne(userIdNum);
+    // const userIdNum = parseInt(userId);
+    const user = await User.findOne(userId);
 
     if (!user) {
       return {
@@ -94,7 +96,7 @@ export class UserResolver {
     }
     user.password = await argon2.hash(newPassword);
     await User.update(
-      { id: userIdNum },
+      { id: userId },
       {
         password: await argon2.hash(newPassword),
       }
@@ -170,20 +172,26 @@ export class UserResolver {
     // });
 
     let user;
+    const uuid = v4();
     try {
       const result = await getConnection()
         .createQueryBuilder()
         .insert()
         .into(User)
         .values([
-          { username: data.username, email: data.email, password: hash },
+          {
+            id: uuid,
+            username: data.username,
+            email: data.email,
+            password: hash,
+            avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
+          },
         ])
         .returning("*") //RETURNING is sql statement
         .execute();
 
       // This query builder is an alternative of the .create.save
       user = result.raw[0];
-      // console.log("result", result);
     } catch (error) {
       console.log("err", error);
       if (error.code === "23505") {
@@ -201,6 +209,7 @@ export class UserResolver {
     // automatically logged in after register
     // set a cookie on the user
     req.session.userId = user.id;
+
     return { user: user };
   }
 

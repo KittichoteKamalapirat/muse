@@ -1,5 +1,13 @@
 import { Field, ObjectType } from "type-graphql";
-import { Entity, BaseEntity, ManyToOne, PrimaryColumn, Column } from "typeorm";
+import {
+  Entity,
+  BaseEntity,
+  ManyToOne,
+  PrimaryColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Post } from "./Post";
 import { User } from "./User";
 
@@ -17,7 +25,7 @@ export class Upvote extends BaseEntity {
 
   @Field()
   @PrimaryColumn()
-  userId: number;
+  userId: string;
 
   @Field(() => User) //have to be explicit
   @ManyToOne(() => User, (user) => user.upvotes)
@@ -32,4 +40,12 @@ export class Upvote extends BaseEntity {
     onDelete: "CASCADE",
   })
   post: Post;
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

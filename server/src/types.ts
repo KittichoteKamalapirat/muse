@@ -6,7 +6,7 @@ import { createUserLoader } from "./utils/createUserLoader";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 export type MyContext = {
   // req: Request & { session: Express.Session };
-  req: Request & { session?: Session & { userId?: number } };
+  req: Request & { session?: Session & { userId?: string } };
   res: Response;
   redis: Redis;
   userLoader: ReturnType<typeof createUserLoader>;

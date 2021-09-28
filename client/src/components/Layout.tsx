@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { Navbar } from "./Navbar";
 import { Wrapper, WrapperVariant } from "./Wrapper";
@@ -10,7 +11,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
   return (
     <>
       <Navbar />
-      <Wrapper variant={variant}>{children}</Wrapper>
+      <Box mt={20}>
+        <Wrapper variant={variant}>{children}</Wrapper>
+      </Box>
     </>
   );
 };

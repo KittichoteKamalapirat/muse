@@ -1,18 +1,31 @@
-import { Box, Button, Flex, Heading, Link } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  Link,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import { useRouter } from "next/router";
-import { PlusSquareIcon } from "@chakra-ui/icons";
+import { PlusSquareIcon, SearchIcon } from "@chakra-ui/icons";
 import { useApolloClient } from "@apollo/client";
+import { HomeIcon } from "./Icons/HomeIcon";
+import { AccountIcon } from "./Icons/AccountIcon";
+import { HeartIcon } from "./Icons/HeartIcon";
+import { ActivityIcon } from "./Icons/ActivityIcon";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
-  const [logout, { loading: logoutLoading }] = useLogoutMutation();
-  const apolloClient = useApolloClient();
+
   const { data, loading } = useMeQuery({
     skip: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
     // no need to request in the browser side, just on client, but the server still knows anyway due to cookei forwarding
@@ -50,56 +63,131 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   } else {
     body = (
       <Flex align="center">
-        <NextLink href="/create-post">
-          <Button as={Link} mr={2}>
-            <PlusSquareIcon />{" "}
-          </Button>
-        </NextLink>
-
-        <Box mr={2}>{data.me.username}</Box>
-        <Button
-          onClick={async () => {
-            await logout();
-            await apolloClient.resetStore();
-            // router.reload();
-          }}
-          isLoading={logoutLoading}
-        >
-          logout
-        </Button>
-
-        <NextLink
-          href={{
-            pathname: "/account",
-            query: { id: data.me.id },
-          }}
-        >
-          <Link>My account</Link>
-        </NextLink>
+        <Box>{data.me.username}</Box>
       </Flex>
 
       // no need ? because it is implied that it exsists, put the ifs befire
     );
   }
   return (
-    <Flex
-      zIndex={1}
-      position="sticky"
-      top={0}
-      bg={["white", "red"]}
-      p={2}
-      ml={"auto"}
-      align="center"
-    >
-      <Flex maxW={800} flex={1} align="center" m="auto">
+    <Box>
+      <Flex
+        zIndex={1}
+        position="fixed"
+        width="100%"
+        top={0}
+        bg={["white", "red"]}
+        p={2}
+        ml={"auto"}
+        align="center"
+        justifyContent="flex-end"
+        bgColor="red.400"
+      >
+        <InputGroup zIndex={2} bgColor="white">
+          <InputLeftElement
+            height="100%"
+            pointerEvents="none"
+            children={<SearchIcon color="grey.300" />}
+          />
+          <Input zIndex={2} placeholder="search" size="sm" variant="filled" />
+        </InputGroup>
+
+        <NextLink href="/create-post">
+          <Button as={Link} mr={2}>
+            <PlusSquareIcon />{" "}
+          </Button>
+        </NextLink>
+      </Flex>
+      <Flex
+        zIndex={1}
+        position="fixed"
+        bottom={0}
+        bg={["white", "red"]}
+        p={2}
+        ml={"auto"}
+        align="center"
+        width="100%"
+        justifyContent="space-around"
+      >
         <NextLink href="/">
           <Link>
-            <Heading>Cookknow</Heading>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <HomeIcon />
+              <Text fontSize="xs">New Feed</Text>
+            </Flex>
           </Link>
         </NextLink>
 
-        <Box ml={"auto"}>{body}</Box>
+        <NextLink
+          href={{
+            pathname: "/like",
+          }}
+        >
+          <Link>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <HeartIcon />
+              <Text fontSize="xs">Likes</Text>
+            </Flex>
+          </Link>
+        </NextLink>
+
+        {/* <NextLink
+          href={{
+            pathname: "/search",
+          }}>
+          <Link>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center">
+              <SearchIcon />
+              <Text fontSize="xs">Search</Text>
+            </Flex>
+          </Link>
+        </NextLink> */}
+
+        <NextLink
+          href={{
+            pathname: "/activity",
+          }}
+        >
+          <Link>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <ActivityIcon />
+              <Text fontSize="xs">Acitivity</Text>
+            </Flex>
+          </Link>
+        </NextLink>
+
+        <NextLink
+          href={{
+            pathname: "/account",
+          }}
+        >
+          <Link>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <AccountIcon />
+              <Text fontSize="xs">{body}</Text>
+            </Flex>
+          </Link>
+        </NextLink>
       </Flex>
-    </Flex>
+    </Box>
   );
 };

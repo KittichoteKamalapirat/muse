@@ -17,9 +17,9 @@ import { Upvote } from "./Upvote";
 @ObjectType()
 @Entity()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
-  id!: number;
+  id!: string;
 
   // will use this later
   //   @Column({ unique: true })
@@ -34,6 +34,10 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   @Field()
   email!: string;
+
+  @Column({ unique: true })
+  @Field()
+  avatar!: string;
 
   //   Client can't query for pass word it will and hashed
   @Column()

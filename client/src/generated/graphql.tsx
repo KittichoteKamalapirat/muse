@@ -158,7 +158,7 @@ export type Post = {
   voteStatus?: Maybe<Scalars['Int']>;
   thumbnailUrl: Scalars['String'];
   videoUrl: Scalars['String'];
-  creatorId: Scalars['Float'];
+  creatorId: Scalars['String'];
   creator: User;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
@@ -186,6 +186,7 @@ export type Query = {
   users: Array<User>;
   user: User;
   me?: Maybe<User>;
+  votedPosts: PaginatedPosts;
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   address: Address;
@@ -194,6 +195,12 @@ export type Query = {
 
 export type QueryUserArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryVotedPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -264,7 +271,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: number, createdAt: string, updatedAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: string, createdAt: string, updatedAt: string } };
 
 export type DeleteAddressMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -367,6 +374,14 @@ export type PostsQueryVariables = Exact<{
 
 
 export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string } }> } };
+
+export type VotedPostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
+
+
+export type VotedPostsQuery = { __typename?: 'Query', votedPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string }> } };
 
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on Post {
@@ -1030,3 +1045,45 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const VotedPostsDocument = gql`
+    query votedPosts($limit: Int!, $cursor: String) {
+  votedPosts(limit: $limit, cursor: $cursor) {
+    posts {
+      title
+      textSnippet
+      videoUrl
+      thumbnailUrl
+    }
+    hasMore
+  }
+}
+    `;
+
+/**
+ * __useVotedPostsQuery__
+ *
+ * To run a query within a React component, call `useVotedPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVotedPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVotedPostsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useVotedPostsQuery(baseOptions: Apollo.QueryHookOptions<VotedPostsQuery, VotedPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<VotedPostsQuery, VotedPostsQueryVariables>(VotedPostsDocument, options);
+      }
+export function useVotedPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<VotedPostsQuery, VotedPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<VotedPostsQuery, VotedPostsQueryVariables>(VotedPostsDocument, options);
+        }
+export type VotedPostsQueryHookResult = ReturnType<typeof useVotedPostsQuery>;
+export type VotedPostsLazyQueryHookResult = ReturnType<typeof useVotedPostsLazyQuery>;
+export type VotedPostsQueryResult = Apollo.QueryResult<VotedPostsQuery, VotedPostsQueryVariables>;

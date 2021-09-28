@@ -1,0 +1,11 @@
+query votedPosts($limit: Int!, $cursor: String) {
+  votedPosts(limit: $limit, cursor: $cursor) {
+    posts {
+      title
+      textSnippet
+      videoUrl
+      thumbnailUrl
+    }
+    hasMore
+  }
+}
