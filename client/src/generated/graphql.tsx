@@ -243,7 +243,7 @@ export type UsernamePasswordInput = {
   password?: Maybe<Scalars['String']>;
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -373,7 +373,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -381,7 +381,7 @@ export type VotedPostsQueryVariables = Exact<{
 }>;
 
 
-export type VotedPostsQuery = { __typename?: 'Query', votedPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string }> } };
+export type VotedPostsQuery = { __typename?: 'Query', votedPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string }> } };
 
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on Post {
@@ -396,6 +396,7 @@ export const PostSnippetFragmentDoc = gql`
   creator {
     id
     username
+    avatar
   }
 }
     `;
@@ -1049,6 +1050,7 @@ export const VotedPostsDocument = gql`
     query votedPosts($limit: Int!, $cursor: String) {
   votedPosts(limit: $limit, cursor: $cursor) {
     posts {
+      id
       title
       textSnippet
       videoUrl

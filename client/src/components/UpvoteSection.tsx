@@ -1,5 +1,5 @@
 import { StarIcon } from "@chakra-ui/icons";
-import { Flex, IconButton } from "@chakra-ui/react";
+import { background, Flex, IconButton } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { gql } from "urql";
 import {
@@ -60,7 +60,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
 
   const [vote] = useVoteMutation(); //cannot use fetching because it would be loading state for upvote or downvote button
   return (
-    <Flex alignItems="center" justifyContent="center" mr={4}>
+    <Flex alignItems="center" justifyContent="center">
       <IconButton
         onClick={async () => {
           setLoadingState("upvote-loading");
@@ -75,9 +75,15 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
           });
           setLoadingState("not-loading");
         }}
+        bgColor="white"
         aria-label="upvote post"
         isLoading={loadingState === "upvote-loading"}
-        icon={<StarIcon color={post.voteStatus === 1 ? "green" : "grey"} />}
+        icon={
+          <StarIcon
+            color={post.voteStatus === 1 ? "green" : "grey"}
+            // borderColor={post.voteStatus === 1 ? "green" : "dark.100"}
+          />
+        }
       ></IconButton>
       {post.points}
     </Flex>

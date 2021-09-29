@@ -13,18 +13,20 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
 }) => {
   const [deletePost] = useDeletePostMutation();
   return (
-    <Box>
+    <Box m={2}>
       <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
         <IconButton
           as={Link}
           aria-label="Edit post"
           icon={<EditIcon />}
+          bgColor="white"
         ></IconButton>
       </NextLink>
 
       <IconButton
         aria-label="Delete post"
         icon={<DeleteIcon />}
+        bgColor="white"
         onClick={() =>
           deletePost({
             variables: { id },

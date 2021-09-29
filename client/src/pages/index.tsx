@@ -2,7 +2,15 @@ import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
 import { Link } from "@chakra-ui/layout";
-import { Box, Button, Flex, Heading, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { UpvoteSection } from "../components/UpvoteSection";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
@@ -11,7 +19,6 @@ import { withApollo } from "../util/withApollo";
 const Index = () => {
   const { data: meData } = useMeQuery(); //this is renaming synta when destructing data => meData
 
-  // console.log(variables);
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
     variables: {
       limit: 20,
@@ -34,17 +41,31 @@ const Index = () => {
       {!data && loading ? (
         <div>loading ... </div>
       ) : (
-        <Stack spacing={8}>
+        <Stack spacing={4}>
           {data!.posts.posts.map((post) =>
             !post ? null : (
-              <Box key={post.id} shadow="md" borderWidth="1px">
-                <Text>by {post.creator.username}</Text>
+              <Box
+                key={post.id}
+                // shadow="md"
+                // borderWidth="1px"
+              >
+                <Flex alignItems="center">
+                  <Image
+                    m={2}
+                    width="2.5rem"
+                    src={post.creator.avatar}
+                    alt="creator avatar"
+                    borderRadius="50%"
+                    border={2}
+                    borderStyle="solid"
+                    borderColor="red.400"
+                  />
+
+                  <Text> {post.creator.username}</Text>
+                </Flex>
+
                 <Flex key={post.id}>
                   <Box flex={1}>
-                    {/* <Box boxSize="sm">
-                      <Image src={post.videoUrl} alt="image" />
-                    </Box> */}
-
                     <video controls>
                       <source src={post.videoUrl} type="video/mp4" />
                       Your browser does not support the video tag.
@@ -70,7 +91,7 @@ const Index = () => {
                     </NextLink>
 
                     <Flex justifyContent="space-between" alignItems="center">
-                      <Text mt={4}>{post.textSnippet}</Text>
+                      <Text>{post.textSnippet}... </Text>
                       {/* show the box only if I own the post */}
                     </Flex>
                   </Box>

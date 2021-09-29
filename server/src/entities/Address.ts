@@ -49,9 +49,9 @@ export class Address extends BaseEntity {
 
   // relationship with user
   @Column()
-  @Field(() => Int)
+  @Field(() => String)
   // @Field()
-  userId: number;
+  userId: string;
 
   @Field(() => User)
   @OneToOne((type) => User, (user) => user.address)

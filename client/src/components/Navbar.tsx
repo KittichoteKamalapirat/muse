@@ -3,6 +3,8 @@ import {
   Button,
   Flex,
   Heading,
+  Image,
+  Img,
   Input,
   InputGroup,
   InputLeftElement,
@@ -139,21 +141,6 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
 
-        {/* <NextLink
-          href={{
-            pathname: "/search",
-          }}>
-          <Link>
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center">
-              <SearchIcon />
-              <Text fontSize="xs">Search</Text>
-            </Flex>
-          </Link>
-        </NextLink> */}
-
         <NextLink
           href={{
             pathname: "/activity",
@@ -182,8 +169,22 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <AccountIcon />
-              <Text fontSize="xs">{body}</Text>
+              {!data?.me ? (
+                <AccountIcon />
+              ) : (
+                <Box>
+                  <Image
+                    width="2rem"
+                    src={data?.me?.avatar}
+                    alt="creator avatar"
+                    borderRadius="50%"
+                    border={1}
+                    borderStyle="solid"
+                    borderColor="red.400"
+                  />
+                  <Text fontSize="xs">{body}</Text>
+                </Box>
+              )}
             </Flex>
           </Link>
         </NextLink>

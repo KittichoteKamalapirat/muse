@@ -1,6 +1,7 @@
 query votedPosts($limit: Int!, $cursor: String) {
   votedPosts(limit: $limit, cursor: $cursor) {
     posts {
+      id
       title
       textSnippet
       videoUrl

@@ -1,9 +1,10 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import { Layout } from "../components/Layout";
 import { Wrapper } from "../components/Wrapper";
 import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
+import NextLink from "next/link";
 
 interface likeProps {}
 
@@ -20,25 +21,39 @@ const Like: React.FC = ({}) => {
     body = <Text>You don't have a favorite recipe</Text>;
   } else {
     body = (
-      <Flex align="center">
-        <Box>
-          {data?.votedPosts.posts.map((post) => (
-            <Flex m={2}>
-              <Box flex={1} m={2}>
-                <Image src={post.thumbnailUrl} alt="image" borderRadius="10%" />
-              </Box>
-              <Box flex={2} m={2}>
-                <Text>{post.title}</Text>
-                <Text>{post.textSnippet}</Text>
-              </Box>
-            </Flex>
-          ))}
-        </Box>
-      </Flex>
+      <Box>
+        {data?.votedPosts.posts.map((post) => (
+          <NextLink
+            href={{
+              pathname: "/post/[id]",
+              query: { id: post.id },
+            }}
+          >
+            <Link>
+              <Flex m={2}>
+                <Box flex={1} m={2}>
+                  <Image
+                    src={post.thumbnailUrl}
+                    alt="image"
+                    borderRadius="10%"
+                  />
+                </Box>
+                <Box flex={2} m={2}>
+                  <Heading fontSize="xl">{post.title}</Heading>
+                  <Text>{post.textSnippet}...</Text>
+                </Box>
+              </Flex>
+            </Link>
+          </NextLink>
+        ))}
+      </Box>
     );
   }
   return (
     <Layout>
+      <Text ml="1rem" fontSize="xl">
+        เมนูโปรดของฉัน
+      </Text>
       <Box>{body}</Box>
     </Layout>
   );

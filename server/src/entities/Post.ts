@@ -62,6 +62,22 @@ export class Post extends BaseEntity {
   @OneToMany((type) => Upvote, (upvote) => upvote.post)
   upvotes: Upvote[];
 
+  //recipe
+
+  // @Field(() => ObjectType)
+  // @Column({
+  //   type: 'jsonb',
+  //   array: false,
+  //   // array: true,
+  //   default: () => "'[]'",
+  //   nullable: true,
+  // })
+  // recipe: {
+  //   ingredient: string;
+  //   aount: string;
+  //   unit: string;
+  // }
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;
