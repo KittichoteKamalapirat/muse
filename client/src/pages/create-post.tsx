@@ -70,7 +70,7 @@ const CreatePost: React.FC<{}> = ({}) => {
     return newFilename.substring(0, 60);
   };
 
-  const videoPreviewHandler = (e) => {
+  const videoPreviewHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     // for preview starts
     const reader = new FileReader();
     console.log("hi");
@@ -84,7 +84,7 @@ const CreatePost: React.FC<{}> = ({}) => {
       }
     };
 
-    reader.readAsDataURL(e.target.files[0]);
+    reader.readAsDataURL(e.target.files![0]);
 
     console.log("end");
     // for preview ends
@@ -148,7 +148,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                 router.push("/");
               }
             } catch (error) {
-              console.log(error.message);
+              console.log(error);
             }
 
             // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
@@ -208,8 +208,8 @@ const CreatePost: React.FC<{}> = ({}) => {
                       >
                         <div {...getRootProps()}>
                           <input
-                            {...getInputProps()}
                             onChange={(e) => videoPreviewHandler(e)}
+                            {...getInputProps()}
                           />
                           {!videoPreview ? null : (
                             <video controls>
