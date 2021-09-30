@@ -20,6 +20,8 @@ const CreatePost: React.FC<{}> = ({}) => {
   const [createPost] = useCreatePostMutation();
   const router = useRouter();
 
+  const [videoPreview, setVideoPreview] = useState("" as any);
+
   const [videoFile, setVideoFile] = useState({ file: null } as any);
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
@@ -27,6 +29,7 @@ const CreatePost: React.FC<{}> = ({}) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
+
     setVideoFile({ file: acceptedFiles[0] });
   };
 
@@ -67,6 +70,25 @@ const CreatePost: React.FC<{}> = ({}) => {
     return newFilename.substring(0, 60);
   };
 
+  const videoPreviewHandler = (e) => {
+    // for preview starts
+    const reader = new FileReader();
+    console.log("hi");
+    if (reader.error) {
+      console.log(reader.error.message);
+    }
+    reader.onload = () => {
+      console.log("before videopreview");
+      if (reader.readyState === 2) {
+        setVideoPreview(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files[0]);
+
+    console.log("end");
+    // for preview ends
+  };
   return (
     <Layout variant="small">
       <Wrapper variant="small">
@@ -185,10 +207,19 @@ const CreatePost: React.FC<{}> = ({}) => {
                         padding={4}
                       >
                         <div {...getRootProps()}>
-                          <input {...getInputProps()} />
+                          <input
+                            {...getInputProps()}
+                            onChange={(e) => videoPreviewHandler(e)}
+                          />
+                          {!videoPreview ? null : (
+                            <video controls>
+                              <source src={videoPreview} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                          )}
                           <p>
                             Drag and drop a video here, or click to select the
-                            file
+                            filed
                           </p>
                         </div>
                       </Box>
