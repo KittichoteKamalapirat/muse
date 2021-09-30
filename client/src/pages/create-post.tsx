@@ -1,5 +1,6 @@
-import { Box } from "@chakra-ui/layout";
-import { Button, Image } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/layout";
+
+import { Button, Image, AspectRatio } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
@@ -12,6 +13,7 @@ import Dropzone from "react-dropzone";
 import axios from "axios";
 import moment from "moment";
 import { withApollo } from "../util/withApollo";
+import { ArrowUpIcon, EditIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 const CreatePost: React.FC<{}> = ({}) => {
   //router import for below, not for useIsAuth
@@ -105,7 +107,7 @@ const CreatePost: React.FC<{}> = ({}) => {
 
   return (
     <Layout variant="small">
-      <Wrapper variant="small">
+      <Box m="1rem">
         <Formik
           initialValues={{
             title: "",
@@ -170,9 +172,57 @@ const CreatePost: React.FC<{}> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
+              <Dropzone
+                onDrop={handleOnDropVideo}
+                // maxSize={1000 * 1}
+                multiple={false}
+                // accept="video/mp4"
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <Box mt={2}>
+                    {/* <Box mb={2}>Video</Box> */}
+                    <Box cursor="pointer" padding={4}>
+                      <div {...getRootProps()}>
+                        <input
+                          // onChange={(e) => console.log("onchange")}
+
+                          {...getInputProps()}
+                          onChange={(e) => {
+                            console.log("onchange");
+                            videoPreviewHandler(e);
+                          }}
+                        />
+                        {!videoPreview ? (
+                          <Flex
+                            direction="column"
+                            alignItems="center"
+                            border="1px"
+                            borderColor="gray.200"
+                            bgColor="gray.50"
+                          >
+                            <ArrowUpIcon mt="3rem" />
+                            <Text textAlign="center" mb="2rem">
+                              Drag and drop a video here, or click to select the
+                              file
+                            </Text>
+                          </Flex>
+                        ) : (
+                          <Flex justifyContent="center" alignItems="end">
+                            <video controls width="50%">
+                              <source src={videoPreview} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                            <EditIcon m={2} />
+                          </Flex>
+                        )}
+                      </div>
+                    </Box>
+                  </Box>
+                )}
+              </Dropzone>
+
               <InputField name="title" placeholder="title" label="title" />
               <Box mt={4}>
-                {" "}
                 <InputField
                   textarea={true}
                   name="text"
@@ -187,11 +237,11 @@ const CreatePost: React.FC<{}> = ({}) => {
                 >
                   {({ getRootProps, getInputProps }) => (
                     <Box mt={2}>
-                      <Box mb={2}>Thumbnail Image</Box>
+                      {/* <Box mb={2}>Thumbnail Image</Box> */}
                       <Box
                         cursor="pointer"
-                        border="1px"
-                        borderColor="gray.200"
+                        // border="1px"
+                        // borderColor="gray.200"
                         padding={4}
                       >
                         <div {...getRootProps()}>
@@ -199,80 +249,55 @@ const CreatePost: React.FC<{}> = ({}) => {
                             {...getInputProps()}
                             onChange={(e) => thumbnailPreviewHandler(e)}
                           />
-                          {!thumbnailPreview ? null : (
-                            <Box boxSize="sm">
-                              <Image src={thumbnailPreview} alt="image" />
-                            </Box>
-                          )}
-                          <Box mb={2}>
-                            <p>
-                              Drag and drop a thumbnail image here, or click to
-                              select the file
-                            </p>
-                          </Box>
-                        </div>
-                      </Box>
-                    </Box>
-                  )}
-                </Dropzone>
-                <Dropzone
-                  onDrop={handleOnDropVideo}
-                  // maxSize={1000 * 1}
-                  multiple={false}
-                  // accept="video/mp4"
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <Box mt={2}>
-                      <Box mb={2}>Video</Box>
-                      <Box
-                        cursor="pointer"
-                        border="1px"
-                        borderColor="gray.200"
-                        padding={4}
-                      >
-                        <div {...getRootProps()}>
-                          <input
-                            // onChange={(e) => console.log("onchange")}
 
-                            {...getInputProps()}
-                            onChange={(e) => {
-                              console.log("onchange");
-                              videoPreviewHandler(e);
-                            }}
-                          />
-                          {!videoPreview ? null : (
-                            <video controls>
-                              <source src={videoPreview} type="video/mp4" />
-                              Your browser does not support the video tag.
-                            </video>
+                          {!videoPreview ? null : !thumbnailPreview ? (
+                            <Flex
+                              direction="column"
+                              alignItems="center"
+                              border="1px"
+                              borderColor="gray.200"
+                              bgColor="gray.50"
+                            >
+                              <ArrowUpIcon mt="3rem" />
+                              <Text textAlign="center" mb="2rem">
+                                Drag and drop a video here, or click to select
+                                the file
+                              </Text>
+                            </Flex>
+                          ) : (
+                            <Flex justifyContent="center">
+                              {/* <AspectRatio ratio={1}> */}
+                              <Image
+                                src={thumbnailPreview}
+                                alt="image"
+                                boxSize="50%"
+                                fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                              />
+                              {/* </AspectRatio> */}
+                            </Flex>
                           )}
-
-                          <Box>
-                            <p>
-                              Drag and drop a video here, or click to select the
-                              file
-                            </p>
-                          </Box>
                         </div>
                       </Box>
                     </Box>
                   )}
                 </Dropzone>
               </Box>
-
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                colorScheme="teal"
-              >
+              <Flex justifyContent="center">
                 {" "}
-                Create Post
-              </Button>
+                <Button
+                  mb="4rem"
+                  type="submit"
+                  isLoading={isSubmitting}
+                  colorScheme="teal"
+                >
+                  {" "}
+                  Create Post
+                </Button>
+              </Flex>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </Box>
     </Layout>
   );
 };

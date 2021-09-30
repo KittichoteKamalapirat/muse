@@ -16,7 +16,7 @@ import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import { useRouter } from "next/router";
-import { PlusSquareIcon, SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { useApolloClient } from "@apollo/client";
 import { HomeIcon } from "./Icons/HomeIcon";
 import { AccountIcon } from "./Icons/AccountIcon";
@@ -96,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
 
         <NextLink href="/create-post">
           <Button as={Link} mr={2}>
-            <PlusSquareIcon />{" "}
+            <SmallAddIcon />{" "}
           </Button>
         </NextLink>
       </Flex>
