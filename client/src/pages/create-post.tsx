@@ -1,5 +1,5 @@
 import { Box } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
@@ -21,6 +21,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const router = useRouter();
 
   const [videoPreview, setVideoPreview] = useState("" as any);
+  const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
 
   const [videoFile, setVideoFile] = useState({ file: null } as any);
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
@@ -71,7 +72,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   };
 
   const videoPreviewHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // for preview starts
+    console.log("video hi");
     const reader = new FileReader();
     console.log("hi");
     if (reader.error) {
@@ -85,10 +86,23 @@ const CreatePost: React.FC<{}> = ({}) => {
     };
 
     reader.readAsDataURL(e.target.files![0]);
-
-    console.log("end");
-    // for preview ends
   };
+
+  const thumbnailPreviewHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("thumbnailPreviewHandler");
+    const reader = new FileReader();
+    if (reader.error) {
+      console.log(reader.error.message);
+    }
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setThumbnailPreview(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(e.target.files![0]);
+  };
+
   return (
     <Layout variant="small">
       <Wrapper variant="small">
@@ -181,11 +195,21 @@ const CreatePost: React.FC<{}> = ({}) => {
                         padding={4}
                       >
                         <div {...getRootProps()}>
-                          <input {...getInputProps()} />
-                          <p>
-                            Drag and drop a thumbnail image here, or click to
-                            select the file
-                          </p>
+                          <input
+                            {...getInputProps()}
+                            onChange={(e) => thumbnailPreviewHandler(e)}
+                          />
+                          {!thumbnailPreview ? null : (
+                            <Box boxSize="sm">
+                              <Image src={thumbnailPreview} alt="image" />
+                            </Box>
+                          )}
+                          <Box mb={2}>
+                            <p>
+                              Drag and drop a thumbnail image here, or click to
+                              select the file
+                            </p>
+                          </Box>
                         </div>
                       </Box>
                     </Box>
@@ -208,8 +232,13 @@ const CreatePost: React.FC<{}> = ({}) => {
                       >
                         <div {...getRootProps()}>
                           <input
-                            onChange={(e) => videoPreviewHandler(e)}
+                            // onChange={(e) => console.log("onchange")}
+
                             {...getInputProps()}
+                            onChange={(e) => {
+                              console.log("onchange");
+                              videoPreviewHandler(e);
+                            }}
                           />
                           {!videoPreview ? null : (
                             <video controls>
@@ -217,10 +246,13 @@ const CreatePost: React.FC<{}> = ({}) => {
                               Your browser does not support the video tag.
                             </video>
                           )}
-                          <p>
-                            Drag and drop a video here, or click to select the
-                            filed
-                          </p>
+
+                          <Box>
+                            <p>
+                              Drag and drop a video here, or click to select the
+                              file
+                            </p>
+                          </Box>
                         </div>
                       </Box>
                     </Box>
