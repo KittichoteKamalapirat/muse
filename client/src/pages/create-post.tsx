@@ -14,6 +14,7 @@ import axios from "axios";
 import moment from "moment";
 import { withApollo } from "../util/withApollo";
 import { ArrowUpIcon, EditIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { CreateIngredient } from "../components/CreateIngredient";
 
 const CreatePost: React.FC<{}> = ({}) => {
   //router import for below, not for useIsAuth
@@ -282,6 +283,8 @@ const CreatePost: React.FC<{}> = ({}) => {
                   )}
                 </Dropzone>
               </Box>
+
+              <CreateIngredient />
               <Flex justifyContent="center">
                 {" "}
                 <Button
