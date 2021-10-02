@@ -1,4 +1,4 @@
-import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { PostsDocument, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
 import { Link } from "@chakra-ui/layout";

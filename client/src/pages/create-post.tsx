@@ -1,6 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
-import { Button, Image, AspectRatio } from "@chakra-ui/react";
+import {
+  Button,
+  Image,
+  AspectRatio,
+  IconButton,
+  Input,
+} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
@@ -13,7 +19,13 @@ import Dropzone from "react-dropzone";
 import axios from "axios";
 import moment from "moment";
 import { withApollo } from "../util/withApollo";
-import { ArrowUpIcon, EditIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  ArrowUpIcon,
+  EditIcon,
+  MinusIcon,
+  TriangleUpIcon,
+} from "@chakra-ui/icons";
 import { CreateIngredient } from "../components/CreateIngredient";
 
 const CreatePost: React.FC<{}> = ({}) => {
@@ -30,7 +42,10 @@ const CreatePost: React.FC<{}> = ({}) => {
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
+    console.log("accepted File");
+    console.log(acceptedFiles[0]);
     if (rejectedFiles.length > 0) {
+      console.log("rejfect File");
       return alert(rejectedFiles[0].errors[0].message);
     }
 
@@ -74,24 +89,21 @@ const CreatePost: React.FC<{}> = ({}) => {
     return newFilename.substring(0, 60);
   };
 
-  const videoPreviewHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("video hi");
+  const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
     const reader = new FileReader();
-    console.log("hi");
     if (reader.error) {
       console.log(reader.error.message);
     }
     reader.onload = () => {
-      console.log("before videopreview");
       if (reader.readyState === 2) {
         setVideoPreview(reader.result);
       }
     };
 
-    reader.readAsDataURL(e.target.files![0]);
+    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
   };
 
-  const thumbnailPreviewHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
     console.log("thumbnailPreviewHandler");
     const reader = new FileReader();
     if (reader.error) {
@@ -103,8 +115,49 @@ const CreatePost: React.FC<{}> = ({}) => {
       }
     };
 
-    reader.readAsDataURL(e.target.files![0]);
+    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
   };
+
+  // ingredient zone start
+  const [ingredientsField, setIngredientsField] = useState([
+    {
+      ingredient: "",
+      amount: "",
+      unit: "",
+    },
+  ]);
+
+  const handleChangeInput = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const values: any = [...ingredientsField];
+
+    values[index][event.target.name] = event.target.value;
+    setIngredientsField(values);
+  };
+
+  const handleAddField = (index: any) => {
+    const values = [...ingredientsField];
+    console.log("values");
+    console.log(values);
+    values.splice(index + 1, 0, {
+      ingredient: "",
+      amount: "",
+      unit: "",
+    });
+    setIngredientsField(values);
+  };
+
+  const handleRemoveField = (index: any) => {
+    const values = [...ingredientsField];
+    if (values.length > 1) {
+      values.splice(index, 1);
+      setIngredientsField(values);
+    }
+  };
+
+  // ingredient  zone ends
 
   return (
     <Layout variant="small">
@@ -118,6 +171,9 @@ const CreatePost: React.FC<{}> = ({}) => {
           onSubmit={async (values) => {
             try {
               // S3
+              console.log("sign S3");
+              console.log("videoname");
+              console.log(videoFile.file.name);
               const response = await signS3({
                 variables: {
                   videoname: videoFile.file.name,
@@ -127,6 +183,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                 },
                 // filename: formatFilename(file.name),
               });
+              console.log("signS4");
               let videoUrl = "";
               let videoSignedRequest = "";
               let thumbnailUrl = "";
@@ -155,6 +212,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                     text: values.text,
                     videoUrl: videoUrl,
                     thumbnailUrl: thumbnailUrl,
+                    ingredients: ingredientsField,
                   },
                 },
                 update: (cache) => {
@@ -183,16 +241,14 @@ const CreatePost: React.FC<{}> = ({}) => {
                   <Box mt={2}>
                     {/* <Box mb={2}>Video</Box> */}
                     <Box cursor="pointer" padding={4}>
-                      <div {...getRootProps()}>
-                        <input
-                          // onChange={(e) => console.log("onchange")}
-
-                          {...getInputProps()}
-                          onChange={(e) => {
-                            console.log("onchange");
-                            videoPreviewHandler(e);
-                          }}
-                        />
+                      <div
+                        {...getRootProps({
+                          onChange: (event) => {
+                            videoPreviewHandler(event);
+                          },
+                        })}
+                      >
+                        <input {...getInputProps()} />
                         {!videoPreview ? (
                           <Flex
                             direction="column"
@@ -245,11 +301,12 @@ const CreatePost: React.FC<{}> = ({}) => {
                         // borderColor="gray.200"
                         padding={4}
                       >
-                        <div {...getRootProps()}>
-                          <input
-                            {...getInputProps()}
-                            onChange={(e) => thumbnailPreviewHandler(e)}
-                          />
+                        <div
+                          {...getRootProps({
+                            onChange: (e) => thumbnailPreviewHandler(e),
+                          })}
+                        >
+                          <input {...getInputProps()} />
 
                           {!videoPreview ? null : !thumbnailPreview ? (
                             <Flex
@@ -283,8 +340,53 @@ const CreatePost: React.FC<{}> = ({}) => {
                   )}
                 </Dropzone>
               </Box>
+              <form>
+                {ingredientsField.map((inputField, index) => (
+                  <Flex key={index}>
+                    <Input
+                      name="ingredient"
+                      type="text"
+                      m={1}
+                      borderColor="gray.300"
+                      value={inputField.ingredient}
+                      placeholder="วัตถุดิบ"
+                      onChange={(event) => handleChangeInput(index, event)}
+                    ></Input>
+                    <Input
+                      name="amount"
+                      type="text"
+                      m={1}
+                      borderColor="gray.300"
+                      value={inputField.amount}
+                      placeholder="ปริมาณ"
+                      onChange={(event) => handleChangeInput(index, event)}
+                    ></Input>
+                    <Input
+                      name="unit"
+                      type="text"
+                      m={1}
+                      borderColor="gray.300"
+                      placeholder="หน่วย"
+                      value={inputField.unit}
+                      onChange={(event) => handleChangeInput(index, event)}
+                    ></Input>
+                    <IconButton
+                      onClick={() => handleAddField(index)}
+                      aria-label="Add ingredient"
+                      bgColor="white"
+                      icon={<AddIcon width={3} />}
+                    />
+                    <IconButton
+                      onClick={() => handleRemoveField(index)}
+                      aria-label="Remove ingredient"
+                      bgColor="white"
+                      icon={<MinusIcon width={3} />}
+                    />
+                  </Flex>
+                ))}
+              </form>
 
-              <CreateIngredient />
+              {/* <CreateIngredient /> */}
               <Flex justifyContent="center">
                 {" "}
                 <Button

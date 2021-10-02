@@ -164,28 +164,33 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           }}
         >
           <Link>
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              {!data?.me ? (
+            {!data?.me ? (
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
                 <AccountIcon />
-              ) : (
-                <Box>
-                  <Image
-                    width="2rem"
-                    src={data?.me?.avatar}
-                    alt="creator avatar"
-                    borderRadius="50%"
-                    border={1}
-                    borderStyle="solid"
-                    borderColor="red.400"
-                  />
-                  <Text fontSize="xs">{body}</Text>
-                </Box>
-              )}
-            </Flex>
+                <Text fontSize="xs">Account</Text>
+              </Flex>
+            ) : (
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Image
+                  width="1.3rem"
+                  src={data?.me?.avatar}
+                  alt="creator avatar"
+                  borderRadius="50%"
+                  border={1}
+                  borderStyle="solid"
+                  borderColor="red.400"
+                />
+                <Text fontSize="xs">{body}</Text>
+              </Flex>
+            )}
           </Link>
         </NextLink>
       </Flex>

@@ -26,7 +26,7 @@ export type Address = {
   province: Scalars['String'];
   country: Scalars['String'];
   postcode: Scalars['String'];
-  userId: Scalars['Int'];
+  userId: Scalars['String'];
   user: User;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -47,6 +47,19 @@ export type FieldError = {
   __typename?: 'FieldError';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type Ingredient = {
+  __typename?: 'Ingredient';
+  ingredient: Scalars['String'];
+  amount: Scalars['String'];
+  unit: Scalars['String'];
+};
+
+export type IngredientInput = {
+  ingredient: Scalars['String'];
+  amount: Scalars['String'];
+  unit: Scalars['String'];
 };
 
 export type Mutation = {
@@ -102,10 +115,8 @@ export type MutationCreatePostArgs = {
 
 
 export type MutationUpdatePostArgs = {
-  videoUrl: Scalars['String'];
-  text: Scalars['String'];
-  title: Scalars['String'];
   id: Scalars['Int'];
+  input: PostInput;
 };
 
 
@@ -160,6 +171,7 @@ export type Post = {
   videoUrl: Scalars['String'];
   creatorId: Scalars['String'];
   creator: User;
+  ingredients?: Maybe<Array<Ingredient>>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -170,6 +182,7 @@ export type PostInput = {
   text: Scalars['String'];
   videoUrl: Scalars['String'];
   thumbnailUrl: Scalars['String'];
+  ingredients: Array<IngredientInput>;
 };
 
 export type PostSignedS3 = {
@@ -264,7 +277,7 @@ export type CreateAddressMutationVariables = Exact<{
 }>;
 
 
-export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
+export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -330,17 +343,15 @@ export type UpdateAddressMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
+export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
 
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
-  title: Scalars['String'];
-  text: Scalars['String'];
-  videoUrl: Scalars['String'];
+  input: PostInput;
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: Maybe<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string }> };
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: Maybe<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>> }> };
 
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
@@ -353,7 +364,7 @@ export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
 export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', id: number, userId: number, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
+export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -365,7 +376,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -775,6 +786,7 @@ export type SignS3MutationOptions = Apollo.BaseMutationOptions<SignS3Mutation, S
 export const UpdateAddressDocument = gql`
     mutation updateAddress($input: AddressInput!, $id: Int!) {
   updateAddress(input: $input, id: $id) {
+    id
     userId
     line1
     line2
@@ -814,12 +826,17 @@ export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddress
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
 export const UpdatePostDocument = gql`
-    mutation UpdatePost($id: Int!, $title: String!, $text: String!, $videoUrl: String!) {
-  updatePost(id: $id, title: $title, text: $text, videoUrl: $videoUrl) {
+    mutation UpdatePost($id: Int!, $input: PostInput!) {
+  updatePost(id: $id, input: $input) {
     id
     title
     textSnippet
     videoUrl
+    ingredients {
+      ingredient
+      amount
+      unit
+    }
   }
 }
     `;
@@ -839,9 +856,7 @@ export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, U
  * const [updatePostMutation, { data, loading, error }] = useUpdatePostMutation({
  *   variables: {
  *      id: // value for 'id'
- *      title: // value for 'title'
- *      text: // value for 'text'
- *      videoUrl: // value for 'videoUrl'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -972,6 +987,11 @@ export const PostDocument = gql`
     updatedAt
     points
     voteStatus
+    ingredients {
+      ingredient
+      amount
+      unit
+    }
     creator {
       id
       username

@@ -1,13 +1,13 @@
-mutation UpdatePost(
-  $id: Int!
-  $title: String!
-  $text: String!
-  $videoUrl: String!
-) {
-  updatePost(id: $id, title: $title, text: $text, videoUrl: $videoUrl) {
+mutation UpdatePost($id: Int!, $input: PostInput!) {
+  updatePost(id: $id, input: $input) {
     id
     title
     textSnippet
     videoUrl
+    ingredients {
+      ingredient
+      amount
+      unit
+    }
   }
 }

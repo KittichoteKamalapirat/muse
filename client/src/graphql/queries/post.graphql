@@ -9,6 +9,11 @@ query Post($id: Int!) {
     updatedAt
     points
     voteStatus
+    ingredients {
+      ingredient
+      amount
+      unit
+    }
     creator {
       id
       username

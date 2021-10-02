@@ -33,6 +33,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
     };
     const { errors } = await updateAddress({
       variables: { input, id: data!.address.id },
+      // update: cache =>
     });
     router.push("/account/address");
 

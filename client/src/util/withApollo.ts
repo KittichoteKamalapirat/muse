@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createWithApollo } from "./createWithApollo";
 import { PaginatedPosts } from "../generated/graphql";
 import { NextPageContext } from "next";
+import address from "../pages/account/address";
 
 const createClient = (ctx: NextPageContext) =>
   new ApolloClient({
@@ -24,7 +25,6 @@ const createClient = (ctx: NextPageContext) =>
                 existing: PaginatedPosts | undefined,
                 incoming: PaginatedPosts
               ): PaginatedPosts {
-                console.log(existing, incoming);
                 return {
                   __typename: "PaginatedPosts",
                   hasMore: incoming.hasMore, //or ...incoming
@@ -32,6 +32,16 @@ const createClient = (ctx: NextPageContext) =>
                 };
               },
             },
+            // address(existing, { canRead, toReference }) {
+            //   console.log(existing);
+            //   console.log(canRead);
+            //   console.log(toReference);
+            //   // return {
+            //   //   __typename: "address",
+            //   //   address: existing,
+            //   // };
+            //   return existing;
+            // },
           },
         },
       },

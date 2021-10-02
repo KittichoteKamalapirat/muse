@@ -1,6 +1,7 @@
 import React from "react";
 import { Layout } from "../../../components/Layout";
 import {
+  AddressDocument,
   useAddressQuery,
   useDeleteAddressMutation,
   useMeQuery,
@@ -10,6 +11,7 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Link, Text } from "@chakra-ui/react";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
+import { useApolloClient } from "@apollo/client";
 
 interface addressProps {}
 
@@ -66,7 +68,17 @@ const Address: React.FC<addressProps> = ({}) => {
             aria-label="Delete post"
             icon={<DeleteIcon />}
             onClick={() =>
-              deleteAddress({ variables: { id: data.address.id } })
+              deleteAddress({
+                variables: { id: data.address.id },
+                update: (cache) => {
+                  cache.evict({
+                    id: "Address:" + data.address.id,
+                    // broadcast: true,
+                    // fieldName: "address:",
+                  });
+                },
+                // refetchQueries: [{ query: AddressDocument }],
+              })
             }
           ></IconButton>
         </Box>
@@ -75,4 +87,4 @@ const Address: React.FC<addressProps> = ({}) => {
   );
 };
 
-export default withApollo({ ssr: false })(Address);
+export default withApollo({ ssr: true })(Address);

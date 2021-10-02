@@ -26,8 +26,6 @@ interface indexProps {}
 const Account: React.FC<indexProps> = ({}) => {
   const { data: meData, loading } = useMeQuery();
   const router = useRouter();
-  const { data: addressData, loading: addressLoading } = useAddressQuery();
-
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apolloClient = useApolloClient();
 

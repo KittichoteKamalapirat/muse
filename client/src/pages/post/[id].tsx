@@ -5,6 +5,7 @@ import { Box, Heading, Image } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import { withApollo } from "../../util/withApollo";
+import IngredientList from "../../components/IngredientList";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();
@@ -29,14 +30,22 @@ const Post = ({}) => {
   return (
     <Layout>
       <Heading mb={4}>{data?.post?.title}</Heading>
-      <Box mb={4}> {data?.post?.text}</Box>
-      <Box boxSize="sm">
+
+      {/* 
+      <Box>
         <Image src={data?.post?.thumbnailUrl} alt="image" />
-      </Box>
-      <video width="320" height="240" controls>
+      </Box> */}
+
+      <video width="100%" controls>
         <source src={data?.post?.videoUrl} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+
+      <Box mb={4}> {data?.post?.text}</Box>
+
+      {!data.post.ingredients ? null : (
+        <IngredientList ingredients={data.post.ingredients} />
+      )}
 
       {meData?.me?.id !== data.post.creator.id ? null : (
         <Box>

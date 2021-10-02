@@ -36,7 +36,6 @@
 //                     Your browser does not support the video tag.
 //                   </video>
 //                 )}
-//                 <p>Drag and drop a video here, or click to select the fileds</p>
 //               </div>
 //             </Box>
 //           </Box>
