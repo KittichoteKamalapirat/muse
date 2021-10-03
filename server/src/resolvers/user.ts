@@ -143,6 +143,8 @@ export class UserResolver {
     return User.findOne(id);
   }
 
+  //
+
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
     //Destructure the parameter array to req

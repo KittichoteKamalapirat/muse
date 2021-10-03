@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, InputType, Int, ObjectType } from "type-graphql";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -11,6 +11,16 @@ import {
 } from "typeorm";
 import { Upvote } from "./Upvote";
 import { User } from "./User";
+
+@ObjectType()
+export class Ingredient {
+  @Field()
+  ingredient: string;
+  @Field()
+  amount: string;
+  @Field()
+  unit: string;
+}
 
 @ObjectType()
 @Entity()
@@ -77,6 +87,12 @@ export class Post extends BaseEntity {
   //   aount: string;
   //   unit: string;
   // }
+
+  @Field(() => [Ingredient], { nullable: true })
+  @Column("jsonb", { nullable: true })
+  ingredients: Ingredient[];
+  // @Column({type: 'jsonb', array: true, nullable: true})
+  // testJson: object[];
 
   @Field(() => String)
   @CreateDateColumn()

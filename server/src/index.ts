@@ -22,6 +22,7 @@ import { createUserLoader } from "./utils/createUserLoader";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { Address } from "./entities/Address";
 import { AddressResolver } from "./resolvers/address";
+import { sendSMS } from "./utils/sendSms";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
@@ -46,6 +47,7 @@ const main = async () => {
   // console.log("dirname", __dirname);
   // sendEmail("bob@bob.com", "<h1>Email</h1>");
   const app = express();
+  // sendSMS();
 
   const RedisStore = connectRedis(session);
   const redis = new Redis();

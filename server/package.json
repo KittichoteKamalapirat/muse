@@ -39,6 +39,7 @@
     "nodemailer": "^6.6.3",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
+    "twilio": "^3.68.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.37",
     "uuid": "^8.3.2"

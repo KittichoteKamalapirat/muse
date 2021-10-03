@@ -44,6 +44,16 @@ const s3Params = (key: string, contentType: string) => {
 };
 
 @InputType()
+export class IngredientInput {
+  @Field()
+  ingredient: string;
+  @Field()
+  amount: string;
+  @Field()
+  unit: string;
+}
+
+@InputType()
 class PostInput {
   @Field()
   title: string;
@@ -53,6 +63,8 @@ class PostInput {
   videoUrl: string;
   @Field()
   thumbnailUrl: string;
+  @Field(() => [IngredientInput])
+  ingredients: IngredientInput[];
 }
 
 @ObjectType()
@@ -291,24 +303,24 @@ export class PostResolver {
   @Mutation(() => Post, { nullable: true })
   @UseMiddleware(isAuth) //have to log in to update a post
   async updatePost(
+    @Arg("input") input: PostInput,
     @Arg("id", () => Int) id: number,
-    @Arg("title") title: string,
-    @Arg("text") text: string,
-    @Arg("videoUrl") videoUrl: string,
+    // @Arg("title") title: string,
+    // @Arg("text") text: string,
+    // @Arg("videoUrl") videoUrl: string,
+    // @Arg("ingredients", () => [IngredientInput]) ingredients: IngredientInput[],
     @Ctx() { req }: MyContext
   ): Promise<Post | null> {
     const result = await getConnection()
       .createQueryBuilder()
       .update(Post)
-      .set({ title, text, videoUrl })
+      .set(input)
       .where('id = :id and "creatorId" = :creatorId', {
         id: id,
         creatorId: req.session.userId,
       })
       .returning("*")
       .execute();
-    // console.log(result);
-    // console.log("result", result.raw[0]);
     return result.raw[0];
   }
 
