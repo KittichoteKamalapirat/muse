@@ -37,6 +37,10 @@ export class User extends BaseEntity {
 
   @Column({ unique: true })
   @Field()
+  phonenumber!: string;
+
+  @Column({ unique: true })
+  @Field()
   avatar!: string;
 
   //   Client can't query for pass word it will and hashed

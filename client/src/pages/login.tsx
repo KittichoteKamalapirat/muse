@@ -22,7 +22,7 @@ export const Login: React.FC<{}> = ({}) => {
 
         <Formik
           initialValues={{
-            usernameOrEmail: "",
+            usernameOrEmailOrPhonenumber: "",
             password: "",
           }}
           onSubmit={async (values, { setErrors }) => {
@@ -56,28 +56,41 @@ export const Login: React.FC<{}> = ({}) => {
           {({ isSubmitting }) => (
             <Form>
               <InputField
-                name="usernameOrEmail"
-                placeholder="username or email"
-                label="Username or Email"
+                name="usernameOrEmailOrPhonenumber"
+                placeholder="อีเมล/เบอร์โทร/ชื่อผู้ใช้/"
+                label=""
               />
               <Box mt={4}>
                 {" "}
                 <InputField
                   name="password"
                   placeholder="password"
-                  label="Password"
+                  label=""
                   type="password"
                 />
               </Box>
               <Flex>
-                {" "}
                 <NextLink href="/forgot-password">
-                  <Link ml={"auto"}>Forgot password</Link>
+                  <Link ml={"auto"} fontSize="sm" textDecoration="underline">
+                    Forgot password
+                  </Link>
                 </NextLink>
               </Flex>
 
+              <Box textAlign="center" mt={5}>
+                <Text>
+                  Don't have an account?{" "}
+                  <NextLink href="/register">
+                    <Link fontWeight="700" color="red.400">
+                      Register
+                    </Link>
+                  </NextLink>
+                </Text>
+              </Box>
+
               <Button
                 mt={4}
+                width="100%"
                 type="submit"
                 isLoading={isSubmitting}
                 colorScheme="teal"

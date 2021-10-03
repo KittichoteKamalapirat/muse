@@ -38,17 +38,35 @@ const Account: React.FC<indexProps> = ({}) => {
     );
   } else if (!loading && !meData?.me) {
     body = (
-      <Box textAlign="center">
-        <Text>You are not signed in</Text>
-        <Text>
-          Please{" "}
-          <NextLink href="/login">
-            <Link fontWeight="700" color="red.400">
-              Login
-            </Link>
-          </NextLink>
-        </Text>
-      </Box>
+      <Flex
+        minH="500px"
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        {" "}
+        <Box textAlign="center">
+          <Text>You are not signed in</Text>
+          <Text>
+            Please{" "}
+            <NextLink href="/login">
+              <Link fontWeight="700" color="red.400">
+                Login
+              </Link>
+            </NextLink>
+          </Text>
+        </Box>
+        <Box textAlign="center" mt={5}>
+          <Text>
+            Don't have an account?{" "}
+            <NextLink href="/register">
+              <Link fontWeight="700" color="red.400">
+                Register
+              </Link>
+            </NextLink>
+          </Text>
+        </Box>
+      </Flex>
     );
   } else {
     body = (
