@@ -39,7 +39,7 @@ const main = async () => {
     entities: [User, Post, Upvote, Address],
   });
 
-  await conn.runMigrations();
+  // await conn.runMigrations();
   // await Post.delete({});
   // console.log("delete all the data");
   // await Post.delete({})

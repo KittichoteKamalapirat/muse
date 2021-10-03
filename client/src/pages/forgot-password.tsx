@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
 import { InputField } from "../components/InputField";
@@ -23,7 +23,10 @@ const ForgotPassword: React.FC<{}> = ({}) => {
         {({ isSubmitting }) =>
           complete ? (
             <Box>
-              if an account with that email exists, we've sent you an email
+              <Text>
+                If an account with that email exists, we've sent you the email.
+              </Text>
+              <Text>Iy may take a few moments</Text>
             </Box>
           ) : (
             <Form>

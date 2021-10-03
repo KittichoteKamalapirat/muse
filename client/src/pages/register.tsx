@@ -77,6 +77,15 @@ export const Register: React.FC<registerProps> = ({}) => {
             <Box mt={4}>
               {/* {" "} */}
               <InputField
+                name="phonenumber"
+                placeholder="phonenumber"
+                label="Phonenumber"
+              />
+            </Box>
+
+            <Box mt={4}>
+              {/* {" "} */}
+              <InputField
                 name="password"
                 placeholder="password"
                 label="Password"

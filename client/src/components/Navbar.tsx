@@ -22,11 +22,16 @@ import { HomeIcon } from "./Icons/HomeIcon";
 import { AccountIcon } from "./Icons/AccountIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { ActivityIcon } from "./Icons/ActivityIcon";
+import { inActiveGray, primaryColor } from "./Variables";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
   const router = useRouter();
+  const homeActive = router.pathname === "/";
+  const likeActive = router.pathname === "/like";
+  const activityActive = router.pathname === "/activity";
+  const accountActive = router.pathname === "/account";
 
   const { data, loading } = useMeQuery({
     skip: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
@@ -118,8 +123,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <HomeIcon />
-              <Text fontSize="xs">New Feed</Text>
+              <HomeIcon isActive={homeActive} />
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                textColor={homeActive ? primaryColor : inActiveGray}
+              >
+                New Feed
+              </Text>
             </Flex>
           </Link>
         </NextLink>
@@ -135,8 +146,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <HeartIcon />
-              <Text fontSize="xs">Likes</Text>
+              <HeartIcon isActive={likeActive} />
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                textColor={likeActive ? primaryColor : inActiveGray}
+              >
+                Likes
+              </Text>
             </Flex>
           </Link>
         </NextLink>
@@ -152,8 +169,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <ActivityIcon />
-              <Text fontSize="xs">Acitivity</Text>
+              <ActivityIcon isActive={activityActive} />
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                textColor={activityActive ? primaryColor : inActiveGray}
+              >
+                Activity
+              </Text>
             </Flex>
           </Link>
         </NextLink>
@@ -170,8 +193,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <AccountIcon />
-                <Text fontSize="xs">Account</Text>
+                <AccountIcon isActive={accountActive} />
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={accountActive ? primaryColor : inActiveGray}
+                >
+                  Account
+                </Text>
               </Flex>
             ) : (
               <Flex
@@ -186,9 +215,15 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                   borderRadius="50%"
                   border={1}
                   borderStyle="solid"
-                  borderColor="red.400"
+                  borderColor={accountActive ? primaryColor : inActiveGray}
                 />
-                <Text fontSize="xs">{body}</Text>
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={accountActive ? primaryColor : inActiveGray}
+                >
+                  {body}
+                </Text>
               </Flex>
             )}
           </Link>

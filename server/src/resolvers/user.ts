@@ -22,6 +22,7 @@ import { v4 } from "uuid";
 import { ContainerInterface, getConnection } from "typeorm";
 import { createAvatar } from "@dicebear/avatars";
 import * as style from "@dicebear/open-peeps";
+import { ElasticInference } from "aws-sdk";
 
 @ObjectType()
 class FieldError {
@@ -173,6 +174,14 @@ export class UserResolver {
     //   password: hash,
     // });
 
+    let phonenumber = data.phonenumber;
+
+    if (/^[\+66\d+]{12}$/.test(phonenumber)) {
+      phonenumber = phonenumber.slice(3);
+    } else if (/^[0\d+]{10}$/.test(phonenumber)) {
+      phonenumber = phonenumber.substring(1);
+    }
+
     let user;
     const uuid = v4();
     try {
@@ -185,6 +194,7 @@ export class UserResolver {
             id: uuid,
             username: data.username,
             email: data.email,
+            phonenumber: phonenumber,
             password: hash,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
           },
@@ -196,13 +206,31 @@ export class UserResolver {
       user = result.raw[0];
     } catch (error) {
       console.log("err", error);
-      if (error.code === "23505") {
+      if (error.detail.includes("username")) {
         //|| error.detail.includes("already exists"))
         return {
           errors: [
             {
               field: "username",
               message: "username already taken",
+            },
+          ],
+        };
+      } else if (error.detail.includes("email")) {
+        return {
+          errors: [
+            {
+              field: "email",
+              message: "email already taken",
+            },
+          ],
+        };
+      } else if (error.detail.includes("phonenumber")) {
+        return {
+          errors: [
+            {
+              field: "phonenumber",
+              message: "phonenumber already taken",
             },
           ],
         };
@@ -218,23 +246,40 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     // @Arg("data") data: UsernamePasswordInput,
-    @Arg("usernameOrEmail") usernameOrEmail: string,
+    @Arg("usernameOrEmailOrPhonenumber") usernameOrEmailOrPhonenumber: string,
     @Arg("password") password: string,
     @Ctx() { req, res }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOne(
-      usernameOrEmail.includes("@")
-        ? { email: usernameOrEmail }
-        : { username: usernameOrEmail }
+    // 1) includes @ -> email
+    // 2) all numbers -> phonenumber
+    // 3) else -> username
 
-      // ben did{ where: {username: usernameOrEmail }}
-    );
+    // check if starts with  +66 and length = 12
+    if (/^[\+66\d+]{12}$/.test(usernameOrEmailOrPhonenumber)) {
+      usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.slice(3);
+    } // check if starts with  0 and length = 10
+    else if (/^[0\d+]{10}$/.test(usernameOrEmailOrPhonenumber)) {
+      usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.substring(1);
+    }
+
+    let user: User | undefined;
+    if (usernameOrEmailOrPhonenumber.includes("@")) {
+      user = await User.findOne({ email: usernameOrEmailOrPhonenumber });
+    } else if (
+      /^\d+$/.test(usernameOrEmailOrPhonenumber) &&
+      usernameOrEmailOrPhonenumber.length === 9
+    ) {
+      user = await User.findOne({ phonenumber: usernameOrEmailOrPhonenumber });
+    } else {
+      user = await User.findOne({ username: usernameOrEmailOrPhonenumber });
+    }
+
     if (!user) {
       return {
         errors: [
           {
-            field: "usernameOrEmail",
-            message: "The username or email does not exist",
+            field: "usernameOrEmailOrPhonenumber",
+            message: "The username, email, or phone number does not exist",
           },
         ],
       };

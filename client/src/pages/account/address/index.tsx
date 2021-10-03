@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout } from "../../../components/Layout";
 import {
-  AddressDocument,
   useAddressQuery,
   useDeleteAddressMutation,
   useMeQuery,
@@ -73,11 +72,10 @@ const Address: React.FC<addressProps> = ({}) => {
                 update: (cache) => {
                   cache.evict({
                     id: "Address:" + data.address.id,
-                    // broadcast: true,
-                    // fieldName: "address:",
                   });
+
+                  cache.gc();
                 },
-                // refetchQueries: [{ query: AddressDocument }],
               })
             }
           ></IconButton>
