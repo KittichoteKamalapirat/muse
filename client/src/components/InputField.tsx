@@ -11,7 +11,7 @@ import { InputHTMLAttributes } from "react";
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string; //name has to be required
-  label: string;
+  label?: string;
   textarea?: boolean;
   //   placeholder: string;  rmeove cause redundant, already in InputHTMLAttributes
 };

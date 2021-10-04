@@ -6,6 +6,9 @@ import {
   AspectRatio,
   IconButton,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
@@ -127,6 +130,8 @@ const CreatePost: React.FC<{}> = ({}) => {
     },
   ]);
 
+  const [instructionField, setInstructionField] = useState([""]);
+
   const handleChangeInput = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>
@@ -137,10 +142,18 @@ const CreatePost: React.FC<{}> = ({}) => {
     setIngredientsField(values);
   };
 
+  const handleInstructionChangeInput = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const values: any = [...instructionField];
+
+    values[index] = event.target.value;
+    setInstructionField(values);
+  };
+
   const handleAddField = (index: any) => {
     const values = [...ingredientsField];
-    console.log("values");
-    console.log(values);
     values.splice(index + 1, 0, {
       ingredient: "",
       amount: "",
@@ -148,12 +161,27 @@ const CreatePost: React.FC<{}> = ({}) => {
     });
     setIngredientsField(values);
   };
+  const handleAddInstructionField = (index: any) => {
+    const values = [...instructionField];
+    console.log("values");
+    console.log(values);
+    values.splice(index + 1, 0, "");
+    setInstructionField(values);
+  };
 
   const handleRemoveField = (index: any) => {
     const values = [...ingredientsField];
     if (values.length > 1) {
       values.splice(index, 1);
       setIngredientsField(values);
+    }
+  };
+
+  const handleRemoveInstructionField = (index: any) => {
+    const values = [...instructionField];
+    if (values.length > 1) {
+      values.splice(index, 1);
+      setInstructionField(values);
     }
   };
 
@@ -166,6 +194,9 @@ const CreatePost: React.FC<{}> = ({}) => {
           initialValues={{
             title: "",
             text: "",
+            portion: 0,
+            cooktime: "",
+            advice: "",
             videoUrl: "change this later",
           }}
           onSubmit={async (values) => {
@@ -204,6 +235,18 @@ const CreatePost: React.FC<{}> = ({}) => {
                   thumbnailSignedRequest
                 );
               }
+              console.log("object");
+              console.log({
+                title: values.title,
+                text: values.text,
+                videoUrl: videoUrl,
+                instruction: instructionField,
+                cooktime: values.cooktime,
+                portion: values.portion,
+                advice: [values.advice],
+                thumbnailUrl: thumbnailUrl,
+                ingredients: ingredientsField,
+              });
               // S3 end
               const { errors } = await createPost({
                 variables: {
@@ -211,6 +254,10 @@ const CreatePost: React.FC<{}> = ({}) => {
                     title: values.title,
                     text: values.text,
                     videoUrl: videoUrl,
+                    instruction: instructionField,
+                    cooktime: values.cooktime,
+                    portion: values.portion,
+                    advice: [values.advice],
                     thumbnailUrl: thumbnailUrl,
                     ingredients: ingredientsField,
                   },
@@ -278,13 +325,32 @@ const CreatePost: React.FC<{}> = ({}) => {
                 )}
               </Dropzone>
 
-              <InputField name="title" placeholder="title" label="title" />
+              <InputField name="title" placeholder="ชื่อเมนู" label="" />
               <Box mt={4}>
                 <InputField
                   textarea={true}
                   name="text"
-                  placeholder="text..."
-                  label="Body"
+                  placeholder="รายละเอียดเกี่ยวกับเมนู"
+                  label=""
+                />
+
+                <InputField
+                  name="cooktime"
+                  placeholder="เวลาในการทำโดยประมาณ"
+                  label=""
+                />
+
+                <InputGroup size="sm">
+                  <InputLeftAddon children="ปริมาณสำหรับ" mt={2} />
+                  <InputField name="portion" placeholder="2" type="number" />
+                  <InputRightAddon children="คน" mt={2} />
+                </InputGroup>
+
+                <InputField
+                  textarea={true}
+                  name="advice"
+                  placeholder="ข้อแนะนำ"
+                  label=""
                 />
                 <Dropzone
                   onDrop={handleOnDropThumbnail}
@@ -318,8 +384,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                             >
                               <ArrowUpIcon mt="3rem" />
                               <Text textAlign="center" mb="2rem">
-                                Drag and drop a video here, or click to select
-                                the file
+                                ลากไฟล์รูปภาพมาวาง หรือ คลิกเพื่อเลือกไฟล์
                               </Text>
                             </Flex>
                           ) : (
@@ -354,7 +419,7 @@ const CreatePost: React.FC<{}> = ({}) => {
                     ></Input>
                     <Input
                       name="amount"
-                      type="text"
+                      type="number"
                       m={1}
                       borderColor="gray.300"
                       value={inputField.amount}
@@ -386,8 +451,39 @@ const CreatePost: React.FC<{}> = ({}) => {
                 ))}
               </form>
 
+              <form>
+                {instructionField.map((inputField, index) => (
+                  <Flex key={index}>
+                    <Input
+                      name="instruction"
+                      type="textarea"
+                      m={1}
+                      borderColor="gray.300"
+                      value={inputField}
+                      placeholder="โปรดกรอกขั้นตอนการทำตรงนี้"
+                      onChange={(event) =>
+                        handleInstructionChangeInput(index, event)
+                      }
+                    ></Input>
+
+                    <IconButton
+                      onClick={() => handleAddInstructionField(index)}
+                      aria-label="เพิ่มขั้นตอน"
+                      bgColor="white"
+                      icon={<AddIcon width={3} />}
+                    />
+                    <IconButton
+                      onClick={() => handleRemoveInstructionField(index)}
+                      aria-label="ลดขั้นตอน"
+                      bgColor="white"
+                      icon={<MinusIcon width={3} />}
+                    />
+                  </Flex>
+                ))}
+              </form>
+
               {/* <CreateIngredient /> */}
-              <Flex justifyContent="center">
+              <Flex mt={10} justifyContent="center">
                 {" "}
                 <Button
                   mb="4rem"
