@@ -165,6 +165,10 @@ export type Post = {
   id: Scalars['Float'];
   title: Scalars['String'];
   text: Scalars['String'];
+  instruction: Array<Scalars['String']>;
+  advice: Array<Scalars['String']>;
+  cooktime: Scalars['String'];
+  portion: Scalars['Int'];
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   thumbnailUrl: Scalars['String'];
@@ -180,6 +184,10 @@ export type Post = {
 export type PostInput = {
   title: Scalars['String'];
   text: Scalars['String'];
+  instruction: Array<Scalars['String']>;
+  cooktime: Scalars['String'];
+  portion: Scalars['Float'];
+  advice: Array<Scalars['String']>;
   videoUrl: Scalars['String'];
   thumbnailUrl: Scalars['String'];
   ingredients: Array<IngredientInput>;
@@ -239,6 +247,7 @@ export type User = {
   username: Scalars['String'];
   email: Scalars['String'];
   phonenumber: Scalars['String'];
+  isCreator: Scalars['Boolean'];
   avatar: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
@@ -254,6 +263,7 @@ export type UserResponse = {
 export type UsernamePasswordInput = {
   username: Scalars['String'];
   email: Scalars['String'];
+  phonenumber: Scalars['String'];
   password?: Maybe<Scalars['String']>;
 };
 
@@ -261,9 +271,9 @@ export type PostSnippetFragment = { __typename?: 'Post', id: number, title: stri
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, avatar: string };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string }> };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -271,7 +281,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string }> } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> } };
 
 export type CreateAddressMutationVariables = Exact<{
   input: AddressInput;
@@ -314,7 +324,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -326,7 +336,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> } };
 
 export type SignS3MutationVariables = Exact<{
   videoname: Scalars['String'];
@@ -370,14 +380,14 @@ export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Addr
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction: Array<string>, cooktime: string, portion: number, advice: Array<string>, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -423,6 +433,7 @@ export const RegularUserFragmentDoc = gql`
   id
   username
   avatar
+  isCreator
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -985,6 +996,10 @@ export const PostDocument = gql`
     id
     title
     text
+    instruction
+    cooktime
+    portion
+    advice
     videoUrl
     thumbnailUrl
     createdAt

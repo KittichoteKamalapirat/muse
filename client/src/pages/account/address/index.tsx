@@ -6,11 +6,21 @@ import {
   useMeQuery,
 } from "../../../generated/graphql";
 import NextLink from "next/link";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, IconButton, Link, Text } from "@chakra-ui/react";
+import { AddIcon, DeleteIcon, EditIcon, SmallAddIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  IconButton,
+  Link,
+  Text,
+  Button,
+  Flex,
+  Divider,
+} from "@chakra-ui/react";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 import { useApolloClient } from "@apollo/client";
+import { Wrapper } from "../../../components/Wrapper";
+import { HeadingLayout } from "../../../components/HeadingLayout";
 
 interface addressProps {}
 
@@ -28,60 +38,116 @@ const Address: React.FC<addressProps> = ({}) => {
     );
   }
   const noAddress = (
-    <Layout>
-      <Text>You have not added yoru address yet</Text>
-      <NextLink href="/account/address/create" as="/account/address/create">
-        <Link>Add address</Link>
-      </NextLink>
-    </Layout>
+    <Flex justifyContent="center" alignItems="center" minH="600px">
+      <Flex direction="column" alignItems="center">
+        <Text m={5}>You have not added your address yet</Text>
+        <NextLink href="/account/address/create" as="/account/address/create">
+          <Button colorScheme="teal" leftIcon={<AddIcon />}>
+            Add address
+          </Button>
+        </NextLink>
+      </Flex>
+    </Flex>
   );
-  return !data ? (
-    noAddress
-  ) : (
-    <Layout>
-      <h1>ที่อยู่จัดส่ง</h1>
-      <Box>
-        <Text>
-          {data?.address.line1} {data?.address.line2}{" "}
-          {data?.address.subdistrict} {data?.address.district}{" "}
-          <Text>
-            {" "}
-            {data?.address.province} {data?.address.country}{" "}
-            {data?.address.postcode}
-          </Text>
-        </Text>
-      </Box>
+  return (
+    <HeadingLayout heading="ที่อยู่จัดส่ง">
+      {!data ? (
+        <Wrapper>{noAddress}</Wrapper>
+      ) : (
+        <Wrapper>
+          <Box>
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>ที่อยู่ 1</Box>
+                <Box flex={3}>{data?.address.line1}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
 
-      {!meData?.me ? null : (
-        <Box>
-          <Text>แก้ไขที่อยู่</Text>
-          <NextLink href="/account/address/edit/" as="/account/address/edit/">
-            <IconButton
-              as={Link}
-              aria-label="Edit post"
-              icon={<EditIcon />}
-            ></IconButton>
-          </NextLink>
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>ที่อยู่ 2</Box>
+                <Box flex={3}>{data?.address.line2}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
 
-          <IconButton
-            aria-label="Delete post"
-            icon={<DeleteIcon />}
-            onClick={() =>
-              deleteAddress({
-                variables: { id: data.address.id },
-                update: (cache) => {
-                  cache.evict({
-                    id: "Address:" + data.address.id,
-                  });
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>แขวง</Box>
+                <Box flex={1}>{data?.address.subdistrict}</Box>
 
-                  cache.gc();
-                },
-              })
-            }
-          ></IconButton>
-        </Box>
+                <Box flex={1}>เขต</Box>
+                <Box flex={1}>{data?.address.district}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
+
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>จังหวัด</Box>
+                <Box flex={1}>{data?.address.province}</Box>
+                <Box flex={1}>ประเทศ</Box>
+                <Box flex={1}>{data?.address.country}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
+
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>รหัสไปรษณีย์</Box>
+                <Box flex={3}>{data?.address.postcode}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
+          </Box>
+
+          {!meData?.me ? null : (
+            <Flex m={2} justifyContent="right">
+              <NextLink
+                href="/account/address/edit/"
+                as="/account/address/edit/"
+              >
+                <Button
+                  m={1}
+                  size="xs"
+                  colorScheme="teal"
+                  leftIcon={<EditIcon />}
+                >
+                  แก้ไขที่อยู่
+                </Button>
+              </NextLink>
+
+              <NextLink
+                href="/account/address/edit/"
+                as="/account/address/edit/"
+              >
+                <Button
+                  size="xs"
+                  m={1}
+                  colorScheme="red"
+                  leftIcon={<DeleteIcon />}
+                  onClick={() =>
+                    deleteAddress({
+                      variables: { id: data.address.id },
+                      update: (cache) => {
+                        cache.evict({
+                          id: "Address:" + data.address.id,
+                        });
+
+                        cache.gc();
+                      },
+                    })
+                  }
+                >
+                  ลบที่อยู่นี้
+                </Button>
+              </NextLink>
+            </Flex>
+          )}
+        </Wrapper>
       )}
-    </Layout>
+    </HeadingLayout>
   );
 };
 

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout";
+import { Wrapper } from "../../../components/Wrapper";
 import {
   AddressInput,
   useCreateAddressMutation,
@@ -40,77 +41,79 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
   };
   return (
     <Layout>
-      <h1>สร้างที่อยู่การจัดส่ง</h1>
-      <Formik
-        initialValues={{
-          line1: "",
-          line2: "",
-          subdistrict: "",
-          district: "",
-          province: "",
-          country: "",
-          postcode: "",
-        }}
-        onSubmit={(values) => handleOnSubmit(values)}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <InputField
-              name="line1"
-              placeholder="Address line 1"
-              label="line1"
-            />
-            <InputField
-              name="line2"
-              placeholder="Address line 2"
-              label="line2"
-            />
-            <Flex>
+      <Wrapper>
+        <h1>สร้างที่อยู่การจัดส่ง</h1>
+        <Formik
+          initialValues={{
+            line1: "",
+            line2: "",
+            subdistrict: "",
+            district: "",
+            province: "",
+            country: "",
+            postcode: "",
+          }}
+          onSubmit={(values) => handleOnSubmit(values)}
+        >
+          {({ isSubmitting }) => (
+            <Form>
               <InputField
-                name="subdistrict"
-                placeholder="subdistrict"
-                label="subdistrict"
+                name="line1"
+                placeholder="Address line 1"
+                label="line1"
               />
               <InputField
-                name="district"
-                placeholder="district"
-                label="district"
+                name="line2"
+                placeholder="Address line 2"
+                label="line2"
               />
-            </Flex>
-            <Flex>
-              {" "}
-              <InputField
-                name="province"
-                placeholder="province"
-                label="province"
-              />{" "}
-              <InputField
-                name="country"
-                placeholder="country"
-                label="country"
-              />
-            </Flex>
-            <Flex>
-              {" "}
-              <InputField
-                name="postcode"
-                placeholder="postcode"
-                label="postcode"
-              />{" "}
-            </Flex>
+              <Flex>
+                <InputField
+                  name="subdistrict"
+                  placeholder="subdistrict"
+                  label="subdistrict"
+                />
+                <InputField
+                  name="district"
+                  placeholder="district"
+                  label="district"
+                />
+              </Flex>
+              <Flex>
+                {" "}
+                <InputField
+                  name="province"
+                  placeholder="province"
+                  label="province"
+                />{" "}
+                <InputField
+                  name="country"
+                  placeholder="country"
+                  label="country"
+                />
+              </Flex>
+              <Flex>
+                {" "}
+                <InputField
+                  name="postcode"
+                  placeholder="postcode"
+                  label="postcode"
+                />{" "}
+              </Flex>
 
-            <Button
-              mt={4}
-              type="submit"
-              isLoading={isSubmitting}
-              colorScheme="teal"
-            >
-              {" "}
-              Update
-            </Button>
-          </Form>
-        )}
-      </Formik>
+              <Button
+                mt={4}
+                type="submit"
+                isLoading={isSubmitting}
+                colorScheme="teal"
+              >
+                {" "}
+                Update
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </Wrapper>
     </Layout>
   );
 };

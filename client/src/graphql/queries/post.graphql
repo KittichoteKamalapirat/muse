@@ -3,6 +3,10 @@ query Post($id: Int!) {
     id
     title
     text
+    instruction
+    cooktime
+    portion
+    advice
     videoUrl
     thumbnailUrl
     createdAt

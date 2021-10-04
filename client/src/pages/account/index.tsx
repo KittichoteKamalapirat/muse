@@ -20,6 +20,7 @@ import {
 import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import { InfoIcon, StarIcon } from "@chakra-ui/icons";
+import { AccountIcon } from "../../components/Icons/AccountIcon";
 
 interface indexProps {}
 
@@ -73,7 +74,6 @@ const Account: React.FC<indexProps> = ({}) => {
       <Box>
         <Text textAlign="center"> Account</Text>
         <Box>
-          {" "}
           <Image
             margin="auto"
             width="50%"
@@ -85,7 +85,18 @@ const Account: React.FC<indexProps> = ({}) => {
             alt="Segun Adebayo"
           />{" "}
         </Box>
+
         <Box ml={4} textAlign="left">
+          <Box mt={2}>
+            <NextLink href="/account/info/" as="/account/info">
+              <Link>
+                <AccountIcon mr={2} />
+                ข้อมูลบัญชี
+              </Link>
+            </NextLink>
+            <Divider mt={2} />
+          </Box>
+
           <Box mt={2}>
             <NextLink href="/account/address/" as="/account/address">
               <Link>

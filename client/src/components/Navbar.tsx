@@ -7,7 +7,7 @@ import {
   Img,
   Input,
   InputGroup,
-  InputLeftElement,
+  InputLeftAddon,
   Link,
   Text,
 } from "@chakra-ui/react";
@@ -90,20 +90,28 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         justifyContent="flex-end"
         bgColor="red.400"
       >
-        <InputGroup zIndex={2} bgColor="white">
-          <InputLeftElement
-            height="100%"
+        <InputGroup zIndex={2} bgColor="white" size="sm">
+          <InputLeftAddon
+            bgColor="white"
+            // height="100%"
             pointerEvents="none"
-            children={<SearchIcon color="grey.300" />}
+            children={<SearchIcon color={inActiveGray} />}
           />
-          <Input zIndex={2} placeholder="search" size="sm" variant="filled" />
+          <Input
+            border="none"
+            zIndex={2}
+            placeholder="search"
+            variant="outline"
+          />
         </InputGroup>
 
-        <NextLink href="/create-post">
-          <Button as={Link} mr={2}>
-            <SmallAddIcon />{" "}
-          </Button>
-        </NextLink>
+        {!data?.me?.isCreator ? null : (
+          <NextLink href="/create-post">
+            <Button as={Link} mr={2}>
+              <SmallAddIcon />{" "}
+            </Button>
+          </NextLink>
+        )}
       </Flex>
       <Flex
         zIndex={1}

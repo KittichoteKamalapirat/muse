@@ -19,6 +19,7 @@ export const Register: React.FC<registerProps> = ({}) => {
         initialValues={{
           email: "",
           username: "",
+          phonenumber: "",
           password: "",
         }}
         onSubmit={async (values, { setErrors }) => {

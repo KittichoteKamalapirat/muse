@@ -11,21 +11,19 @@ interface IngredientListProps {
 const IngredientList: React.FC<IngredientListProps> = ({ ingredients }) => {
   // ingredient
   return (
-    <Wrapper>
-      <h1>Ingredient List</h1>
-
-      {ingredients.map((ingredient) => (
-        <Box>
-          <Flex key={ingredient.ingredient} justifyContent="space-between">
+    <Box>
+      {ingredients.map((ingredient, index) => (
+        <Box key={index}>
+          <Flex justifyContent="space-between">
             <div>{ingredient.ingredient}</div>
             <div>
               {ingredient.amount} {ingredient.unit}
             </div>
           </Flex>
-          <Divider />
+          <Divider variant="dashed" />
         </Box>
       ))}
-    </Wrapper>
+    </Box>
   );
 };
 

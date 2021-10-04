@@ -12,7 +12,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, variant }) => {
     <>
       <Navbar />
       <Box mt={20}>
-        <Wrapper variant={variant}>{children}</Wrapper>
+        {/* <Wrapper variant={variant}>{children}</Wrapper> */}
+        {children}
       </Box>
     </>
   );
