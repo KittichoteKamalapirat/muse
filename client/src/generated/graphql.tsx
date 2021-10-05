@@ -62,6 +62,28 @@ export type IngredientInput = {
   unit: Scalars['String'];
 };
 
+export type Mealkit = {
+  __typename?: 'Mealkit';
+  id: Scalars['Float'];
+  price?: Maybe<Scalars['Int']>;
+  portion: Scalars['Float'];
+  items?: Maybe<Array<Scalars['String']>>;
+  images?: Maybe<Array<Scalars['String']>>;
+  createdAt: Scalars['String'];
+  postId: Scalars['Float'];
+  post?: Maybe<Post>;
+  creatorId: Scalars['String'];
+  creator?: Maybe<User>;
+  updatedAt: Scalars['String'];
+};
+
+export type MealkitInput = {
+  items: Array<Scalars['String']>;
+  images: Array<Scalars['String']>;
+  price: Scalars['Float'];
+  portion: Scalars['Float'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
@@ -78,6 +100,9 @@ export type Mutation = {
   createAddress: Address;
   updateAddress?: Maybe<Address>;
   deleteAddress: Scalars['Boolean'];
+  createMealkit: Mealkit;
+  updateMealkit?: Maybe<Mealkit>;
+  deleteMealkit: Scalars['Boolean'];
 };
 
 
@@ -154,6 +179,23 @@ export type MutationDeleteAddressArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateMealkitArgs = {
+  postId: Scalars['Int'];
+  input: MealkitInput;
+};
+
+
+export type MutationUpdateMealkitArgs = {
+  id: Scalars['Int'];
+  input: MealkitInput;
+};
+
+
+export type MutationDeleteMealkitArgs = {
+  id: Scalars['Int'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -165,10 +207,10 @@ export type Post = {
   id: Scalars['Float'];
   title: Scalars['String'];
   text: Scalars['String'];
-  instruction: Array<Scalars['String']>;
-  advice: Array<Scalars['String']>;
-  cooktime: Scalars['String'];
-  portion: Scalars['Int'];
+  instruction?: Maybe<Array<Scalars['String']>>;
+  advice?: Maybe<Array<Scalars['String']>>;
+  cooktime?: Maybe<Scalars['String']>;
+  portion?: Maybe<Scalars['Int']>;
   points: Scalars['Float'];
   voteStatus?: Maybe<Scalars['Int']>;
   thumbnailUrl: Scalars['String'];
@@ -211,6 +253,7 @@ export type Query = {
   posts: PaginatedPosts;
   post?: Maybe<Post>;
   address: Address;
+  mealkits?: Maybe<Array<Mealkit>>;
 };
 
 
@@ -233,6 +276,11 @@ export type QueryPostsArgs = {
 
 export type QueryPostArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryMealkitsArgs = {
+  postId: Scalars['Int'];
 };
 
 export type SignedS3 = {
@@ -290,6 +338,14 @@ export type CreateAddressMutationVariables = Exact<{
 
 export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
+export type CreateMealkitMutationVariables = Exact<{
+  input: MealkitInput;
+  postId: Scalars['Int'];
+}>;
+
+
+export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, id: number } };
+
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
 }>;
@@ -303,6 +359,13 @@ export type DeleteAddressMutationVariables = Exact<{
 
 
 export type DeleteAddressMutation = { __typename?: 'Mutation', deleteAddress: boolean };
+
+export type DeleteMealkitMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteMealkitMutation = { __typename?: 'Mutation', deleteMealkit: boolean };
 
 export type DeletePostMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -356,6 +419,14 @@ export type UpdateAddressMutationVariables = Exact<{
 
 export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
 
+export type UpdateMealkitMutationVariables = Exact<{
+  input: MealkitInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type UpdateMealkitMutation = { __typename?: 'Mutation', updateMealkit?: Maybe<{ __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, id: number }> };
+
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   input: PostInput;
@@ -382,12 +453,19 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> };
 
+export type MealkitsQueryVariables = Exact<{
+  postId: Scalars['Int'];
+}>;
+
+
+export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>> };
+
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction: Array<string>, cooktime: string, portion: number, advice: Array<string>, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -521,6 +599,43 @@ export function useCreateAddressMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAddressMutationHookResult = ReturnType<typeof useCreateAddressMutation>;
 export type CreateAddressMutationResult = Apollo.MutationResult<CreateAddressMutation>;
 export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<CreateAddressMutation, CreateAddressMutationVariables>;
+export const CreateMealkitDocument = gql`
+    mutation createMealkit($input: MealkitInput!, $postId: Int!) {
+  createMealkit(input: $input, postId: $postId) {
+    items
+    images
+    price
+    id
+  }
+}
+    `;
+export type CreateMealkitMutationFn = Apollo.MutationFunction<CreateMealkitMutation, CreateMealkitMutationVariables>;
+
+/**
+ * __useCreateMealkitMutation__
+ *
+ * To run a mutation, you first call `useCreateMealkitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMealkitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMealkitMutation, { data, loading, error }] = useCreateMealkitMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useCreateMealkitMutation(baseOptions?: Apollo.MutationHookOptions<CreateMealkitMutation, CreateMealkitMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMealkitMutation, CreateMealkitMutationVariables>(CreateMealkitDocument, options);
+      }
+export type CreateMealkitMutationHookResult = ReturnType<typeof useCreateMealkitMutation>;
+export type CreateMealkitMutationResult = Apollo.MutationResult<CreateMealkitMutation>;
+export type CreateMealkitMutationOptions = Apollo.BaseMutationOptions<CreateMealkitMutation, CreateMealkitMutationVariables>;
 export const CreatePostDocument = gql`
     mutation createPost($input: PostInput!) {
   createPost(input: $input) {
@@ -592,6 +707,37 @@ export function useDeleteAddressMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteAddressMutationHookResult = ReturnType<typeof useDeleteAddressMutation>;
 export type DeleteAddressMutationResult = Apollo.MutationResult<DeleteAddressMutation>;
 export type DeleteAddressMutationOptions = Apollo.BaseMutationOptions<DeleteAddressMutation, DeleteAddressMutationVariables>;
+export const DeleteMealkitDocument = gql`
+    mutation deleteMealkit($id: Int!) {
+  deleteMealkit(id: $id)
+}
+    `;
+export type DeleteMealkitMutationFn = Apollo.MutationFunction<DeleteMealkitMutation, DeleteMealkitMutationVariables>;
+
+/**
+ * __useDeleteMealkitMutation__
+ *
+ * To run a mutation, you first call `useDeleteMealkitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteMealkitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteMealkitMutation, { data, loading, error }] = useDeleteMealkitMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteMealkitMutation(baseOptions?: Apollo.MutationHookOptions<DeleteMealkitMutation, DeleteMealkitMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteMealkitMutation, DeleteMealkitMutationVariables>(DeleteMealkitDocument, options);
+      }
+export type DeleteMealkitMutationHookResult = ReturnType<typeof useDeleteMealkitMutation>;
+export type DeleteMealkitMutationResult = Apollo.MutationResult<DeleteMealkitMutation>;
+export type DeleteMealkitMutationOptions = Apollo.BaseMutationOptions<DeleteMealkitMutation, DeleteMealkitMutationVariables>;
 export const DeletePostDocument = gql`
     mutation DeletePost($id: Int!) {
   deletePost(id: $id)
@@ -840,6 +986,43 @@ export function useUpdateAddressMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const UpdateMealkitDocument = gql`
+    mutation updateMealkit($input: MealkitInput!, $id: Int!) {
+  updateMealkit(input: $input, id: $id) {
+    items
+    images
+    price
+    id
+  }
+}
+    `;
+export type UpdateMealkitMutationFn = Apollo.MutationFunction<UpdateMealkitMutation, UpdateMealkitMutationVariables>;
+
+/**
+ * __useUpdateMealkitMutation__
+ *
+ * To run a mutation, you first call `useUpdateMealkitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMealkitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMealkitMutation, { data, loading, error }] = useUpdateMealkitMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUpdateMealkitMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMealkitMutation, UpdateMealkitMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMealkitMutation, UpdateMealkitMutationVariables>(UpdateMealkitDocument, options);
+      }
+export type UpdateMealkitMutationHookResult = ReturnType<typeof useUpdateMealkitMutation>;
+export type UpdateMealkitMutationResult = Apollo.MutationResult<UpdateMealkitMutation>;
+export type UpdateMealkitMutationOptions = Apollo.BaseMutationOptions<UpdateMealkitMutation, UpdateMealkitMutationVariables>;
 export const UpdatePostDocument = gql`
     mutation UpdatePost($id: Int!, $input: PostInput!) {
   updatePost(id: $id, input: $input) {
@@ -990,6 +1173,44 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MealkitsDocument = gql`
+    query mealkits($postId: Int!) {
+  mealkits(postId: $postId) {
+    items
+    images
+    price
+    portion
+  }
+}
+    `;
+
+/**
+ * __useMealkitsQuery__
+ *
+ * To run a query within a React component, call `useMealkitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMealkitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMealkitsQuery({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useMealkitsQuery(baseOptions: Apollo.QueryHookOptions<MealkitsQuery, MealkitsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MealkitsQuery, MealkitsQueryVariables>(MealkitsDocument, options);
+      }
+export function useMealkitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MealkitsQuery, MealkitsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MealkitsQuery, MealkitsQueryVariables>(MealkitsDocument, options);
+        }
+export type MealkitsQueryHookResult = ReturnType<typeof useMealkitsQuery>;
+export type MealkitsLazyQueryHookResult = ReturnType<typeof useMealkitsLazyQuery>;
+export type MealkitsQueryResult = Apollo.QueryResult<MealkitsQuery, MealkitsQueryVariables>;
 export const PostDocument = gql`
     query Post($id: Int!) {
   post(id: $id) {

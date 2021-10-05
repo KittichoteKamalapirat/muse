@@ -1,0 +1,8 @@
+mutation updateMealkit($input: MealkitInput!, $id: Int!) {
+  updateMealkit(input: $input, id: $id) {
+    items
+    images
+    price
+    id
+  }
+}

@@ -18,6 +18,8 @@ import { HeadingLayout } from "../../components/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
 
 import { ChevronLeftIcon } from "@chakra-ui/icons";
+import { MealkitInfo } from "../../components/MealkitInfo";
+import { dataURItoBlob } from "dropzone";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();
@@ -107,6 +109,7 @@ const Post = ({}) => {
         {meData?.me?.id !== data.post.creator.id ? null : (
           <EditDeletePostButtons id={data.post.id} />
         )}
+        <MealkitInfo postId={data.post.id} />
       </Wrapper>
     </Box>
   );

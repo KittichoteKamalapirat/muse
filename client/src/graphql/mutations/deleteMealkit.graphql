@@ -1,0 +1,3 @@
+mutation deleteMealkit($id: Int!) {
+  deleteMealkit(id: $id)
+}

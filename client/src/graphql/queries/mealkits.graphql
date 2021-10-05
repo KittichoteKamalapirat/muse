@@ -1,0 +1,8 @@
+query mealkits($postId: Int!) {
+  mealkits(postId: $postId) {
+    items
+    images
+    price
+    portion
+  }
+}
