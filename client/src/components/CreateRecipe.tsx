@@ -1,0 +1,110 @@
+import { IconButton } from "@chakra-ui/button";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { Input } from "@chakra-ui/input";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Form } from "formik";
+import React from "react";
+import { IngredientInput } from "../generated/graphql";
+
+interface CreateRecipeProps {
+  ingredientsField: IngredientInput[];
+  instructionField: string[];
+  handleChangeInput: Function;
+  handleAddField: Function;
+  handleRemoveField: Function;
+  handleInstructionChangeInput: Function;
+  handleAddInstructionField: Function;
+  handleRemoveInstructionField: Function;
+}
+
+export const CreateRecipe: React.FC<CreateRecipeProps> = ({
+  ingredientsField,
+  instructionField,
+  handleChangeInput,
+  handleAddField,
+  handleRemoveField,
+  handleInstructionChangeInput,
+  handleAddInstructionField,
+  handleRemoveInstructionField,
+}) => {
+  return (
+    <Box>
+      <Form>
+        <Heading fontSize="md">วัตถุดิบ</Heading>
+        {ingredientsField.map((inputField, index) => (
+          <Flex key={index}>
+            <Input
+              name="ingredient"
+              type="text"
+              m={1}
+              borderColor="gray.300"
+              value={inputField.ingredient}
+              placeholder="วัตถุดิบ"
+              onChange={(event) => handleChangeInput(index, event)}
+            ></Input>
+            <Input
+              name="amount"
+              type="number"
+              m={1}
+              borderColor="gray.300"
+              value={inputField.amount}
+              placeholder="ปริมาณ"
+              onChange={(event) => handleChangeInput(index, event)}
+            ></Input>
+            <Input
+              name="unit"
+              type="text"
+              m={1}
+              borderColor="gray.300"
+              placeholder="หน่วย"
+              value={inputField.unit}
+              onChange={(event) => handleChangeInput(index, event)}
+            ></Input>
+            <IconButton
+              onClick={() => handleAddField(index)}
+              aria-label="Add ingredient"
+              bgColor="white"
+              icon={<AddIcon width={3} />}
+            />
+            <IconButton
+              onClick={() => handleRemoveField(index)}
+              aria-label="Remove ingredient"
+              bgColor="white"
+              icon={<MinusIcon width={3} />}
+            />
+          </Flex>
+        ))}
+      </Form>
+
+      <Form>
+        <Heading fontSize="md">ขั้นตอน</Heading>
+        {instructionField.map((inputField, index) => (
+          <Flex key={index}>
+            <Input
+              name="instruction"
+              type="textarea"
+              m={1}
+              borderColor="gray.300"
+              value={inputField}
+              placeholder="โปรดกรอกขั้นตอนการทำตรงนี้"
+              onChange={(event) => handleInstructionChangeInput(index, event)}
+            ></Input>
+
+            <IconButton
+              onClick={() => handleAddInstructionField(index)}
+              aria-label="เพิ่มขั้นตอน"
+              bgColor="white"
+              icon={<AddIcon width={3} />}
+            />
+            <IconButton
+              onClick={() => handleRemoveInstructionField(index)}
+              aria-label="ลดขั้นตอน"
+              bgColor="white"
+              icon={<MinusIcon width={3} />}
+            />
+          </Flex>
+        ))}
+      </Form>
+    </Box>
+  );
+};

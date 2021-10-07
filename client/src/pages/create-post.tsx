@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 
 import {
   Button,
@@ -30,13 +30,38 @@ import {
   TriangleUpIcon,
 } from "@chakra-ui/icons";
 import { CreateIngredient } from "../components/CreateIngredient";
+import { CreateMealkit } from "../components/CreateMealkit";
+import { CreateRecipe } from "../components/CreateRecipe";
+import { CreatePostForm } from "../components/CreatePostForm";
+import { CreateVideo } from "../components/CreateVideo";
 
-const CreatePost: React.FC<{}> = ({}) => {
+const CreatePost: React.FC<{}> = ({ children }) => {
   //router import for below, not for useIsAuth
+
+  const [step, setStep] = useState(1);
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+
   useIsAuth();
+  const router = useRouter();
+
+  // Variables definitions
   const [signS3] = useSignS3Mutation();
   const [createPost] = useCreatePostMutation();
-  const router = useRouter();
+
+  const postValues = {
+    title: "",
+    text: "",
+    portion: 0,
+    cooktime: "",
+    advice: "",
+    videoUrl: "change this later",
+  };
 
   const [videoPreview, setVideoPreview] = useState("" as any);
   const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
@@ -45,10 +70,7 @@ const CreatePost: React.FC<{}> = ({}) => {
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
-    console.log("accepted File");
-    console.log(acceptedFiles[0]);
     if (rejectedFiles.length > 0) {
-      console.log("rejfect File");
       return alert(rejectedFiles[0].errors[0].message);
     }
 
@@ -107,7 +129,6 @@ const CreatePost: React.FC<{}> = ({}) => {
   };
 
   const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-    console.log("thumbnailPreviewHandler");
     const reader = new FileReader();
     if (reader.error) {
       console.log(reader.error.message);
@@ -163,8 +184,6 @@ const CreatePost: React.FC<{}> = ({}) => {
   };
   const handleAddInstructionField = (index: any) => {
     const values = [...instructionField];
-    console.log("values");
-    console.log(values);
     values.splice(index + 1, 0, "");
     setInstructionField(values);
   };
@@ -187,315 +206,153 @@ const CreatePost: React.FC<{}> = ({}) => {
 
   // ingredient  zone ends
 
+  const [mealkitInput, setMealkitInput] = useState({
+    price: 0,
+    portion: 0,
+    items: [""],
+    images: [""],
+  });
+
+  const handleSubmit = async (values: any) => {
+    try {
+      // S3
+
+      const response = await signS3({
+        variables: {
+          videoname: videoFile.file.name,
+          thumbnailname: thumbnailFile.file.name,
+          videoFiletype: videoFile.file.type,
+          thumbnailFiletype: thumbnailFile.file.type,
+        },
+        // filename: formatFilename(file.name),
+      });
+
+      let videoUrl = "";
+      let videoSignedRequest = "";
+      let thumbnailUrl = "";
+      let thumbnailSignedRequest = "";
+
+      if (response.data) {
+        // const { signedRequest, url } = response.data.signS3;
+        videoUrl = response.data.signS3!.videoUrl;
+        thumbnailUrl = response.data.signS3!.thumbnailUrl;
+        videoSignedRequest = response.data.signS3!.videoSignedRequest;
+        thumbnailSignedRequest = response.data.signS3!.thumbnailSignedRequest;
+
+        await uploadToS3(
+          videoFile.file,
+          thumbnailFile.file,
+          videoSignedRequest,
+          thumbnailSignedRequest
+        );
+      }
+      // S3 end
+      const { errors } = await createPost({
+        variables: {
+          input: {
+            title: values.title,
+            text: values.text,
+            videoUrl: videoUrl,
+            instruction: instructionField,
+            cooktime: values.cooktime,
+            portion: values.portion,
+            advice: [values.advice],
+            thumbnailUrl: thumbnailUrl,
+            ingredients: ingredientsField,
+          },
+        },
+        update: (cache) => {
+          cache.evict({ fieldName: "posts:{}" });
+        },
+      });
+      if (!errors) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // switch (step) {
+  //   case 1:
+  //     return <Text>step 1</Text>;
+  //   case 2:
+  //     return <Text>step 2</Text>;
+  //   case 3:
+  //     return <Text>step 3</Text>;
+  //   case 4:
+  //     return <Text>step 4</Text>;
+  //   default:
+  //     return <Text>step redeault</Text>;
+  // }
   return (
     <Layout variant="small">
+      {/* <Text>{step}</Text>
+        <Button onClick={nextStep}>Next</Button>
+        <Button onClick={prevStep}>Back</Button> */}
+
       <Box m="1rem">
         <Formik
-          initialValues={{
-            title: "",
-            text: "",
-            portion: 0,
-            cooktime: "",
-            advice: "",
-            videoUrl: "change this later",
-          }}
+          initialValues={postValues}
           onSubmit={async (values) => {
-            try {
-              // S3
-              console.log("sign S3");
-              console.log("videoname");
-              console.log(videoFile.file.name);
-              const response = await signS3({
-                variables: {
-                  videoname: videoFile.file.name,
-                  thumbnailname: thumbnailFile.file.name,
-                  videoFiletype: videoFile.file.type,
-                  thumbnailFiletype: thumbnailFile.file.type,
-                },
-                // filename: formatFilename(file.name),
-              });
-              console.log("signS4");
-              let videoUrl = "";
-              let videoSignedRequest = "";
-              let thumbnailUrl = "";
-              let thumbnailSignedRequest = "";
-
-              if (response.data) {
-                // const { signedRequest, url } = response.data.signS3;
-                videoUrl = response.data.signS3!.videoUrl;
-                thumbnailUrl = response.data.signS3!.thumbnailUrl;
-                videoSignedRequest = response.data.signS3!.videoSignedRequest;
-                thumbnailSignedRequest =
-                  response.data.signS3!.thumbnailSignedRequest;
-
-                await uploadToS3(
-                  videoFile.file,
-                  thumbnailFile.file,
-                  videoSignedRequest,
-                  thumbnailSignedRequest
-                );
-              }
-              console.log("object");
-              console.log({
-                title: values.title,
-                text: values.text,
-                videoUrl: videoUrl,
-                instruction: instructionField,
-                cooktime: values.cooktime,
-                portion: values.portion,
-                advice: [values.advice],
-                thumbnailUrl: thumbnailUrl,
-                ingredients: ingredientsField,
-              });
-              // S3 end
-              const { errors } = await createPost({
-                variables: {
-                  input: {
-                    title: values.title,
-                    text: values.text,
-                    videoUrl: videoUrl,
-                    instruction: instructionField,
-                    cooktime: values.cooktime,
-                    portion: values.portion,
-                    advice: [values.advice],
-                    thumbnailUrl: thumbnailUrl,
-                    ingredients: ingredientsField,
-                  },
-                },
-                update: (cache) => {
-                  cache.evict({ fieldName: "posts:{}" });
-                },
-              });
-              if (!errors) {
-                router.push("/");
-              }
-            } catch (error) {
-              console.log(error);
-            }
+            handleSubmit(values);
 
             // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
           }}
         >
           {({ isSubmitting }) => (
-            <Form>
-              <Dropzone
-                onDrop={handleOnDropVideo}
-                // maxSize={1000 * 1}
-                multiple={false}
-                // accept="video/mp4"
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <Box mt={2}>
-                    {/* <Box mb={2}>Video</Box> */}
-                    <Box cursor="pointer" padding={4}>
-                      <div
-                        {...getRootProps({
-                          onChange: (event) => {
-                            videoPreviewHandler(event);
-                          },
-                        })}
-                      >
-                        <input {...getInputProps()} />
-                        {!videoPreview ? (
-                          <Flex
-                            direction="column"
-                            alignItems="center"
-                            border="1px"
-                            borderColor="gray.200"
-                            bgColor="gray.50"
-                          >
-                            <ArrowUpIcon mt="3rem" />
-                            <Text textAlign="center" mb="2rem">
-                              Drag and drop a video here, or click to select the
-                              file
-                            </Text>
-                          </Flex>
-                        ) : (
-                          <Flex justifyContent="center" alignItems="end">
-                            <video controls width="50%">
-                              <source src={videoPreview} type="video/mp4" />
-                              Your browser does not support the video tag.
-                            </video>
-                            <EditIcon m={2} />
-                          </Flex>
-                        )}
-                      </div>
-                    </Box>
-                  </Box>
-                )}
-              </Dropzone>
-
-              <InputField name="title" placeholder="ชื่อเมนู" label="" />
-              <Box mt={4}>
-                <InputField
-                  textarea={true}
-                  name="text"
-                  placeholder="รายละเอียดเกี่ยวกับเมนู"
-                  label=""
+            <Box>
+              <Form>
+                <CreateVideo
+                  handleOnDropVideo={(acceptedFiles: any, rejectedFiles: any) =>
+                    handleOnDropVideo(acceptedFiles, rejectedFiles)
+                  }
+                  videoPreviewHandler={videoPreviewHandler}
+                  videoPreview={videoPreview}
+                />
+                <CreatePostForm
+                  videoPreview={videoPreview}
+                  thumbnailPreview={thumbnailPreview}
+                  thumbnailPreviewHandler={(
+                    e: React.FormEvent<HTMLDivElement>
+                  ) => thumbnailPreviewHandler(e)}
+                  handleOnDropThumbnail={(
+                    acceptedFiles: any,
+                    rejectedFiles: any
+                  ) => handleOnDropThumbnail(acceptedFiles, rejectedFiles)}
                 />
 
-                <InputField
-                  name="cooktime"
-                  placeholder="เวลาในการทำโดยประมาณ"
-                  label=""
+                <CreateRecipe
+                  ingredientsField={ingredientsField}
+                  instructionField={instructionField}
+                  handleChangeInput={handleChangeInput}
+                  handleAddField={handleAddField}
+                  handleRemoveField={handleRemoveField}
+                  handleInstructionChangeInput={handleInstructionChangeInput}
+                  handleAddInstructionField={handleAddInstructionField}
+                  handleRemoveInstructionField={handleRemoveInstructionField}
                 />
 
-                <InputGroup size="sm">
-                  <InputLeftAddon children="ปริมาณสำหรับ" mt={2} />
-                  <InputField name="portion" placeholder="2" type="number" />
-                  <InputRightAddon children="คน" mt={2} />
-                </InputGroup>
-
-                <InputField
-                  textarea={true}
-                  name="advice"
-                  placeholder="ข้อแนะนำ"
-                  label=""
+                <CreateMealkit
+                  input={mealkitInput}
+                  setInput={setMealkitInput}
                 />
-                <Dropzone
-                  onDrop={handleOnDropThumbnail}
-                  // maxSize={1000 * 1}
-                  multiple={false}
-                  // accept="video/mp4"
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <Box mt={2}>
-                      {/* <Box mb={2}>Thumbnail Image</Box> */}
-                      <Box
-                        cursor="pointer"
-                        // border="1px"
-                        // borderColor="gray.200"
-                        padding={4}
-                      >
-                        <div
-                          {...getRootProps({
-                            onChange: (e) => thumbnailPreviewHandler(e),
-                          })}
-                        >
-                          <input {...getInputProps()} />
 
-                          {!videoPreview ? null : !thumbnailPreview ? (
-                            <Flex
-                              direction="column"
-                              alignItems="center"
-                              border="1px"
-                              borderColor="gray.200"
-                              bgColor="gray.50"
-                            >
-                              <ArrowUpIcon mt="3rem" />
-                              <Text textAlign="center" mb="2rem">
-                                ลากไฟล์รูปภาพมาวาง หรือ คลิกเพื่อเลือกไฟล์
-                              </Text>
-                            </Flex>
-                          ) : (
-                            <Flex justifyContent="center">
-                              {/* <AspectRatio ratio={1}> */}
-                              <Image
-                                src={thumbnailPreview}
-                                alt="image"
-                                boxSize="50%"
-                                fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                              />
-                              {/* </AspectRatio> */}
-                            </Flex>
-                          )}
-                        </div>
-                      </Box>
-                    </Box>
-                  )}
-                </Dropzone>
-              </Box>
-              <form>
-                {ingredientsField.map((inputField, index) => (
-                  <Flex key={index}>
-                    <Input
-                      name="ingredient"
-                      type="text"
-                      m={1}
-                      borderColor="gray.300"
-                      value={inputField.ingredient}
-                      placeholder="วัตถุดิบ"
-                      onChange={(event) => handleChangeInput(index, event)}
-                    ></Input>
-                    <Input
-                      name="amount"
-                      type="number"
-                      m={1}
-                      borderColor="gray.300"
-                      value={inputField.amount}
-                      placeholder="ปริมาณ"
-                      onChange={(event) => handleChangeInput(index, event)}
-                    ></Input>
-                    <Input
-                      name="unit"
-                      type="text"
-                      m={1}
-                      borderColor="gray.300"
-                      placeholder="หน่วย"
-                      value={inputField.unit}
-                      onChange={(event) => handleChangeInput(index, event)}
-                    ></Input>
-                    <IconButton
-                      onClick={() => handleAddField(index)}
-                      aria-label="Add ingredient"
-                      bgColor="white"
-                      icon={<AddIcon width={3} />}
-                    />
-                    <IconButton
-                      onClick={() => handleRemoveField(index)}
-                      aria-label="Remove ingredient"
-                      bgColor="white"
-                      icon={<MinusIcon width={3} />}
-                    />
-                  </Flex>
-                ))}
-              </form>
-
-              <form>
-                {instructionField.map((inputField, index) => (
-                  <Flex key={index}>
-                    <Input
-                      name="instruction"
-                      type="textarea"
-                      m={1}
-                      borderColor="gray.300"
-                      value={inputField}
-                      placeholder="โปรดกรอกขั้นตอนการทำตรงนี้"
-                      onChange={(event) =>
-                        handleInstructionChangeInput(index, event)
-                      }
-                    ></Input>
-
-                    <IconButton
-                      onClick={() => handleAddInstructionField(index)}
-                      aria-label="เพิ่มขั้นตอน"
-                      bgColor="white"
-                      icon={<AddIcon width={3} />}
-                    />
-                    <IconButton
-                      onClick={() => handleRemoveInstructionField(index)}
-                      aria-label="ลดขั้นตอน"
-                      bgColor="white"
-                      icon={<MinusIcon width={3} />}
-                    />
-                  </Flex>
-                ))}
-              </form>
-
-              {/* <CreateIngredient /> */}
-              <Flex mt={10} justifyContent="center">
-                {" "}
-                <Button
-                  mb="4rem"
-                  type="submit"
-                  isLoading={isSubmitting}
-                  colorScheme="teal"
-                >
+                {/* <CreateIngredient /> */}
+                <Flex mt={10} justifyContent="center">
                   {" "}
-                  Create Post
-                </Button>
-              </Flex>
-            </Form>
+                  <Button
+                    mb="4rem"
+                    type="submit"
+                    isLoading={isSubmitting}
+                    colorScheme="teal"
+                  >
+                    {" "}
+                    Create Post
+                  </Button>
+                </Flex>
+              </Form>
+            </Box>
           )}
         </Formik>
       </Box>

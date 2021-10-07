@@ -23,6 +23,7 @@ import { AccountIcon } from "./Icons/AccountIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { ActivityIcon } from "./Icons/ActivityIcon";
 import { inActiveGray, primaryColor } from "./Variables";
+import { getRouteMatcher } from "next/dist/shared/lib/router/utils";
 
 interface NavbarProps {}
 
