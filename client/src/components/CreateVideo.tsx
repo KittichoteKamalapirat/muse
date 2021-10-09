@@ -1,24 +1,29 @@
 import React from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import Dropzone from "react-dropzone";
+
 import {
   AddIcon,
   ArrowUpIcon,
+  ChevronRightIcon,
   EditIcon,
   MinusIcon,
   TriangleUpIcon,
 } from "@chakra-ui/icons";
+import { IconButton } from "@chakra-ui/react";
 
 interface CreateVideoProps {
   videoPreview: any;
   handleOnDropVideo: Function;
   videoPreviewHandler: Function;
+  nextStep: Function;
 }
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
   videoPreview,
   handleOnDropVideo,
   videoPreviewHandler,
+  nextStep,
 }) => {
   return (
     <Box>
@@ -56,13 +61,25 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                     </Text>
                   </Flex>
                 ) : (
-                  <Flex justifyContent="center" alignItems="end">
-                    <video controls width="50%">
-                      <source src={videoPreview} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                    <EditIcon m={2} />
-                  </Flex>
+                  <Box>
+                    <Flex justifyContent="center" alignItems="end">
+                      <video controls width="50%">
+                        <source src={videoPreview} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <EditIcon m={2} />
+                    </Flex>
+                    <Flex justifyContent="right">
+                      <IconButton
+                        aria-label="Search database"
+                        icon={<ChevronRightIcon />}
+                        onClick={() => nextStep()}
+                        fontSize="x-large"
+                        color="dark.200"
+                        variant="none"
+                      />
+                    </Flex>
+                  </Box>
                 )}
               </div>
             </Box>

@@ -5,11 +5,13 @@ import React from "react";
 
 interface HeadingLayoutProps {
   heading: string;
+  back?: boolean;
 }
 
 export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
   children,
   heading,
+  back = true,
 }) => {
   const router = useRouter();
   return (
@@ -25,15 +27,18 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
         borderBottomWidth="1px"
         borderBottomColor="blackAlpha.200"
       >
-        <IconButton
-          aria-label="Search database"
-          icon={<ChevronLeftIcon />}
-          onClick={() => router.back()}
-          position="fixed"
-          fontSize="x-large"
-          color="dark.200"
-          variant="none"
-        />
+        {!back ? null : (
+          <IconButton
+            aria-label="Search database"
+            icon={<ChevronLeftIcon />}
+            onClick={() => router.back()}
+            position="fixed"
+            fontSize="x-large"
+            color="dark.200"
+            variant="none"
+          />
+        )}
+
         <Heading fontSize="xl" textAlign="center" mt={1}>
           {heading}
         </Heading>

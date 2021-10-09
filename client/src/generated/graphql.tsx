@@ -103,6 +103,7 @@ export type Mutation = {
   createMealkit: Mealkit;
   updateMealkit?: Maybe<Mealkit>;
   deleteMealkit: Scalars['Boolean'];
+  signMealkitS3: Array<SignedS3Result>;
 };
 
 
@@ -194,6 +195,11 @@ export type MutationUpdateMealkitArgs = {
 
 export type MutationDeleteMealkitArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationSignMealkitS3Args = {
+  input: Array<SignS3Params>;
 };
 
 export type PaginatedPosts = {
@@ -315,6 +321,17 @@ export type UsernamePasswordInput = {
   password?: Maybe<Scalars['String']>;
 };
 
+export type SignS3Params = {
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type SignedS3Result = {
+  __typename?: 'signedS3Result';
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
@@ -400,6 +417,13 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, avatar: string, isCreator: boolean }> } };
+
+export type SignMealkitS3MutationVariables = Exact<{
+  input: Array<SignS3Params> | SignS3Params;
+}>;
+
+
+export type SignMealkitS3Mutation = { __typename?: 'Mutation', signMealkitS3: Array<{ __typename?: 'signedS3Result', signedRequest: string, url: string }> };
 
 export type SignS3MutationVariables = Exact<{
   videoname: Scalars['String'];
@@ -900,6 +924,40 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const SignMealkitS3Document = gql`
+    mutation signMealkitS3($input: [signS3Params!]!) {
+  signMealkitS3(input: $input) {
+    signedRequest
+    url
+  }
+}
+    `;
+export type SignMealkitS3MutationFn = Apollo.MutationFunction<SignMealkitS3Mutation, SignMealkitS3MutationVariables>;
+
+/**
+ * __useSignMealkitS3Mutation__
+ *
+ * To run a mutation, you first call `useSignMealkitS3Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignMealkitS3Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signMealkitS3Mutation, { data, loading, error }] = useSignMealkitS3Mutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSignMealkitS3Mutation(baseOptions?: Apollo.MutationHookOptions<SignMealkitS3Mutation, SignMealkitS3MutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignMealkitS3Mutation, SignMealkitS3MutationVariables>(SignMealkitS3Document, options);
+      }
+export type SignMealkitS3MutationHookResult = ReturnType<typeof useSignMealkitS3Mutation>;
+export type SignMealkitS3MutationResult = Apollo.MutationResult<SignMealkitS3Mutation>;
+export type SignMealkitS3MutationOptions = Apollo.BaseMutationOptions<SignMealkitS3Mutation, SignMealkitS3MutationVariables>;
 export const SignS3Document = gql`
     mutation signS3($videoname: String!, $thumbnailname: String!, $videoFiletype: String!, $thumbnailFiletype: String!) {
   signS3(
