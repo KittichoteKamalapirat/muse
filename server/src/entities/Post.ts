@@ -9,6 +9,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
+import { Mealkit } from "./Mealkit";
 import { Upvote } from "./Upvote";
 import { User } from "./User";
 
@@ -36,6 +37,22 @@ export class Post extends BaseEntity {
   @Column({ nullable: true })
   @Field()
   text!: string;
+
+  @Column("text", { nullable: true, array: true })
+  @Field(() => [String], { nullable: true })
+  instruction: string[];
+
+  @Column("text", { nullable: true, array: true })
+  @Field(() => [String], { nullable: true })
+  advice: string[];
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  cooktime!: string;
+
+  @Column({ type: "int", nullable: true })
+  @Field(() => Int, { nullable: true })
+  portion!: number;
 
   @Column({ type: "int", default: 0 })
   @Field()
@@ -72,27 +89,14 @@ export class Post extends BaseEntity {
   @OneToMany((type) => Upvote, (upvote) => upvote.post)
   upvotes: Upvote[];
 
-  //recipe
-
-  // @Field(() => ObjectType)
-  // @Column({
-  //   type: 'jsonb',
-  //   array: false,
-  //   // array: true,
-  //   default: () => "'[]'",
-  //   nullable: true,
-  // })
-  // recipe: {
-  //   ingredient: string;
-  //   aount: string;
-  //   unit: string;
-  // }
-
   @Field(() => [Ingredient], { nullable: true })
   @Column("jsonb", { nullable: true })
   ingredients: Ingredient[];
   // @Column({type: 'jsonb', array: true, nullable: true})
   // testJson: object[];
+
+  @OneToMany((type) => Mealkit, (mealkit) => mealkit.post)
+  mealkits: Mealkit[];
 
   @Field(() => String)
   @CreateDateColumn()

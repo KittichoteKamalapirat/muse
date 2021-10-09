@@ -11,6 +11,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Address } from "./Address";
+import { Mealkit } from "./Mealkit";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
 
@@ -39,6 +40,10 @@ export class User extends BaseEntity {
   @Field()
   phonenumber!: string;
 
+  @Column("boolean", { default: false })
+  @Field()
+  isCreator: boolean;
+
   @Column({ unique: true })
   @Field()
   avatar!: string;
@@ -49,6 +54,9 @@ export class User extends BaseEntity {
 
   @OneToMany((type) => Post, (post) => post.creator)
   posts: Post[];
+
+  @OneToMany((type) => Mealkit, (mealkit) => mealkit.creator)
+  mealkits: Mealkit[];
   // .posts have to be matched what in the Post.ts
 
   @OneToMany((type) => Upvote, (upvote) => upvote.user)

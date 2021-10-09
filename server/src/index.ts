@@ -21,8 +21,10 @@ import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { Address } from "./entities/Address";
+import { Mealkit } from "./entities/Mealkit";
 import { AddressResolver } from "./resolvers/address";
 import { sendSMS } from "./utils/sendSms";
+import { MealkitResolver } from "./resolvers/mealkit";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
@@ -36,16 +38,9 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [User, Post, Upvote, Address],
+    entities: [User, Post, Upvote, Address, Mealkit],
   });
 
-  // await conn.runMigrations();
-  // await Post.delete({});
-  // console.log("delete all the data");
-  // await Post.delete({})
-  // await conn.runMigrations(); -> make sure the colume name with capital letter is "", put quatation "creatorId"
-  // console.log("dirname", __dirname);
-  // sendEmail("bob@bob.com", "<h1>Email</h1>");
   const app = express();
   // sendSMS();
 
@@ -81,7 +76,13 @@ const main = async () => {
   );
 
   const schema = await buildSchema({
-    resolvers: [HelloResolver, UserResolver, PostResolver, AddressResolver],
+    resolvers: [
+      HelloResolver,
+      UserResolver,
+      PostResolver,
+      AddressResolver,
+      MealkitResolver,
+    ],
     validate: false,
   });
 

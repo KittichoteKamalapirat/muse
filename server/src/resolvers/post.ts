@@ -26,14 +26,14 @@ import {
 } from "../constants";
 import aws from "aws-sdk";
 
-const s3 = new aws.S3({
+export const s3 = new aws.S3({
   signatureVersion: "v4",
   region: AWS_REGION,
   accessKeyId: AWS_ACCESS_KEY_ID,
   secretAccessKey: AWS_SECRET_ACCESS_KEY,
 });
 
-const s3Params = (key: string, contentType: string) => {
+export const s3Params = (key: string, contentType: string) => {
   return {
     Bucket: s3Bucket,
     Key: key,
@@ -42,6 +42,14 @@ const s3Params = (key: string, contentType: string) => {
     // ACL: "public-read", //this thing cause error somehow !!!!!
   };
 };
+
+@InputType()
+export class signS3Params {
+  @Field()
+  name: string;
+  @Field()
+  type: string;
+}
 
 @InputType()
 export class IngredientInput {
@@ -59,6 +67,14 @@ class PostInput {
   title: string;
   @Field()
   text: string;
+  @Field(() => [String])
+  instruction: string[];
+  @Field()
+  cooktime: string;
+  @Field()
+  portion: number;
+  @Field(() => [String])
+  advice: string[];
   @Field()
   videoUrl: string;
   @Field()

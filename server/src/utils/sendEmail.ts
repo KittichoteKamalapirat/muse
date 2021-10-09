@@ -31,7 +31,7 @@ export async function sendEmail(to: string, html: string) {
   console.log("trying to send email");
   try {
     let info = await transporter.sendMail({
-      from: '"Cookknow 👻" <noreply@hormchocolate.com>', // sender address
+      from: '"🧑‍🍳 Cookknow 🍳" <noreply@hormchocolate.com>', // sender address
       to: to, // list of receivers
       subject: "Change password ✔", // Subject line
       html: html, // html body
