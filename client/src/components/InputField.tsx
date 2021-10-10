@@ -13,6 +13,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string; //name has to be required
   label?: string;
   textarea?: boolean;
+  variant?: string;
   //   placeholder: string;  rmeove cause redundant, already in InputHTMLAttributes
 };
 
@@ -21,6 +22,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   label,
   textarea,
   size: _,
+  variant,
   ...props
 }) => {
   // somehow props don't like the size in it, so we destructure it out,
@@ -38,6 +40,7 @@ export const InputField: React.FC<InputFieldProps> = ({
 
         {...field}
         {...props}
+        variant={variant}
         id={field.name}
         placeholder={props.placeholder}
       />

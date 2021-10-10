@@ -48,14 +48,12 @@ const Account: React.FC<indexProps> = ({}) => {
         {" "}
         <Box textAlign="center">
           <Text>You are not signed in</Text>
-          <Text>
-            Please{" "}
-            <NextLink href="/login">
-              <Link fontWeight="700" color="red.400">
-                Login
-              </Link>
-            </NextLink>
-          </Text>
+          <Text>Please </Text>
+          <NextLink href="/login">
+            <Link fontWeight="700" color="red.400">
+              Login
+            </Link>
+          </NextLink>
         </Box>
         <Box textAlign="center" mt={5}>
           <Text>

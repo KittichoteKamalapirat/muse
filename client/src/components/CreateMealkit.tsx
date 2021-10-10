@@ -3,7 +3,17 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { Box, Button, Flex, Heading, IconButton, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  Image,
+  Img,
+} from "@chakra-ui/react";
+import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import { Form } from "formik";
 import React, { useState } from "react";
 import { MealkitInput, useCreateMealkitMutation } from "../generated/graphql";
@@ -11,7 +21,12 @@ import { InputField } from "./InputField";
 import Dropzone from "react-dropzone";
 
 interface CreateMealkitProps {
-  input: MealkitInput;
+  input: {
+    price: string;
+    portion: string;
+    images: string[];
+    items: string[];
+  };
   setInput: Function;
   nextStep: Function;
   prevStep: Function;
@@ -31,36 +46,56 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   return (
     <Box>
       {mealkitFilesPreview.length === 0 ? null : (
-        <Text>
+        <Box>
           {" "}
           {mealkitFilesPreview.map((filePreview: any, index: number) => (
             <Box key={index}>
-              <video controls width="50%">
-                <source src={filePreview} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
+              {filePreview.slice(0, 10).includes("video") ? (
+                <video controls width="50%">
+                  <source src={filePreview} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <Image src={filePreview} alt="image" boxSize="50%" />
+              )}
             </Box>
           ))}
-        </Text>
+        </Box>
       )}
       <Form>
         <Heading>Create a meal kit</Heading>
-        <InputField
-          name="price"
-          type="number"
-          value={input.price}
-          placeholder="price"
-          onChange={(e) => setInput({ ...input, price: e.target.value })}
-        ></InputField>
+        <InputGroup>
+          <InputLeftAddon children="Price" mt={2} />
+          <InputField
+            name="price"
+            type="number"
+            value={input.price}
+            placeholder="price"
+            variant="flushed"
+            onChange={(e) => setInput({ ...input, price: e.target.value })}
+          />
+          <InputRightAddon children="THB" mt={2} />
+        </InputGroup>
 
-        <InputField
-          name="portion"
-          type="number"
-          value={input.portion}
-          placeholder="portion"
-          onChange={(e) => setInput({ ...input, portion: e.target.value })}
-        ></InputField>
+        {/* <Heading fontSize="md" whiteSpace="nowrap">
+          Portion for
+        </Heading> */}
+        <Flex alignItems="center">
+          <InputGroup>
+            <InputLeftAddon children="Portion for" mt={2} />
+            {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
+            <InputField
+              name="portion"
+              type="number"
+              value={input.portion}
+              placeholder="portion"
+              variant="flushed"
+              onChange={(e) => setInput({ ...input, portion: e.target.value })}
+            ></InputField>
 
+            <InputRightAddon children="people" mt={2} />
+          </InputGroup>
+        </Flex>
         <InputField
           name="items"
           type="text"
@@ -74,6 +109,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
           }
           multiple={true}
+          accept={["image/*", "video/*"]}
         >
           {({ getRootProps, getInputProps }) => (
             <Box>
@@ -94,6 +130,17 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                   bgColor="gray.50"
                 >
                   <ArrowUpIcon mt="3rem" />
+
+                  <Img
+                    src="./Icons/uploadMealkitIcon.svg"
+                    boxSize="10rem"
+                    fallbackSrc="https://via.placeholder.com/150"
+                  />
+                  <Image
+                    src="./Icons/uploadMealkitIcon.svg"
+                    boxSize="10rem"
+                    fallbackSrc="https://via.placeholder.com/150"
+                  />
                   <Text textAlign="center" mb="2rem">
                     Drag and drop a video here, or click to select the file
                   </Text>

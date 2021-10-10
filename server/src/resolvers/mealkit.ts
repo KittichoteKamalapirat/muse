@@ -76,6 +76,7 @@ export class MealkitResolver {
     @Arg("postId", () => Int) postId: number,
     @Ctx() { req }: MyContext
   ): Promise<Mealkit> {
+    console.log(input);
     const mealkit = await Mealkit.create({
       ...input,
       postId: postId,

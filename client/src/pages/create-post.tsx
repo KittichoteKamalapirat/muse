@@ -2,8 +2,7 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 
 import { Button, IconButton } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import React, { useEffect, useState } from "react";
-import { InputField } from "../components/InputField";
+import React, { useState } from "react";
 import { Wrapper } from "../components/Wrapper";
 import {
   SignS3Params,
@@ -13,22 +12,12 @@ import {
   useSignS3Mutation,
 } from "../generated/graphql";
 import { useRouter } from "next/router";
-import { Layout } from "../components/Layout";
+
 import { useIsAuth } from "../util/useIsAuth";
-import Dropzone from "react-dropzone";
 import axios from "axios";
 import moment from "moment";
 import { withApollo } from "../util/withApollo";
-import {
-  AddIcon,
-  ArrowUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  EditIcon,
-  MinusIcon,
-  TriangleUpIcon,
-} from "@chakra-ui/icons";
-import { CreateIngredient } from "../components/CreateIngredient";
+import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { CreateMealkit } from "../components/CreateMealkit";
 import { CreateRecipe } from "../components/CreateRecipe";
 import { CreatePostForm } from "../components/CreatePostForm";
@@ -36,12 +25,11 @@ import { CreateVideo } from "../components/CreateVideo";
 import { HeadingLayout } from "../components/HeadingLayout";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { printSourceLocation } from "graphql";
-import { dataURItoBlob } from "dropzone";
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   //router import for below, not for useIsAuth
 
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const nextStep = () => {
     setStep(step + 1);
   };
@@ -50,6 +38,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setStep(step - 1);
   };
 
+  const [submitting, setSubmitting] = useState<boolean>(false);
   useIsAuth();
   const router = useRouter();
 
@@ -109,8 +98,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const [createMealkit] = useCreateMealkitMutation();
   const [mealkitInput, setMealkitInput] = useState({
-    price: 0,
-    portion: 0,
+    price: "",
+    portion: "",
     items: [""],
     images: [""],
   });
@@ -119,45 +108,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const postValues = {
     title: "",
     text: "",
-    portion: 0,
+    portion: "",
     cooktime: "",
     advice: "",
     videoUrl: "change this later",
-  };
-
-  const [mealkitFiles, setMealkitFiles] = useState<any>([]);
-  const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
-    if (rejectedFiles.length > 0) {
-      return alert(rejectedFiles[0].errors[0].message);
-    }
-    let files: any = [];
-    // mealkitFiles.forEach((file) => {
-    //   files.push(file);
-    // });
-    setMealkitFiles(acceptedFiles);
-  };
-
-  // I need an array of files and and signedRequest
-  const uploadMealkitToS3 = async (
-    inputObjectsArray: {
-      file: any;
-      signedRequest: string;
-    }[]
-  ) => {
-    inputObjectsArray.forEach(async (input, index) => {
-      const options = {
-        headers: {
-          "Content-Type": input.file.type,
-        },
-      };
-
-      await axios.put(input.signedRequest, input.file, options);
-    });
-    const Options = {
-      headers: {
-        "Content-Type": videoFile.type,
-      },
-    };
   };
 
   const formatFilename = (filename: string) => {
@@ -209,6 +163,36 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   ]);
 
   const [instructionField, setInstructionField] = useState([""]);
+
+  // mealkit zone
+
+  const [mealkitFiles, setMealkitFiles] = useState<any>([]);
+  const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+    let files: any = [];
+
+    setMealkitFiles(acceptedFiles);
+  };
+
+  // I need an array of files and and signedRequest
+  const uploadMealkitToS3 = async (
+    inputObjectsArray: {
+      file: any;
+      signedRequest: string;
+    }[]
+  ) => {
+    inputObjectsArray.forEach(async (input, index) => {
+      const options = {
+        headers: {
+          "Content-Type": input.file.type,
+        },
+      };
+      console.log(`axios${index}`);
+      await axios.put(input.signedRequest, input.file, options);
+    });
+  };
 
   const [mealkitFilesPreview, setMealkitFilesPreview] = useState([] as any[]);
 
@@ -303,6 +287,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   const handleSubmit = async (values: any) => {
+    setSubmitting(true);
     try {
       // S3 Video and images starts
 
@@ -342,7 +327,34 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       mealkitFiles.forEach((file: any) =>
         input.push({ name: file.name, type: file.type })
       );
-      await signMealkitS3({ variables: { input } });
+      const results = await signMealkitS3({ variables: { input } });
+
+      const resultsArray = results.data?.signMealkitS3;
+
+      let urlArray: string[] = [];
+      if (resultsArray) {
+        for (let i = 0; i < resultsArray?.length; i++) {
+          urlArray.push(resultsArray[i].url);
+        }
+      }
+      console.log("urlArray1");
+      console.log({ urlArray });
+
+      let fileAndSignedRequestObjectArray: {
+        file: any;
+        signedRequest: string;
+      }[] = [];
+      resultsArray?.forEach((urlAndSignedRequestObject, index) => {
+        const file = mealkitFiles[index];
+        const signedRequest = urlAndSignedRequestObject.signedRequest;
+        const object = { file, signedRequest };
+
+        fileAndSignedRequestObjectArray.push(object);
+      });
+      await uploadMealkitToS3(fileAndSignedRequestObjectArray);
+
+      console.log({ input });
+      console.log({ results });
 
       // S3 mealkit ends
       const { data, errors } = await createPost({
@@ -365,23 +377,38 @@ const CreatePost: React.FC<{}> = ({ children }) => {
         },
       });
 
-      const { errors: mealkitErrors } = await createMealkit({
-        variables: {
-          input: {
-            price: mealkitInput.price,
-            portion: mealkitInput.portion,
-            items: mealkitInput.items,
-            images: mealkitInput.images,
-          },
-          postId: data!.createPost.id,
-        },
-      });
-      if (!errors && !mealkitErrors) {
-        router.push("/");
+      console.log("post created? ");
+      console.log(data);
+
+      const postId = data?.createPost.id;
+      if (postId && urlArray.length > 0) {
+        const price = parseInt(mealkitInput.price);
+        const portion = parseInt(mealkitInput.portion);
+        const { data: mealkitResult, errors: mealkitErrors } =
+          await createMealkit({
+            variables: {
+              input: {
+                price: price,
+                portion: portion,
+                items: mealkitInput.items,
+                images: urlArray,
+              },
+              postId: postId, //not this one
+            },
+          });
+        console.log("himealkit");
+        console.log({ mealkitErrors });
+        console.log({ mealkitResult });
+        if (!errors && !mealkitErrors) {
+          router.push("/");
+        }
       }
     } catch (error) {
-      console.log(error);
+      // console.log("errro here 2");
+      console.error(error);
+      // console.log(error);
     }
+    setSubmitting(false);
   };
 
   let render: any;
@@ -422,43 +449,50 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     case 3:
       render = (
-        <Box>
-          <CreatePostForm
-            videoPreview={videoPreview}
-            thumbnailPreview={thumbnailPreview}
-            nextStep={nextStep}
-            prevstep={prevStep}
-          />
-          <CreateRecipe
-            ingredientsField={ingredientsField}
-            instructionField={instructionField}
-            handleChangeInput={handleChangeInput}
-            handleAddField={handleAddField}
-            handleRemoveField={handleRemoveField}
-            handleInstructionChangeInput={handleInstructionChangeInput}
-            handleAddInstructionField={handleAddInstructionField}
-            handleRemoveInstructionField={handleRemoveInstructionField}
-          />
+        <HeadingLayout back={false} heading="Add Post Detail">
+          <Box>
+            <CreatePostForm
+              videoPreview={videoPreview}
+              thumbnailPreview={thumbnailPreview}
+              nextStep={nextStep}
+              prevstep={prevStep}
+            />
+            <CreateRecipe
+              ingredientsField={ingredientsField}
+              instructionField={instructionField}
+              handleChangeInput={handleChangeInput}
+              handleAddField={handleAddField}
+              handleRemoveField={handleRemoveField}
+              handleInstructionChangeInput={handleInstructionChangeInput}
+              handleAddInstructionField={handleAddInstructionField}
+              handleRemoveInstructionField={handleRemoveInstructionField}
+            />
 
-          <Flex justifyContent="space-between">
-            <IconButton
-              aria-label="Search database"
-              icon={<ChevronLeftIcon />}
-              onClick={() => prevStep()}
-              fontSize="x-large"
-              color="dark.200"
-              variant="none"
-            />
-            <IconButton
-              aria-label="Search database"
-              icon={<ChevronRightIcon />}
-              onClick={() => nextStep()}
-              fontSize="x-large"
-              color="dark.200"
-              variant="none"
-            />
-          </Flex>
-        </Box>
+            <Flex justifyContent="space-between" alignItems="center" mt={5}>
+              <IconButton
+                aria-label="Search database"
+                icon={<ChevronLeftIcon />}
+                onClick={() => prevStep()}
+                fontSize="x-large"
+                color="dark.200"
+                variant="none"
+              />
+
+              <Button color="green.400" onClick={() => nextStep()}>
+                Next
+              </Button>
+
+              {/* <IconButton
+                aria-label="Search database"
+                icon={<ChevronRightIcon />}
+                onClick={() => nextStep()}
+                fontSize="x-large"
+                color="dark.200"
+                variant="none"
+              /> */}
+            </Flex>
+          </Box>
+        </HeadingLayout>
       );
 
       break;
@@ -507,7 +541,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                     <Button
                       mb="4rem"
                       type="submit"
-                      isLoading={isSubmitting}
+                      isLoading={submitting}
                       colorScheme="teal"
                     >
                       {" "}

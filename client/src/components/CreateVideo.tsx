@@ -2,15 +2,9 @@ import React from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import Dropzone from "react-dropzone";
 
-import {
-  AddIcon,
-  ArrowUpIcon,
-  ChevronRightIcon,
-  EditIcon,
-  MinusIcon,
-  TriangleUpIcon,
-} from "@chakra-ui/icons";
-import { IconButton } from "@chakra-ui/react";
+import { EditIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { Button, Image } from "@chakra-ui/react";
+import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
   videoPreview: any;
@@ -33,6 +27,9 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         }
         // maxSize={1000 * 1}
         multiple={false}
+        // accept= {['image/*', 'video/*']}
+        accept="video/*"
+
         // accept="video/mp4"
       >
         {({ getRootProps, getInputProps }) => (
@@ -50,34 +47,50 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                 {!videoPreview ? (
                   <Flex
                     direction="column"
+                    p="2rem"
                     alignItems="center"
                     border="1px"
-                    borderColor="gray.200"
-                    bgColor="gray.50"
+                    borderColor="gray.400"
+                    borderStyle="dashed"
                   >
-                    <ArrowUpIcon mt="3rem" />
-                    <Text textAlign="center" mb="2rem">
-                      Drag and drop a video here, or click to select the file
+                    {/* <ArrowUpIcon mt="3rem" /> */}
+                    <UploadVideoIcon />
+                    <Heading fontSize="xl" textAlign="center">
+                      Select a video
+                    </Heading>
+                    <Text fontSize="sm" textAlign="center">
+                      Or drag and drop here
                     </Text>
                   </Flex>
                 ) : (
                   <Box>
-                    <Flex justifyContent="center" alignItems="end">
-                      <video controls width="50%">
+                    <Box justifyContent="center" alignItems="end">
+                      <video controls width="90%">
                         <source src={videoPreview} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
-                      <EditIcon m={2} />
+                    </Box>
+                    <Flex
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="center"
+                      mt={2}
+                    >
+                      <PlusSquareIcon mr={2} />
+                      <Text textAlign="center">Change a video</Text>
                     </Flex>
+
+                    {/* <EditIcon m={2} /> */}
+
                     <Flex justifyContent="right">
-                      <IconButton
+                      {/* <IconButton
                         aria-label="Search database"
                         icon={<ChevronRightIcon />}
                         onClick={() => nextStep()}
                         fontSize="x-large"
                         color="dark.200"
                         variant="none"
-                      />
+                      /> */}
                     </Flex>
                   </Box>
                 )}
@@ -86,6 +99,11 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
           </Box>
         )}
       </Dropzone>
+      <Flex justifyContent="right">
+        <Button color="green.400" mt="5rem" onClick={() => nextStep()}>
+          Next
+        </Button>
+      </Flex>
     </Box>
   );
 };

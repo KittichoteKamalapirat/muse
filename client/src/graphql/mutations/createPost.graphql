@@ -8,5 +8,9 @@ mutation createPost($input: PostInput!) {
     creatorId
     createdAt
     updatedAt
+    instruction
+    advice
+    cooktime
+    portion
   }
 }

@@ -2,8 +2,9 @@ import {
   ArrowUpIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  PlusSquareIcon,
 } from "@chakra-ui/icons";
-import { Box, Flex, Text, Image, IconButton } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, IconButton, Button } from "@chakra-ui/react";
 import Dropzone from "react-dropzone";
 import React from "react";
 import router from "next/router";
@@ -30,7 +31,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
       {!thumbnailPreview ? (
         !videoPreview ? null : (
           <Flex justifyContent="center">
-            <video width="50%">
+            <video width="90%">
               <source src={videoPreview} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
@@ -42,7 +43,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           <Image
             src={thumbnailPreview}
             alt="image"
-            boxSize="50%"
+            boxSize="90%"
             fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
           />
           {/* </AspectRatio> */}
@@ -54,7 +55,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
         }
         // maxSize={1000 * 1}
         multiple={true}
-        // accept="video/mp4"
+        accept="image/*"
       >
         {({ getRootProps, getInputProps }) => (
           <Box mt={2}>
@@ -65,7 +66,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
               // borderColor="gray.200"
               padding={4}
             >
-              <div
+              <Box
                 {...getRootProps({
                   onChange: (e) => thumbnailPreviewHandler(e),
                 })}
@@ -73,18 +74,30 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
                 <input {...getInputProps()} />
 
                 <Flex
-                  direction="column"
+                  direction="row"
                   alignItems="center"
-                  border="1px"
-                  borderColor="gray.200"
-                  bgColor="gray.50"
+                  justifyContent="center"
+                  border={!thumbnailPreview ? "1px" : undefined}
+                  borderColor="gray.400"
+                  borderStyle="dashed"
                 >
-                  <ArrowUpIcon mt="3rem" />
-                  <Text textAlign="center" mb="2rem">
-                    ลากไฟล์รูปภาพมาวาง หรือ คลิกเพื่อเลือกไฟล์
-                  </Text>
+                  {!thumbnailPreview ? (
+                    <PlusSquareIcon mr={2} />
+                  ) : (
+                    <Image
+                      border="1px"
+                      borderColor="black"
+                      mr={2}
+                      borderRadius="20%"
+                      src={thumbnailPreview}
+                      alt="image"
+                      boxSize="2rem"
+                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                    />
+                  )}
+                  <Text textAlign="center">Add a custom cover</Text>
                 </Flex>
-              </div>
+              </Box>
             </Box>
           </Box>
         )}
@@ -98,14 +111,18 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           color="dark.200"
           variant="none"
         />
-        <IconButton
+
+        <Button color="green.400" onClick={() => nextStep()}>
+          Next
+        </Button>
+        {/* <IconButton
           aria-label="Search database"
           icon={<ChevronRightIcon />}
           onClick={() => nextStep()}
           fontSize="x-large"
           color="dark.200"
           variant="none"
-        />
+        /> */}
       </Flex>
     </Box>
   );

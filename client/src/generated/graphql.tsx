@@ -361,14 +361,14 @@ export type CreateMealkitMutationVariables = Exact<{
 }>;
 
 
-export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, id: number } };
+export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: string, createdAt: string, updatedAt: string } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: string, createdAt: string, updatedAt: string, instruction?: Maybe<Array<string>>, advice?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number> } };
 
 export type DeleteAddressMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -629,6 +629,7 @@ export const CreateMealkitDocument = gql`
     items
     images
     price
+    portion
     id
   }
 }
@@ -671,6 +672,10 @@ export const CreatePostDocument = gql`
     creatorId
     createdAt
     updatedAt
+    instruction
+    advice
+    cooktime
+    portion
   }
 }
     `;
