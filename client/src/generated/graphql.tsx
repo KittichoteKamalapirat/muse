@@ -42,6 +42,24 @@ export type AddressInput = {
   postcode: Scalars['String'];
 };
 
+export type CartItem = {
+  __typename?: 'CartItem';
+  id: Scalars['Float'];
+  quantity: Scalars['Float'];
+  userId: Scalars['String'];
+  user?: Maybe<User>;
+  mealkitId: Scalars['Int'];
+  mealkit?: Maybe<Mealkit>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  total: Scalars['Int'];
+};
+
+export type CartItemInput = {
+  mealkitId: Scalars['Float'];
+  quantity: Scalars['Float'];
+};
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -65,6 +83,7 @@ export type IngredientInput = {
 export type Mealkit = {
   __typename?: 'Mealkit';
   id: Scalars['Float'];
+  name: Scalars['String'];
   price?: Maybe<Scalars['Int']>;
   portion: Scalars['Float'];
   items?: Maybe<Array<Scalars['String']>>;
@@ -104,6 +123,8 @@ export type Mutation = {
   updateMealkit?: Maybe<Mealkit>;
   deleteMealkit: Scalars['Boolean'];
   signMealkitS3: Array<SignedS3Result>;
+  createCartItem: CartItem;
+  updateCartItem: CartItem;
 };
 
 
@@ -202,6 +223,18 @@ export type MutationSignMealkitS3Args = {
   input: Array<SignS3Params>;
 };
 
+
+export type MutationCreateCartItemArgs = {
+  input: CartItemInput;
+};
+
+
+export type MutationUpdateCartItemArgs = {
+  mealkitId: Scalars['Int'];
+  id: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -260,6 +293,7 @@ export type Query = {
   post?: Maybe<Post>;
   address: Address;
   mealkits?: Maybe<Array<Mealkit>>;
+  cartItems: Array<CartItem>;
 };
 
 
@@ -355,6 +389,13 @@ export type CreateAddressMutationVariables = Exact<{
 
 export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
+export type CreateCartItemMutationVariables = Exact<{
+  input: CartItemInput;
+}>;
+
+
+export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem: { __typename?: 'CartItem', quantity: number, mealkitId: number } };
+
 export type CreateMealkitMutationVariables = Exact<{
   input: MealkitInput;
   postId: Scalars['Int'];
@@ -443,6 +484,15 @@ export type UpdateAddressMutationVariables = Exact<{
 
 export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
 
+export type UpdateCartItemMutationVariables = Exact<{
+  id: Scalars['Int'];
+  quantity: Scalars['Int'];
+  mealkitId: Scalars['Int'];
+}>;
+
+
+export type UpdateCartItemMutation = { __typename?: 'Mutation', updateCartItem: { __typename?: 'CartItem', id: number, quantity: number, total: number, mealkit?: Maybe<{ __typename?: 'Mealkit', price?: Maybe<number> }> } };
+
 export type UpdateMealkitMutationVariables = Exact<{
   input: MealkitInput;
   id: Scalars['Int'];
@@ -472,6 +522,11 @@ export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
+export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -482,7 +537,7 @@ export type MealkitsQueryVariables = Exact<{
 }>;
 
 
-export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>> };
+export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>> };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -623,6 +678,40 @@ export function useCreateAddressMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateAddressMutationHookResult = ReturnType<typeof useCreateAddressMutation>;
 export type CreateAddressMutationResult = Apollo.MutationResult<CreateAddressMutation>;
 export type CreateAddressMutationOptions = Apollo.BaseMutationOptions<CreateAddressMutation, CreateAddressMutationVariables>;
+export const CreateCartItemDocument = gql`
+    mutation createCartItem($input: CartItemInput!) {
+  createCartItem(input: $input) {
+    quantity
+    mealkitId
+  }
+}
+    `;
+export type CreateCartItemMutationFn = Apollo.MutationFunction<CreateCartItemMutation, CreateCartItemMutationVariables>;
+
+/**
+ * __useCreateCartItemMutation__
+ *
+ * To run a mutation, you first call `useCreateCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCartItemMutation, { data, loading, error }] = useCreateCartItemMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCartItemMutation(baseOptions?: Apollo.MutationHookOptions<CreateCartItemMutation, CreateCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCartItemMutation, CreateCartItemMutationVariables>(CreateCartItemDocument, options);
+      }
+export type CreateCartItemMutationHookResult = ReturnType<typeof useCreateCartItemMutation>;
+export type CreateCartItemMutationResult = Apollo.MutationResult<CreateCartItemMutation>;
+export type CreateCartItemMutationOptions = Apollo.BaseMutationOptions<CreateCartItemMutation, CreateCartItemMutationVariables>;
 export const CreateMealkitDocument = gql`
     mutation createMealkit($input: MealkitInput!, $postId: Int!) {
   createMealkit(input: $input, postId: $postId) {
@@ -1049,6 +1138,46 @@ export function useUpdateAddressMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateAddressMutationHookResult = ReturnType<typeof useUpdateAddressMutation>;
 export type UpdateAddressMutationResult = Apollo.MutationResult<UpdateAddressMutation>;
 export type UpdateAddressMutationOptions = Apollo.BaseMutationOptions<UpdateAddressMutation, UpdateAddressMutationVariables>;
+export const UpdateCartItemDocument = gql`
+    mutation updateCartItem($id: Int!, $quantity: Int!, $mealkitId: Int!) {
+  updateCartItem(id: $id, quantity: $quantity, mealkitId: $mealkitId) {
+    id
+    quantity
+    total
+    mealkit {
+      price
+    }
+  }
+}
+    `;
+export type UpdateCartItemMutationFn = Apollo.MutationFunction<UpdateCartItemMutation, UpdateCartItemMutationVariables>;
+
+/**
+ * __useUpdateCartItemMutation__
+ *
+ * To run a mutation, you first call `useUpdateCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCartItemMutation, { data, loading, error }] = useUpdateCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      quantity: // value for 'quantity'
+ *      mealkitId: // value for 'mealkitId'
+ *   },
+ * });
+ */
+export function useUpdateCartItemMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCartItemMutation, UpdateCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCartItemMutation, UpdateCartItemMutationVariables>(UpdateCartItemDocument, options);
+      }
+export type UpdateCartItemMutationHookResult = ReturnType<typeof useUpdateCartItemMutation>;
+export type UpdateCartItemMutationResult = Apollo.MutationResult<UpdateCartItemMutation>;
+export type UpdateCartItemMutationOptions = Apollo.BaseMutationOptions<UpdateCartItemMutation, UpdateCartItemMutationVariables>;
 export const UpdateMealkitDocument = gql`
     mutation updateMealkit($input: MealkitInput!, $id: Int!) {
   updateMealkit(input: $input, id: $id) {
@@ -1202,6 +1331,57 @@ export function useAddressLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ad
 export type AddressQueryHookResult = ReturnType<typeof useAddressQuery>;
 export type AddressLazyQueryHookResult = ReturnType<typeof useAddressLazyQuery>;
 export type AddressQueryResult = Apollo.QueryResult<AddressQuery, AddressQueryVariables>;
+export const CartItemsDocument = gql`
+    query cartItems {
+  cartItems {
+    id
+    quantity
+    userId
+    mealkitId
+    total
+    user {
+      username
+    }
+    mealkit {
+      name
+      images
+      price
+      portion
+      post {
+        id
+        title
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useCartItemsQuery__
+ *
+ * To run a query within a React component, call `useCartItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCartItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCartItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCartItemsQuery(baseOptions?: Apollo.QueryHookOptions<CartItemsQuery, CartItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CartItemsQuery, CartItemsQueryVariables>(CartItemsDocument, options);
+      }
+export function useCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CartItemsQuery, CartItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CartItemsQuery, CartItemsQueryVariables>(CartItemsDocument, options);
+        }
+export type CartItemsQueryHookResult = ReturnType<typeof useCartItemsQuery>;
+export type CartItemsLazyQueryHookResult = ReturnType<typeof useCartItemsLazyQuery>;
+export type CartItemsQueryResult = Apollo.QueryResult<CartItemsQuery, CartItemsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -1239,6 +1419,7 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const MealkitsDocument = gql`
     query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
+    id
     items
     images
     price

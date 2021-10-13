@@ -8,6 +8,7 @@ import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 import { PostResolver } from "./resolvers/post";
+import { XyResolver } from "./resolvers/xy";
 import { MyContext } from "./types";
 
 import Redis from "ioredis";
@@ -21,10 +22,14 @@ import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { Address } from "./entities/Address";
+import { CartItem } from "./entities/CartItem";
 import { Mealkit } from "./entities/Mealkit";
 import { AddressResolver } from "./resolvers/address";
 import { sendSMS } from "./utils/sendSms";
 import { MealkitResolver } from "./resolvers/mealkit";
+import { CartItemResolver } from "./resolvers/cartItem";
+import { X } from "./entities/X";
+import { Y } from "./entities/Y";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
@@ -38,7 +43,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [User, Post, Upvote, Address, Mealkit],
+    entities: [User, Post, Upvote, Address, Mealkit, CartItem],
   });
 
   const app = express();
@@ -82,6 +87,7 @@ const main = async () => {
       PostResolver,
       AddressResolver,
       MealkitResolver,
+      CartItemResolver,
     ],
     validate: false,
   });

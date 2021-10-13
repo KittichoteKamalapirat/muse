@@ -11,6 +11,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Address } from "./Address";
+import { CartItem } from "./CartItem";
 import { Mealkit } from "./Mealkit";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
@@ -67,6 +68,10 @@ export class User extends BaseEntity {
   @JoinColumn()
   address: Address;
   // relatioship with account ends -> profileId
+
+  //has many carts
+  @OneToMany((type) => CartItem, (cartItem) => cartItem.user)
+  cartItems: CartItem[];
 
   @CreateDateColumn()
   @Field()

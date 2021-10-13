@@ -14,6 +14,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
   back = true,
 }) => {
   const router = useRouter();
+
   return (
     <>
       <Box
@@ -31,7 +32,9 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
           <IconButton
             aria-label="Search database"
             icon={<ChevronLeftIcon />}
-            onClick={() => router.back()}
+            onClick={() => {
+              router.back();
+            }}
             position="fixed"
             fontSize="x-large"
             color="dark.200"

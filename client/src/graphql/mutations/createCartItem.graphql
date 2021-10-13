@@ -1,0 +1,6 @@
+mutation createCartItem($input: CartItemInput!) {
+  createCartItem(input: $input) {
+    quantity
+    mealkitId
+  }
+}

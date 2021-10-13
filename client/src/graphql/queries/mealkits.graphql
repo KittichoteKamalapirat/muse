@@ -1,5 +1,6 @@
 query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
+    id
     items
     images
     price

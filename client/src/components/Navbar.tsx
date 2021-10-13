@@ -98,6 +98,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             pointerEvents="none"
             children={<SearchIcon color={inActiveGray} />}
           />
+
           <Input
             border="none"
             zIndex={2}
@@ -113,6 +114,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </Button>
           </NextLink>
         )}
+        <NextLink href="/cart">
+          <Link ml={"auto"} fontSize="sm" textDecoration="underline">
+            cart
+          </Link>
+        </NextLink>
       </Flex>
       <Flex
         zIndex={1}

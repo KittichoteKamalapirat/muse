@@ -1,0 +1,22 @@
+query cartItems {
+  cartItems {
+    id
+    quantity
+    userId
+    mealkitId
+    total
+    user {
+      username
+    }
+    mealkit {
+      name
+      images
+      price
+      portion
+      post {
+        id
+        title
+      }
+    }
+  }
+}
