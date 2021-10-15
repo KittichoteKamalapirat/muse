@@ -9,6 +9,8 @@ mutation updateCartItem($id: Int!, $quantity: Int!, $mealkitId: Int!) {
   }
 }
 
+# Important! I need to add the total here because
+
 # mutation updateCartItem($id: Int!, $quantity: Int!) {
 #   updateCartItem(id: $id, quantity: $quantity) {
 #     id
