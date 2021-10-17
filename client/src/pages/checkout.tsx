@@ -7,6 +7,7 @@ import { Wrapper } from "../components/Wrapper";
 import {
   useAddressQuery,
   useCartItemsQuery,
+  useCreateScbQrQuery,
   useMeQuery,
   useUpdateCartItemMutation,
 } from "../generated/graphql";
@@ -17,6 +18,8 @@ import { useRouter } from "next/router";
 import { Button, IconButton } from "@chakra-ui/button";
 import { AddIcon, MinusIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { Table, Tr, Th } from "@chakra-ui/react";
+
+import axios from "axios";
 
 interface checkoutProps {}
 
@@ -149,9 +152,21 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
           <Text>Total: ฿{gross}</Text>
         </Box>
         <Box p={3} bgColor="red.400" color="white">
-          <Button onClick={() => console.log("hi")}>Make a payment</Button>
+          <NextLink href={{ pathname: "/payment" }}>
+            <Link>Make a payment</Link>
+          </NextLink>
+
+          {/* <Button
+            onClick={() => {
+              createScbQr(gross);
+            }}
+          >
+            Make a payment
+          </Button> */}
         </Box>
       </Flex>
+
+      {/* {!qrLoading ? null : <Image src={qrData?.createScbQr.data.qrImage} />} */}
     </HeadingLayout>
   );
 };

@@ -13,3 +13,8 @@ export const AWS_REGION = "ap-southeast-1";
 export const TWILIO_ACCOUNT_SID = "AC7100776fdba2dd365fc5b54b6a344585";
 export const TWILIO_AUTH_TOKEN = "a948e28bec1dfb222936838ccb1ca600";
 export const TWILIO_TEST_PHONE_NUMBER = "+12183573995";
+
+//SCB
+export const SCB_API_KEY = "l7c8620ca31fc846768d57c2bc2fe01e1f";
+export const SCB_API_SECRET = "4fb2ce52351b4c22a0a08c9a820c0e78";
+export const BILLER_ID = "097741489371038";

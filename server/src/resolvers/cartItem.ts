@@ -26,8 +26,6 @@ class CartItemInput {
   quantity: number;
 }
 
-import fetch from "node-fetch";
-
 @Resolver(CartItem)
 export class CartItemResolver {
   @FieldResolver(() => Int)

@@ -282,6 +282,12 @@ export type PostSignedS3 = {
   thumbnailUrl: Scalars['String'];
 };
 
+export type QrData = {
+  __typename?: 'QrData';
+  qrRawData: Scalars['String'];
+  qrImage: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
@@ -294,6 +300,7 @@ export type Query = {
   address: Address;
   mealkits?: Maybe<Array<Mealkit>>;
   cartItems: Array<CartItem>;
+  createScbQr: QrOutput;
 };
 
 
@@ -323,10 +330,21 @@ export type QueryMealkitsArgs = {
   postId: Scalars['Int'];
 };
 
+
+export type QueryCreateScbQrArgs = {
+  amount: Scalars['Int'];
+};
+
 export type SignedS3 = {
   __typename?: 'SignedS3';
   signedRequest: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type Status = {
+  __typename?: 'Status';
+  code: Scalars['Float'];
+  description: Scalars['String'];
 };
 
 export type User = {
@@ -353,6 +371,12 @@ export type UsernamePasswordInput = {
   email: Scalars['String'];
   phonenumber: Scalars['String'];
   password?: Maybe<Scalars['String']>;
+};
+
+export type QrOutput = {
+  __typename?: 'qrOutput';
+  status: Status;
+  data: QrData;
 };
 
 export type SignS3Params = {
@@ -410,6 +434,13 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: string, createdAt: string, updatedAt: string, instruction?: Maybe<Array<string>>, advice?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number> } };
+
+export type CreateScbQrQueryVariables = Exact<{
+  amount: Scalars['Int'];
+}>;
+
+
+export type CreateScbQrQuery = { __typename?: 'Query', createScbQr: { __typename?: 'qrOutput', status: { __typename?: 'Status', code: number, description: string }, data: { __typename?: 'QrData', qrRawData: string, qrImage: string } } };
 
 export type DeleteAddressMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -794,6 +825,48 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const CreateScbQrDocument = gql`
+    query createScbQr($amount: Int!) {
+  createScbQr(amount: $amount) {
+    status {
+      code
+      description
+    }
+    data {
+      qrRawData
+      qrImage
+    }
+  }
+}
+    `;
+
+/**
+ * __useCreateScbQrQuery__
+ *
+ * To run a query within a React component, call `useCreateScbQrQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreateScbQrQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreateScbQrQuery({
+ *   variables: {
+ *      amount: // value for 'amount'
+ *   },
+ * });
+ */
+export function useCreateScbQrQuery(baseOptions: Apollo.QueryHookOptions<CreateScbQrQuery, CreateScbQrQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CreateScbQrQuery, CreateScbQrQueryVariables>(CreateScbQrDocument, options);
+      }
+export function useCreateScbQrLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateScbQrQuery, CreateScbQrQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CreateScbQrQuery, CreateScbQrQueryVariables>(CreateScbQrDocument, options);
+        }
+export type CreateScbQrQueryHookResult = ReturnType<typeof useCreateScbQrQuery>;
+export type CreateScbQrLazyQueryHookResult = ReturnType<typeof useCreateScbQrLazyQuery>;
+export type CreateScbQrQueryResult = Apollo.QueryResult<CreateScbQrQuery, CreateScbQrQueryVariables>;
 export const DeleteAddressDocument = gql`
     mutation deleteAddress($id: Int!) {
   deleteAddress(id: $id)

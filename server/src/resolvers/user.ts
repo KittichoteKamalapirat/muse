@@ -20,9 +20,6 @@ import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 import { ContainerInterface, getConnection } from "typeorm";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/open-peeps";
-import { ElasticInference } from "aws-sdk";
 
 @ObjectType()
 class FieldError {

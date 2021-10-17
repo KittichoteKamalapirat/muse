@@ -28,18 +28,22 @@ import { AddressResolver } from "./resolvers/address";
 import { sendSMS } from "./utils/sendSms";
 import { MealkitResolver } from "./resolvers/mealkit";
 import { CartItemResolver } from "./resolvers/cartItem";
+import "dotenv-safe/config";
 import { X } from "./entities/X";
 import { Y } from "./entities/Y";
+import { Token } from "graphql";
+import { PaymentResolver } from "./resolvers/payment";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
   const conn = await createConnection({
     type: "postgres",
     host: "localhost",
+    url: process.env.DATABASE_URL,
     port: 5432,
-    username: "postgres",
-    password: "chain123",
-    database: "cookknowdb",
+    // username: "postgres",
+    // password: "chain123",
+    // database: "cookknowdb",
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
@@ -48,18 +52,26 @@ const main = async () => {
 
   const app = express();
   // sendSMS();
+  // generateQr();
+  // generateQr();
+
+  app.get("/payment-confirmation", (req, res) => {
+    console.log("req");
+    // console.log(req);
+    res.send("payment paid");
+  });
 
   const RedisStore = connectRedis(session);
-  const redis = new Redis();
+  const redis = new Redis(process.env.REDIS_URL);
 
   app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.CORS_ORIGIN,
       credentials: true,
     })
   );
 
-  // const redisClient = redis.createClient();
+  // const redisClient = redis.createClient（）
   app.use(
     session({
       name: COOKIE_NAME,
@@ -72,10 +84,10 @@ const main = async () => {
         httpOnly: true, //so that Javascript's front end can't access cookie
         sameSite: "lax", //csrf
         secure: __prod__, //cookie onl works in https
-        // domain: "http://localhost:3000/",
+        domain: __prod__ ? ".cookknow.com" : undefined, //no need if in development
       },
       saveUninitialized: false,
-      secret: "secret",
+      secret: process.env.SESSION_SECRET,
       resave: false,
     })
   );
@@ -88,6 +100,7 @@ const main = async () => {
       AddressResolver,
       MealkitResolver,
       CartItemResolver,
+      PaymentResolver,
     ],
     validate: false,
   });
@@ -114,7 +127,7 @@ const main = async () => {
 
   apolloServer.applyMiddleware({ app, cors: false });
 
-  app.listen(4000, () => {
+  app.listen(parseInt(process.env.PORT), () => {
     console.log(`server started on port 4000`);
   });
 };
