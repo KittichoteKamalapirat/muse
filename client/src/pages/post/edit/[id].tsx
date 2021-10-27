@@ -55,7 +55,7 @@ const EditPost = ({}) => {
             // if (!error) {
             //   router.push("/");
             // }
-            await updatePost({ variables: { id: postId, ...values } });
+            // await updatePost({ variables: { id: postId, ...values } });
             router.back();
           }}
         >

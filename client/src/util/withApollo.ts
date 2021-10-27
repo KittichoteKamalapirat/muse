@@ -3,11 +3,10 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createWithApollo } from "./createWithApollo";
 import { PaginatedPosts } from "../generated/graphql";
 import { NextPageContext } from "next";
-import address from "../pages/account/address";
-
 const createClient = (ctx: NextPageContext) =>
   new ApolloClient({
-    uri: "http://localhost:4000/graphql",
+    // uri: "http://localhost:4000/graphql",
+    uri: process.env.NEXT_PUBLIC_SERVER_URL,
     credentials: "include",
     headers: {
       cookie:

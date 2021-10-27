@@ -42,12 +42,12 @@ const main = async () => {
     // password: "chain123",
     // database: "cookknowdb",
     logging: true,
-    // synchronize: true,
+    synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User, Post, Upvote, Address, Mealkit, CartItem],
   });
 
-  await conn.runMigrations();
+  // await conn.runMigrations();
   const app = express();
 
   console.log(process.memoryUsage());

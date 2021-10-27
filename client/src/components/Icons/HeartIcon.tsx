@@ -4,6 +4,7 @@ import { inActiveGray, primaryColor } from "../Variables";
 
 interface HeartProps {
   isactive?: boolean;
+  mr?: number;
 }
 
 export const HeartIcon = (props: HeartProps) => (
