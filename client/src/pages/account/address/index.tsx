@@ -21,6 +21,7 @@ import { withApollo } from "../../../util/withApollo";
 import { useApolloClient } from "@apollo/client";
 import { Wrapper } from "../../../components/Wrapper";
 import { HeadingLayout } from "../../../components/HeadingLayout";
+import { useRouter } from "next/router";
 
 interface addressProps {}
 
@@ -29,6 +30,8 @@ const Address: React.FC<addressProps> = ({}) => {
   const { data, loading } = useAddressQuery();
   const { data: meData } = useMeQuery();
   const [deleteAddress] = useDeleteAddressMutation();
+
+  const router = useRouter();
 
   if (loading) {
     return (
@@ -56,6 +59,22 @@ const Address: React.FC<addressProps> = ({}) => {
       ) : (
         <Wrapper>
           <Box>
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>Name</Box>
+                <Box flex={3}>{data?.address.name}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
+
+            <Box>
+              <Flex justifyContent="space-between">
+                <Box flex={1}>Phone no.</Box>
+                <Box flex={3}>{data?.address.phonenumber}</Box>
+              </Flex>
+              <Divider variant="dashed" />
+            </Box>
+
             <Box>
               <Flex justifyContent="space-between">
                 <Box flex={1}>ที่อยู่ 1</Box>
@@ -127,7 +146,7 @@ const Address: React.FC<addressProps> = ({}) => {
                   m={1}
                   colorScheme="red"
                   leftIcon={<DeleteIcon />}
-                  onClick={() =>
+                  onClick={() => {
                     deleteAddress({
                       variables: { id: data.address.id },
                       update: (cache) => {
@@ -137,8 +156,9 @@ const Address: React.FC<addressProps> = ({}) => {
 
                         cache.gc();
                       },
-                    })
-                  }
+                    });
+                    router.push("/account/address");
+                  }}
                 >
                   ลบที่อยู่นี้
                 </Button>

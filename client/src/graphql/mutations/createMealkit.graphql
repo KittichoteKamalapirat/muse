@@ -1,5 +1,6 @@
 mutation createMealkit($input: MealkitInput!, $postId: Int!) {
   createMealkit(input: $input, postId: $postId) {
+    name
     items
     images
     price

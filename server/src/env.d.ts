@@ -7,3 +7,5 @@ declare namespace NodeJS {
     CORS_ORIGIN: string;
   }
 }
+
+declare module "node-fetch";

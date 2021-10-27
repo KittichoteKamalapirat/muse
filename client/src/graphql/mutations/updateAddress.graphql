@@ -1,5 +1,7 @@
 mutation updateAddress($input: AddressInput!, $id: Int!) {
   updateAddress(input: $input, id: $id) {
+    name
+    phonenumber
     id
     userId
     line1

@@ -78,14 +78,12 @@ export const Login: React.FC<{}> = ({}) => {
               </Flex>
 
               <Box textAlign="center" mt={5}>
-                <Text>
-                  Don't have an account?{" "}
-                  <NextLink href="/register">
-                    <Link fontWeight="700" color="red.400">
-                      Register
-                    </Link>
-                  </NextLink>
-                </Text>
+                Don't have an account?{" "}
+                <NextLink href="/register">
+                  <Link fontWeight="700" color="red.400">
+                    Register
+                  </Link>
+                </NextLink>
               </Box>
 
               <Button

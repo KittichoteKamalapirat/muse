@@ -24,6 +24,8 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
 
   const handleOnSubmit = async (values: any) => {
     const input: AddressInput = {
+      name: values.name,
+      phonenumber: values.phonenumber,
       line1: values.line1,
       line2: values.line2,
       subdistrict: values.subdistrict,
@@ -67,6 +69,8 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
         <h1>แก้ไขที่อยู่การจัดส่ง</h1>
         <Formik
           initialValues={{
+            name: data?.address.name,
+            phonenumber: data?.address.phonenumber,
             line1: data?.address.line1,
             line2: data?.address.line2,
             subdistrict: data?.address.subdistrict,
@@ -79,6 +83,14 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
+              <InputField name="name" placeholder="Name" label="Name" />
+              <InputField
+                name="phonenumber"
+                type="tel"
+                placeholder="phonenumber"
+                label="phonenumber"
+              />
+
               <InputField
                 name="line1"
                 placeholder="Address line 1"

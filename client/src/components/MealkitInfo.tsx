@@ -40,7 +40,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
           <Text>ไม่มีชุดทำอาหาร</Text>
-          {/* To add ! if owner of the post -> show the button */}
           <NextLink href="/" as="/">
             <Button colorScheme="teal" leftIcon={<AddIcon />}>
               เพิ่มชุดทำอาหาร

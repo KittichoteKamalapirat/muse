@@ -49,19 +49,27 @@ const Index = () => {
                 // shadow="md"
                 // borderWidth="1px"
               >
-                <Flex alignItems="center">
-                  <Image
-                    m={2}
-                    width="2.5rem"
-                    src={post.creator.avatar}
-                    alt="creator avatar"
-                    borderRadius="50%"
-                    border={2}
-                    borderStyle="solid"
-                    borderColor="red.400"
-                  />
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Flex alignItems="center">
+                    <Image
+                      m={2}
+                      width="2.5rem"
+                      src={post.creator.avatar}
+                      alt="creator avatar"
+                      borderRadius="50%"
+                      border={2}
+                      borderStyle="solid"
+                      borderColor="red.400"
+                    />
 
-                  <Text> {post.creator.username}</Text>
+                    <Text> {post.creator.username}</Text>
+                  </Flex>
+
+                  {meData?.me?.id !== post.creator.id ? null : (
+                    <Box>
+                      <EditDeletePostButtons id={post.id} />
+                    </Box>
+                  )}
                 </Flex>
 
                 <Flex key={post.id}>
@@ -72,12 +80,6 @@ const Index = () => {
                     </video>
                     <Flex justifyContent="space-between">
                       <UpvoteSection post={post} />
-
-                      {meData?.me?.id !== post.creator.id ? null : (
-                        <Box>
-                          <EditDeletePostButtons id={post.id} />
-                        </Box>
-                      )}
                     </Flex>
                     <NextLink
                       href={{

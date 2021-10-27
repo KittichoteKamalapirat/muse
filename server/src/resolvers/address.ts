@@ -17,6 +17,10 @@ import { MyContext } from "../types";
 @InputType()
 class AddressInput {
   @Field()
+  name: string;
+  @Field()
+  phonenumber: string;
+  @Field()
   line1: string;
   @Field()
   line2: string;
@@ -66,6 +70,8 @@ export class AddressResolver {
       .createQueryBuilder()
       .update(Address)
       .set({
+        name: input.name,
+        phonenumber: input.phonenumber,
         line1: input.line1,
         line2: input.line2,
         subdistrict: input.subdistrict,

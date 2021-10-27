@@ -21,6 +21,8 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
 
   const handleOnSubmit = async (values: any) => {
     const input: AddressInput = {
+      name: values.name,
+      phonenumber: values.phonenumber,
       line1: values.line1,
       line2: values.line2,
       subdistrict: values.subdistrict,
@@ -45,6 +47,8 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
         <h1>สร้างที่อยู่การจัดส่ง</h1>
         <Formik
           initialValues={{
+            name: "",
+            phonenumber: "",
             line1: "",
             line2: "",
             subdistrict: "",
@@ -57,6 +61,13 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
+              <InputField name="name" placeholder="Name" label="Name" />
+              <InputField
+                name="phonenumber"
+                type="tel"
+                placeholder="phonenumber"
+                label="phonenumber"
+              />
               <InputField
                 name="line1"
                 placeholder="Address line 1"

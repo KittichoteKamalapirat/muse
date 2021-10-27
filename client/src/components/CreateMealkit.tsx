@@ -22,6 +22,7 @@ import Dropzone from "react-dropzone";
 
 interface CreateMealkitProps {
   input: {
+    name: string;
     price: string;
     portion: string;
     images: string[];
@@ -64,6 +65,13 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
       )}
       <Form>
         <Heading>Create a meal kit</Heading>
+
+        <InputField
+          name="name"
+          value={input.name}
+          placeholder="name of the mealkit"
+          onChange={(e) => setInput({ ...input, name: e.target.value })}
+        />
         <InputGroup>
           <InputLeftAddon children="Price" mt={2} />
           <InputField

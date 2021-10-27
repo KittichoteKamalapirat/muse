@@ -21,6 +21,7 @@ import { useApolloClient } from "@apollo/client";
 import { useRouter } from "next/router";
 import { InfoIcon, StarIcon } from "@chakra-ui/icons";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
+import { HeartIcon } from "../../components/Icons/HeartIcon";
 
 interface indexProps {}
 
@@ -56,14 +57,12 @@ const Account: React.FC<indexProps> = ({}) => {
           </NextLink>
         </Box>
         <Box textAlign="center" mt={5}>
-          <Text>
-            Don't have an account?{" "}
-            <NextLink href="/register">
-              <Link fontWeight="700" color="red.400">
-                Register
-              </Link>
-            </NextLink>
-          </Text>
+          Don't have an account?{" "}
+          <NextLink href="/register">
+            <Link fontWeight="700" color="red.400">
+              Register
+            </Link>
+          </NextLink>
         </Box>
       </Flex>
     );
@@ -88,7 +87,7 @@ const Account: React.FC<indexProps> = ({}) => {
           <Box mt={2}>
             <NextLink href="/account/info/" as="/account/info">
               <Link>
-                <AccountIcon mr={2} />
+                <AccountIcon />
                 ข้อมูลบัญชี
               </Link>
             </NextLink>
@@ -108,7 +107,7 @@ const Account: React.FC<indexProps> = ({}) => {
           <Box mt={2}>
             <NextLink href="/like" as="/like">
               <Link>
-                <StarIcon mr={2} />
+                <HeartIcon isactive={false} mr={2} />
                 Liked recipe
               </Link>
             </NextLink>

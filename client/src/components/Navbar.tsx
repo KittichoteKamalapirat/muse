@@ -24,6 +24,7 @@ import { HeartIcon } from "./Icons/HeartIcon";
 import { ActivityIcon } from "./Icons/ActivityIcon";
 import { inActiveGray, primaryColor } from "./Variables";
 import { getRouteMatcher } from "next/dist/shared/lib/router/utils";
+import { BasketIcon } from "./Icons/BasketIcon";
 
 interface NavbarProps {}
 
@@ -32,6 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const homeActive = router.pathname === "/";
   const likeActive = router.pathname === "/like";
   const activityActive = router.pathname === "/activity";
+  const basketActive = router.pathname === "/basket";
+
   const accountActive = router.pathname === "/account";
 
   const { data, loading } = useMeQuery({
@@ -116,7 +119,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         )}
         <NextLink href="/cart">
           <Link ml={"auto"} fontSize="sm" textDecoration="underline">
-            cart
+            <BasketIcon />
           </Link>
         </NextLink>
       </Flex>
@@ -138,7 +141,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <HomeIcon isActive={homeActive} />
+              <HomeIcon isactive={homeActive} />
               <Text
                 fontSize="xs"
                 fontWeight="medium"
@@ -161,7 +164,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <HeartIcon isActive={likeActive} />
+              <HeartIcon isactive={likeActive} />
               <Text
                 fontSize="xs"
                 fontWeight="medium"
@@ -184,7 +187,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               alignItems="center"
               justifyContent="center"
             >
-              <ActivityIcon isActive={activityActive} />
+              <ActivityIcon isactive={activityActive} />
               <Text
                 fontSize="xs"
                 fontWeight="medium"
@@ -195,6 +198,29 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </Flex>
           </Link>
         </NextLink>
+
+        {/* <NextLink
+          href={{
+            pathname: "/cart",
+          }}
+        >
+          <Link>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <BasketIcon isactive={basketActive} />
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                textColor={basketActive ? primaryColor : inActiveGray}
+              >
+                Basket
+              </Text>
+            </Flex>
+          </Link>
+        </NextLink> */}
 
         <NextLink
           href={{
@@ -208,7 +234,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <AccountIcon isActive={accountActive} />
+                <AccountIcon isactive={accountActive} />
                 <Text
                   fontSize="xs"
                   fontWeight="medium"

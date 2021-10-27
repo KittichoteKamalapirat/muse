@@ -1,4 +1,4 @@
-FROM node:14
+FROM --platform=linux/amd64 node:14.17.4
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -15,10 +15,13 @@ RUN yarn
 
 COPY . .
 COPY .env.production .env
+# ENV GENERATE_SOURCEMAP=false
+# ENV NODE_OPTIONS=--max-old-space-size=16384
 
 RUN yarn build
 
 ENV NODE_ENV production
+
 
 EXPOSE 8080
 CMD [ "node", "dist/index.js" ]

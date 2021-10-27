@@ -22,8 +22,9 @@ const Like: React.FC = ({}) => {
   } else {
     body = (
       <Box>
-        {data?.votedPosts.posts.map((post) => (
+        {data?.votedPosts.posts.map((post, index) => (
           <NextLink
+            key={index}
             href={{
               pathname: "/post/[id]",
               query: { id: post.id },

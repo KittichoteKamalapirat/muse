@@ -19,6 +19,8 @@ export type Scalars = {
 export type Address = {
   __typename?: 'Address';
   id: Scalars['Float'];
+  name: Scalars['String'];
+  phonenumber: Scalars['String'];
   line1: Scalars['String'];
   line2: Scalars['String'];
   subdistrict: Scalars['String'];
@@ -33,6 +35,8 @@ export type Address = {
 };
 
 export type AddressInput = {
+  name: Scalars['String'];
+  phonenumber: Scalars['String'];
   line1: Scalars['String'];
   line2: Scalars['String'];
   subdistrict: Scalars['String'];
@@ -58,6 +62,30 @@ export type CartItem = {
 export type CartItemInput = {
   mealkitId: Scalars['Float'];
   quantity: Scalars['Float'];
+};
+
+export type ConfirmData = {
+  __typename?: 'ConfirmData';
+  transRef: Scalars['String'];
+  sendingBank: Scalars['String'];
+  receivingBank: Scalars['String'];
+  transDate: Scalars['String'];
+  transTime: Scalars['String'];
+  sender: Person;
+  receiver: Person;
+  amount: Scalars['String'];
+  paidLocalAmount: Scalars['String'];
+  paidLocalCurrency: Scalars['String'];
+  countryCode: Scalars['String'];
+  ref1: Scalars['String'];
+  ref2: Scalars['String'];
+  ref3: Scalars['String'];
+};
+
+export type ConfirmationResponse = {
+  __typename?: 'ConfirmationResponse';
+  status: Status;
+  data: ConfirmData;
 };
 
 
@@ -97,6 +125,7 @@ export type Mealkit = {
 };
 
 export type MealkitInput = {
+  name: Scalars['String'];
   items: Array<Scalars['String']>;
   images: Array<Scalars['String']>;
   price: Scalars['Float'];
@@ -241,6 +270,14 @@ export type PaginatedPosts = {
   hasMore: Scalars['Boolean'];
 };
 
+export type Person = {
+  __typename?: 'Person';
+  displayName: Scalars['String'];
+  name: Scalars['String'];
+  proxy: TypeAndValue;
+  account: TypeAndValue;
+};
+
 export type Post = {
   __typename?: 'Post';
   id: Scalars['Float'];
@@ -301,6 +338,7 @@ export type Query = {
   mealkits?: Maybe<Array<Mealkit>>;
   cartItems: Array<CartItem>;
   createScbQr: QrOutput;
+  confirmPayment: ConfirmationResponse;
 };
 
 
@@ -335,6 +373,12 @@ export type QueryCreateScbQrArgs = {
   amount: Scalars['Int'];
 };
 
+
+export type QueryConfirmPaymentArgs = {
+  sendingBank: Scalars['String'];
+  transRef: Scalars['String'];
+};
+
 export type SignedS3 = {
   __typename?: 'SignedS3';
   signedRequest: Scalars['String'];
@@ -345,6 +389,12 @@ export type Status = {
   __typename?: 'Status';
   code: Scalars['Float'];
   description: Scalars['String'];
+};
+
+export type TypeAndValue = {
+  __typename?: 'TypeAndValue';
+  type: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type User = {
@@ -411,7 +461,7 @@ export type CreateAddressMutationVariables = Exact<{
 }>;
 
 
-export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
+export type CreateAddressMutation = { __typename?: 'Mutation', createAddress: { __typename?: 'Address', name: string, phonenumber: string, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type CreateCartItemMutationVariables = Exact<{
   input: CartItemInput;
@@ -426,7 +476,7 @@ export type CreateMealkitMutationVariables = Exact<{
 }>;
 
 
-export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
+export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -513,7 +563,7 @@ export type UpdateAddressMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
+export type UpdateAddressMutation = { __typename?: 'Mutation', updateAddress?: Maybe<{ __typename?: 'Address', name: string, phonenumber: string, id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string }> };
 
 export type UpdateCartItemMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -551,7 +601,7 @@ export type VoteMutation = { __typename?: 'Mutation', vote: boolean };
 export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
+export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', name: string, phonenumber: string, id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -672,6 +722,8 @@ export type ChangePasswordMutationOptions = Apollo.BaseMutationOptions<ChangePas
 export const CreateAddressDocument = gql`
     mutation createAddress($input: AddressInput!) {
   createAddress(input: $input) {
+    name
+    phonenumber
     userId
     line1
     line2
@@ -746,6 +798,7 @@ export type CreateCartItemMutationOptions = Apollo.BaseMutationOptions<CreateCar
 export const CreateMealkitDocument = gql`
     mutation createMealkit($input: MealkitInput!, $postId: Int!) {
   createMealkit(input: $input, postId: $postId) {
+    name
     items
     images
     price
@@ -1172,6 +1225,8 @@ export type SignS3MutationOptions = Apollo.BaseMutationOptions<SignS3Mutation, S
 export const UpdateAddressDocument = gql`
     mutation updateAddress($input: AddressInput!, $id: Int!) {
   updateAddress(input: $input, id: $id) {
+    name
+    phonenumber
     id
     userId
     line1
@@ -1365,6 +1420,8 @@ export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteM
 export const AddressDocument = gql`
     query address {
   address {
+    name
+    phonenumber
     id
     userId
     line1

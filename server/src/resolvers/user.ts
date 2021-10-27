@@ -11,7 +11,6 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import argon2 from "argon2";
 import { MyContext } from "../types";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
 import { emitWarning } from "process";
@@ -20,6 +19,7 @@ import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 import { ContainerInterface, getConnection } from "typeorm";
+import bcrypt from "bcrypt";
 
 @ObjectType()
 class FieldError {
@@ -92,11 +92,13 @@ export class UserResolver {
         ],
       };
     }
-    user.password = await argon2.hash(newPassword);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    // user.password = await argon2.hash(newPassword);
     await User.update(
       { id: userId },
       {
-        password: await argon2.hash(newPassword),
+        password: await bcrypt.hash(newPassword, salt),
       }
     );
     redis.del(key); //so that token can be used once
@@ -164,7 +166,10 @@ export class UserResolver {
       return { errors };
     }
 
-    const hash = await argon2.hash(data.password);
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(data.password, salt);
+    // const hash = await argon2.hash(data.password);
+
     // const newUser = User.create({
     //   username: data.username,
     //   email: data.email,
@@ -281,7 +286,10 @@ export class UserResolver {
         ],
       };
     }
-    const valid = await argon2.verify(user.password, password);
+    // const valid = await argon2.verify(user.password, password);
+
+    const valid = await bcrypt.compare(password, user.password);
+
     if (!valid) {
       return {
         errors: [

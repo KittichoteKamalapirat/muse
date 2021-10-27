@@ -98,6 +98,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const [createMealkit] = useCreateMealkitMutation();
   const [mealkitInput, setMealkitInput] = useState({
+    name: "",
     price: "",
     portion: "",
     items: [""],
@@ -355,8 +356,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
       console.log({ input });
       console.log({ results });
-
-      // S3 mealkit ends
+      const cooktime = values.cooktime;
       const { data, errors } = await createPost({
         variables: {
           input: {
@@ -388,6 +388,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           await createMealkit({
             variables: {
               input: {
+                name: mealkitInput.name,
                 price: price,
                 portion: portion,
                 items: mealkitInput.items,

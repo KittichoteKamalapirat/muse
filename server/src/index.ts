@@ -8,7 +8,6 @@ import { buildSchema } from "type-graphql";
 import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 import { PostResolver } from "./resolvers/post";
-import { XyResolver } from "./resolvers/xy";
 import { MyContext } from "./types";
 
 import Redis from "ioredis";
@@ -29,8 +28,6 @@ import { sendSMS } from "./utils/sendSms";
 import { MealkitResolver } from "./resolvers/mealkit";
 import { CartItemResolver } from "./resolvers/cartItem";
 import "dotenv-safe/config";
-import { X } from "./entities/X";
-import { Y } from "./entities/Y";
 import { Token } from "graphql";
 import { PaymentResolver } from "./resolvers/payment";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
@@ -45,12 +42,15 @@ const main = async () => {
     // password: "chain123",
     // database: "cookknowdb",
     logging: true,
-    synchronize: true,
+    // synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User, Post, Upvote, Address, Mealkit, CartItem],
   });
 
+  await conn.runMigrations();
   const app = express();
+
+  console.log(process.memoryUsage());
   // sendSMS();
   // generateQr();
   // generateQr();
@@ -64,6 +64,7 @@ const main = async () => {
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
 
+  app.set("trust proxy", 1); //make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN,
@@ -126,6 +127,7 @@ const main = async () => {
   // Rest to test whether it is running all not
 
   apolloServer.applyMiddleware({ app, cors: false });
+  console.log(process.memoryUsage());
 
   app.listen(parseInt(process.env.PORT), () => {
     console.log(`server started on port 4000`);

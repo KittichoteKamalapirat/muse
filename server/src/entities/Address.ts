@@ -17,6 +17,14 @@ export class Address extends BaseEntity {
   @Field()
   id!: number;
 
+  @Column()
+  @Field()
+  name!: string;
+
+  @Column()
+  @Field()
+  phonenumber!: string;
+
   @Column({ nullable: true })
   @Field()
   line1: string;

@@ -65,7 +65,6 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
             <Box width="4rem" ml={2}>
               <InputField
                 name="cooktime"
-                type="number"
                 variant="flushed"
                 // placeholder="เวลาในการทำโดยประมาณ"
                 placeholder="30"
