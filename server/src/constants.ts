@@ -5,8 +5,8 @@ export const FORGET_PASSWORD_PREFIX = "forget-password:";
 // S3
 export const s3Bucket = "cookknow";
 
-export const AWS_ACCESS_KEY_ID = "123";
-export const AWS_SECRET_ACCESS_KEY = "123123";
+export const AWS_ACCESS_KEY_ID = "AKIA3ZS7NFDQDURWUKFZ";
+export const AWS_SECRET_ACCESS_KEY = "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";
 export const AWS_REGION = "ap-southeast-1";
 
 //Twilio

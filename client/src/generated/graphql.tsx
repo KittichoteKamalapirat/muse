@@ -333,6 +333,7 @@ export type Query = {
   me?: Maybe<User>;
   votedPosts: PaginatedPosts;
   posts: PaginatedPosts;
+  postsByCreator: Array<Post>;
   post?: Maybe<Post>;
   address: Address;
   mealkits?: Maybe<Array<Mealkit>>;
@@ -343,7 +344,7 @@ export type Query = {
 
 
 export type QueryUserArgs = {
-  id: Scalars['Float'];
+  id: Scalars['String'];
 };
 
 
@@ -356,6 +357,11 @@ export type QueryVotedPostsArgs = {
 export type QueryPostsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryPostsByCreatorArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -634,6 +640,20 @@ export type PostsQueryVariables = Exact<{
 
 
 export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
+
+export type PostsByCreatorQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type PostsByCreatorQuery = { __typename?: 'Query', postsByCreator: Array<{ __typename?: 'Post', id: number, title: string, text: string, thumbnailUrl: string, points: number }> };
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', username: string, avatar: string } };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1680,6 +1700,81 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
+export const PostsByCreatorDocument = gql`
+    query postsByCreator($userId: String!) {
+  postsByCreator(userId: $userId) {
+    id
+    title
+    text
+    thumbnailUrl
+    points
+  }
+}
+    `;
+
+/**
+ * __usePostsByCreatorQuery__
+ *
+ * To run a query within a React component, call `usePostsByCreatorQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePostsByCreatorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePostsByCreatorQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function usePostsByCreatorQuery(baseOptions: Apollo.QueryHookOptions<PostsByCreatorQuery, PostsByCreatorQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PostsByCreatorQuery, PostsByCreatorQueryVariables>(PostsByCreatorDocument, options);
+      }
+export function usePostsByCreatorLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PostsByCreatorQuery, PostsByCreatorQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PostsByCreatorQuery, PostsByCreatorQueryVariables>(PostsByCreatorDocument, options);
+        }
+export type PostsByCreatorQueryHookResult = ReturnType<typeof usePostsByCreatorQuery>;
+export type PostsByCreatorLazyQueryHookResult = ReturnType<typeof usePostsByCreatorLazyQuery>;
+export type PostsByCreatorQueryResult = Apollo.QueryResult<PostsByCreatorQuery, PostsByCreatorQueryVariables>;
+export const UserDocument = gql`
+    query user($id: String!) {
+  user(id: $id) {
+    username
+    avatar
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const VotedPostsDocument = gql`
     query votedPosts($limit: Int!, $cursor: String) {
   votedPosts(limit: $limit, cursor: $cursor) {

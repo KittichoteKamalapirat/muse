@@ -9,6 +9,7 @@ import {
   VoteMutation,
 } from "../generated/graphql";
 import { ApolloCache } from "@apollo/client";
+import { HeartIcon } from "./Icons/HeartIcon";
 
 interface UpvoteSectionProps {
   //   post: PostsQuery["posts"]["posts"][0]; //select type in a type (this is an array)
@@ -79,8 +80,9 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         aria-label="upvote post"
         isLoading={loadingState === "upvote-loading"}
         icon={
-          <StarIcon
-            color={post.voteStatus === 1 ? "green" : "grey"}
+          <HeartIcon
+            isactive={post.voteStatus === 1}
+            // color={post.voteStatus === 1 ? "green" : "grey"}
             // borderColor={post.voteStatus === 1 ? "green" : "dark.100"}
           />
         }

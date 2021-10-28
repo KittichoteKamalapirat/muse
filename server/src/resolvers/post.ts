@@ -291,6 +291,14 @@ export class PostResolver {
   //   @Query(() => Post)
   //   post(@Arg("id", () => Int) id: number) {}
 
+  @Query(() => [Post])
+  async postsByCreator(
+    @Arg("userId") userId: string
+  ): Promise<Post[] | undefined> {
+    const posts = await Post.find({ where: { creatorId: userId } });
+    return posts;
+  }
+
   @Query(() => Post, { nullable: true })
   //   the id after immediately after arg is for when we query in graphql
   // the id: number is for findOne(id)

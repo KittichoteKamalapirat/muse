@@ -139,7 +139,7 @@ export class UserResolver {
     return User.find();
   } // return a single user
   @Query(() => User)
-  async user(@Arg("id") id: number): Promise<User | undefined> {
+  async user(@Arg("id") id: string): Promise<User | undefined> {
     return User.findOne(id);
   }
 

@@ -1,0 +1,9 @@
+query postsByCreator($userId: String!) {
+  postsByCreator(userId: $userId) {
+    id
+    title
+    text
+    thumbnailUrl
+    points
+  }
+}

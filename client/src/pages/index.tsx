@@ -50,20 +50,29 @@ const Index = () => {
                 // borderWidth="1px"
               >
                 <Flex alignItems="center" justifyContent="space-between">
-                  <Flex alignItems="center">
-                    <Image
-                      m={2}
-                      width="2.5rem"
-                      src={post.creator.avatar}
-                      alt="creator avatar"
-                      borderRadius="50%"
-                      border={2}
-                      borderStyle="solid"
-                      borderColor="red.400"
-                    />
+                  <NextLink
+                    href={{
+                      pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file name
+                      query: { id: post.creator.id },
+                    }}
+                  >
+                    <Link style={{ textDecoration: "none" }}>
+                      <Flex alignItems="center">
+                        <Image
+                          m={2}
+                          width="2.5rem"
+                          src={post.creator.avatar}
+                          alt="creator avatar"
+                          borderRadius="50%"
+                          border={2}
+                          borderStyle="solid"
+                          borderColor="red.400"
+                        />
 
-                    <Text> {post.creator.username}</Text>
-                  </Flex>
+                        <Text>{post.creator.username}</Text>
+                      </Flex>
+                    </Link>
+                  </NextLink>
 
                   {meData?.me?.id !== post.creator.id ? null : (
                     <Box>
@@ -81,21 +90,19 @@ const Index = () => {
                     <Flex justifyContent="space-between">
                       <UpvoteSection post={post} />
                     </Flex>
-                    <NextLink
-                      href={{
-                        pathname: "/post/[id]",
-                        query: { id: post.id },
-                      }}
-                    >
-                      <Link>
-                        <Heading fontSize="xl">{post.title}</Heading>
-                      </Link>
-                    </NextLink>
-
-                    <Flex justifyContent="space-between" alignItems="center">
-                      <Text>{post.textSnippet}... </Text>
-                      {/* show the box only if I own the post */}
-                    </Flex>
+                    <Box mx={2}>
+                      <NextLink
+                        href={{
+                          pathname: "/post/[id]",
+                          query: { id: post.id },
+                        }}
+                      >
+                        <Link style={{ textDecoration: "none" }}>
+                          <Heading fontSize="xl">{post.title}</Heading>
+                          <Text>{post.textSnippet}... </Text>
+                        </Link>
+                      </NextLink>
+                    </Box>
                   </Box>
                 </Flex>
               </Box>

@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </NextLink>
         )}
         <NextLink href="/cart">
-          <Link ml={"auto"} fontSize="sm" textDecoration="underline">
+          <Link ml={"auto"} fontSize="sm" textDecoration="none">
             <BasketIcon />
           </Link>
         </NextLink>
@@ -134,7 +134,10 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         justifyContent="space-around"
       >
         <NextLink href="/">
-          <Link>
+          <Link
+            style={{ textDecoration: "none" }}
+            // textDecoration="none"
+          >
             <Flex
               flexDirection="column"
               alignItems="center"
@@ -157,7 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             pathname: "/like",
           }}
         >
-          <Link>
+          <Link style={{ textDecoration: "none" }}>
             <Flex
               flexDirection="column"
               alignItems="center"
@@ -180,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             pathname: "/activity",
           }}
         >
-          <Link>
+          <Link style={{ textDecoration: "none" }}>
             <Flex
               flexDirection="column"
               alignItems="center"
@@ -198,35 +201,12 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
 
-        {/* <NextLink
-          href={{
-            pathname: "/cart",
-          }}
-        >
-          <Link>
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <BasketIcon isactive={basketActive} />
-              <Text
-                fontSize="xs"
-                fontWeight="medium"
-                textColor={basketActive ? primaryColor : inActiveGray}
-              >
-                Basket
-              </Text>
-            </Flex>
-          </Link>
-        </NextLink> */}
-
         <NextLink
           href={{
             pathname: "/account",
           }}
         >
-          <Link>
+          <Link style={{ textDecoration: "none" }}>
             {!data?.me ? (
               <Flex
                 flexDirection="column"
@@ -251,7 +231,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 <Image
                   width="1.3rem"
                   src={data?.me?.avatar}
-                  alt="creator avatar"
+                  // alt="creator avatar"
                   borderRadius="50%"
                   border={1}
                   borderStyle="solid"
