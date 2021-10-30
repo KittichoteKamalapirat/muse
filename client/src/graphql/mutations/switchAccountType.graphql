@@ -1,0 +1,3 @@
+mutation switchAccountType($becomeCreator: Boolean!) {
+  switchAccountType(becomeCreator: $becomeCreator)
+}

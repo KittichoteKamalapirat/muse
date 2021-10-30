@@ -9,19 +9,28 @@ import {
   IconButton,
   Image,
   Link,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
 } from "@chakra-ui/react";
+import { Heading } from "@chakra-ui/layout";
 import { withApollo } from "../../util/withApollo";
 import {
+  MeDocument,
+  MeQuery,
   useAddressQuery,
   useLogoutMutation,
   useMeQuery,
+  useSwitchAccountTypeMutation,
 } from "../../generated/graphql";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import { InfoIcon, StarIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, InfoIcon, StarIcon } from "@chakra-ui/icons";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
+import { primaryColor } from "../../components/Variables";
 
 interface indexProps {}
 
@@ -30,6 +39,9 @@ const Account: React.FC<indexProps> = ({}) => {
   const router = useRouter();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apolloClient = useApolloClient();
+
+  const [switchAccountType, { data: isCreator }] =
+    useSwitchAccountTypeMutation();
 
   let body;
   if (loading) {
@@ -69,7 +81,15 @@ const Account: React.FC<indexProps> = ({}) => {
   } else {
     body = (
       <Box>
-        <Text textAlign="center"> Account</Text>
+        {meData?.me?.isCreator ? (
+          <Heading textAlign="center" fontSize="xl">
+            {" "}
+            Creator
+          </Heading>
+        ) : (
+          ""
+        )}
+
         <Box>
           <Image
             margin="auto"
@@ -113,6 +133,65 @@ const Account: React.FC<indexProps> = ({}) => {
             </NextLink>
             <Divider mt={2} />
           </Box>
+
+          <Box mt={2}>
+            {" "}
+            <Menu>
+              <MenuButton
+                // as={Button}
+                // rightIcon={<ChevronDownIcon />}
+                _focus={{ boxShadow: "outline" }}
+                textColor={primaryColor}
+              >
+                Switch Account type
+              </MenuButton>
+              <MenuList bgColor="white">
+                <MenuItem
+                  onClick={() =>
+                    switchAccountType({
+                      variables: { becomeCreator: true },
+                      update: (cache, { data }) => {
+                        cache.writeFragment({
+                          id: "User:" + meData?.me?.id,
+                          fragment: gql`
+                            fragment __ on User {
+                              isCreator
+                            }
+                          `,
+                          data: { isCreator: true },
+                        });
+                      },
+                    })
+                  }
+                >
+                  {" "}
+                  Switch to Creator Account
+                </MenuItem>
+                <MenuItem
+                  onClick={() =>
+                    switchAccountType({
+                      variables: { becomeCreator: false },
+                      update: (cache, { data }) => {
+                        cache.writeFragment({
+                          id: "User:" + meData?.me?.id,
+                          fragment: gql`
+                            fragment __ on User {
+                              isCreator
+                            }
+                          `,
+                          data: { isCreator: false },
+                        });
+                      },
+                    })
+                  }
+                >
+                  Switch to Personal Account
+                </MenuItem>
+              </MenuList>
+            </Menu>
+            {/* <Text>{meData?.me?.isCreator ? "Creator" : "Personal"}</Text> */}
+          </Box>
+
           <Flex justifyContent="center">
             <Button
               onClick={async () => {

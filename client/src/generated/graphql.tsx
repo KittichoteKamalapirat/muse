@@ -139,6 +139,7 @@ export type Mutation = {
   register: UserResponse;
   login: UserResponse;
   logout: Scalars['Boolean'];
+  switchAccountType: Scalars['Boolean'];
   vote: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
@@ -176,6 +177,11 @@ export type MutationRegisterArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmailOrPhonenumber: Scalars['String'];
+};
+
+
+export type MutationSwitchAccountTypeArgs = {
+  becomeCreator: Scalars['Boolean'];
 };
 
 
@@ -562,6 +568,13 @@ export type SignS3MutationVariables = Exact<{
 
 
 export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'PostSignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
+
+export type SwitchAccountTypeMutationVariables = Exact<{
+  becomeCreator: Scalars['Boolean'];
+}>;
+
+
+export type SwitchAccountTypeMutation = { __typename?: 'Mutation', switchAccountType: boolean };
 
 export type UpdateAddressMutationVariables = Exact<{
   input: AddressInput;
@@ -1242,6 +1255,37 @@ export function useSignS3Mutation(baseOptions?: Apollo.MutationHookOptions<SignS
 export type SignS3MutationHookResult = ReturnType<typeof useSignS3Mutation>;
 export type SignS3MutationResult = Apollo.MutationResult<SignS3Mutation>;
 export type SignS3MutationOptions = Apollo.BaseMutationOptions<SignS3Mutation, SignS3MutationVariables>;
+export const SwitchAccountTypeDocument = gql`
+    mutation switchAccountType($becomeCreator: Boolean!) {
+  switchAccountType(becomeCreator: $becomeCreator)
+}
+    `;
+export type SwitchAccountTypeMutationFn = Apollo.MutationFunction<SwitchAccountTypeMutation, SwitchAccountTypeMutationVariables>;
+
+/**
+ * __useSwitchAccountTypeMutation__
+ *
+ * To run a mutation, you first call `useSwitchAccountTypeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSwitchAccountTypeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [switchAccountTypeMutation, { data, loading, error }] = useSwitchAccountTypeMutation({
+ *   variables: {
+ *      becomeCreator: // value for 'becomeCreator'
+ *   },
+ * });
+ */
+export function useSwitchAccountTypeMutation(baseOptions?: Apollo.MutationHookOptions<SwitchAccountTypeMutation, SwitchAccountTypeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SwitchAccountTypeMutation, SwitchAccountTypeMutationVariables>(SwitchAccountTypeDocument, options);
+      }
+export type SwitchAccountTypeMutationHookResult = ReturnType<typeof useSwitchAccountTypeMutation>;
+export type SwitchAccountTypeMutationResult = Apollo.MutationResult<SwitchAccountTypeMutation>;
+export type SwitchAccountTypeMutationOptions = Apollo.BaseMutationOptions<SwitchAccountTypeMutation, SwitchAccountTypeMutationVariables>;
 export const UpdateAddressDocument = gql`
     mutation updateAddress($input: AddressInput!, $id: Int!) {
   updateAddress(input: $input, id: $id) {

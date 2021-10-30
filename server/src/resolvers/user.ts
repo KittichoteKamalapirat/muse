@@ -20,6 +20,8 @@ import { sendEmail } from "../utils/sendEmail";
 import { v4 } from "uuid";
 import { ContainerInterface, getConnection } from "typeorm";
 import bcrypt from "bcrypt";
+import { isAuth } from "../middlware/isAuth";
+import { registerEnumType } from "type-graphql";
 
 @ObjectType()
 class FieldError {
@@ -37,6 +39,7 @@ class UserResponse {
   user?: User;
 }
 
+// Resolver starts
 @Resolver(User)
 export class UserResolver {
   @FieldResolver(() => String)
@@ -327,5 +330,20 @@ export class UserResolver {
         resolve(true);
       });
     });
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async switchAccountType(
+    @Arg("becomeCreator") becomeCreator: boolean,
+    @Ctx() { req, res }: MyContext
+  ) {
+    await User.update(
+      { id: req.session.userId },
+      {
+        isCreator: becomeCreator,
+      }
+    );
+    return true;
   }
 }
