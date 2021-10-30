@@ -24,6 +24,7 @@ import { HeartIcon } from "./Icons/HeartIcon";
 import { ActivityIcon } from "./Icons/ActivityIcon";
 import { inActiveGray, primaryColor } from "./Variables";
 import { BasketIcon } from "./Icons/BasketIcon";
+import { ShopIcon } from "./Icons/ShopIcon";
 
 interface NavbarProps {}
 
@@ -33,6 +34,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   const likeActive = router.pathname === "/like";
   const activityActive = router.pathname === "/activity";
   const basketActive = router.pathname === "/basket";
+  const shopActive = router.pathname === "/myshop";
 
   const accountActive = router.pathname === "/account";
 
@@ -79,6 +81,67 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       // no need ? because it is implied that it exsists, put the ifs befire
     );
   }
+
+  // let accountIcon: any;
+  // if (!data?.me) {
+  //   accountIcon = (
+  //     <Flex flexDirection="column" alignItems="center" justifyContent="center">
+  //       <AccountIcon isactive={accountActive} />
+  //       <Text
+  //         fontSize="xs"
+  //         fontWeight="medium"
+  //         textColor={accountActive ? primaryColor : inActiveGray}
+  //       >
+  //         Account
+  //       </Text>
+  //     </Flex>
+  //   );
+  // } else if (data?.me?.isCreator) {
+  //   accountIcon = (
+  //     <NextLink href="/myshop">
+  //       <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
+  //         <Flex
+  //           flexDirection="column"
+  //           alignItems="center"
+  //           justifyContent="center"
+  //         >
+  //           {" "}
+  //           <ShopIcon isactive={shopActive} />
+  //           <Text
+  //             fontSize="xs"
+  //             fontWeight="medium"
+  //             textColor={shopActive ? primaryColor : inActiveGray}
+  //           >
+  //             My shop
+  //           </Text>
+  //         </Flex>
+  //         {/* <SmallAddIcon />{" "} */}
+  //       </Link>
+  //     </NextLink>
+  //   );
+  // } else {
+  //   accountIcon = (
+  //     <Flex flexDirection="column" alignItems="center" justifyContent="center">
+  //       <Image
+  //         width="1.3rem"
+  //         src={data?.me?.avatar}
+  //         // alt="creator avatar"
+  //         borderRadius="50%"
+  //         border={1}
+  //         borderStyle="solid"
+  //         borderColor={accountActive ? primaryColor : inActiveGray}
+  //       />
+  //       <Text
+  //         fontSize="xs"
+  //         fontWeight="medium"
+  //         textColor={accountActive ? primaryColor : inActiveGray}
+  //       >
+  //         {body}
+  //       </Text>
+  //     </Flex>
+  //   );
+  // }
+
   return (
     <Box>
       <Flex
@@ -109,15 +172,8 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           />
         </InputGroup>
 
-        {!data?.me?.isCreator ? null : (
-          <NextLink href="/create-post">
-            <Button as={Link} mr={2}>
-              <SmallAddIcon />{" "}
-            </Button>
-          </NextLink>
-        )}
         <NextLink href="/cart">
-          <Link ml={"auto"} fontSize="sm" textDecoration="none">
+          <Link mx={2} fontSize="sm" textDecoration="none">
             <BasketIcon />
           </Link>
         </NextLink>
@@ -178,6 +234,27 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
 
+        <NextLink href="/myshop">
+          <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
+            <Flex
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+            >
+              {" "}
+              <ShopIcon isactive={shopActive} />
+              <Text
+                fontSize="xs"
+                fontWeight="medium"
+                textColor={shopActive ? primaryColor : inActiveGray}
+              >
+                My shop
+              </Text>
+            </Flex>
+            {/* <SmallAddIcon />{" "} */}
+          </Link>
+        </NextLink>
+
         <NextLink
           href={{
             pathname: "/activity",
@@ -200,6 +277,29 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             </Flex>
           </Link>
         </NextLink>
+
+        {/* {!data?.me?.isCreator ? null : (
+          <NextLink href="/myshop">
+            <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+              >
+                {" "}
+                <ShopIcon isactive={shopActive} />
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={shopActive ? primaryColor : inActiveGray}
+                >
+                  My shop
+                </Text>
+              </Flex> */}
+        {/* <SmallAddIcon />{" "} */}
+        {/* </Link>
+          </NextLink>
+        )} */}
 
         <NextLink
           href={{
@@ -248,6 +348,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             )}
           </Link>
         </NextLink>
+        {/* {loading ? null : accountIcon} */}
       </Flex>
     </Box>
   );

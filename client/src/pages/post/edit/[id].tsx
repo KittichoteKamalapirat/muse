@@ -2,6 +2,7 @@ import { Box, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
+import { HeadingLayout } from "../../../components/HeadingLayout";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout";
 import { Wrapper } from "../../../components/Wrapper";
@@ -39,7 +40,7 @@ const EditPost = ({}) => {
     );
   }
   return (
-    <Layout variant="small">
+    <HeadingLayout heading="Edit post">
       <Wrapper variant="small">
         <Formik
           initialValues={{
@@ -85,7 +86,7 @@ const EditPost = ({}) => {
           )}
         </Formik>
       </Wrapper>
-    </Layout>
+    </HeadingLayout>
   );
 };
 
