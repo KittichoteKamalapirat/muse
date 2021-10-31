@@ -31,8 +31,7 @@ export class CartItemResolver {
   @FieldResolver(() => Int)
   async total(@Root() cartItem: CartItem): Promise<number> {
     const mealkit = await cartItem.mealkit;
-    console.log(mealkit);
-    console.log(cartItem);
+
     const total = mealkit.price * cartItem.quantity;
     return total;
   }
@@ -41,7 +40,7 @@ export class CartItemResolver {
   @UseMiddleware(isAuth)
   async cartItems(@Ctx() { req }: MyContext): Promise<CartItem[]> {
     return await CartItem.find({
-      where: { userId: req.session.userId },
+      where: { userId: req.session.userId, orderId: null },
       relations: ["mealkit", "user", "mealkit.post"],
     });
   }
@@ -52,14 +51,14 @@ export class CartItemResolver {
     @Arg("input") input: CartItemInput,
     @Ctx() { req }: MyContext
   ): Promise<CartItem> {
-    const newCart = await CartItem.create({
+    const newCartItem = await CartItem.create({
       quantity: input.quantity,
       userId: req.session.userId,
       mealkitId: input.mealkitId,
     }).save();
 
     // const user = await User.findOne({ id: req.session.userId });
-    return newCart;
+    return newCartItem;
   }
 
   @Mutation(() => CartItem)

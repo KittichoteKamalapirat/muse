@@ -30,6 +30,9 @@ import { CartItemResolver } from "./resolvers/cartItem";
 import "dotenv-safe/config";
 import { Token } from "graphql";
 import { PaymentResolver } from "./resolvers/payment";
+import { Order } from "./entities/Order";
+import { OrderResolver } from "./resolvers/order";
+import { Payment } from "./entities/Payment";
 // import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
@@ -44,7 +47,7 @@ const main = async () => {
     logging: true,
     synchronize: true,
     migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [User, Post, Upvote, Address, Mealkit, CartItem],
+    entities: [User, Post, Upvote, Address, Mealkit, CartItem, Order, Payment],
   });
 
   // await conn.runMigrations();
@@ -102,6 +105,7 @@ const main = async () => {
       MealkitResolver,
       CartItemResolver,
       PaymentResolver,
+      OrderResolver,
     ],
     validate: false,
   });

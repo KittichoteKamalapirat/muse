@@ -54,6 +54,7 @@ export type CartItem = {
   user?: Maybe<User>;
   mealkitId: Scalars['Int'];
   mealkit?: Maybe<Mealkit>;
+  orderId: Scalars['Int'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   total: Scalars['Int'];
@@ -155,6 +156,7 @@ export type Mutation = {
   signMealkitS3: Array<SignedS3Result>;
   createCartItem: CartItem;
   updateCartItem: CartItem;
+  createOrder: Order;
 };
 
 
@@ -270,6 +272,31 @@ export type MutationUpdateCartItemArgs = {
   quantity: Scalars['Int'];
 };
 
+
+export type MutationCreateOrderArgs = {
+  grossOrder: Scalars['Int'];
+  cartItemIds: Array<Scalars['Int']>;
+};
+
+export type Order = {
+  __typename?: 'Order';
+  id: Scalars['Float'];
+  grossOrder: Scalars['Float'];
+  status: Scalars['String'];
+  userId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export enum OrderStatus {
+  PaymentPending = 'PaymentPending',
+  ToDeliver = 'ToDeliver',
+  OnDelivery = 'OnDelivery',
+  Complete = 'Complete',
+  Cancelled = 'Cancelled',
+  Refunded = 'Refunded'
+}
+
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
   posts: Array<Post>;
@@ -346,6 +373,8 @@ export type Query = {
   cartItems: Array<CartItem>;
   createScbQr: QrOutput;
   confirmPayment: ConfirmationResponse;
+  orderItems: Array<CartItem>;
+  creatorCartItems: Array<CartItem>;
 };
 
 
@@ -389,6 +418,16 @@ export type QueryCreateScbQrArgs = {
 export type QueryConfirmPaymentArgs = {
   sendingBank: Scalars['String'];
   transRef: Scalars['String'];
+};
+
+
+export type QueryOrderItemsArgs = {
+  status: OrderStatus;
+};
+
+
+export type QueryCreatorCartItemsArgs = {
+  status: OrderStatus;
 };
 
 export type SignedS3 = {
@@ -489,6 +528,14 @@ export type CreateMealkitMutationVariables = Exact<{
 
 
 export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
+
+export type CreateOrderMutationVariables = Exact<{
+  cartItemIds: Array<Scalars['Int']> | Scalars['Int'];
+  grossOrder: Scalars['Int'];
+}>;
+
+
+export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, status: string, userId: string } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -626,6 +673,13 @@ export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
+
+export type CreatorCartItemsQueryVariables = Exact<{
+  status: OrderStatus;
+}>;
+
+
+export type CreatorCartItemsQuery = { __typename?: 'Query', creatorCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, orderId: number, total: number, mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>> }> }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -867,6 +921,43 @@ export function useCreateMealkitMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMealkitMutationHookResult = ReturnType<typeof useCreateMealkitMutation>;
 export type CreateMealkitMutationResult = Apollo.MutationResult<CreateMealkitMutation>;
 export type CreateMealkitMutationOptions = Apollo.BaseMutationOptions<CreateMealkitMutation, CreateMealkitMutationVariables>;
+export const CreateOrderDocument = gql`
+    mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!) {
+  createOrder(cartItemIds: $cartItemIds, grossOrder: $grossOrder) {
+    id
+    grossOrder
+    status
+    userId
+  }
+}
+    `;
+export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
+
+/**
+ * __useCreateOrderMutation__
+ *
+ * To run a mutation, you first call `useCreateOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrderMutation, { data, loading, error }] = useCreateOrderMutation({
+ *   variables: {
+ *      cartItemIds: // value for 'cartItemIds'
+ *      grossOrder: // value for 'grossOrder'
+ *   },
+ * });
+ */
+export function useCreateOrderMutation(baseOptions?: Apollo.MutationHookOptions<CreateOrderMutation, CreateOrderMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument, options);
+      }
+export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMutation>;
+export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
+export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreatePostDocument = gql`
     mutation createPost($input: PostInput!) {
   createPost(input: $input) {
@@ -1576,6 +1667,52 @@ export function useCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CartItemsQueryHookResult = ReturnType<typeof useCartItemsQuery>;
 export type CartItemsLazyQueryHookResult = ReturnType<typeof useCartItemsLazyQuery>;
 export type CartItemsQueryResult = Apollo.QueryResult<CartItemsQuery, CartItemsQueryVariables>;
+export const CreatorCartItemsDocument = gql`
+    query creatorCartItems($status: OrderStatus!) {
+  creatorCartItems(status: $status) {
+    id
+    quantity
+    userId
+    mealkitId
+    mealkit {
+      id
+      name
+      price
+      images
+    }
+    orderId
+    total
+  }
+}
+    `;
+
+/**
+ * __useCreatorCartItemsQuery__
+ *
+ * To run a query within a React component, call `useCreatorCartItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreatorCartItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreatorCartItemsQuery({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useCreatorCartItemsQuery(baseOptions: Apollo.QueryHookOptions<CreatorCartItemsQuery, CreatorCartItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CreatorCartItemsQuery, CreatorCartItemsQueryVariables>(CreatorCartItemsDocument, options);
+      }
+export function useCreatorCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreatorCartItemsQuery, CreatorCartItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CreatorCartItemsQuery, CreatorCartItemsQueryVariables>(CreatorCartItemsDocument, options);
+        }
+export type CreatorCartItemsQueryHookResult = ReturnType<typeof useCreatorCartItemsQuery>;
+export type CreatorCartItemsLazyQueryHookResult = ReturnType<typeof useCreatorCartItemsLazyQuery>;
+export type CreatorCartItemsQueryResult = Apollo.QueryResult<CreatorCartItemsQuery, CreatorCartItemsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

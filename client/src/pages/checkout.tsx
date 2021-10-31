@@ -7,6 +7,7 @@ import { Wrapper } from "../components/Wrapper";
 import {
   useAddressQuery,
   useCartItemsQuery,
+  useCreateOrderMutation,
   useCreateScbQrQuery,
   useMeQuery,
   useUpdateCartItemMutation,
@@ -14,7 +15,7 @@ import {
 import { createWithApollo } from "../util/createWithApollo";
 import { withApollo } from "../util/withApollo";
 import NextLink from "next/link";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import { Button, IconButton } from "@chakra-ui/button";
 import { AddIcon, MinusIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { Table, Tr, Th } from "@chakra-ui/react";
@@ -28,6 +29,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
   const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
   // const { data: me, loading: meLoading } = useMeQuery();
+  const [createOrder] = useCreateOrderMutation();
 
   const noAddress = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
@@ -152,9 +154,26 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
           <Text>Total: ฿{gross}</Text>
         </Box>
         <Box p={3} bgColor="red.400" color="white">
-          <NextLink href={{ pathname: "/payment" }}>
+          <Button
+            onClick={async () => {
+              const cartItemIds: number[] = [];
+              cartItems?.cartItems.forEach((cartItem) => {
+                cartItemIds.push(cartItem.id);
+              });
+              await createOrder({
+                variables: {
+                  cartItemIds: cartItemIds,
+                  grossOrder: gross,
+                },
+              });
+              router.push("/payment");
+            }}
+          >
+            Make a payment
+          </Button>
+          {/* <NextLink href={{ pathname: "/payment" }}>
             <Link>Make a payment</Link>
-          </NextLink>
+          </NextLink> */}
 
           {/* <Button
             onClick={() => {

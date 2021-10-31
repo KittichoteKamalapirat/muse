@@ -12,6 +12,7 @@ import {
   JoinColumn,
 } from "typeorm";
 import { Mealkit } from "./Mealkit";
+import { Order } from "./Order";
 import { User } from "./User";
 
 @ObjectType()
@@ -37,7 +38,7 @@ export class CartItem extends BaseEntity {
 
   //belongs to mealkit
   // one mealkit -> many cart
-  // on cart one mealkitx
+  // on cart one mealkit
 
   @Column()
   @Field(() => Int)
@@ -46,6 +47,15 @@ export class CartItem extends BaseEntity {
   @Field(() => Mealkit, { nullable: true })
   @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
   mealkit: Mealkit;
+
+  //Order can have many cartItems
+  @Column({ nullable: true })
+  @Field(() => Int)
+  orderId: number;
+
+  // @Field(() => Order, { nullable: true })
+  @ManyToOne((type) => Order, (order) => order.cartItems)
+  order: Order;
 
   @Field(() => String)
   @CreateDateColumn()

@@ -6,11 +6,13 @@ export type WrapperVariant = "small" | "regular";
 interface WrapperProps {
   variant?: "small" | "regular";
   mb?: number;
+  mt?: number;
 }
 
 export const Wrapper: React.FC<WrapperProps> = ({
   children,
   mb,
+  mt,
   variant = "regular",
 }) => {
   return (
@@ -18,8 +20,9 @@ export const Wrapper: React.FC<WrapperProps> = ({
       m={8}
       mx="auto"
       maxW={["none", "400px", "800px"]}
-      w={["90%", "70%", "60%"]}
+      w={["90%", "70%", "50%"]}
       mb={mb}
+      mt={mt}
     >
       {children}
     </Box>

@@ -6,12 +6,14 @@ import React from "react";
 interface HeadingLayoutProps {
   heading: string;
   back?: boolean;
+  mt?: number;
 }
 
 export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
   children,
   heading,
   back = true,
+  mt,
 }) => {
   const router = useRouter();
 
@@ -46,7 +48,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
           {heading}
         </Heading>
       </Box>
-      <Box mt={20}>{children}</Box>
+      <Box mt={mt || 20}>{children}</Box>
     </>
   );
 };

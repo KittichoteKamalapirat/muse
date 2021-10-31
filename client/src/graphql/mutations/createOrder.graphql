@@ -1,0 +1,8 @@
+mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!) {
+  createOrder(cartItemIds: $cartItemIds, grossOrder: $grossOrder) {
+    id
+    grossOrder
+    status
+    userId
+  }
+}

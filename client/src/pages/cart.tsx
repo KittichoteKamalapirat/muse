@@ -56,17 +56,19 @@ const Cart: React.FC<cartProps> = ({}) => {
       </div>
     );
   }
+  console.log(cartItems);
+  console.log(cartItems?.cartItems);
 
   return (
     <HeadingLayout heading="Cart">
       <Wrapper>
         <Heading>My cart</Heading>
 
-        {!cartItems ? (
-          <Text>You don't have any items yet</Text>
+        {cartItems?.cartItems.length === 0 ? (
+          <Text>Your cart is empty</Text>
         ) : (
           <Box>
-            {cartItems.cartItems.map((item) => (
+            {cartItems?.cartItems.map((item) => (
               <Flex textAlign="center">
                 <Box flex={1} m={1}>
                   {!item.mealkit?.images ? null : (

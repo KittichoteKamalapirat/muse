@@ -14,9 +14,9 @@ import { Layout } from "../../components/Layout";
 import { Wrapper } from "../../components/Wrapper";
 import { withApollo } from "../../util/withApollo";
 import NextLink from "next/link";
-import { useMeQuery } from "../../generated/graphql";
+import { OrderStatus, useMeQuery } from "../../generated/graphql";
 import { SmallAddIcon, SpinnerIcon, StarIcon } from "@chakra-ui/icons";
-import { primaryColor } from "../../components/Variables";
+import { inActiveGray, primaryColor } from "../../components/Variables";
 
 interface MyShopProps {}
 
@@ -50,10 +50,13 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 <StarIcon color={primaryColor} />
                 <StarIcon color={primaryColor} />
                 <StarIcon color={primaryColor} />
-                <StarIcon />
-                <StarIcon />
+                <StarIcon color="white" stroke={inActiveGray} strokeWidth={2} />
+                <StarIcon color="white" stroke={inActiveGray} strokeWidth={2} />
               </Flex>
-              <Text ml={1}>3.5</Text>
+              <Text ml={1}>3.0</Text>
+              <Text fontSize="sm" ml={1} color={inActiveGray}>
+                (999 reviews)
+              </Text>
             </Flex>
           </Box>
         </Flex>
@@ -62,23 +65,18 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           <Heading fontSize="md">My orders</Heading>
 
           <Flex mt={4}>
-            {/* <Box flex={1}>
-              <Box textAlign="center">
-                <SpinnerIcon />
-                <Text>Pending</Text>
-              </Box>
-            </Box> */}
-            <Box flex={1}>
-              <Box
-                textAlign="center"
-                // border="1px"
-                // borderColor="gray.200"
-                // py={4}
-              >
+            <NextLink
+              // href="/myshop/order"
+              href={{
+                pathname: "/myshop/order",
+                query: { status: OrderStatus.ToDeliver },
+              }}
+            >
+              <Link textAlign="center">
                 <SpinnerIcon />
                 <Text>To deliver</Text>
-              </Box>
-            </Box>
+              </Link>
+            </NextLink>
             <Box flex={1}>
               <Box textAlign="center">
                 <SpinnerIcon />

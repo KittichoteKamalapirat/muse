@@ -52,7 +52,7 @@ const Index = () => {
                 <Flex alignItems="center" justifyContent="space-between">
                   <NextLink
                     href={{
-                      pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file name
+                      pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
                       query: { id: post.creator.id },
                     }}
                   >

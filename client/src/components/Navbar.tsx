@@ -16,8 +16,7 @@ import NextLink from "next/link";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import { useRouter } from "next/router";
-import { SearchIcon, SmallAddIcon } from "@chakra-ui/icons";
-import { useApolloClient } from "@apollo/client";
+import { SearchIcon } from "@chakra-ui/icons";
 import { HomeIcon } from "./Icons/HomeIcon";
 import { AccountIcon } from "./Icons/AccountIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
@@ -149,12 +148,11 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         position="fixed"
         width="100%"
         top={0}
-        bg={["white", "red"]}
+        bg={primaryColor}
         p={2}
         ml={"auto"}
         align="center"
         justifyContent="flex-end"
-        bgColor="red.400"
       >
         <InputGroup zIndex={2} bgColor="white" size="sm">
           <InputLeftAddon
@@ -182,7 +180,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         zIndex={1}
         position="fixed"
         bottom={0}
-        bg={["white", "red"]}
+        bg={"white"}
         p={2}
         ml={"auto"}
         align="center"
@@ -234,26 +232,28 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           </Link>
         </NextLink>
 
-        <NextLink href="/myshop">
-          <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              {" "}
-              <ShopIcon isactive={shopActive} />
-              <Text
-                fontSize="xs"
-                fontWeight="medium"
-                textColor={shopActive ? primaryColor : inActiveGray}
+        {!data?.me?.isCreator ? null : (
+          <NextLink href="/myshop">
+            <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
               >
-                My shop
-              </Text>
-            </Flex>
-            {/* <SmallAddIcon />{" "} */}
-          </Link>
-        </NextLink>
+                {" "}
+                <ShopIcon isactive={shopActive} />
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={shopActive ? primaryColor : inActiveGray}
+                >
+                  My shop
+                </Text>
+              </Flex>
+              {/* <SmallAddIcon />{" "} */}
+            </Link>
+          </NextLink>
+        )}
 
         <NextLink
           href={{

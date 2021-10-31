@@ -6,6 +6,7 @@ import {
   useCreateCartItemMutation,
   useMealkitsQuery,
 } from "../generated/graphql";
+import { gql } from "@apollo/client";
 import { Layout } from "./Layout";
 import { Wrapper } from "./Wrapper";
 import NextLink from "next/link";
@@ -14,6 +15,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { inActiveGray, primaryColor } from "./Variables";
 import { graphqlSync } from "graphql";
+import router from "next/router";
 
 interface MealkitInfoProps {
   postId: number;
@@ -87,8 +89,28 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                         mealkitId: mealkit.id,
                       },
                     },
+
+                    update(cache, { data: newCartItem }) {
+                      cache.modify({
+                        fields: {
+                          cartItems(existingCartItems = []) {
+                            const newCartItemRef = cache.writeFragment({
+                              data: newCartItem,
+                              fragment: gql`
+                                fragment NewCartItem on CartItem {
+                                  id
+                                  type
+                                }
+                              `,
+                            });
+                            return [...existingCartItems, newCartItemRef];
+                          },
+                        },
+                      });
+                    },
                   });
                   setCartLoading(false);
+                  router.push("/cart");
                 }}
               >
                 ใส่ตะกร้า

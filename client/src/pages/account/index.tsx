@@ -27,10 +27,16 @@ import {
 } from "../../generated/graphql";
 import { useApolloClient, gql } from "@apollo/client";
 import { useRouter } from "next/router";
-import { ChevronDownIcon, InfoIcon, StarIcon } from "@chakra-ui/icons";
+import {
+  ChevronDownIcon,
+  InfoIcon,
+  SpinnerIcon,
+  StarIcon,
+} from "@chakra-ui/icons";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { primaryColor } from "../../components/Variables";
+import { Wrapper } from "../../components/Wrapper";
 
 interface indexProps {}
 
@@ -103,7 +109,58 @@ const Account: React.FC<indexProps> = ({}) => {
           />{" "}
         </Box>
 
-        <Box ml={4} textAlign="left">
+        <Box mt={4}>
+          <Heading fontSize="md">My orders</Heading>
+
+          <Flex mt={4}>
+            {/* <Box flex={1}>
+              <Box textAlign="center">
+                <SpinnerIcon />
+                <Text>Pending</Text>
+              </Box>
+            </Box> */}
+
+            <NextLink href="/myshop/order" as="/myshop/order">
+              <Link textAlign="center" flex={1}>
+                <SpinnerIcon />
+                <Text>To deliver</Text>
+              </Link>
+            </NextLink>
+
+            <NextLink href="/myshop/order" as="/myshop/order">
+              <Link textAlign="center" flex={1}>
+                <SpinnerIcon />
+                <Text>Delivering</Text>
+              </Link>
+            </NextLink>
+            <NextLink href="/myshop/order" as="/myshop/order">
+              <Link textAlign="center" flex={1}>
+                <SpinnerIcon />
+                <Text>Complete</Text>
+              </Link>
+            </NextLink>
+
+            <NextLink href="/myshop/order" as="/myshop/order">
+              <Link textAlign="center" flex={1}>
+                <Text>...</Text>
+                <Text>Others</Text>
+              </Link>
+            </NextLink>
+          </Flex>
+          <Divider mt={2} />
+
+          <Box mt={2}>
+            <NextLink href="/" as="/">
+              <Link>
+                {/* <AccountIcon /> */}
+                Order History
+              </Link>
+            </NextLink>
+            <Divider mt={2} />
+          </Box>
+        </Box>
+
+        <Box textAlign="left">
           <Box mt={2}>
             <NextLink href="/account/info/" as="/account/info">
               <Link>
@@ -212,7 +269,11 @@ const Account: React.FC<indexProps> = ({}) => {
     );
   }
 
-  return <Layout>{body}</Layout>;
+  return (
+    <Layout>
+      <Wrapper>{body}</Wrapper>
+    </Layout>
+  );
 };
 
 export default withApollo({ ssr: false })(Account);

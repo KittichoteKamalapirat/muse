@@ -13,6 +13,7 @@ import {
 import { Address } from "./Address";
 import { CartItem } from "./CartItem";
 import { Mealkit } from "./Mealkit";
+import { Order } from "./Order";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
 
@@ -72,6 +73,10 @@ export class User extends BaseEntity {
   //has many carts
   @OneToMany((type) => CartItem, (cartItem) => cartItem.user)
   cartItems: CartItem[];
+
+  //One user can have many orders
+  @OneToMany((type) => Order, (order) => order.user)
+  orders: Order[];
 
   @CreateDateColumn()
   @Field()
