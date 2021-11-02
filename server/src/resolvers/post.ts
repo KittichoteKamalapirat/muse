@@ -24,24 +24,7 @@ import {
   s3Bucket,
   AWS_REGION,
 } from "../constants";
-import aws from "aws-sdk";
-
-export const s3 = new aws.S3({
-  signatureVersion: "v4",
-  region: AWS_REGION,
-  accessKeyId: AWS_ACCESS_KEY_ID,
-  secretAccessKey: AWS_SECRET_ACCESS_KEY,
-});
-
-export const s3Params = (key: string, contentType: string) => {
-  return {
-    Bucket: s3Bucket,
-    Key: key,
-    Expires: 60, //how to we have to send the request after we create the url (seconds)
-    ContentType: contentType,
-    // ACL: "public-read", //this thing cause error somehow !!!!!
-  };
-};
+import { s3, s3Params } from "../utils/s3";
 
 @InputType()
 export class signS3Params {

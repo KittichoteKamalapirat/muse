@@ -1,16 +1,20 @@
 import { Button } from "@chakra-ui/button";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { HeadingLayout } from "../../components/HeadingLayout";
+
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
+import NextLink from "next/link";
 import {
-  useCreatorCartItemsLazyQuery,
-  useCreatorCartItemsQuery,
+  useAddressQuery,
+  useCartItemsLazyQuery,
+  useMyOrdersLazyQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
+import payment from "../payment";
 
 export enum OrderStatus {
   PaymentPending = "PaymentPending",
@@ -28,13 +32,14 @@ const Order: React.FC<OrderProps> = ({}) => {
 
   const router = useRouter();
   const { status: statusParam } = router.query;
+  const { data: address, loading: addressLoading } = useAddressQuery();
 
-  const [creatorCartitems, { loading, error, data }] =
-    useCreatorCartItemsLazyQuery();
+  // const [myOrders, { loading, error, data }] = useCartItemsLazyQuery();
+
+  const [myOrders, { loading, error, data }] = useMyOrdersLazyQuery();
 
   useEffect(() => {
-    console.log("effect");
-    creatorCartitems({
+    myOrders({
       variables: {
         status: OrderStatus[statusParam as keyof typeof OrderStatus],
       },
@@ -46,6 +51,7 @@ const Order: React.FC<OrderProps> = ({}) => {
   if (loading) {
     return <Text>loading...</Text>;
   }
+
   return (
     <HeadingLayout heading="My order" mt={10}>
       <Flex
@@ -54,7 +60,6 @@ const Order: React.FC<OrderProps> = ({}) => {
         ml={"auto"}
         align="center"
         justifyContent="flex-end"
-        overflowX="scroll"
       >
         <Box
           flex={1}
@@ -67,7 +72,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "PaymentPending" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            myOrders({
               variables: {
                 status: OrderStatus.PaymentPending,
               },
@@ -75,7 +80,7 @@ const Order: React.FC<OrderProps> = ({}) => {
             setOrderStatus(OrderStatus.PaymentPending);
           }}
         >
-          Not paid
+          To pay
         </Box>
 
         <Box
@@ -87,7 +92,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "ToDeliver" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            myOrders({
               variables: {
                 status: OrderStatus.ToDeliver,
               },
@@ -107,7 +112,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "OnDelivery" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            myOrders({
               variables: {
                 status: OrderStatus.OnDelivery,
               },
@@ -129,7 +134,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           mx={1}
           Complete
           onClick={() => {
-            creatorCartitems({
+            myOrders({
               variables: {
                 status: OrderStatus.Complete,
               },
@@ -138,44 +143,80 @@ const Order: React.FC<OrderProps> = ({}) => {
             setOrderStatus(OrderStatus.Complete);
           }}
         >
-          Complete
+          Rate
         </Box>
       </Flex>
       <Wrapper mt={0}>
+        <Box mt={2}>
+          <Heading fontSize="md">Delivery Address</Heading>
+          <Text d="inline">{address?.address.line1}</Text>
+          <Text d="inline">{address?.address.line2}, </Text>
+          <Text d="inline">{address?.address.subdistrict} </Text>
+          <Text>{address?.address.district} </Text>
+          <Text d="inline">{address?.address.province}</Text>
+          {/* <Text>{address?.address.country}</Text> */}
+          <Text d="inline"> {address?.address.postcode}</Text>
+        </Box>
+
         {!data ? (
           <Text>No data</Text>
         ) : (
           <Box>
-            {data.creatorCartItems.map((cartItem) => (
-              <Flex textAlign="center">
-                <Box flex={1} m={1}>
-                  {!cartItem.mealkit?.images ? null : (
-                    <Image
-                      src={cartItem.mealkit?.images[0]}
-                      alt="image"
-                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                    />
-                  )}
-                </Box>
+            {data.myOrders.map((order) => (
+              <Box>
+                {/* <Text>{order.grossOrder}</Text> */}
 
-                <Box flex={3} m={1} textAlign="left">
-                  <Heading size="md">{cartItem.mealkit?.name}</Heading>
+                {order.cartItems.map((cartItem) => (
+                  <Flex textAlign="center">
+                    <Box flex={1} m={1}>
+                      {!cartItem.mealkit?.images ? null : (
+                        <Image
+                          src={cartItem.mealkit?.images[0]}
+                          alt="image"
+                          fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                        />
+                      )}
+                    </Box>
 
-                  <Box flex={1} m={1}>
-                    <Text>{cartItem.quantity}</Text>
-                  </Box>
+                    <Box flex={3} m={1} textAlign="left">
+                      <Heading size="md">{cartItem.mealkit?.name}</Heading>
 
-                  <Text color="gray.700" fontSize="md" fontWeight="normal">
-                    quantity: {cartItem.quantity}
-                  </Text>
+                      <Box flex={1} m={1}>
+                        <Text>{cartItem.quantity}</Text>
+                      </Box>
 
-                  <Heading size="lg">Add Delivery fee and update total</Heading>
+                      <Text color="gray.700" fontSize="md" fontWeight="normal">
+                        quantity: {cartItem.quantity}
+                      </Text>
 
-                  <Box flex={1} m={1}>
-                    <Text>Total: {cartItem.total}</Text>
-                  </Box>
-                </Box>
-              </Flex>
+                      <Heading size="lg">
+                        Add Delivery fee and update total
+                      </Heading>
+
+                      <Box flex={1} m={1}>
+                        <Text>Total: {cartItem.total}</Text>
+                      </Box>
+                    </Box>
+                  </Flex>
+                ))}
+                <Text>{order.payment?.amount}</Text>
+
+                <Flex justifyContent="flex-end">
+                  <NextLink
+                    href={{
+                      pathname: "/payment/[id]",
+                      query: {
+                        id: order.payment?.id,
+                        qrUrl: order.payment?.qrUrl,
+                      },
+                    }}
+                  >
+                    <Link>
+                      <Button colorScheme="teal">Pay now</Button>
+                    </Link>
+                  </NextLink>
+                </Flex>
+              </Box>
             ))}
           </Box>
         )}

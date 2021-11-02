@@ -4,6 +4,7 @@ import { BILLER_ID, SCB_API_KEY } from "../constants";
 import { SCB_API_SECRET } from "../constants";
 import {
   Arg,
+  Ctx,
   Field,
   Int,
   Mutation,
@@ -13,6 +14,10 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { isAuth } from "../middlware/isAuth";
+import { s3, s3Params } from "../utils/s3";
+import { MyContext } from "../types";
+import axios from "axios";
+import { Payment } from "../entities/Payment";
 
 // const qrcode = require('qrcode ')
 // const generatePaylload = require('promptpay-qr')
@@ -109,7 +114,7 @@ class ConfirmationResponse {
   data: ConfirmData;
 }
 
-const scbToken = async () => {
+export const scbToken = async () => {
   try {
     const authentication_headers = {
       headers: {
@@ -139,13 +144,53 @@ const scbToken = async () => {
   }
 };
 
+export const createScbQr = async (amount: number, userId: string) => {
+  try {
+    const token = await scbToken();
+    console.log({ token });
+    const qr_headers = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "accept-language": "EN", //or "TH"
+        authorization: `Bearer ${token}`,
+        requestUId: "later",
+        resourceOwnerId: SCB_API_KEY,
+      },
+
+      body: JSON.stringify({
+        qrType: "PP", //QR30
+        ppType: "BILLERID", //change later
+        ppId: BILLER_ID,
+        amount: amount,
+        ref1: "REFERENCE1",
+        ref2: "REFERENCE2",
+        ref3: "SCB", // -> NEED UNTIL THIS
+      }),
+    };
+    const response = await fetch(
+      "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create",
+      { ...qr_headers }
+    );
+    console.log({ response });
+
+    const data: any = await response.json();
+
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
 @Resolver()
 export class PaymentResolver {
   @Query(() => qrOutput)
   @UseMiddleware(isAuth)
   async createScbQr(
     // @Arg('requestId',() => String) requestId: string
-    @Arg("amount", () => Int) amount: number
+    @Arg("amount", () => Int) amount: number,
+    @Ctx() { req, res }: MyContext
   ): Promise<qrOutput | undefined> {
     try {
       const token = await scbToken();
@@ -182,11 +227,22 @@ export class PaymentResolver {
       const data: any = await response.json();
       console.log({ data });
 
+      //save to s3 end
+
       return data;
     } catch (error) {
       console.log(error);
       return undefined;
     }
+  }
+
+  @Query(() => Payment)
+  @UseMiddleware(isAuth)
+  async payment(
+    @Arg("id", () => Int) id: number
+  ): Promise<Payment | undefined> {
+    const payment = await Payment.findOne(id);
+    return payment;
   }
 
   //check

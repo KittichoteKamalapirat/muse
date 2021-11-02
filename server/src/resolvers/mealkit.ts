@@ -15,7 +15,7 @@ import { s3Bucket } from "../constants";
 import { Mealkit } from "../entities/Mealkit";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import { s3, s3Params } from "./post";
+import { s3, s3Params } from "../utils/s3";
 
 @InputType()
 class MealkitInput {

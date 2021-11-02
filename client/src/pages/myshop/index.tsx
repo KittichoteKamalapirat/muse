@@ -66,45 +66,52 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
 
           <Flex mt={4}>
             <NextLink
-              // href="/myshop/order"
               href={{
                 pathname: "/myshop/order",
                 query: { status: OrderStatus.ToDeliver },
               }}
             >
-              <Link textAlign="center">
+              <Link textAlign="center" flex={1}>
                 <SpinnerIcon />
                 <Text>To deliver</Text>
               </Link>
             </NextLink>
-            <Box flex={1}>
-              <Box textAlign="center">
-                <SpinnerIcon />
-                <Text>Delivering</Text>
-              </Box>
-            </Box>
 
-            <Box flex={1}>
-              <Box textAlign="center">
+            <NextLink
+              href={{
+                pathname: "/myshop/order",
+                query: { status: OrderStatus.OnDelivery },
+              }}
+            >
+              <Link textAlign="center" flex={1}>
                 <SpinnerIcon />
-                <Text>Complete</Text>
-              </Box>
-            </Box>
+                <Text>Shipping</Text>
+              </Link>
+            </NextLink>
 
-            <Box flex={1}>
-              <Box textAlign="center">
-                <Text>...</Text>
-                <Text>Others</Text>
-              </Box>
-            </Box>
+            <NextLink
+              href={{
+                pathname: "/myshop/order",
+                query: { status: OrderStatus.PaymentPending },
+              }}
+            >
+              <Link textAlign="center" flex={1}>
+                <Text>... </Text>
+                <Text>Others </Text>
+              </Link>
+            </NextLink>
           </Flex>
           <Divider mt={2} />
 
           <Box mt={2}>
-            <NextLink href="/" as="/">
+            <NextLink
+              href={{
+                pathname: "/myshop/order",
+                query: { status: OrderStatus.Complete },
+              }}
+            >
               <Link>
-                {/* <AccountIcon /> */}
-                Order History
+                <Text>Order history </Text>
               </Link>
             </NextLink>
             <Divider mt={2} />

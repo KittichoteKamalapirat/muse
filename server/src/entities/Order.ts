@@ -50,6 +50,7 @@ export class Order extends BaseEntity {
   status: OrderStatus;
 
   //One order can have many cartitems
+  @Field(() => [CartItem])
   @OneToMany((type) => CartItem, (cartItem) => cartItem.order)
   cartItems: CartItem[];
 
@@ -62,6 +63,7 @@ export class Order extends BaseEntity {
   user: User;
 
   // One order has one payment
+  @Field(() => Payment, { nullable: true })
   @OneToOne((type) => Payment, (payment) => payment.order) //create paymentId
   @JoinColumn()
   payment: Payment;

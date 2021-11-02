@@ -18,6 +18,10 @@ import { Order, OrderStatus } from "../entities/Order";
 import { Payment } from "../entities/Payment";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import { s3, s3Params } from "../utils/s3";
+import { createScbQr, scbToken } from "./payment";
+import axios from "axios";
+import { s3Bucket } from "../constants";
 
 //we need to make TypeGraphQL aware of the enums manually by calling the registerEnumType function and providing the enum name for GraphQL (accotding to Doc)
 registerEnumType(OrderStatus, {
@@ -53,8 +57,31 @@ export class OrderResolver {
         .execute();
     });
 
+    // qr
+    const base64raw = await createScbQr(grossOrder, req.session.userId!);
+    const base64Text = `data:image/png;base64, ${base64raw.data.qrImage}`;
+    // S3
+    const now = Date.now().toString();
+    // s3 signed request
+    const qrParams = s3Params(`${req.session.userId}/${now}`, "utf-8");
+    const signedRequest = s3.getSignedUrl("putObject", qrParams);
+    const url = `https://${s3Bucket}.s3.amazonaws.com/${req.session.userId}/${now}`;
+    //s3 signed request done
+
+    // save to S3 start
+    const options = {
+      headers: {
+        "Content-Type": "utf-8",
+      },
+    };
+
+    // await axios.put(signedRequest, image, options);
+    await axios.put(signedRequest, base64Text, options);
+    // save to S3 done
+    // save url to database
     await Payment.create({
       amount: grossOrder,
+      qrUrl: url,
     }).save();
 
     return order;
@@ -62,7 +89,7 @@ export class OrderResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [CartItem])
-  async orderItems(
+  async cartItems(
     @Arg("status", () => OrderStatus) status: OrderStatus,
     @Ctx() { req, res }: MyContext
   ): Promise<CartItem[] | undefined> {
@@ -180,5 +207,18 @@ export class OrderResolver {
     });
     console.log(cartItems);
     return cartItems;
+  }
+  @UseMiddleware(isAuth)
+  @Query(() => [Order])
+  async myOrders(
+    @Arg("status", () => OrderStatus) status: OrderStatus,
+    @Ctx() { req, res }: MyContext
+  ): Promise<Order[] | undefined> {
+    const orders = await Order.find({
+      where: { userId: req.session.userId, status: status },
+      relations: ["cartItems", "cartItems.mealkit", "payment"],
+    });
+
+    return orders;
   }
 }

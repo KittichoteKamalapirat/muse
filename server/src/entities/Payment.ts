@@ -21,6 +21,10 @@ export class Payment extends BaseEntity {
   @Field()
   amount: number;
 
+  @Column()
+  @Field()
+  qrUrl: string;
+
   // @Column()
   // @Field()
   // orderId: number;

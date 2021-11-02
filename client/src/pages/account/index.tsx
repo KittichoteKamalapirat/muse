@@ -20,6 +20,7 @@ import { withApollo } from "../../util/withApollo";
 import {
   MeDocument,
   MeQuery,
+  OrderStatus,
   useAddressQuery,
   useLogoutMutation,
   useMeQuery,
@@ -113,54 +114,72 @@ const Account: React.FC<indexProps> = ({}) => {
           <Heading fontSize="md">My orders</Heading>
 
           <Flex mt={4}>
-            {/* <Box flex={1}>
-              <Box textAlign="center">
+            <NextLink
+              href={{
+                pathname: "/order",
+                query: { status: OrderStatus.PaymentPending },
+              }}
+            >
+              <Link textAlign="center" flex={1}>
                 <SpinnerIcon />
-                <Text>Pending</Text>
-              </Box>
-            </Box> */}
+                <Text>To pay</Text>
+              </Link>
+            </NextLink>
 
-            <NextLink href="/myshop/order" as="/myshop/order">
+            <NextLink
+              href={{
+                pathname: "/order",
+                query: { status: OrderStatus.ToDeliver },
+              }}
+            >
               <Link textAlign="center" flex={1}>
                 <SpinnerIcon />
                 <Text>To deliver</Text>
               </Link>
             </NextLink>
 
-            <NextLink href="/myshop/order" as="/myshop/order">
+            <NextLink
+              href={{
+                pathname: "/order",
+                query: { status: OrderStatus.OnDelivery },
+              }}
+            >
               <Link textAlign="center" flex={1}>
                 <SpinnerIcon />
-                <Text>Delivering</Text>
+                <Text>To recieve</Text>
               </Link>
             </NextLink>
-            <NextLink href="/myshop/order" as="/myshop/order">
+            <NextLink
+              href={{
+                pathname: "/order",
+                query: { status: OrderStatus.PaymentPending },
+              }}
+            >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
-                <Text>Complete</Text>
-              </Link>
-            </NextLink>
-
-            <NextLink href="/myshop/order" as="/myshop/order">
-              <Link textAlign="center" flex={1}>
-                <Text>...</Text>
-                <Text>Others</Text>
+                <StarIcon />
+                <Text>Rate</Text>
               </Link>
             </NextLink>
           </Flex>
           <Divider mt={2} />
 
           <Box mt={2}>
-            <NextLink href="/" as="/">
+            <NextLink
+              href={{
+                pathname: "/order",
+                query: { status: OrderStatus.Cancelled },
+              }}
+            >
               <Link>
-                {/* <AccountIcon /> */}
-                Order History
+                <Text>Purchase history</Text>
               </Link>
             </NextLink>
-            <Divider mt={2} />
           </Box>
+          <Divider mt={2} />
         </Box>
 
-        <Box textAlign="left">
+        <Box textAlign="left" mt={4}>
+          <Heading fontSize="md">Account Info</Heading>
           <Box mt={2}>
             <NextLink href="/account/info/" as="/account/info">
               <Link>

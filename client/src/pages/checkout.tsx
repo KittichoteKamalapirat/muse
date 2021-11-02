@@ -26,7 +26,7 @@ interface checkoutProps {}
 
 const Checkout: React.FC<checkoutProps> = ({}) => {
   // useupdate
-  const { data: cartItems, loading, error } = useCartItemsQuery();
+  // const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
   // const { data: me, loading: meLoading } = useMeQuery();
   const [createOrder] = useCreateOrderMutation();
