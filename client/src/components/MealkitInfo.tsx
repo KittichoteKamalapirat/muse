@@ -61,8 +61,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
               <Text>ราคา: {mealkit.price} บาท</Text>
               <Box>
                 <Heading size="md">รายการ</Heading>
-                {mealkit.items?.map((item, index) => (
-                  <Text key={index}>
+                {mealkit.items?.map((item, itemIndex) => (
+                  <Text key={itemIndex}>
                     {index + 1}. {item}
                   </Text>
                 ))}
@@ -89,24 +89,68 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                         mealkitId: mealkit.id,
                       },
                     },
-
-                    update(cache, { data: newCartItem }) {
-                      cache.modify({
-                        fields: {
-                          cartItems(existingCartItems = []) {
-                            const newCartItemRef = cache.writeFragment({
-                              data: newCartItem,
-                              fragment: gql`
-                                fragment NewCartItem on CartItem {
-                                  id
-                                  type
-                                }
-                              `,
-                            });
-                            return [...existingCartItems, newCartItemRef];
+                    update(cache, { data }) {
+                      const id = data?.createCartItem.cartItem.id;
+                      const newItem = data?.createCartItem.newItem;
+                      console.log({ newItem });
+                      // if it's a newItem -> append to an array
+                      //if it's the old one -> do nothing since Apollo automatically update for us
+                      //have to remove mealkit and user, keep only mealkitId and userI since user=null and mealkit=null replace the cache
+                      if (newItem) {
+                        cache.modify({
+                          fields: {
+                            cartItems(existingCartItems = []) {
+                              const newCartItemRef = cache.writeFragment({
+                                data: data.createCartItem.cartItem,
+                                fragment: gql`
+                                  fragment NewCartItem on CartItem {
+                                    id
+                                    meakitId
+                                    type
+                                  }
+                                `,
+                              });
+                              return [...existingCartItems, newCartItemRef];
+                            },
                           },
-                        },
-                      });
+                        });
+                      } else {
+                        // existing item
+                        const cached = cache.readFragment({
+                          id: "CartItem:" + id, // The value of the to-do item's cache ID
+                          fragment: gql`
+                            fragment MyCartItem on CartItem {
+                              id
+                              mealkitId
+                            }
+                          `,
+                        });
+
+                        console.log({ cached });
+                        // case1: CartItem: xx already in the cache -> break
+                        // case2: CartItem: xx not in the cache yet -> good
+                        console.log({ data });
+                        // cache.modify({
+                        //   // id: `CartItem:${id}`,
+                        //   fields: {
+                        //     cartItems(existingCartItems = []) {
+                        //       const newCartItemRef = cache.writeFragment({
+                        //         data: data?.createCartItem.cartItem,
+                        //         fragment: gql`
+                        //           fragment NewCartItem on CartItem {
+                        //             id
+                        //             # type
+                        //             meakitId
+                        //           }
+                        //         `,
+                        //       });
+                        //       console.log({ newCartItemRef });
+                        //       // return [...existingCartItems, newCartItemRef];
+                        //       return [...existingCartItems, newCartItemRef];
+                        //     },
+                        //   },
+                        // });
+                      }
                     },
                   });
                   setCartLoading(false);

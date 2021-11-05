@@ -14,7 +14,6 @@ import {
   usePaymentQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
-import payment from "../payment";
 
 interface PaymentProps {}
 

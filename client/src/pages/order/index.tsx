@@ -207,9 +207,15 @@ const Order: React.FC<OrderProps> = ({}) => {
                       pathname: "/payment/[id]",
                       query: {
                         id: order.payment?.id,
-                        qrUrl: order.payment?.qrUrl,
                       },
                     }}
+                    as={`/payment/${order.payment?.id}`}
+                    // as={{
+                    //   pathname: "/payment/[id]",
+                    //   query: {
+                    //     id: order.payment?.id,
+                    //   },
+                    // }}
                   >
                     <Link>
                       <Button colorScheme="teal">Pay now</Button>

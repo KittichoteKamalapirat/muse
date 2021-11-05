@@ -6,6 +6,7 @@ import {
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   Root,
@@ -14,6 +15,7 @@ import {
 import { getConnection } from "typeorm";
 import { CartItem } from "../entities/CartItem";
 import { Mealkit } from "../entities/Mealkit";
+import { OrderStatus } from "../entities/Order";
 import { User } from "../entities/User";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -24,6 +26,14 @@ class CartItemInput {
   mealkitId: number;
   @Field()
   quantity: number;
+}
+
+@ObjectType()
+class AddToCart {
+  @Field()
+  cartItem: CartItem;
+  @Field()
+  newItem: boolean;
 }
 
 @Resolver(CartItem)
@@ -45,20 +55,49 @@ export class CartItemResolver {
     });
   }
 
-  @Mutation(() => CartItem)
+  @Mutation(() => AddToCart)
   @UseMiddleware(isAuth)
   async createCartItem(
     @Arg("input") input: CartItemInput,
     @Ctx() { req }: MyContext
-  ): Promise<CartItem> {
-    const newCartItem = await CartItem.create({
-      quantity: input.quantity,
-      userId: req.session.userId,
-      mealkitId: input.mealkitId,
-    }).save();
+  ): Promise<AddToCart> {
+    // check first whether this melakit already exsits in the cart
+    const cartItem = await CartItem.findOne({
+      where: { mealkitId: input.mealkitId, orderId: null },
+    });
 
-    // const user = await User.findOne({ id: req.session.userId });
-    return newCartItem;
+    // CartItem.create().save()
+    if (cartItem) {
+      const result = await getConnection()
+        .createQueryBuilder()
+        .update(CartItem)
+        .set({ quantity: cartItem.quantity + input.quantity })
+        .where('id = :id and "mealkitId" = :mealkitId', {
+          id: cartItem.id,
+          mealkitId: cartItem.mealkitId,
+        })
+        .returning("*")
+        .execute();
+
+      // const sameCartItem = await CartItem.create({
+      //   id: cartItem.id,
+      //   quantity: cartItem.quantity + input.quantity,
+      //   userId: req.session.userId,
+      //   mealkitId: cartItem.mealkitId,
+      // }).save();
+      // console.log({ cartItem: sameCartItem, newItem: false });
+      return { cartItem: result.raw[0], newItem: false };
+    } else {
+      const newCartItem = await CartItem.create({
+        quantity: input.quantity,
+        userId: req.session.userId,
+        mealkitId: input.mealkitId,
+      }).save();
+      console.log({ cartItem: newCartItem, newItem: true });
+      // const user = await User.findOne({ id: req.session.userId });
+
+      return { cartItem: newCartItem, newItem: true };
+    }
   }
 
   @Mutation(() => CartItem)
@@ -67,7 +106,6 @@ export class CartItemResolver {
     @Arg("quantity", () => Int) quantity: number,
     @Arg("id", () => Int) id: number,
     @Arg("mealkitId", () => Int) mealkitId: number,
-
     @Ctx() { req }: MyContext
   ): Promise<CartItem> {
     const result = await getConnection()
@@ -86,5 +124,15 @@ export class CartItemResolver {
     // console.log(result.raw[0]);
     // return result.raw[0];
     return updated;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deleteCartItem(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    await CartItem.delete({ id: id, userId: req.session.userId });
+    return true;
   }
 }

@@ -89,49 +89,10 @@ export class OrderResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [CartItem])
-  async cartItems(
+  async orderItems(
     @Arg("status", () => OrderStatus) status: OrderStatus,
     @Ctx() { req, res }: MyContext
   ): Promise<CartItem[] | undefined> {
-    // let cartItems: CartItem[] | undefined = [];
-
-    // await getConnection().transaction(async (tm) => {
-    // 1. select orderId by userId and status from Order
-    // 2. select data from Cartitem by orderId
-    //   const orderIds = await tm.query(
-    //     `
-    //   SELECT id
-    //   FROM "order"
-    //   WHERE "userId" = $1 AND "status" = $2;
-    //   `,
-    //     [req.session.userId, status]
-    //   );
-    //   let idsArray: number[] = [];
-    //   orderIds.forEach((idObj: any) => {
-    //     idsArray.push(idObj.id);
-    //   });
-
-    //   let arrayForIN: string | null;
-    //   if (idsArray.length > 0) {
-    //     arrayForIN = "(" + idsArray.join() + ")";
-    //   } else {
-    //     arrayForIN = null;
-    //   }
-
-    //   cartItems = await tm.query(
-    //     `
-    //   SELECT *
-    //   FROM "cart_item"
-    //   ${
-    //     arrayForIN
-    //       ? `WHERE "orderId" IN ${arrayForIN}`
-    //       : `WHERE "orderId" IN (0)`
-    //   }
-    //  ;
-    //   `
-    //   );
-    // });
-
     const cartItems = await getConnection().query(
       `
       SELECT *
@@ -155,36 +116,10 @@ export class OrderResolver {
 
   @UseMiddleware(isAuth)
   @Query(() => [CartItem])
-  async creatorCartItems(
+  async creatorOrderItems(
     @Arg("status", () => OrderStatus) status: OrderStatus,
     @Ctx() { req, res }: MyContext
   ) {
-    // 1. select cartItems which have mealkit.creatorId = currentUser and has orderId
-    // 2. only pick cartItem which order status matches
-
-    // const cartItems = await getConnection().query(
-    //   `
-    //   SELECT *
-    //   FROM cart_item
-    //   WHERE "mealkitId" IN (
-    //     SELECT id
-    //     FROM mealkit
-    //     WHERE "creatorId" = '${req.session.userId}'
-    //   AND "orderId" IS NOT NULL
-    //   )
-    //   `
-    // );
-
-    // const cartItems2 = await getConnection().query(
-    //   `
-    //   SELECT cart_item.id
-    //   FROM cart_item
-    //   INNER JOIN "order"
-    //   ON cart_item."orderId"="order".id
-    //   WHERE "order".status = '${status}'
-    //   `
-    // );
-
     const cartItems = await getConnection().query(
       `
       SELECT *

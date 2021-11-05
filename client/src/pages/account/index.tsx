@@ -184,7 +184,8 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink href="/account/info/" as="/account/info">
               <Link>
                 <AccountIcon />
-                ข้อมูลบัญชี
+                My profile
+                {/* ข้อมูลบัญชี */}
               </Link>
             </NextLink>
             <Divider mt={2} />

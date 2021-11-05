@@ -2,6 +2,9 @@
 fragment RegularUser on User {
   id
   username
+  email
+  phonenumber
   avatar
   isCreator
+  about
 }

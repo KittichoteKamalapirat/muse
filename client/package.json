@@ -10,6 +10,7 @@
     "@apollo/client": "^3.4.13",
     "@chakra-ui/icons": "^1.0.0",
     "@chakra-ui/react": "^1.4.2",
+    "@chakra-ui/utils": "^1.8.4",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@types/dropzone": "^5.7.4",

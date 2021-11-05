@@ -1,5 +1,5 @@
-query cartItems {
-  cartItems {
+query orderItems($status: OrderStatus!) {
+  orderItems(status: $status) {
     id
     quantity
     userId

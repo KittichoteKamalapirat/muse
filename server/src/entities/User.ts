@@ -24,16 +24,10 @@ export class User extends BaseEntity {
   @Field()
   id!: string;
 
-  // will use this later
-  //   @Column({ unique: true })
-  //   @Field()
-  //   phone_no!: string;
-
   @Column({ unique: true })
   @Field()
   username!: string;
 
-  // , nullable: true
   @Column({ unique: true })
   @Field()
   email!: string;
@@ -44,11 +38,15 @@ export class User extends BaseEntity {
 
   @Column("boolean", { default: false })
   @Field()
-  isCreator: boolean;
+  isCreator!: boolean;
 
   @Column({ unique: true })
   @Field()
   avatar!: string;
+
+  @Column({ unique: true, nullable: true })
+  @Field()
+  about!: string;
 
   //   Client can't query for pass word it will and hashed
   @Column()

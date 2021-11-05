@@ -1,6 +1,11 @@
 mutation createCartItem($input: CartItemInput!) {
   createCartItem(input: $input) {
-    quantity
-    mealkitId
+    cartItem {
+      id
+      quantity
+      mealkitId
+      userId
+    }
+    newItem
   }
 }

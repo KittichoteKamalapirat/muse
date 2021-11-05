@@ -22,6 +22,7 @@ import { useApolloClient } from "@apollo/client";
 import { Wrapper } from "../../../components/Wrapper";
 import { HeadingLayout } from "../../../components/HeadingLayout";
 import { useRouter } from "next/router";
+import { primaryColor } from "../../../components/Variables";
 
 interface addressProps {}
 
@@ -122,18 +123,18 @@ const Address: React.FC<addressProps> = ({}) => {
           </Box>
 
           {!meData?.me ? null : (
-            <Flex m={2} justifyContent="right">
+            <Flex flexDirection="column" m={2} justifyContent="right">
               <NextLink
                 href="/account/address/edit/"
                 as="/account/address/edit/"
               >
                 <Button
                   m={1}
-                  size="xs"
+                  // size="xs"
                   colorScheme="teal"
                   leftIcon={<EditIcon />}
                 >
-                  แก้ไขที่อยู่
+                  Edit address
                 </Button>
               </NextLink>
 
@@ -141,11 +142,12 @@ const Address: React.FC<addressProps> = ({}) => {
                 href="/account/address/edit/"
                 as="/account/address/edit/"
               >
-                <Button
+                <Box
+                  textAlign="center"
                   size="xs"
                   m={1}
-                  colorScheme="red"
-                  leftIcon={<DeleteIcon />}
+                  color={primaryColor}
+                  // leftIcon={<DeleteIcon />}
                   onClick={() => {
                     deleteAddress({
                       variables: { id: data.address.id },
@@ -161,7 +163,7 @@ const Address: React.FC<addressProps> = ({}) => {
                   }}
                 >
                   ลบที่อยู่นี้
-                </Button>
+                </Box>
               </NextLink>
             </Flex>
           )}

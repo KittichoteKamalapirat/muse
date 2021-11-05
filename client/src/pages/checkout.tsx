@@ -21,15 +21,17 @@ import { AddIcon, MinusIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { Table, Tr, Th } from "@chakra-ui/react";
 
 import axios from "axios";
+import { useField } from "formik";
 
 interface checkoutProps {}
 
 const Checkout: React.FC<checkoutProps> = ({}) => {
   // useupdate
-  // const { data: cartItems, loading, error } = useCartItemsQuery();
+  const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
   // const { data: me, loading: meLoading } = useMeQuery();
-  const [createOrder] = useCreateOrderMutation();
+  const [createOrder, { data: orderData, loading: orderLoading }] =
+    useCreateOrderMutation();
 
   const noAddress = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
@@ -61,7 +63,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       setGross(gross);
       // }
     }
-  }, [cartItems]);
+  }, []);
 
   if (!loading && !cartItems) {
     return (
@@ -166,7 +168,9 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   grossOrder: gross,
                 },
               });
-              router.push("/payment");
+              if (!orderLoading) {
+                router.push(`/payment/${orderData?.createOrder.id}`);
+              }
             }}
           >
             Make a payment

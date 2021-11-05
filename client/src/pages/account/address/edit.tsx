@@ -2,6 +2,7 @@ import { Flex, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
+import { HeadingLayout } from "../../../components/HeadingLayout";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout";
 import { Wrapper } from "../../../components/Wrapper";
@@ -64,9 +65,8 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
     );
   }
   return (
-    <Layout>
+    <HeadingLayout heading="Edit address">
       <Wrapper>
-        <h1>แก้ไขที่อยู่การจัดส่ง</h1>
         <Formik
           initialValues={{
             name: data?.address.name,
@@ -148,7 +148,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
           )}
         </Formik>
       </Wrapper>
-    </Layout>
+    </HeadingLayout>
   );
 };
 

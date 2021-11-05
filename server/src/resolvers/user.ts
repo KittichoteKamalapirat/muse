@@ -10,6 +10,7 @@ import {
   Query,
   Resolver,
   UseMiddleware,
+  InputType,
 } from "type-graphql";
 import { MyContext } from "../types";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
@@ -37,6 +38,18 @@ class UserResponse {
   errors?: FieldError[];
   @Field(() => User, { nullable: true })
   user?: User;
+}
+
+@InputType()
+class UserInput {
+  @Field()
+  username: string;
+  @Field()
+  email: string;
+  @Field()
+  phonenumber: string;
+  @Field()
+  about?: string;
 }
 
 // Resolver starts
@@ -146,8 +159,6 @@ export class UserResolver {
     return User.findOne(id);
   }
 
-  //
-
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
     //Destructure the parameter array to req
@@ -246,6 +257,24 @@ export class UserResolver {
     req.session.userId = user.id;
 
     return { user: user };
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => User)
+  async updateUser(
+    @Arg("input", () => UserInput) input: UserInput,
+    @Ctx() { req }: MyContext
+  ) {
+    const result = await getConnection()
+      .createQueryBuilder()
+      .update(User)
+      .set({ ...input })
+      .where("id = :id", {
+        id: req.session.userId,
+      })
+      .returning("*")
+      .execute();
+    return result.raw[0];
   }
 
   @Mutation(() => UserResponse)

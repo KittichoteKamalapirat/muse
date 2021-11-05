@@ -43,7 +43,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
 
           <Box flex={3} ml={2}>
             <Heading fontSize="md">{meData?.me?.username}</Heading>
-            <Text>Shop Short Description</Text>
+            <Text>{meData?.me?.about}</Text>
             <Text>Follower: xxx</Text>
             <Flex alignItems="center">
               <Flex>
