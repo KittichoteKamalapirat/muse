@@ -68,6 +68,10 @@ export class Order extends BaseEntity {
   @JoinColumn()
   payment: Payment;
 
+  @Column({ nullable: true }) //type: int?
+  @Field()
+  paymentId: number;
+
   @CreateDateColumn()
   @Field()
   createdAt: Date;

@@ -117,7 +117,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
               color={primaryColor}
               d="inline"
             >
-              xxx
+              {paymentData?.payment.amount}
             </Heading>
           </Box>
 

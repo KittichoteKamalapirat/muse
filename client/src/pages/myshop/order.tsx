@@ -7,8 +7,8 @@ import { HeadingLayout } from "../../components/HeadingLayout";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {
-  useCreatorCartItemsLazyQuery,
-  useCreatorCartItemsQuery,
+  useCreatorOrderItemsLazyQuery,
+  useCreatorOrderItemsQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
@@ -29,12 +29,12 @@ const Order: React.FC<OrderProps> = ({}) => {
   const router = useRouter();
   const { status: statusParam } = router.query;
 
-  const [creatorCartitems, { loading, error, data }] =
-    useCreatorCartItemsLazyQuery();
+  const [creatorOrderitems, { loading, error, data }] =
+    useCreatorOrderItemsLazyQuery();
 
   useEffect(() => {
     console.log("effect");
-    creatorCartitems({
+    creatorOrderitems({
       variables: {
         status: OrderStatus[statusParam as keyof typeof OrderStatus],
       },
@@ -67,7 +67,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "PaymentPending" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            creatorOrderitems({
               variables: {
                 status: OrderStatus.PaymentPending,
               },
@@ -87,7 +87,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "ToDeliver" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            creatorOrderitems({
               variables: {
                 status: OrderStatus.ToDeliver,
               },
@@ -107,7 +107,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           color={orderStatus === "OnDelivery" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorCartitems({
+            creatorOrderitems({
               variables: {
                 status: OrderStatus.OnDelivery,
               },
@@ -129,7 +129,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           mx={1}
           Complete
           onClick={() => {
-            creatorCartitems({
+            creatorOrderitems({
               variables: {
                 status: OrderStatus.Complete,
               },
@@ -146,12 +146,12 @@ const Order: React.FC<OrderProps> = ({}) => {
           <Text>No data</Text>
         ) : (
           <Box>
-            {data.creatorCartItems.map((cartItem) => (
+            {data.creatorOrderItems.map((orderItem) => (
               <Flex textAlign="center">
                 <Box flex={1} m={1}>
-                  {!cartItem.mealkit?.images ? null : (
+                  {!orderItem.mealkit?.images ? null : (
                     <Image
-                      src={cartItem.mealkit?.images[0]}
+                      src={orderItem.mealkit?.images[0]}
                       alt="image"
                       fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
                     />
@@ -159,20 +159,20 @@ const Order: React.FC<OrderProps> = ({}) => {
                 </Box>
 
                 <Box flex={3} m={1} textAlign="left">
-                  <Heading size="md">{cartItem.mealkit?.name}</Heading>
+                  <Heading size="md">{orderItem.mealkit?.name}</Heading>
 
                   <Box flex={1} m={1}>
-                    <Text>{cartItem.quantity}</Text>
+                    <Text>{orderItem.quantity}</Text>
                   </Box>
 
                   <Text color="gray.700" fontSize="md" fontWeight="normal">
-                    quantity: {cartItem.quantity}
+                    quantity: {orderItem.quantity}
                   </Text>
 
                   <Heading size="lg">Add Delivery fee and update total</Heading>
 
                   <Box flex={1} m={1}>
-                    <Text>Total: {cartItem.total}</Text>
+                    <Text>Total: {orderItem.total}</Text>
                   </Box>
                 </Box>
               </Flex>

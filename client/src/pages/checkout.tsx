@@ -156,7 +156,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
           <Text>Total: ฿{gross}</Text>
         </Box>
         <Box p={3} bgColor="red.400" color="white">
-          <Button
+          <Box
             onClick={async () => {
               const cartItemIds: number[] = [];
               cartItems?.cartItems.forEach((cartItem) => {
@@ -168,13 +168,13 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   grossOrder: gross,
                 },
               });
-              if (!orderLoading) {
+              if (!orderLoading && orderData?.createOrder.id) {
                 router.push(`/payment/${orderData?.createOrder.id}`);
               }
             }}
           >
             Make a payment
-          </Button>
+          </Box>
           {/* <NextLink href={{ pathname: "/payment" }}>
             <Link>Make a payment</Link>
           </NextLink> */}

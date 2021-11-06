@@ -600,6 +600,13 @@ export type CreateScbQrQueryVariables = Exact<{
 
 export type CreateScbQrQuery = { __typename?: 'Query', createScbQr: { __typename?: 'qrOutput', status: { __typename?: 'Status', code: number, description: string }, data: { __typename?: 'QrData', qrRawData: string, qrImage: string } } };
 
+export type CreatorOrderItemsQueryVariables = Exact<{
+  status: OrderStatus;
+}>;
+
+
+export type CreatorOrderItemsQuery = { __typename?: 'Query', creatorOrderItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, orderId: number, total: number, mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>> }> }> };
+
 export type DeleteAddressMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -736,13 +743,6 @@ export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
-
-export type CreatorOrderItemsQueryVariables = Exact<{
-  status: OrderStatus;
-}>;
-
-
-export type CreatorOrderItemsQuery = { __typename?: 'Query', creatorOrderItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, orderId: number, total: number, mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>> }> }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1136,6 +1136,52 @@ export function useCreateScbQrLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CreateScbQrQueryHookResult = ReturnType<typeof useCreateScbQrQuery>;
 export type CreateScbQrLazyQueryHookResult = ReturnType<typeof useCreateScbQrLazyQuery>;
 export type CreateScbQrQueryResult = Apollo.QueryResult<CreateScbQrQuery, CreateScbQrQueryVariables>;
+export const CreatorOrderItemsDocument = gql`
+    query creatorOrderItems($status: OrderStatus!) {
+  creatorOrderItems(status: $status) {
+    id
+    quantity
+    userId
+    mealkitId
+    mealkit {
+      id
+      name
+      price
+      images
+    }
+    orderId
+    total
+  }
+}
+    `;
+
+/**
+ * __useCreatorOrderItemsQuery__
+ *
+ * To run a query within a React component, call `useCreatorOrderItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreatorOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCreatorOrderItemsQuery({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useCreatorOrderItemsQuery(baseOptions: Apollo.QueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
+      }
+export function useCreatorOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
+        }
+export type CreatorOrderItemsQueryHookResult = ReturnType<typeof useCreatorOrderItemsQuery>;
+export type CreatorOrderItemsLazyQueryHookResult = ReturnType<typeof useCreatorOrderItemsLazyQuery>;
+export type CreatorOrderItemsQueryResult = Apollo.QueryResult<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>;
 export const DeleteAddressDocument = gql`
     mutation deleteAddress($id: Int!) {
   deleteAddress(id: $id)
@@ -1826,52 +1872,6 @@ export function useCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CartItemsQueryHookResult = ReturnType<typeof useCartItemsQuery>;
 export type CartItemsLazyQueryHookResult = ReturnType<typeof useCartItemsLazyQuery>;
 export type CartItemsQueryResult = Apollo.QueryResult<CartItemsQuery, CartItemsQueryVariables>;
-export const CreatorOrderItemsDocument = gql`
-    query creatorOrderItems($status: OrderStatus!) {
-  creatorOrderItems(status: $status) {
-    id
-    quantity
-    userId
-    mealkitId
-    mealkit {
-      id
-      name
-      price
-      images
-    }
-    orderId
-    total
-  }
-}
-    `;
-
-/**
- * __useCreatorOrderItemsQuery__
- *
- * To run a query within a React component, call `useCreatorOrderItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreatorOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCreatorOrderItemsQuery({
- *   variables: {
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useCreatorOrderItemsQuery(baseOptions: Apollo.QueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
-      }
-export function useCreatorOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
-        }
-export type CreatorOrderItemsQueryHookResult = ReturnType<typeof useCreatorOrderItemsQuery>;
-export type CreatorOrderItemsLazyQueryHookResult = ReturnType<typeof useCreatorOrderItemsLazyQuery>;
-export type CreatorOrderItemsQueryResult = Apollo.QueryResult<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

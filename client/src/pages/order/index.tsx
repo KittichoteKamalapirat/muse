@@ -14,7 +14,6 @@ import {
   useMyOrdersLazyQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
-import payment from "../payment";
 
 export enum OrderStatus {
   PaymentPending = "PaymentPending",
@@ -37,6 +36,8 @@ const Order: React.FC<OrderProps> = ({}) => {
   // const [myOrders, { loading, error, data }] = useCartItemsLazyQuery();
 
   const [myOrders, { loading, error, data }] = useMyOrdersLazyQuery();
+  console.log("hi");
+  console.log(data);
 
   useEffect(() => {
     myOrders({
@@ -162,12 +163,12 @@ const Order: React.FC<OrderProps> = ({}) => {
           <Text>No data</Text>
         ) : (
           <Box>
-            {data.myOrders.map((order) => (
-              <Box>
+            {data.myOrders.map((order, index) => (
+              <Box key={index}>
                 {/* <Text>{order.grossOrder}</Text> */}
 
-                {order.cartItems.map((cartItem) => (
-                  <Flex textAlign="center">
+                {order.cartItems.map((cartItem, i) => (
+                  <Flex textAlign="center" key={i}>
                     <Box flex={1} m={1}>
                       {!cartItem.mealkit?.images ? null : (
                         <Image
@@ -188,7 +189,6 @@ const Order: React.FC<OrderProps> = ({}) => {
                       <Text color="gray.700" fontSize="md" fontWeight="normal">
                         quantity: {cartItem.quantity}
                       </Text>
-
                       <Heading size="lg">
                         Add Delivery fee and update total
                       </Heading>

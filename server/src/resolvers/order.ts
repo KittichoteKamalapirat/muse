@@ -37,26 +37,6 @@ export class OrderResolver {
     @Arg("cartItemIds", () => [Int]) cartItemIds: number[],
     @Arg("grossOrder", () => Int) grossOrder: number //need Int due to reflection system
   ): Promise<Order | undefined> {
-    // loop through every cartItem
-    // orderId
-
-    const order = await Order.create({
-      grossOrder: grossOrder,
-      status: OrderStatus.PaymentPending,
-      userId: "5619ffb2-6ce2-42cf-bd5c-042f2685a045",
-      //   cartItemId: 123,
-      //   paymentId: 123
-    }).save();
-
-    cartItemIds.forEach(async (cartItemId) => {
-      await getConnection()
-        .createQueryBuilder()
-        .update(CartItem)
-        .set({ orderId: order.id })
-        .where("id = :id", { id: cartItemId })
-        .execute();
-    });
-
     // qr
     const base64raw = await createScbQr(grossOrder, req.session.userId!);
     const base64Text = `data:image/png;base64, ${base64raw.data.qrImage}`;
@@ -79,10 +59,30 @@ export class OrderResolver {
     await axios.put(signedRequest, base64Text, options);
     // save to S3 done
     // save url to database
-    await Payment.create({
+    const payment = await Payment.create({
       amount: grossOrder,
       qrUrl: url,
     }).save();
+
+    // loop through every cartItem
+    // orderId
+
+    const order = await Order.create({
+      grossOrder: grossOrder,
+      status: OrderStatus.PaymentPending,
+      userId: "5619ffb2-6ce2-42cf-bd5c-042f2685a045",
+      paymentId: payment.id,
+      //   cartItemId: 123,
+    }).save();
+
+    cartItemIds.forEach(async (cartItemId) => {
+      await getConnection()
+        .createQueryBuilder()
+        .update(CartItem)
+        .set({ orderId: order.id })
+        .where("id = :id", { id: cartItemId })
+        .execute();
+    });
 
     return order;
   }
