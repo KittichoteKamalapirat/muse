@@ -1,4 +1,3 @@
-import { Button } from "@chakra-ui/button";
 import { StarIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
