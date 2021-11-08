@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { Address } from "./Address";
 import { CartItem } from "./CartItem";
+import { Follow } from "./Follow";
 import { Mealkit } from "./Mealkit";
 import { Order } from "./Order";
 import { Post } from "./Post";
@@ -45,8 +46,8 @@ export class User extends BaseEntity {
   avatar!: string;
 
   @Column({ unique: true, nullable: true })
-  @Field()
-  about!: string;
+  @Field({ nullable: true })
+  about: string;
 
   //   Client can't query for pass word it will and hashed
   @Column()
@@ -62,6 +63,13 @@ export class User extends BaseEntity {
   @OneToMany((type) => Upvote, (upvote) => upvote.user)
   upvotes: Upvote[];
 
+  @Column({ type: "int", default: 0 })
+  @Field()
+  followerNum!: number;
+
+  @Field()
+  isFollowed: boolean;
+
   // relatioship with profile starts
   @OneToOne((type) => Address, (address) => address.user)
   @JoinColumn()
@@ -75,6 +83,13 @@ export class User extends BaseEntity {
   //One user can have many orders
   @OneToMany((type) => Order, (order) => order.user)
   orders: Order[];
+
+  //Follow function
+  @OneToMany((type) => Follow, (followed) => followed.user)
+  followed: Follow[];
+
+  @OneToMany((type) => Follow, (following) => following.follower)
+  following: Follow[];
 
   @CreateDateColumn()
   @Field()

@@ -44,10 +44,6 @@ export class Mealkit extends BaseEntity {
   @Field(() => [String], { nullable: true })
   images: string[];
 
-  @Field(() => String)
-  @CreateDateColumn()
-  createdAt: Date;
-
   @Column()
   @Field()
   postId: number;
@@ -74,6 +70,10 @@ export class Mealkit extends BaseEntity {
   @OneToMany((type) => CartItem, (cartItem) => cartItem.mealkit)
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
 
   @Field(() => String)
   @UpdateDateColumn()

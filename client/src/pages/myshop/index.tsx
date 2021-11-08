@@ -14,7 +14,11 @@ import { Layout } from "../../components/Layout";
 import { Wrapper } from "../../components/Wrapper";
 import { withApollo } from "../../util/withApollo";
 import NextLink from "next/link";
-import { OrderStatus, useMeQuery } from "../../generated/graphql";
+import {
+  OrderStatus,
+  useFollowersQuery,
+  useMeQuery,
+} from "../../generated/graphql";
 import { SmallAddIcon, SpinnerIcon, StarIcon } from "@chakra-ui/icons";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 
@@ -22,6 +26,7 @@ interface MyShopProps {}
 
 const MyShop: React.FC<MyShopProps> = ({}) => {
   const { data: meData, loading: meLoading } = useMeQuery();
+
   return (
     <Layout>
       <Wrapper>

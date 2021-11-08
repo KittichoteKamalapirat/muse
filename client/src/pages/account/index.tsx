@@ -36,7 +36,7 @@ import {
 } from "@chakra-ui/icons";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
-import { primaryColor } from "../../components/Variables";
+import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 
 interface indexProps {}
@@ -268,7 +268,9 @@ const Account: React.FC<indexProps> = ({}) => {
             </Menu>
             {/* <Text>{meData?.me?.isCreator ? "Creator" : "Personal"}</Text> */}
           </Box>
-
+          <Text fontSize="sm" color={inActiveGray}>
+            Current: {meData?.me?.isCreator ? "Creator" : "Personal"} Account
+          </Text>
           <Flex justifyContent="center">
             <Button
               onClick={async () => {

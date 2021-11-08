@@ -36,6 +36,7 @@ const updateAfterVote = (
     `,
   });
 
+  console.log({ data });
   if (data) {
     if (data.voteStatus === value) {
       return;

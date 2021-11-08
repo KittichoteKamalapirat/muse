@@ -23,6 +23,7 @@ import { ContainerInterface, getConnection } from "typeorm";
 import bcrypt from "bcrypt";
 import { isAuth } from "../middlware/isAuth";
 import { registerEnumType } from "type-graphql";
+import { Follow } from "../entities/Follow";
 
 @ObjectType()
 class FieldError {
@@ -64,6 +65,20 @@ export class UserResolver {
     // current user watns to see someone elses email
     return "";
   }
+
+  @UseMiddleware(isAuth)
+  @FieldResolver(() => Boolean)
+  async isFollowed(@Root() parent: User, @Ctx() { req }: MyContext) {
+    const isFollowing = await Follow.findOne({
+      where: { userId: parent.id, followerId: req.session.userId },
+    });
+
+    if (isFollowing) {
+      return true;
+    }
+    return false;
+  }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("newPassword") newPassword: string,

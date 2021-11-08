@@ -1,6 +1,10 @@
 query user($id: String!) {
   user(id: $id) {
+    id
     username
+    about
     avatar
+    isFollowed
+    followerNum
   }
 }

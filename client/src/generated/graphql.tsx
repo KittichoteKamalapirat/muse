@@ -102,6 +102,17 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type Follow = {
+  __typename?: 'Follow';
+  id: Scalars['Float'];
+  userId: Scalars['String'];
+  user: User;
+  followerId: Scalars['String'];
+  follower: User;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
 export type Ingredient = {
   __typename?: 'Ingredient';
   ingredient: Scalars['String'];
@@ -123,11 +134,11 @@ export type Mealkit = {
   portion: Scalars['Float'];
   items?: Maybe<Array<Scalars['String']>>;
   images?: Maybe<Array<Scalars['String']>>;
-  createdAt: Scalars['String'];
   postId: Scalars['Float'];
   post?: Maybe<Post>;
   creatorId: Scalars['String'];
   creator?: Maybe<User>;
+  createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
@@ -165,6 +176,7 @@ export type Mutation = {
   updateCartItem: CartItem;
   deleteCartItem: Scalars['Boolean'];
   createOrder: Order;
+  toggleFollow: Scalars['Boolean'];
 };
 
 
@@ -296,6 +308,11 @@ export type MutationCreateOrderArgs = {
   cartItemIds: Array<Scalars['Int']>;
 };
 
+
+export type MutationToggleFollowArgs = {
+  targetUserId: Scalars['String'];
+};
+
 export type Order = {
   __typename?: 'Order';
   id: Scalars['Float'];
@@ -304,6 +321,7 @@ export type Order = {
   cartItems: Array<CartItem>;
   userId: Scalars['String'];
   payment?: Maybe<Payment>;
+  paymentId: Scalars['Float'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -406,6 +424,8 @@ export type Query = {
   orderItems: Array<CartItem>;
   creatorOrderItems: Array<CartItem>;
   myOrders: Array<Order>;
+  followers: Array<Follow>;
+  following: Array<Follow>;
 };
 
 
@@ -471,6 +491,16 @@ export type QueryMyOrdersArgs = {
   status: OrderStatus;
 };
 
+
+export type QueryFollowersArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type QueryFollowingArgs = {
+  userId: Scalars['String'];
+};
+
 export type SignedS3 = {
   __typename?: 'SignedS3';
   signedRequest: Scalars['String'];
@@ -498,6 +528,8 @@ export type User = {
   isCreator: Scalars['Boolean'];
   avatar: Scalars['String'];
   about: Scalars['String'];
+  followerNum: Scalars['Float'];
+  isFollowed: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -686,6 +718,13 @@ export type SwitchAccountTypeMutationVariables = Exact<{
 
 export type SwitchAccountTypeMutation = { __typename?: 'Mutation', switchAccountType: boolean };
 
+export type ToggleFollowMutationVariables = Exact<{
+  targetUserId: Scalars['String'];
+}>;
+
+
+export type ToggleFollowMutation = { __typename?: 'Mutation', toggleFollow: boolean };
+
 export type UpdateAddressMutationVariables = Exact<{
   input: AddressInput;
   id: Scalars['Int'];
@@ -743,6 +782,13 @@ export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
+
+export type FollowersQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+
+export type FollowersQuery = { __typename?: 'Query', followers: Array<{ __typename?: 'Follow', id: number, followerId: string, follower: { __typename?: 'User', username: string } }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -804,7 +850,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', username: string, avatar: string } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about: string, avatar: string, isFollowed: boolean, followerNum: number } };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1546,6 +1592,37 @@ export function useSwitchAccountTypeMutation(baseOptions?: Apollo.MutationHookOp
 export type SwitchAccountTypeMutationHookResult = ReturnType<typeof useSwitchAccountTypeMutation>;
 export type SwitchAccountTypeMutationResult = Apollo.MutationResult<SwitchAccountTypeMutation>;
 export type SwitchAccountTypeMutationOptions = Apollo.BaseMutationOptions<SwitchAccountTypeMutation, SwitchAccountTypeMutationVariables>;
+export const ToggleFollowDocument = gql`
+    mutation toggleFollow($targetUserId: String!) {
+  toggleFollow(targetUserId: $targetUserId)
+}
+    `;
+export type ToggleFollowMutationFn = Apollo.MutationFunction<ToggleFollowMutation, ToggleFollowMutationVariables>;
+
+/**
+ * __useToggleFollowMutation__
+ *
+ * To run a mutation, you first call `useToggleFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleFollowMutation, { data, loading, error }] = useToggleFollowMutation({
+ *   variables: {
+ *      targetUserId: // value for 'targetUserId'
+ *   },
+ * });
+ */
+export function useToggleFollowMutation(baseOptions?: Apollo.MutationHookOptions<ToggleFollowMutation, ToggleFollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleFollowMutation, ToggleFollowMutationVariables>(ToggleFollowDocument, options);
+      }
+export type ToggleFollowMutationHookResult = ReturnType<typeof useToggleFollowMutation>;
+export type ToggleFollowMutationResult = Apollo.MutationResult<ToggleFollowMutation>;
+export type ToggleFollowMutationOptions = Apollo.BaseMutationOptions<ToggleFollowMutation, ToggleFollowMutationVariables>;
 export const UpdateAddressDocument = gql`
     mutation updateAddress($input: AddressInput!, $id: Int!) {
   updateAddress(input: $input, id: $id) {
@@ -1872,6 +1949,45 @@ export function useCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CartItemsQueryHookResult = ReturnType<typeof useCartItemsQuery>;
 export type CartItemsLazyQueryHookResult = ReturnType<typeof useCartItemsLazyQuery>;
 export type CartItemsQueryResult = Apollo.QueryResult<CartItemsQuery, CartItemsQueryVariables>;
+export const FollowersDocument = gql`
+    query followers($userId: String!) {
+  followers(userId: $userId) {
+    id
+    followerId
+    follower {
+      username
+    }
+  }
+}
+    `;
+
+/**
+ * __useFollowersQuery__
+ *
+ * To run a query within a React component, call `useFollowersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFollowersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFollowersQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFollowersQuery(baseOptions: Apollo.QueryHookOptions<FollowersQuery, FollowersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FollowersQuery, FollowersQueryVariables>(FollowersDocument, options);
+      }
+export function useFollowersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FollowersQuery, FollowersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FollowersQuery, FollowersQueryVariables>(FollowersDocument, options);
+        }
+export type FollowersQueryHookResult = ReturnType<typeof useFollowersQuery>;
+export type FollowersLazyQueryHookResult = ReturnType<typeof useFollowersLazyQuery>;
+export type FollowersQueryResult = Apollo.QueryResult<FollowersQuery, FollowersQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -2226,8 +2342,12 @@ export type PostsByCreatorQueryResult = Apollo.QueryResult<PostsByCreatorQuery, 
 export const UserDocument = gql`
     query user($id: String!) {
   user(id: $id) {
+    id
     username
+    about
     avatar
+    isFollowed
+    followerNum
   }
 }
     `;

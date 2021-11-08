@@ -14,6 +14,7 @@ import {
   useMyOrdersLazyQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
+import { AddIcon } from "@chakra-ui/icons";
 
 export enum OrderStatus {
   PaymentPending = "PaymentPending",
@@ -36,8 +37,6 @@ const Order: React.FC<OrderProps> = ({}) => {
   // const [myOrders, { loading, error, data }] = useCartItemsLazyQuery();
 
   const [myOrders, { loading, error, data }] = useMyOrdersLazyQuery();
-  console.log("hi");
-  console.log(data);
 
   useEffect(() => {
     myOrders({
@@ -148,16 +147,36 @@ const Order: React.FC<OrderProps> = ({}) => {
         </Box>
       </Flex>
       <Wrapper mt={0}>
-        <Box mt={2}>
-          <Heading fontSize="md">Delivery Address</Heading>
-          <Text d="inline">{address?.address.line1}</Text>
-          <Text d="inline">{address?.address.line2}, </Text>
-          <Text d="inline">{address?.address.subdistrict} </Text>
-          <Text>{address?.address.district} </Text>
-          <Text d="inline">{address?.address.province}</Text>
-          {/* <Text>{address?.address.country}</Text> */}
-          <Text d="inline"> {address?.address.postcode}</Text>
-        </Box>
+        <Heading fontSize="md">Delivery Address</Heading>
+        {orderStatus}
+        {[
+          OrderStatus.PaymentPending,
+          OrderStatus.ToDeliver,
+          OrderStatus.OnDelivery,
+        ].includes(orderStatus!) &&
+          (address ? (
+            <Box mt={2}>
+              <Text d="inline">{address?.address.line1}</Text>
+              <Text d="inline">{address?.address.line2} </Text>
+              <Text d="inline">{address?.address.subdistrict} </Text>
+              <Text>{address?.address.district} </Text>
+              <Text d="inline">{address?.address.province}</Text>
+              {/* <Text>{address?.address.country}</Text> */}
+              <Text d="inline"> {address?.address.postcode}</Text>
+            </Box>
+          ) : (
+            <Box>
+              <Text>You have not added your address. Please add one</Text>
+              <NextLink
+                href="/account/address/create"
+                as="/account/address/create"
+              >
+                <Button colorScheme="teal" leftIcon={<AddIcon />}>
+                  Add address
+                </Button>
+              </NextLink>
+            </Box>
+          ))}
 
         {!data ? (
           <Text>No data</Text>
