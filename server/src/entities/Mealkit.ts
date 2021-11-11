@@ -1,4 +1,4 @@
-import { Field, InputType, Int, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 
 import {
   Entity,
@@ -8,8 +8,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  OneToOne,
-  JoinColumn,
   OneToMany,
 } from "typeorm";
 import { CartItem } from "./CartItem";

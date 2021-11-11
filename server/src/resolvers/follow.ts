@@ -60,7 +60,7 @@ export class FollowResolver {
 
       return true;
     } else {
-      Follow.delete({ userId: targetUserId, followerId: req.session.userId });
+       Follow.delete({ userId: targetUserId, followerId: req.session.userId });
       if (user) {
         await User.update(
           { id: targetUserId },

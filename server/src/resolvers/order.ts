@@ -37,9 +37,6 @@ export class OrderResolver {
     @Arg("cartItemIds", () => [Int]) cartItemIds: number[],
     @Arg("grossOrder", () => Int) grossOrder: number //need Int due to reflection system
   ): Promise<Order | undefined> {
-    // qr
-    const base64raw = await createScbQr(grossOrder, req.session.userId!);
-    const base64Text = `data:image/png;base64, ${base64raw.data.qrImage}`;
     // S3
     const now = Date.now().toString();
     // s3 signed request
@@ -48,32 +45,40 @@ export class OrderResolver {
     const url = `https://${s3Bucket}.s3.amazonaws.com/${req.session.userId}/${now}`;
     //s3 signed request done
 
+    // payment object
+    const payment = await Payment.create({
+      amount: grossOrder,
+      qrUrl: url,
+    }).save();
+
+    const order = await Order.create({
+      grossOrder: grossOrder,
+      status: OrderStatus.PaymentPending,
+      userId: req.session.userId,
+      paymentId: payment.id,
+      //   cartItemId: 123,
+    }).save();
+
     // save to S3 start
     const options = {
       headers: {
         "Content-Type": "utf-8",
       },
     };
-
+    // qr
+    const base64raw = await createScbQr(
+      grossOrder,
+      req.session.userId!,
+      order.id
+    );
+    const base64Text = `data:image/png;base64, ${base64raw.data.qrImage}`;
     // await axios.put(signedRequest, image, options);
     await axios.put(signedRequest, base64Text, options);
     // save to S3 done
     // save url to database
-    const payment = await Payment.create({
-      amount: grossOrder,
-      qrUrl: url,
-    }).save();
 
     // loop through every cartItem
     // orderId
-
-    const order = await Order.create({
-      grossOrder: grossOrder,
-      status: OrderStatus.PaymentPending,
-      userId: "5619ffb2-6ce2-42cf-bd5c-042f2685a045",
-      paymentId: payment.id,
-      //   cartItemId: 123,
-    }).save();
 
     cartItemIds.forEach(async (cartItemId) => {
       await getConnection()

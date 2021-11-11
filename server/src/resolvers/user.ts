@@ -13,17 +13,15 @@ import {
   InputType,
 } from "type-graphql";
 import { MyContext } from "../types";
+import { v4 } from "uuid";
+import { getConnection } from "typeorm";
+import bcrypt from "bcrypt";
+import { isAuth } from "../middlware/isAuth";
+import { Follow } from "../entities/Follow";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
-import { emitWarning } from "process";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
-import { v4 } from "uuid";
-import { ContainerInterface, getConnection } from "typeorm";
-import bcrypt from "bcrypt";
-import { isAuth } from "../middlware/isAuth";
-import { registerEnumType } from "type-graphql";
-import { Follow } from "../entities/Follow";
 
 @ObjectType()
 class FieldError {

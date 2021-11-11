@@ -5,17 +5,14 @@ import { Post } from "./entities/Post";
 import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
-import { HelloResolver } from "./resolvers/hello";
 import { UserResolver } from "./resolvers/user";
 import { PostResolver } from "./resolvers/post";
 import { MyContext } from "./types";
-
 import Redis from "ioredis";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { COOKIE_NAME, __prod__ } from "./constants";
 import cors from "cors";
-import { sendEmail } from "./utils/sendEmail";
 import path from "path";
 import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
@@ -24,18 +21,15 @@ import { Address } from "./entities/Address";
 import { CartItem } from "./entities/CartItem";
 import { Mealkit } from "./entities/Mealkit";
 import { AddressResolver } from "./resolvers/address";
-import { sendSMS } from "./utils/sendSms";
 import { MealkitResolver } from "./resolvers/mealkit";
 import { CartItemResolver } from "./resolvers/cartItem";
 import "dotenv-safe/config";
-import { Token } from "graphql";
 import { PaymentResolver } from "./resolvers/payment";
-import { Order } from "./entities/Order";
+import { Order, OrderStatus } from "./entities/Order";
 import { OrderResolver } from "./resolvers/order";
 import { Payment } from "./entities/Payment";
 import { Follow } from "./entities/Follow";
 import { FollowResolver } from "./resolvers/follow";
-// import { createUpvoteLoader } from "./utils/createUpvoteLoader";
 
 const main = async () => {
   const conn = await createConnection({
@@ -65,15 +59,49 @@ const main = async () => {
   // await conn.runMigrations();
   const app = express();
 
-  console.log(process.memoryUsage());
+  // console.log(process.memoryUsage());
   // sendSMS();
   // generateQr();
   // generateQr();
 
-  app.get("/payment-confirmation", (req, res) => {
-    console.log("req");
-    // console.log(req);
-    res.send("payment paid");
+  app.use(
+    express.urlencoded({
+      extended: true,
+    })
+  );
+  app.use(express.json());
+
+  app.get("/redirect", (req, res) => {
+    res.redirect("http://google.com/");
+  });
+
+  app.post("/payment-confirmation", async (req, res) => {
+    try {
+      console.log(req);
+      console.log("req.body");
+      console.log(req.body);
+      const ref1 = parseInt(req.body.billPaymentRef1);
+      console.log({ ref1 });
+      await Order.update({ id: ref1 }, { status: OrderStatus.ToDeliver });
+      res.send({
+        resCode: "00",
+        "resDesc ": "success",
+        transactionId: "xxx",
+        confirmId: "xxx",
+      });
+
+      // res.redirect("http://google.com/");
+      // res.writeHead(302, {
+      //   Location: '"http://google.com/"',
+      // });
+      // res.end();
+    } catch (error) {
+      console.log(error);
+      // res.send(error);
+      // res.send({
+      //   error: error,
+      // });
+    }
   });
 
   const RedisStore = connectRedis(session);
@@ -110,7 +138,6 @@ const main = async () => {
 
   const schema = await buildSchema({
     resolvers: [
-      HelloResolver,
       UserResolver,
       PostResolver,
       AddressResolver,

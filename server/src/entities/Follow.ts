@@ -1,7 +1,6 @@
 import { Field, ObjectType } from "type-graphql";
 import {
   Column,
-  PrimaryColumn,
   BaseEntity,
   Entity,
   CreateDateColumn,

@@ -144,7 +144,11 @@ export const scbToken = async () => {
   }
 };
 
-export const createScbQr = async (amount: number, userId: string) => {
+export const createScbQr = async (
+  amount: number,
+  userId: string,
+  orderId: number
+) => {
   try {
     const token = await scbToken();
     console.log({ token });
@@ -163,8 +167,10 @@ export const createScbQr = async (amount: number, userId: string) => {
         ppType: "BILLERID", //change later
         ppId: BILLER_ID,
         amount: amount,
-        ref1: "REFERENCE1",
-        ref2: "REFERENCE2",
+        ref1: orderId.toString(),
+        // ref1: "REFERENCE1",
+        // ref2: "REFERENCE2",
+        // ref2: orderId.toString(),
         ref3: "SCB", // -> NEED UNTIL THIS
       }),
     };
@@ -185,56 +191,56 @@ export const createScbQr = async (amount: number, userId: string) => {
 
 @Resolver()
 export class PaymentResolver {
-  @Query(() => qrOutput)
-  @UseMiddleware(isAuth)
-  async createScbQr(
-    // @Arg('requestId',() => String) requestId: string
-    @Arg("amount", () => Int) amount: number,
-    @Ctx() { req, res }: MyContext
-  ): Promise<qrOutput | undefined> {
-    try {
-      const token = await scbToken();
-      console.log(token);
+  // @Query(() => qrOutput)
+  // @UseMiddleware(isAuth)
+  // async createScbQr(
+  //   // @Arg('requestId',() => String) requestId: string
+  //   @Arg("amount", () => Int) amount: number,
+  //   @Ctx() { req, res }: MyContext
+  // ): Promise<qrOutput | undefined> {
+  //   try {
+  //     const token = await scbToken();
+  //     console.log(token);
 
-      const qr_headers = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "accept-language": "EN", //or "TH"
-          authorization: `Bearer ${token}`,
-          requestUId: "later",
-          resourceOwnerId: SCB_API_KEY,
-        },
+  //     const qr_headers = {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "accept-language": "EN", //or "TH"
+  //         authorization: `Bearer ${token}`,
+  //         requestUId: "later",
+  //         resourceOwnerId: SCB_API_KEY,
+  //       },
 
-        body: JSON.stringify({
-          qrType: "PP", //QR30
-          ppType: "BILLERID", //change later
-          ppId: BILLER_ID,
-          amount: amount,
-          ref1: "REFERENCE1",
-          ref2: "REFERENCE2",
-          ref3: "SCB", // -> NEED UNTIL THIS
-        }),
-      };
-      console.log(qr_headers.headers.authorization);
+  //       body: JSON.stringify({
+  //         qrType: "PP", //QR30
+  //         ppType: "BILLERID", //change later
+  //         ppId: BILLER_ID,
+  //         amount: amount,
+  //         ref1: "REFERENCE1",
+  //         ref2: "REFERENCE2",
+  //         ref3: "SCB", // -> NEED UNTIL THIS
+  //       }),
+  //     };
+  //     console.log(qr_headers.headers.authorization);
 
-      const response = await fetch(
-        "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create",
-        { ...qr_headers }
-      );
+  //     const response = await fetch(
+  //       "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create",
+  //       { ...qr_headers }
+  //     );
 
-      console.log({ response });
-      const data: any = await response.json();
-      console.log({ data });
+  //     console.log({ response });
+  //     const data: any = await response.json();
+  //     console.log({ data });
 
-      //save to s3 end
+  //     //save to s3 end
 
-      return data;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
-  }
+  //     return data;
+  //   } catch (error) {
+  //     console.log(error);
+  //     return undefined;
+  //   }
+  // }
 
   @Query(() => Payment)
   @UseMiddleware(isAuth)
