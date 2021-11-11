@@ -122,7 +122,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
           </Box>
 
           <Button width="100%" bgColor={primaryColor} color="white">
-            Pay now
+            Upload slip
           </Button>
         </Flex>
       </Box>

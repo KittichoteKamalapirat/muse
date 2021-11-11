@@ -1,12 +1,12 @@
-query createScbQr($amount: Int!) {
-  createScbQr(amount: $amount) {
-    status {
-      code
-      description
-    }
-    data {
-      qrRawData
-      qrImage
-    }
-  }
-}
+# query createScbQr($amount: Int!) {
+#   createScbQr(amount: $amount) {
+#     status {
+#       code
+#       description
+#     }
+#     data {
+#       qrRawData
+#       qrImage
+#     }
+#   }
+# }

@@ -31,7 +31,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
       country: values.country,
       postcode: values.postcode,
     };
-    const { errors } = await createAddress({ variables: { input } });
+    const { errors } = await createAddress({ variables: { input } }); //somehow no need to manuall update cache
     router.push("/account/address");
 
     if (errors) {

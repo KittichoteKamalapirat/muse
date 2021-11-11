@@ -8,7 +8,6 @@ import {
   useAddressQuery,
   useCartItemsQuery,
   useCreateOrderMutation,
-  useCreateScbQrQuery,
   useMeQuery,
   useUpdateCartItemMutation,
 } from "../generated/graphql";
@@ -72,6 +71,13 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
         <div>{error?.message}</div>
       </div>
     );
+  }
+
+  if (orderLoading) {
+    return <Text>Creating payment</Text>;
+  }
+  if (orderData) {
+    router.push(`/payment/${orderData?.createOrder.id}`);
   }
 
   return (
@@ -168,24 +174,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   grossOrder: gross,
                 },
               });
-              if (!orderLoading && orderData?.createOrder.id) {
-                router.push(`/payment/${orderData?.createOrder.id}`);
-              }
+              // if (!orderLoading && orderData?.createOrder.id) {
+              //   console.log(orderLoading);
+              //   console.log(3);
+              //   router.push(`/payment/${orderData?.createOrder.id}`);
+              // }
             }}
           >
             Make a payment
           </Box>
-          {/* <NextLink href={{ pathname: "/payment" }}>
-            <Link>Make a payment</Link>
-          </NextLink> */}
-
-          {/* <Button
-            onClick={() => {
-              createScbQr(gross);
-            }}
-          >
-            Make a payment
-          </Button> */}
         </Box>
       </Flex>
 

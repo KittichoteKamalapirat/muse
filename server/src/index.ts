@@ -30,6 +30,8 @@ import { OrderResolver } from "./resolvers/order";
 import { Payment } from "./entities/Payment";
 import { Follow } from "./entities/Follow";
 import { FollowResolver } from "./resolvers/follow";
+import { PaymentInfo } from "./entities/PaymentInfo";
+import { PaymentInfoResolver } from "./resolvers/paymentInfo";
 
 const main = async () => {
   const conn = await createConnection({
@@ -53,6 +55,7 @@ const main = async () => {
       Order,
       Payment,
       Follow,
+      PaymentInfo,
     ],
   });
 
@@ -146,6 +149,7 @@ const main = async () => {
       PaymentResolver,
       OrderResolver,
       FollowResolver,
+      PaymentInfoResolver,
     ],
     validate: false,
   });

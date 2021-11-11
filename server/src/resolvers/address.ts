@@ -47,7 +47,7 @@ class ProfileInput {
 @Resolver()
 export class AddressResolver {
   @Query(() => Address)
-  async address(@Ctx() { req }: MyContext): Promise<Address | undefined> {
+  address(@Ctx() { req }: MyContext): Promise<Address | undefined> {
     return Address.findOne({ userId: req.session.userId });
   }
   @Mutation(() => Address)

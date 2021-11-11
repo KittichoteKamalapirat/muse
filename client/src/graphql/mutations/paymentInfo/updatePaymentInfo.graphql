@@ -1,0 +1,8 @@
+mutation updatePaymentInfo($id: Int!, $input: PaymentInfoInput!) {
+  updatePaymentInfo(id: $id, input: $input) {
+    id
+    userId
+    bankCode
+    bankAccount
+  }
+}

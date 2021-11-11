@@ -177,6 +177,9 @@ export type Mutation = {
   deleteCartItem: Scalars['Boolean'];
   createOrder: Order;
   toggleFollow: Scalars['Boolean'];
+  createPaymentInfo: PaymentInfo;
+  updatePaymentInfo?: Maybe<PaymentInfo>;
+  deletePaymentInfo: Scalars['Boolean'];
 };
 
 
@@ -313,6 +316,22 @@ export type MutationToggleFollowArgs = {
   targetUserId: Scalars['String'];
 };
 
+
+export type MutationCreatePaymentInfoArgs = {
+  input: PaymentInfoInput;
+};
+
+
+export type MutationUpdatePaymentInfoArgs = {
+  input: PaymentInfoInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeletePaymentInfoArgs = {
+  id: Scalars['Int'];
+};
+
 export type Order = {
   __typename?: 'Order';
   id: Scalars['Float'];
@@ -348,6 +367,22 @@ export type Payment = {
   qrUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type PaymentInfo = {
+  __typename?: 'PaymentInfo';
+  id: Scalars['Float'];
+  bankAccount: Scalars['String'];
+  bankCode: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type PaymentInfoInput = {
+  bankAccount: Scalars['String'];
+  bankCode: Scalars['String'];
 };
 
 export type Person = {
@@ -399,15 +434,8 @@ export type PostSignedS3 = {
   thumbnailUrl: Scalars['String'];
 };
 
-export type QrData = {
-  __typename?: 'QrData';
-  qrRawData: Scalars['String'];
-  qrImage: Scalars['String'];
-};
-
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   users: Array<User>;
   user: User;
   me?: Maybe<User>;
@@ -418,7 +446,6 @@ export type Query = {
   address: Address;
   mealkits?: Maybe<Array<Mealkit>>;
   cartItems: Array<CartItem>;
-  createScbQr: QrOutput;
   payment: Payment;
   confirmPayment: ConfirmationResponse;
   orderItems: Array<CartItem>;
@@ -426,6 +453,7 @@ export type Query = {
   myOrders: Array<Order>;
   followers: Array<Follow>;
   following: Array<Follow>;
+  paymentInfo?: Maybe<PaymentInfo>;
 };
 
 
@@ -458,11 +486,6 @@ export type QueryPostArgs = {
 
 export type QueryMealkitsArgs = {
   postId: Scalars['Int'];
-};
-
-
-export type QueryCreateScbQrArgs = {
-  amount: Scalars['Int'];
 };
 
 
@@ -527,7 +550,7 @@ export type User = {
   phonenumber: Scalars['String'];
   isCreator: Scalars['Boolean'];
   avatar: Scalars['String'];
-  about: Scalars['String'];
+  about?: Maybe<Scalars['String']>;
   followerNum: Scalars['Float'];
   isFollowed: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];
@@ -555,12 +578,6 @@ export type UsernamePasswordInput = {
   password?: Maybe<Scalars['String']>;
 };
 
-export type QrOutput = {
-  __typename?: 'qrOutput';
-  status: Status;
-  data: QrData;
-};
-
 export type SignS3Params = {
   name: Scalars['String'];
   type: Scalars['String'];
@@ -576,9 +593,9 @@ export type PostSnippetFragment = { __typename?: 'Post', id: number, title: stri
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string }> };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> }> };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -586,7 +603,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string }> } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> }> } };
 
 export type CreateAddressMutationVariables = Exact<{
   input: AddressInput;
@@ -624,13 +641,6 @@ export type CreatePostMutationVariables = Exact<{
 
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, videoUrl: string, points: number, creatorId: string, createdAt: string, updatedAt: string, instruction?: Maybe<Array<string>>, advice?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number> } };
-
-export type CreateScbQrQueryVariables = Exact<{
-  amount: Scalars['Int'];
-}>;
-
-
-export type CreateScbQrQuery = { __typename?: 'Query', createScbQr: { __typename?: 'qrOutput', status: { __typename?: 'Status', code: number, description: string }, data: { __typename?: 'QrData', qrRawData: string, qrImage: string } } };
 
 export type CreatorOrderItemsQueryVariables = Exact<{
   status: OrderStatus;
@@ -680,19 +690,46 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
+export type CreatePaymentInfoMutationVariables = Exact<{
+  input: PaymentInfoInput;
+}>;
+
+
+export type CreatePaymentInfoMutation = { __typename?: 'Mutation', createPaymentInfo: { __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string } };
+
+export type DeletePaymentInfoMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePaymentInfoMutation = { __typename?: 'Mutation', deletePaymentInfo: boolean };
+
+export type PaymentInfoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PaymentInfoQuery = { __typename?: 'Query', paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> };
+
+export type UpdatePaymentInfoMutationVariables = Exact<{
+  id: Scalars['Int'];
+  input: PaymentInfoInput;
+}>;
+
+
+export type UpdatePaymentInfoMutation = { __typename?: 'Mutation', updatePaymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> };
+
 export type RegisterMutationVariables = Exact<{
   data: UsernamePasswordInput;
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> }> } };
 
 export type SignMealkitS3MutationVariables = Exact<{
   input: Array<SignS3Params> | SignS3Params;
@@ -763,7 +800,7 @@ export type UpdateUserMutationVariables = Exact<{
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, phonenumber: string, about: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, phonenumber: string, about?: Maybe<string> } };
 
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
@@ -793,7 +830,7 @@ export type FollowersQuery = { __typename?: 'Query', followers: Array<{ __typena
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about: string }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string> }> };
 
 export type MealkitsQueryVariables = Exact<{
   postId: Scalars['Int'];
@@ -850,7 +887,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about: string, avatar: string, isFollowed: boolean, followerNum: number } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about?: Maybe<string>, avatar: string, isFollowed: boolean, followerNum: number } };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1140,48 +1177,6 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
-export const CreateScbQrDocument = gql`
-    query createScbQr($amount: Int!) {
-  createScbQr(amount: $amount) {
-    status {
-      code
-      description
-    }
-    data {
-      qrRawData
-      qrImage
-    }
-  }
-}
-    `;
-
-/**
- * __useCreateScbQrQuery__
- *
- * To run a query within a React component, call `useCreateScbQrQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreateScbQrQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCreateScbQrQuery({
- *   variables: {
- *      amount: // value for 'amount'
- *   },
- * });
- */
-export function useCreateScbQrQuery(baseOptions: Apollo.QueryHookOptions<CreateScbQrQuery, CreateScbQrQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CreateScbQrQuery, CreateScbQrQueryVariables>(CreateScbQrDocument, options);
-      }
-export function useCreateScbQrLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreateScbQrQuery, CreateScbQrQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CreateScbQrQuery, CreateScbQrQueryVariables>(CreateScbQrDocument, options);
-        }
-export type CreateScbQrQueryHookResult = ReturnType<typeof useCreateScbQrQuery>;
-export type CreateScbQrLazyQueryHookResult = ReturnType<typeof useCreateScbQrLazyQuery>;
-export type CreateScbQrQueryResult = Apollo.QueryResult<CreateScbQrQuery, CreateScbQrQueryVariables>;
 export const CreatorOrderItemsDocument = gql`
     query creatorOrderItems($status: OrderStatus!) {
   creatorOrderItems(status: $status) {
@@ -1450,6 +1445,147 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const CreatePaymentInfoDocument = gql`
+    mutation createPaymentInfo($input: PaymentInfoInput!) {
+  createPaymentInfo(input: $input) {
+    id
+    userId
+    bankCode
+    bankAccount
+  }
+}
+    `;
+export type CreatePaymentInfoMutationFn = Apollo.MutationFunction<CreatePaymentInfoMutation, CreatePaymentInfoMutationVariables>;
+
+/**
+ * __useCreatePaymentInfoMutation__
+ *
+ * To run a mutation, you first call `useCreatePaymentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePaymentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPaymentInfoMutation, { data, loading, error }] = useCreatePaymentInfoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePaymentInfoMutation(baseOptions?: Apollo.MutationHookOptions<CreatePaymentInfoMutation, CreatePaymentInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePaymentInfoMutation, CreatePaymentInfoMutationVariables>(CreatePaymentInfoDocument, options);
+      }
+export type CreatePaymentInfoMutationHookResult = ReturnType<typeof useCreatePaymentInfoMutation>;
+export type CreatePaymentInfoMutationResult = Apollo.MutationResult<CreatePaymentInfoMutation>;
+export type CreatePaymentInfoMutationOptions = Apollo.BaseMutationOptions<CreatePaymentInfoMutation, CreatePaymentInfoMutationVariables>;
+export const DeletePaymentInfoDocument = gql`
+    mutation deletePaymentInfo($id: Int!) {
+  deletePaymentInfo(id: $id)
+}
+    `;
+export type DeletePaymentInfoMutationFn = Apollo.MutationFunction<DeletePaymentInfoMutation, DeletePaymentInfoMutationVariables>;
+
+/**
+ * __useDeletePaymentInfoMutation__
+ *
+ * To run a mutation, you first call `useDeletePaymentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePaymentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePaymentInfoMutation, { data, loading, error }] = useDeletePaymentInfoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePaymentInfoMutation(baseOptions?: Apollo.MutationHookOptions<DeletePaymentInfoMutation, DeletePaymentInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePaymentInfoMutation, DeletePaymentInfoMutationVariables>(DeletePaymentInfoDocument, options);
+      }
+export type DeletePaymentInfoMutationHookResult = ReturnType<typeof useDeletePaymentInfoMutation>;
+export type DeletePaymentInfoMutationResult = Apollo.MutationResult<DeletePaymentInfoMutation>;
+export type DeletePaymentInfoMutationOptions = Apollo.BaseMutationOptions<DeletePaymentInfoMutation, DeletePaymentInfoMutationVariables>;
+export const PaymentInfoDocument = gql`
+    query paymentInfo {
+  paymentInfo {
+    id
+    userId
+    bankCode
+    bankAccount
+  }
+}
+    `;
+
+/**
+ * __usePaymentInfoQuery__
+ *
+ * To run a query within a React component, call `usePaymentInfoQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentInfoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentInfoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePaymentInfoQuery(baseOptions?: Apollo.QueryHookOptions<PaymentInfoQuery, PaymentInfoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaymentInfoQuery, PaymentInfoQueryVariables>(PaymentInfoDocument, options);
+      }
+export function usePaymentInfoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentInfoQuery, PaymentInfoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaymentInfoQuery, PaymentInfoQueryVariables>(PaymentInfoDocument, options);
+        }
+export type PaymentInfoQueryHookResult = ReturnType<typeof usePaymentInfoQuery>;
+export type PaymentInfoLazyQueryHookResult = ReturnType<typeof usePaymentInfoLazyQuery>;
+export type PaymentInfoQueryResult = Apollo.QueryResult<PaymentInfoQuery, PaymentInfoQueryVariables>;
+export const UpdatePaymentInfoDocument = gql`
+    mutation updatePaymentInfo($id: Int!, $input: PaymentInfoInput!) {
+  updatePaymentInfo(id: $id, input: $input) {
+    id
+    userId
+    bankCode
+    bankAccount
+  }
+}
+    `;
+export type UpdatePaymentInfoMutationFn = Apollo.MutationFunction<UpdatePaymentInfoMutation, UpdatePaymentInfoMutationVariables>;
+
+/**
+ * __useUpdatePaymentInfoMutation__
+ *
+ * To run a mutation, you first call `useUpdatePaymentInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdatePaymentInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updatePaymentInfoMutation, { data, loading, error }] = useUpdatePaymentInfoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdatePaymentInfoMutation(baseOptions?: Apollo.MutationHookOptions<UpdatePaymentInfoMutation, UpdatePaymentInfoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdatePaymentInfoMutation, UpdatePaymentInfoMutationVariables>(UpdatePaymentInfoDocument, options);
+      }
+export type UpdatePaymentInfoMutationHookResult = ReturnType<typeof useUpdatePaymentInfoMutation>;
+export type UpdatePaymentInfoMutationResult = Apollo.MutationResult<UpdatePaymentInfoMutation>;
+export type UpdatePaymentInfoMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentInfoMutation, UpdatePaymentInfoMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($data: UsernamePasswordInput!) {
   register(data: $data) {

@@ -150,6 +150,16 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
 
         <Box mt={4}>
           <Heading fontSize="md">Others</Heading>
+
+          <Box mt={2}>
+            <NextLink href="/myshop/payment-info">
+              <Link>
+                {/* <HeartIcon isactive={false} mr={2} /> */}
+                Payment Info
+              </Link>
+            </NextLink>
+            <Divider mt={2} />
+          </Box>
         </Box>
       </Wrapper>
     </Layout>

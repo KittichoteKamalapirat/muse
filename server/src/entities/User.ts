@@ -15,6 +15,7 @@ import { CartItem } from "./CartItem";
 import { Follow } from "./Follow";
 import { Mealkit } from "./Mealkit";
 import { Order } from "./Order";
+import { PaymentInfo } from "./PaymentInfo";
 import { Post } from "./Post";
 import { Upvote } from "./Upvote";
 
@@ -90,6 +91,10 @@ export class User extends BaseEntity {
 
   @OneToMany((type) => Follow, (following) => following.follower)
   following: Follow[];
+
+  @OneToOne((type) => PaymentInfo, (paymentInfo) => paymentInfo.user)
+  @JoinColumn()
+  paymentInfo: PaymentInfo;
 
   @CreateDateColumn()
   @Field()
