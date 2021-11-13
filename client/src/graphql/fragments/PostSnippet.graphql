@@ -3,6 +3,7 @@ fragment PostSnippet on Post {
   title
   textSnippet
   videoUrl
+  thumbnailUrl
   createdAt
   updatedAt
   points

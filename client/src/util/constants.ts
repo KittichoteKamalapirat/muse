@@ -1,5 +1,9 @@
 export const banksArray = [
   {
+    bank: "พร้อมเพย์",
+    bankCode: "Promptpay",
+  },
+  {
     bank: "ไทยพาณิชย์",
     bankCode: "SCB",
   },

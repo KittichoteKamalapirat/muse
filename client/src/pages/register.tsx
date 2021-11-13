@@ -23,7 +23,6 @@ export const Register: React.FC<registerProps> = ({}) => {
           password: "",
         }}
         onSubmit={async (values, { setErrors }) => {
-          console.log(values);
           const response = await register({
             variables: { data: values },
             update: (cache, { data }) => {

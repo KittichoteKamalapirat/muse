@@ -1,8 +1,14 @@
 mutation updatePaymentInfo($id: Int!, $input: PaymentInfoInput!) {
   updatePaymentInfo(id: $id, input: $input) {
-    id
-    userId
-    bankCode
-    bankAccount
+    errors {
+      field
+      message
+    }
+    paymentInfo {
+      id
+      userId
+      bankCode
+      bankAccount
+    }
   }
 }

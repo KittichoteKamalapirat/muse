@@ -53,7 +53,10 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
           <Box>
             <Flex justifyContent="flex-end">
               <Menu>
-                <MenuButton as={Button}> ...</MenuButton>
+                <MenuButton as={Button} bgColor="transparent">
+                  {" "}
+                  ...
+                </MenuButton>
                 <MenuList bgColor="white">
                   <NextLink href="/myshop/payment-info/edit">
                     <MenuItem icon={<EditIcon />} as={Link}>

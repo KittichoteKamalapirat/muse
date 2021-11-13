@@ -1,8 +1,14 @@
 mutation createPaymentInfo($input: PaymentInfoInput!) {
   createPaymentInfo(input: $input) {
-    id
-    userId
-    bankCode
-    bankAccount
+    errors {
+      field
+      message
+    }
+    paymentInfo {
+      id
+      userId
+      bankCode
+      bankAccount
+    }
   }
 }

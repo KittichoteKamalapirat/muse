@@ -12,6 +12,7 @@ import {
   useUpdatePaymentInfoMutation,
 } from "../../../generated/graphql";
 import { banksArray } from "../../../util/constants";
+import { toErrorMap } from "../../../util/toErrorMap";
 import { withApollo } from "../../../util/withApollo";
 
 interface EditPaymentInfoProps {}
@@ -33,8 +34,8 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
             bankCode: paymentInfo?.paymentInfo?.bankCode,
             bankAccount: paymentInfo?.paymentInfo?.bankAccount,
           }}
-          onSubmit={async (values) => {
-            const { errors } = await updatePaymentInfo({
+          onSubmit={async (values, { setErrors }) => {
+            const response = await updatePaymentInfo({
               variables: {
                 input: {
                   bankCode: values.bankCode!,
@@ -43,11 +44,15 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
                 id: paymentInfo?.paymentInfo?.id!,
               },
             });
-            router.push("/myshop/payment-info");
-            if (errors) {
-              throw new Error();
-            } else {
-              router.back();
+
+            if (response.data?.updatePaymentInfo?.errors) {
+              console.log("error");
+              console.log(response.data?.updatePaymentInfo?.errors);
+              // instead of setErrors({username: "error message"}) we do
+              setErrors(toErrorMap(response.data.updatePaymentInfo.errors));
+            } else if (response.data?.updatePaymentInfo?.paymentInfo) {
+              // work we get the user!
+              router.push("/myshop/payment-info");
             }
             return;
           }}
@@ -79,7 +84,7 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
                 colorScheme="teal"
               >
                 {" "}
-                Add
+                Update
               </Button>
             </Form>
           )}

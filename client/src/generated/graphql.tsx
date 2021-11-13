@@ -177,8 +177,8 @@ export type Mutation = {
   deleteCartItem: Scalars['Boolean'];
   createOrder: Order;
   toggleFollow: Scalars['Boolean'];
-  createPaymentInfo: PaymentInfo;
-  updatePaymentInfo?: Maybe<PaymentInfo>;
+  createPaymentInfo: PaymentInfoResponse;
+  updatePaymentInfo?: Maybe<PaymentInfoResponse>;
   deletePaymentInfo: Scalars['Boolean'];
 };
 
@@ -385,6 +385,12 @@ export type PaymentInfoInput = {
   bankCode: Scalars['String'];
 };
 
+export type PaymentInfoResponse = {
+  __typename?: 'PaymentInfoResponse';
+  errors?: Maybe<Array<FieldError>>;
+  paymentInfo?: Maybe<PaymentInfo>;
+};
+
 export type Person = {
   __typename?: 'Person';
   displayName: Scalars['String'];
@@ -589,7 +595,7 @@ export type SignedS3Result = {
   url: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -702,7 +708,7 @@ export type CreatePaymentInfoMutationVariables = Exact<{
 }>;
 
 
-export type CreatePaymentInfoMutation = { __typename?: 'Mutation', createPaymentInfo: { __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string } };
+export type CreatePaymentInfoMutation = { __typename?: 'Mutation', createPaymentInfo: { __typename?: 'PaymentInfoResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> } };
 
 export type DeletePaymentInfoMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -722,7 +728,7 @@ export type UpdatePaymentInfoMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePaymentInfoMutation = { __typename?: 'Mutation', updatePaymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> };
+export type UpdatePaymentInfoMutation = { __typename?: 'Mutation', updatePaymentInfo?: Maybe<{ __typename?: 'PaymentInfoResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> }> };
 
 export type RegisterMutationVariables = Exact<{
   data: UsernamePasswordInput;
@@ -873,7 +879,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
 
 export type PostsByCreatorQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -903,6 +909,7 @@ export const PostSnippetFragmentDoc = gql`
   title
   textSnippet
   videoUrl
+  thumbnailUrl
   createdAt
   updatedAt
   points
@@ -1448,10 +1455,16 @@ export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, L
 export const CreatePaymentInfoDocument = gql`
     mutation createPaymentInfo($input: PaymentInfoInput!) {
   createPaymentInfo(input: $input) {
-    id
-    userId
-    bankCode
-    bankAccount
+    errors {
+      field
+      message
+    }
+    paymentInfo {
+      id
+      userId
+      bankCode
+      bankAccount
+    }
   }
 }
     `;
@@ -1552,10 +1565,16 @@ export type PaymentInfoQueryResult = Apollo.QueryResult<PaymentInfoQuery, Paymen
 export const UpdatePaymentInfoDocument = gql`
     mutation updatePaymentInfo($id: Int!, $input: PaymentInfoInput!) {
   updatePaymentInfo(id: $id, input: $input) {
-    id
-    userId
-    bankCode
-    bankAccount
+    errors {
+      field
+      message
+    }
+    paymentInfo {
+      id
+      userId
+      bankCode
+      bankAccount
+    }
   }
 }
     `;

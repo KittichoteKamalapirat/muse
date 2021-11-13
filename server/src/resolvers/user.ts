@@ -22,14 +22,8 @@ import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
+import { FieldError } from "../utils/FieldError";
 
-@ObjectType()
-class FieldError {
-  @Field()
-  field: string;
-  @Field()
-  message: string;
-}
 // For User
 @ObjectType()
 class UserResponse {

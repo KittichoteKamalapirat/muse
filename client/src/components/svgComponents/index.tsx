@@ -1,0 +1,6 @@
+export { default as Scb } from './Scb'
+export { default as Thflag } from './Thflag'
+export { default as Why1 } from './Why1'
+export { default as Why2 } from './Why2'
+export { default as Why3 } from './Why3'
+export { default as Why4 } from './Why4'

@@ -5,6 +5,7 @@ import {
   InputType,
   Int,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
@@ -13,13 +14,23 @@ import { getConnection } from "typeorm";
 import { PaymentInfo } from "../entities/PaymentInfo";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import { FieldError } from "../utils/FieldError";
+import { validatePaymentInfo } from "../utils/validatePaymentInfo";
 
 @InputType()
-class PaymentInfoInput {
+export class PaymentInfoInput {
   @Field()
   bankAccount: string;
   @Field()
   bankCode: string;
+}
+
+@ObjectType()
+class PaymentInfoResponse {
+  @Field(() => [FieldError], { nullable: true })
+  errors?: FieldError[];
+  @Field(() => PaymentInfo, { nullable: true })
+  paymentInfo?: PaymentInfo;
 }
 
 @Resolver()
@@ -33,25 +44,32 @@ export class PaymentInfoResolver {
     return PaymentInfo.findOne({ userId: req.session.userId });
   }
 
-  @Mutation(() => PaymentInfo)
+  @Mutation(() => PaymentInfoResponse)
   @UseMiddleware(isAuth)
-  createPaymentInfo(
+  async createPaymentInfo(
     @Ctx() { req }: MyContext,
     @Arg("input") input: PaymentInfoInput
-  ): Promise<PaymentInfo> {
-    return PaymentInfo.create({
+  ): Promise<PaymentInfoResponse> {
+    const errors = validatePaymentInfo(input);
+    if (errors) return { errors: errors };
+
+    const paymentInfo = await PaymentInfo.create({
       ...input,
       userId: req.session.userId,
     }).save();
+    return { paymentInfo: paymentInfo };
   }
 
-  @Mutation(() => PaymentInfo, { nullable: true })
+  @Mutation(() => PaymentInfoResponse, { nullable: true })
   @UseMiddleware(isAuth)
   async updatePaymentInfo(
     @Ctx() { req }: MyContext,
     @Arg("id", () => Int) id: number,
     @Arg("input") input: PaymentInfoInput
-  ): Promise<PaymentInfo> {
+  ): Promise<PaymentInfoResponse> {
+    const errors = validatePaymentInfo(input);
+    if (errors) return { errors: errors };
+
     const result = await getConnection()
       .createQueryBuilder()
       .update(PaymentInfo)
@@ -62,7 +80,7 @@ export class PaymentInfoResolver {
       })
       .returning("*")
       .execute();
-    return result.raw[0];
+    return { paymentInfo: result.raw[0] };
   }
 
   @Mutation(() => Boolean)

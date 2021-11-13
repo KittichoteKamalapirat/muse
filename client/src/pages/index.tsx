@@ -15,9 +15,10 @@ import React from "react";
 import { UpvoteSection } from "../components/UpvoteSection";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { withApollo } from "../util/withApollo";
+import { Welcome } from "../components/Welcome";
 
 const Index = () => {
-  const { data: meData } = useMeQuery(); //this is renaming synta when destructing data => meData
+  const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
 
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
     variables: {
@@ -26,6 +27,17 @@ const Index = () => {
     },
   });
 
+  if (meLoading) {
+    return <Text>Loading</Text>;
+  }
+  if (!meData?.me) {
+    console.log("hi");
+
+    return <Welcome posts={data?.posts.posts} />;
+  }
+  if (loading) {
+    return <Text>Loading</Text>;
+  }
   if (!loading && !data) {
     return (
       <div>
@@ -38,78 +50,75 @@ const Index = () => {
     <Layout>
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
-      {!data && loading ? (
-        <div>loading ... </div>
-      ) : (
-        <Stack spacing={4}>
-          {data!.posts.posts.map((post) =>
-            !post ? null : (
-              <Box
-                key={post.id}
-                // shadow="md"
-                // borderWidth="1px"
-              >
-                <Flex alignItems="center" justifyContent="space-between">
-                  <NextLink
-                    href={{
-                      pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
-                      query: { id: post.creator.id },
-                    }}
-                  >
-                    <Link style={{ textDecoration: "none" }}>
-                      <Flex alignItems="center">
-                        <Image
-                          m={2}
-                          width="2.5rem"
-                          src={post.creator.avatar}
-                          alt="creator avatar"
-                          borderRadius="50%"
-                          border={2}
-                          borderStyle="solid"
-                          borderColor="red.400"
-                        />
 
-                        <Text>{post.creator.username}</Text>
-                      </Flex>
-                    </Link>
-                  </NextLink>
+      <Stack spacing={4}>
+        {data!.posts.posts.map((post) =>
+          !post ? null : (
+            <Box
+              key={post.id}
+              // shadow="md"
+              // borderWidth="1px"
+            >
+              <Flex alignItems="center" justifyContent="space-between">
+                <NextLink
+                  href={{
+                    pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
+                    query: { id: post.creator.id },
+                  }}
+                >
+                  <Link style={{ textDecoration: "none" }}>
+                    <Flex alignItems="center">
+                      <Image
+                        m={2}
+                        width="2.5rem"
+                        src={post.creator.avatar}
+                        alt="creator avatar"
+                        borderRadius="50%"
+                        border={2}
+                        borderStyle="solid"
+                        borderColor="red.400"
+                      />
 
-                  {meData?.me?.id !== post.creator.id ? null : (
-                    <Box>
-                      <EditDeletePostButtons id={post.id} />
-                    </Box>
-                  )}
-                </Flex>
-
-                <Flex key={post.id}>
-                  <Box flex={1}>
-                    <video controls>
-                      <source src={post.videoUrl} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                    <Flex justifyContent="space-between">
-                      <UpvoteSection post={post} />
+                      <Text>{post.creator.username}</Text>
                     </Flex>
-                    <Box mx={2}>
-                      <NextLink
-                        href={{
-                          pathname: "/post/[id]",
-                          query: { id: post.id },
-                        }}
-                      >
-                        <Link style={{ textDecoration: "none" }}>
-                          <Heading fontSize="xl">{post.title}</Heading>
-                          <Text>{post.textSnippet}... </Text>
-                        </Link>
-                      </NextLink>
-                    </Box>
+                  </Link>
+                </NextLink>
+
+                {meData?.me?.id !== post.creator.id ? null : (
+                  <Box>
+                    <EditDeletePostButtons id={post.id} />
                   </Box>
-                </Flex>
-              </Box>
-            )
-          )}
-        </Stack>
-      )}
+                )}
+              </Flex>
+
+              <Flex key={post.id}>
+                <Box flex={1}>
+                  <video controls>
+                    <source src={post.videoUrl} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                  <Flex justifyContent="space-between">
+                    <UpvoteSection post={post} />
+                  </Flex>
+                  <Box mx={2}>
+                    <NextLink
+                      href={{
+                        pathname: "/post/[id]",
+                        query: { id: post.id },
+                      }}
+                    >
+                      <Link style={{ textDecoration: "none" }}>
+                        <Heading fontSize="xl">{post.title}</Heading>
+                        <Text>{post.textSnippet}... </Text>
+                      </Link>
+                    </NextLink>
+                  </Box>
+                </Box>
+              </Flex>
+            </Box>
+          )
+        )}
+      </Stack>
 
       {data && data.posts.hasMore ? (
         <Flex>
