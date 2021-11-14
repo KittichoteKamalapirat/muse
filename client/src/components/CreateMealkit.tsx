@@ -19,6 +19,8 @@ import React, { useState } from "react";
 import { MealkitInput, useCreateMealkitMutation } from "../generated/graphql";
 import { InputField } from "./InputField";
 import Dropzone from "react-dropzone";
+import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
+import { HeadingLayout } from "./HeadingLayout";
 
 interface CreateMealkitProps {
   input: {
@@ -64,7 +66,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         </Box>
       )}
       <Form>
-        <Heading>Create a meal kit</Heading>
+        {/* <Heading>Create a mealkit</Heading> */}
 
         <InputField
           name="name"
@@ -139,16 +141,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                 >
                   <ArrowUpIcon mt="3rem" />
 
-                  <Img
-                    src="./Icons/uploadMealkitIcon.svg"
-                    boxSize="10rem"
-                    fallbackSrc="https://via.placeholder.com/150"
-                  />
-                  <Image
-                    src="./Icons/uploadMealkitIcon.svg"
-                    boxSize="10rem"
-                    fallbackSrc="https://via.placeholder.com/150"
-                  />
+                  <SvgUploadMealkitIcon width="10rem" height="10rem" />
                   <Text textAlign="center" mb="2rem">
                     Drag and drop a video here, or click to select the file
                   </Text>

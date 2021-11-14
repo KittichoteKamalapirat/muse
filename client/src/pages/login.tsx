@@ -9,12 +9,13 @@ import { useRouter } from "next/dist/client/router";
 import NextLink from "next/link";
 import { withApollo } from "../util/withApollo";
 import { Layout } from "../components/Layout";
+import { WelcomeNav } from "../components/WelcomeNav";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (
-    <Layout>
+    <WelcomeNav>
       <Wrapper variant="small">
         <Box textAlign="center">
           <Text fontSize="xl">Log in</Text>
@@ -100,7 +101,7 @@ export const Login: React.FC<{}> = ({}) => {
           )}
         </Formik>
       </Wrapper>
-    </Layout>
+    </WelcomeNav>
   );
 };
 

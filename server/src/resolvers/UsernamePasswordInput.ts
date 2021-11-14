@@ -15,4 +15,7 @@ export class UsernamePasswordInput {
 
   @Field({ nullable: true })
   password: string;
+
+  @Field({ nullable: true })
+  isCreator?: boolean;
 }

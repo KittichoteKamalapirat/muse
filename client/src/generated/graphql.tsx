@@ -582,6 +582,7 @@ export type UsernamePasswordInput = {
   email: Scalars['String'];
   phonenumber: Scalars['String'];
   password?: Maybe<Scalars['String']>;
+  isCreator?: Maybe<Scalars['Boolean']>;
 };
 
 export type SignS3Params = {

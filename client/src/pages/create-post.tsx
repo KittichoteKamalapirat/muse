@@ -499,29 +499,31 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       break;
     case 4:
       render = (
-        <CreateMealkit
-          input={mealkitInput}
-          setInput={setMealkitInput}
-          nextStep={nextStep}
-          prevStep={prevStep}
-          mealkitFilesPreview={mealkitFilesPreview}
-          mealkitFilesPreviewHandler={mealkitFilesPreviewHandler}
-          handleOnDropMealkitFiles={(
-            acceptedFiles: any,
-            rejectedFiles: any
-          ) => {
-            console.log("handleondropvids");
-            console.log({ acceptedFiles });
-            handleOnDropMealkitFiles(acceptedFiles, rejectedFiles);
-          }}
-        />
+        <HeadingLayout heading="Add a mealkit">
+          <CreateMealkit
+            input={mealkitInput}
+            setInput={setMealkitInput}
+            nextStep={nextStep}
+            prevStep={prevStep}
+            mealkitFilesPreview={mealkitFilesPreview}
+            mealkitFilesPreviewHandler={mealkitFilesPreviewHandler}
+            handleOnDropMealkitFiles={(
+              acceptedFiles: any,
+              rejectedFiles: any
+            ) => {
+              console.log("handleondropvids");
+              console.log({ acceptedFiles });
+              handleOnDropMealkitFiles(acceptedFiles, rejectedFiles);
+            }}
+          />
+        </HeadingLayout>
       );
       break;
     default:
       render = <Text>step default {step}</Text>;
   }
   return (
-    <Wrapper variant="small">
+    <Box>
       <Box m="1rem">
         <Formik
           initialValues={postValues}
@@ -555,7 +557,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           )}
         </Formik>
       </Box>
-    </Wrapper>
+    </Box>
   );
 };
 

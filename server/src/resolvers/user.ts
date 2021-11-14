@@ -219,6 +219,7 @@ export class UserResolver {
             email: data.email,
             phonenumber: phonenumber,
             password: hash,
+            isCreator: data.isCreator,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
           },
         ])

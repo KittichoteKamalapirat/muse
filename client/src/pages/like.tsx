@@ -5,6 +5,7 @@ import { Wrapper } from "../components/Wrapper";
 import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 interface likeProps {}
 
@@ -13,12 +14,15 @@ const Like: React.FC = ({}) => {
     variables: { limit: 10, cursor: null as null | string },
   });
   const { data: meData, loading: meLoading } = useMeQuery();
+  const router = useRouter();
 
   let body = null;
+
   if (loading) {
     body = <Text>Loading</Text>;
   } else if (!meData?.me) {
-    body = <Text>You don't have a favorite recipe</Text>;
+    router.push("/");
+    // body = <Text>You don't have a favorite recipe</Text>;
   } else {
     body = (
       <Box>
