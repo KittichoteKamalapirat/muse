@@ -1,6 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
-import { Button, IconButton } from "@chakra-ui/react";
+import { Button, IconButton, Img } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import React, { useState } from "react";
 import { Wrapper } from "../components/Wrapper";
@@ -25,6 +25,7 @@ import { CreateVideo } from "../components/CreateVideo";
 import { HeadingLayout } from "../components/HeadingLayout";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { printSourceLocation } from "graphql";
+import { dataURItoBlob } from "../util/dataURItoBlob";
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   //router import for below, not for useIsAuth
@@ -39,6 +40,9 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [autoThumbnailUrl, setAutoThumbnailUrl] = useState<string>("");
+  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
+
   useIsAuth();
   const router = useRouter();
 
@@ -47,9 +51,14 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [createPost] = useCreatePostMutation();
 
   const [videoPreview, setVideoPreview] = useState("" as any);
+
   const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
 
   const [videoFile, setVideoFile] = useState({ file: null } as any);
+  // const [autoThumbnailUrl, setAutoThumbnailUrl] = useState({
+  //   file: null,
+  // } as any);
+
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
@@ -58,7 +67,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
 
     setVideoFile({ file: acceptedFiles[0] });
-    setStep(2);
   };
 
   const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
@@ -66,7 +74,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
+
     setThumbnailFile({ file: acceptedFiles[0] });
+    console.log("xx");
+    console.log(thumbnailFile.file);
   };
 
   const uploadToS3 = async (
@@ -83,12 +94,18 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     const thumbnailOptions = {
       headers: {
-        "Content-Type": thumbnailFile.type,
+        "Content-Type": thumbnailFile ? thumbnailFile.type : "img/png",
       },
     };
+    console.log({ thumbnailOptions });
 
     await axios.put(videoSignedRequest, videoFile, videoOptions);
-    await axios.put(thumbnailSignedRequest, thumbnailFile, thumbnailOptions);
+
+    await axios.put(
+      thumbnailSignedRequest,
+      thumbnailFile || autoThumbnailBlob,
+      thumbnailOptions
+    );
   };
 
   // Mealkit Handler and variables
@@ -287,20 +304,56 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
   };
 
+  // automatically create image from video upload
+
+  console.log(autoThumbnailUrl.length);
+
+  const handleMetadata = () => {
+    const canvas = document.createElement("canvas");
+    const video = document.getElementById("preview") as HTMLVideoElement;
+    canvas.width = video!.videoWidth;
+    canvas.height = video!.videoHeight;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    console.log("7");
+    const dataUrl = canvas.toDataURL();
+    setAutoThumbnailUrl(dataUrl);
+
+    const blobData = dataURItoBlob(dataUrl);
+    setAutoThumbnailBlob(blobData);
+    // const params = {Key: "file_name", ContentType: "image/jpeg", Body: blobData};
+    // bucket.upload(params, function (err, data) {});
+
+    setStep(2);
+  };
+
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
       // S3 Video and images starts
 
+      console.log("here11");
+      console.log({ thumbnailFile });
+      console.log({ videoFile });
+      if (thumbnailFile.file) {
+        console.log("null but true");
+      }
+
       const response = await signS3({
         variables: {
           videoname: videoFile.file.name,
-          thumbnailname: thumbnailFile.file.name,
+          thumbnailname: !thumbnailFile.file
+            ? mealkitInput.name
+            : thumbnailFile.file.name,
           videoFiletype: videoFile.file.type,
-          thumbnailFiletype: thumbnailFile.file.type,
+          thumbnailFiletype: !thumbnailFile.file
+            ? "image/png"
+            : thumbnailFile.file.type,
         },
         // filename: formatFilename(file.name),
       });
+      console.log(response);
+      console.log("here22");
 
       let videoUrl = "";
       let videoSignedRequest = "";
@@ -325,6 +378,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
       // S3 mealkit starts
       let input: SignS3Params[] = [];
+
+      console.log("here33");
       mealkitFiles.forEach((file: any) =>
         input.push({ name: file.name, type: file.type })
       );
@@ -424,6 +479,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             videoPreviewHandler={videoPreviewHandler}
             videoPreview={videoPreview}
             nextStep={nextStep}
+            handleMetadata={handleMetadata}
+            autoThumbnailUrl={autoThumbnailUrl}
           />
         </HeadingLayout>
       );
@@ -443,6 +500,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             }
             prevStep={prevStep}
             nextStep={nextStep}
+            autoThumbnailUrl={autoThumbnailUrl}
           ></CreateThumbnail>
         </HeadingLayout>
       );

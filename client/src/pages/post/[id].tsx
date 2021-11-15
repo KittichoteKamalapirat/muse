@@ -42,7 +42,7 @@ const Post = ({}) => {
     );
   }
   return (
-    <Box>
+    <Box maxW={["none", "none", "40%"]} mx={["none", "auto"]}>
       <HeadingLayout heading={data?.post?.title}></HeadingLayout>
 
       {/* 

@@ -95,7 +95,9 @@ export class Post extends BaseEntity {
   // @Column({type: 'jsonb', array: true, nullable: true})
   // testJson: object[];
 
-  @OneToMany((type) => Mealkit, (mealkit) => mealkit.post)
+  @OneToMany((type) => Mealkit, (mealkit) => mealkit.post, {
+    cascade: true,
+  })
   mealkits: Mealkit[];
 
   @Field(() => String)

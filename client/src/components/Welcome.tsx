@@ -9,6 +9,8 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Center,
+  Avatar,
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import React from "react";
@@ -35,6 +37,9 @@ import SvgThflag from "./svgComponents/Thflag";
 import mealkitImg from "./Assets/mealkit.png";
 import { WelcomeNav } from "./WelcomeNav";
 import { Footer } from "./Footer";
+import { Slider } from "./Slider";
+import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
+import SvgSdg12 from "./svgComponents/Sdg12";
 
 interface WelcomeProps {
   // posts?: Post[] | undefined;
@@ -64,7 +69,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
         <Flex
           flexDirection="column"
           alignItems="center"
-          mt={["30px", "200px"]}
+          mt={["30px", "120px"]}
           mb={["5px", "100px"]}
           pb={["40px"]}
         >
@@ -75,7 +80,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
           >
             <Box>
               {" "}
-              <Heading>The Mealkit Marketplace</Heading>
+              <Heading>The Meal kit Marketplace</Heading>
               <Box
                 // flexDirection={["column", "row"]}
                 mt={4}
@@ -110,19 +115,31 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
         {/* why section */}
         <Box bgColor="gray.50" p={4}>
           <Wrapper>
-            <Heading textAlign="center" mt={4} fontSize="xl">
+            <Heading textAlign="center" mt={4} fontSize="2xl">
               Why choose Cookknow
             </Heading>
 
             <Flex direction={["column", "row"]} alignItems="center">
               <Flex direction="column" alignItems="center" mt={8}>
                 <SvgWhy1 width="80%" height="80%" />
-                <Text>ไม่ต้องออกไปซื้อวัตถุดิบเอง</Text>
+                <Heading fontSize="lg" my={2}>
+                  No grocery shopping
+                </Heading>
+                {/* <Text>ไม่ต้องออกไปซื้อวัตถุดิบเอง</Text> */}
+                <Text textAlign="center">
+                  We provide ingredients at yoru door
+                </Text>
               </Flex>
 
               <Flex direction="column" alignItems="center" mt={8}>
                 <SvgWhy2 width="80%" height="80%" />
-                <Text>ทำอาหารที่ไม่เคยทำตามคลิปง่ายๆ</Text>
+                <Heading fontSize="lg" my={2}>
+                  No messing up{" "}
+                </Heading>
+                <Text textAlign="center">
+                  Cook along the easy-to-follow video recipe
+                </Text>
+                {/* <Text>ทำอาหารใหม่ๆตามคลิปง่ายๆ</Text> */}
               </Flex>
             </Flex>
 
@@ -130,37 +147,49 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
               {" "}
               <Flex direction="column" alignItems="center" mt={8}>
                 <SvgWhy3 width="80%" height="80%" />
-                <Text>ไม่มีอาหาร เหลือทิ้ง</Text>
+                <Heading fontSize="lg" my={2}>
+                  No Food Waste
+                </Heading>
+                {/* <Text>ไม่มีอาหารเหลือทิ้ง</Text> */}
+                <Text textAlign="center">
+                  The ingredients provided are well portioned
+                </Text>
               </Flex>
               <Flex direction="column" alignItems="center" mt={8}>
                 <SvgWhy4 width="80%" height="80%" />
-                <Text>มีคนช่วยเลือกเมนู</Text>
+                <Heading fontSize="lg" my={2}>
+                  No repeated menu
+                </Heading>
+                <Text textAlign="center">
+                  Choose from a wide variety of menu
+                </Text>
+                {/* <Text>มีคนช่วยเลือกเมนู</Text> */}
               </Flex>
             </Flex>
           </Wrapper>
         </Box>
 
-        <Box mt={[10, 10]}>
-          <Heading fontSize="xl" mb={4}>
-            Example of the recipe
-          </Heading>
-          <Flex overflowX="auto">
-            {" "}
-            {posts?.slice(0, 5).map((post, index) => (
-              <Box key={index} m={1} minW="150px" width="200px">
-                {/* <Image src={post.thumbnailUrl} alt="image" borderRadius="10%" /> */}
+        <Box my="80px">
+          <Box my={8}>
+            <Heading fontSize="2xl" mb={4} textAlign="center">
+              Example of the meal kits
+            </Heading>
 
-                <video
-                  // width="320"
-                  // height="320"
-                  controls
-                >
-                  <source src={post.videoUrl} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              </Box>
-            ))}
-          </Flex>
+            <Wrapper mt={0}>
+              <Text fontSize="lg">
+                <Text fontWeight="600" as="mark">
+                  A variety of cuisine{" "}
+                </Text>
+                is available on the platform. Learn to cook{" "}
+                <Text fontWeight="600" as="mark">
+                  new and exiting food
+                </Text>{" "}
+                such as Thai, Japanese, Korean, Italian, or even Indian dishes.
+              </Text>
+            </Wrapper>
+          </Box>
+
+          <Slider />
         </Box>
 
         {/* How it works section
@@ -198,7 +227,53 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
             </NextLink>
           </Wrapper>
         </Box>
+
+        {/* client's voice */}
+        <Box mt="40px" mb="80px">
+          <Heading fontSize="2xl" mb={4} textAlign="center">
+            Customer's Voice
+          </Heading>
+
+          <Wrapper>
+            <Center my={6}>
+              <Avatar
+                name="Dan"
+                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/dan.png"
+                size="2xl"
+              />
+            </Center>
+
+            <Text fontStyle="italic" color="gray.600">
+              "The ingredients were fresh and came in ready-to-use portions.
+              It's super convenient when I'm too lazy to think of a recipe and
+              have to go shop for them.
+              <Text fontWeight="600" as="mark">
+                Would definitely recommend!"
+              </Text>
+            </Text>
+          </Wrapper>
+          <CustomerVoiceSlider />
+        </Box>
+
+        {/* /no food waste */}
+
+        <Box py="20px" mb="80px" bgColor="gray.50">
+          <Wrapper>
+            <Flex direction={["column", "row"]}>
+              <Box>
+                <Heading my={2}>No Food Waste</Heading>
+                <Text>
+                  Help reduce food waste by cooking the amount we can consume
+                </Text>
+              </Box>
+              <Center>
+                <SvgSdg12 width="100px" height="100px" />
+              </Center>
+            </Flex>
+          </Wrapper>
+        </Box>
       </WelcomeNav>
+
       <Footer />
     </>
   );

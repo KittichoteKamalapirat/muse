@@ -7,6 +7,7 @@ import {
   Flex,
   Text,
   Button,
+  Avatar,
 } from "@chakra-ui/react";
 import React from "react";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
@@ -19,6 +20,7 @@ import {
   useFollowersQuery,
   useMeQuery,
 } from "../../generated/graphql";
+import { Center } from "@chakra-ui/layout";
 import { SmallAddIcon, SpinnerIcon, StarIcon } from "@chakra-ui/icons";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 
@@ -30,19 +32,16 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
   return (
     <Layout>
       <Wrapper>
-        <Heading>My shop</Heading>
+        <Heading my={8}>My shop</Heading>
 
         <Flex>
           <Box flex={1}>
-            {" "}
-            <Image
+            <Avatar
               margin="auto"
-              borderRadius="50%"
-              border={5}
-              borderStyle="solid"
-              borderColor="red.400"
+              m={2}
+              size="xl"
               src={meData?.me?.avatar}
-              alt="Segun Adebayo"
+              alt="creator avatar"
             />
           </Box>
 

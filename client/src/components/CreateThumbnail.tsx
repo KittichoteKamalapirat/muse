@@ -4,7 +4,15 @@ import {
   ChevronRightIcon,
   PlusSquareIcon,
 } from "@chakra-ui/icons";
-import { Box, Flex, Text, Image, IconButton, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Image,
+  IconButton,
+  Button,
+  Img,
+} from "@chakra-ui/react";
 import Dropzone from "react-dropzone";
 import React from "react";
 import router from "next/router";
@@ -16,6 +24,7 @@ interface CreateThumbnailProps {
   thumbnailPreviewHandler: Function;
   prevStep: Function;
   nextStep: Function;
+  autoThumbnailUrl: string;
 }
 
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
@@ -25,16 +34,25 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
   thumbnailPreviewHandler,
   prevStep,
   nextStep,
+  autoThumbnailUrl,
 }) => {
+  console.log({ autoThumbnailUrl });
+  if (videoPreview) {
+    // console.log(videoPreview);
+    // const objectURL = URL.createObjectURL(videoPreview);
+    // console.log(objectURL);/
+  }
+
   return (
     <Box>
       {!thumbnailPreview ? (
         !videoPreview ? null : (
           <Flex justifyContent="center">
-            <video width="90%">
+            {/* <video width="90%" controls>
               <source src={videoPreview} type="video/mp4" />
               Your browser does not support the video tag.
-            </video>
+            </video> */}
+            <Image src={autoThumbnailUrl} />
           </Flex>
         )
       ) : (

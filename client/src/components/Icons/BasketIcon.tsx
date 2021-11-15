@@ -9,9 +9,10 @@ interface BasketIconProps {
 export const BasketIcon = (props: BasketIconProps) => (
   <Icon
     viewBox="0 0 22.61 20.83"
-    fill={props.isactive ? primaryColor : "none"}
+    // fill={props.isactive ? primaryColor : "none"}
+    fill="white"
     // stroke={props.isactive ? primaryColor : inActiveGray}
-    stroke="white"
+    stroke="gray.700"
     strokeWidth={2}
     strokeLinecap="round"
     strokeLinejoin="round"

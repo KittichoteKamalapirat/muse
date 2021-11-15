@@ -47,7 +47,9 @@ export class Mealkit extends BaseEntity {
   postId: number;
 
   @Field(() => Post, { nullable: true }) //need to have explicit type
-  @ManyToOne((type) => Post, (post) => post.mealkits)
+  @ManyToOne((type) => Post, (post) => post.mealkits, {
+    onDelete: "CASCADE",
+  })
   post: Post;
 
   @Column()

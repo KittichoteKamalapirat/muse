@@ -19,7 +19,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
     <Box
       m={8}
       mx="auto"
-      maxW={["none", "400px", "800px"]}
+      maxW={["none", "400px", "40%"]}
       w={["90%", "70%", "50%"]}
       mb={mb}
       mt={mt}

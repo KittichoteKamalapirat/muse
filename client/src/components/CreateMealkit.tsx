@@ -11,6 +11,7 @@ import {
   IconButton,
   Text,
   Image,
+  AspectRatio,
   Img,
 } from "@chakra-ui/react";
 import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
@@ -48,23 +49,68 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 }) => {
   return (
     <Box>
-      {mealkitFilesPreview.length === 0 ? null : (
-        <Box>
-          {" "}
+      {mealkitFilesPreview.length === 0 ? (
+        // if not file preview
+        <Dropzone
+          onDrop={(acceptedFiles, rejectedFiles) =>
+            handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
+          }
+          multiple={true}
+          accept={["image/*", "video/*"]}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <Box>
+              <Box
+                {...getRootProps({
+                  onChange: (event) => {
+                    mealkitFilesPreviewHandler(event);
+                  },
+                })}
+              >
+                <input {...getInputProps()} />
+
+                <Flex
+                  direction="column"
+                  alignItems="center"
+                  border="1px"
+                  borderColor="gray.200"
+                  bgColor="gray.50"
+                >
+                  <ArrowUpIcon mt="3rem" />
+
+                  <SvgUploadMealkitIcon width="10rem" height="10rem" />
+                  <Text textAlign="center" mb="2rem">
+                    Drag and drop a video here, or click to select the file
+                  </Text>
+                </Flex>
+              </Box>
+            </Box>
+          )}
+        </Dropzone>
+      ) : (
+        <Flex overflowX="scroll">
+          {/* if there is file preview */}{" "}
           {mealkitFilesPreview.map((filePreview: any, index: number) => (
-            <Box key={index}>
+            <Box key={index} mx={2}>
               {filePreview.slice(0, 10).includes("video") ? (
                 <video controls width="50%">
                   <source src={filePreview} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               ) : (
-                <Image src={filePreview} alt="image" boxSize="50%" />
+                <Image
+                  src={filePreview}
+                  alt="meal kit image"
+                  height="200px"
+                  // vh="80%"
+                  borderRadius={10}
+                />
               )}
             </Box>
           ))}
-        </Box>
+        </Flex>
       )}
+
       <Form>
         {/* <Heading>Create a mealkit</Heading> */}
 
@@ -113,43 +159,6 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           placeholder="items"
           onChange={(e) => setInput({ ...input, items: e.target.value })}
         ></InputField>
-
-        <Dropzone
-          onDrop={(acceptedFiles, rejectedFiles) =>
-            handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
-          }
-          multiple={true}
-          accept={["image/*", "video/*"]}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <Box>
-              <Box
-                {...getRootProps({
-                  onChange: (event) => {
-                    mealkitFilesPreviewHandler(event);
-                  },
-                })}
-              >
-                <input {...getInputProps()} />
-
-                <Flex
-                  direction="column"
-                  alignItems="center"
-                  border="1px"
-                  borderColor="gray.200"
-                  bgColor="gray.50"
-                >
-                  <ArrowUpIcon mt="3rem" />
-
-                  <SvgUploadMealkitIcon width="10rem" height="10rem" />
-                  <Text textAlign="center" mb="2rem">
-                    Drag and drop a video here, or click to select the file
-                  </Text>
-                </Flex>
-              </Box>
-            </Box>
-          )}
-        </Dropzone>
       </Form>
 
       <Flex justifyContent="space-between">

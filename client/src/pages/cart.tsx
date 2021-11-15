@@ -219,7 +219,7 @@ const Cart: React.FC<cartProps> = ({}) => {
         zIndex={1}
         position="fixed"
         bottom={0}
-        bg={["white", "red"]}
+        bg="white"
         ml={"auto"}
         align="center"
         width="100%"

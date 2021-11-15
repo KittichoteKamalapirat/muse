@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import Dropzone from "react-dropzone";
 
 import { EditIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Button, Image } from "@chakra-ui/react";
+import { Button, Image, Img } from "@chakra-ui/react";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
   videoPreview: any;
+  autoThumbnailUrl: string;
   handleOnDropVideo: Function;
+
   videoPreviewHandler: Function;
   nextStep: Function;
+  handleMetadata: Function;
 }
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
@@ -18,7 +21,21 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
   handleOnDropVideo,
   videoPreviewHandler,
   nextStep,
+  handleMetadata,
+  autoThumbnailUrl,
 }) => {
+  // const handleMetadata = () => {
+  //   const canvas = document.createElement("canvas");
+  //   const video = document.getElementById("preview") as HTMLVideoElement;
+  //   canvas.width = video!.videoWidth;
+  //   canvas.height = video!.videoHeight;
+  //   const ctx = canvas.getContext("2d")!;
+  //   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  //   console.log("7");
+  //   const dataUrl = canvas.toDataURL();
+  //   setUrl(dataUrl);
+  // };
+
   return (
     <Box>
       <Dropzone
@@ -65,10 +82,28 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                 ) : (
                   <Box>
                     <Box justifyContent="center" alignItems="end">
-                      <video controls width="90%">
-                        <source src={videoPreview} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
+                      {/* <video
+                        controls
+                        width="90%"
+                        id="preview"
+                        onLoadedMetadata={() => {
+                          handleMetadata();
+                        }}
+                        // handleMetadata() }
+                        src={videoPreview}
+                      /> */}
+
+                      <video
+                        controls
+                        width="90%"
+                        id="preview"
+                        onLoadedMetadata={() => {
+                          setTimeout(() => {
+                            handleMetadata();
+                          }, 100);
+                        }}
+                        src={videoPreview}
+                      />
                     </Box>
                     <Flex
                       direction="row"

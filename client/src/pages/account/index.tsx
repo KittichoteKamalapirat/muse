@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   IconButton,
+  Avatar,
   Image,
   Link,
   Menu,
@@ -15,7 +16,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
-import { Heading } from "@chakra-ui/layout";
+import { Center, Heading } from "@chakra-ui/layout";
 import { withApollo } from "../../util/withApollo";
 import {
   MeDocument,
@@ -97,18 +98,19 @@ const Account: React.FC<indexProps> = ({}) => {
           ""
         )}
 
-        <Box>
-          <Image
+        <Center mt={8}>
+          <Avatar
             margin="auto"
-            width="50%"
-            borderRadius="50%"
+            m={2}
+            size="2xl"
+            src={meData?.me?.avatar}
+            alt="creator avatar"
             border={5}
             borderStyle="solid"
             borderColor="red.400"
-            src={meData?.me?.avatar}
-            alt="Segun Adebayo"
-          />{" "}
-        </Box>
+            bg="white"
+          />
+        </Center>
 
         <Box mt={4}>
           <Heading fontSize="md">My orders</Heading>

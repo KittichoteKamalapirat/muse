@@ -6,7 +6,6 @@ import React from "react";
 import { primaryColor } from "./Variables";
 import NextLink from "next/link";
 import SvgThflag from "./svgComponents/Thflag";
-import SvgHamburger from "./svgComponents/Hamburger";
 import { NavDrawer } from "./NavDrawer";
 
 interface WelcomeNavProps {}

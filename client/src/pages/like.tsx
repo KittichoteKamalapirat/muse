@@ -35,15 +35,15 @@ const Like: React.FC = ({}) => {
             }}
           >
             <Link>
-              <Flex m={2}>
-                <Box flex={1} m={2}>
+              <Flex my={1}>
+                <Box flex={1} m={1}>
                   <Image
                     src={post.thumbnailUrl}
                     alt="image"
                     borderRadius="10%"
                   />
                 </Box>
-                <Box flex={2} m={2}>
+                <Box flex={2} m={1}>
                   <Heading fontSize="xl">{post.title}</Heading>
                   <Text>{post.textSnippet}...</Text>
                 </Box>
@@ -56,10 +56,10 @@ const Like: React.FC = ({}) => {
   }
   return (
     <Layout>
-      <Text ml="1rem" fontSize="xl">
-        เมนูโปรดของฉัน
-      </Text>
-      <Box>{body}</Box>
+      <Wrapper>
+        <Text fontSize="xl">เมนูโปรดของฉัน</Text>
+        <Box>{body}</Box>
+      </Wrapper>
     </Layout>
   );
 };

@@ -9,6 +9,7 @@ import {
   InputGroup,
   InputLeftAddon,
   Link,
+  Avatar,
   Text,
 } from "@chakra-ui/react";
 import React from "react";
@@ -145,16 +146,18 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     <Box>
       <Flex
         zIndex={1}
+        justifyContent="center"
         position="fixed"
         width="100%"
         top={0}
-        bg={primaryColor}
+        bg="white"
         p={2}
-        ml={"auto"}
-        align="center"
-        justifyContent="flex-end"
+        // ml={"auto"}
+        borderBottom="solid"
+        borderBottomColor="gray.200"
+        borderBottomWidth="1px"
       >
-        <InputGroup zIndex={2} bgColor="white" size="sm">
+        {/* <InputGroup zIndex={2} bgColor="white" size="sm">
           <InputLeftAddon
             bgColor="white"
             // height="100%"
@@ -168,24 +171,41 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
             placeholder="search"
             variant="outline"
           />
-        </InputGroup>
+        </InputGroup> */}
 
-        <NextLink href="/cart">
-          <Link mx={2} fontSize="sm" textDecoration="none">
-            <BasketIcon />
-          </Link>
-        </NextLink>
+        <Flex width={["100%", "100%", "40%"]} justifyContent="space-between">
+          <NextLink href="/">
+            <Link mx={2} fontSize="sm" style={{ textDecoration: "none" }}>
+              <Heading fontSize="xl" color="{primaryColor}">
+                Cookknow
+              </Heading>
+            </Link>
+          </NextLink>
+
+          <NextLink href="/cart">
+            <Link mx={2} fontSize="sm">
+              <BasketIcon />
+            </Link>
+          </NextLink>
+        </Flex>
       </Flex>
+
       <Flex
+        direction={["row", "row", "column"]}
         zIndex={1}
         position="fixed"
         bottom={0}
+        left={0}
         bg={"white"}
         p={2}
         ml={"auto"}
         align="center"
-        width="100%"
+        width={["100%", "100%", "80px"]}
+        height={[null, null, "100%"]}
         justifyContent="space-around"
+        borderRight="solid"
+        borderRightColor="gray.200"
+        borderRightWidth="1px"
       >
         <NextLink href="/">
           <Link
@@ -328,7 +348,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <Image
+                {/* <Image
                   width="1.3rem"
                   src={data?.me?.avatar}
                   // alt="creator avatar"
@@ -336,7 +356,16 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                   border={1}
                   borderStyle="solid"
                   borderColor={accountActive ? primaryColor : inActiveGray}
+                /> */}
+
+                <Avatar
+                  m={2}
+                  size="xs"
+                  src={data?.me?.avatar}
+                  alt="creator avatar"
+                  border={1}
                 />
+
                 <Text
                   fontSize="xs"
                   fontWeight="medium"

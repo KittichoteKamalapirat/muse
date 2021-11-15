@@ -8,6 +8,7 @@ import {
   Flex,
   Heading,
   Image,
+  Avatar,
   Stack,
   Text,
 } from "@chakra-ui/react";
@@ -16,6 +17,8 @@ import { UpvoteSection } from "../components/UpvoteSection";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { withApollo } from "../util/withApollo";
 import { Welcome } from "../components/Welcome";
+import { NewsFeedSkeleton } from "../components/Icons/NewsFeedSkeleton";
+import { primaryColor } from "../components/Variables";
 
 const Index = () => {
   const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
@@ -34,7 +37,7 @@ const Index = () => {
     return <Welcome posts={data.posts.posts} />;
   }
   if (loading) {
-    return <Text>Loading</Text>;
+    return <NewsFeedSkeleton />;
   }
   if (!loading && !data) {
     return (
@@ -49,9 +52,11 @@ const Index = () => {
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
 
-      <Stack spacing={4}>
+      <Stack spacing={4} maxW={["none", "40%"]} mx={["none", "auto"]}>
         {data!.posts.posts.map((post) =>
-          !post ? null : (
+          !post ? (
+            <NewsFeedSkeleton />
+          ) : (
             <Box
               key={post.id}
               // shadow="md"
@@ -66,15 +71,16 @@ const Index = () => {
                 >
                   <Link style={{ textDecoration: "none" }}>
                     <Flex alignItems="center">
-                      <Image
+                      <Avatar
                         m={2}
-                        width="2.5rem"
+                        size="sm"
                         src={post.creator.avatar}
                         alt="creator avatar"
-                        borderRadius="50%"
-                        border={2}
-                        borderStyle="solid"
-                        borderColor="red.400"
+                        border={1}
+                        // showBorder={true}
+                        // borderStyle="solid"
+                        // borderColor={primaryColor}
+                        // bg="white"
                       />
 
                       <Text>{post.creator.username}</Text>
