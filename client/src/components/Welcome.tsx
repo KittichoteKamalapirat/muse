@@ -26,14 +26,20 @@ import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
 import SvgWhy3 from "./svgComponents/Why3";
 import SvgWhy4 from "./svgComponents/Why4";
-import { PaginatedPosts, Post } from "../generated/graphql";
+import {
+  PaginatedPosts,
+  Post,
+  PostSnippetFragment,
+} from "../generated/graphql";
 import SvgThflag from "./svgComponents/Thflag";
 import mealkitImg from "./Assets/mealkit.png";
 import { WelcomeNav } from "./WelcomeNav";
 import { Footer } from "./Footer";
 
 interface WelcomeProps {
-  posts: Post[] | undefined;
+  // posts?: Post[] | undefined;
+  // posts?: Post[] | undefined;
+  posts?: PostSnippetFragment[] | undefined;
 }
 
 export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
@@ -43,14 +49,14 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
   //   return `https://cookknow.com/${src}?w=${width}&q=${quality || 75}`;
   // };
 
-  const Feature = ({ title, desc, ...rest }) => {
-    return (
-      <Box p={5} shadow="md" borderWidth="1px" {...rest}>
-        <Heading fontSize="xl">{title}</Heading>
-        <Text mt={4}>{desc}</Text>
-      </Box>
-    );
-  };
+  // const Feature = ({ title, desc, ...rest }) => {
+  //   return (
+  //     <Box p={5} shadow="md" borderWidth="1px" {...rest}>
+  //       <Heading fontSize="xl">{title}</Heading>
+  //       <Text mt={4}>{desc}</Text>
+  //     </Box>
+  //   );
+  // };
 
   return (
     <>

@@ -27,7 +27,8 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({}) => {
 
   return (
     <>
-      <Box ref={btnRef} onClick={onOpen}>
+      {/* fix this later */}
+      <Box ref={btnRef as any} onClick={onOpen}>
         <SvgHamburger />
       </Box>
       <Drawer

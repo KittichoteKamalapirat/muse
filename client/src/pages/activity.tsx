@@ -1,3 +1,4 @@
+import { Heading } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React from "react";
 import { Layout } from "../components/Layout";
@@ -10,14 +11,14 @@ const Activity: React.FC<ActivityProps> = ({}) => {
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
 
-  if (!meData?.me) {
+  if (!meLoading && !meData?.me) {
     router.push("/");
   }
 
   return (
     <Layout>
       <Wrapper>
-        <h1>My Activity</h1>
+        <Heading>My Activity</Heading>
       </Wrapper>
     </Layout>
   );

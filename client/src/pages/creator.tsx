@@ -16,9 +16,9 @@ import SvgCreator2 from "../components/svgComponents/Creator2";
 import SvgCreator3 from "../components/svgComponents/Creator3";
 import SvgCreator4 from "../components/svgComponents/Creator4";
 
-interface creatorProps {}
+interface WelcomeCreatorProps {}
 
-const WelcomeCreator: React.FC<creatorProps> = ({}) => {
+const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
   return (
     <>
       <WelcomeNav />

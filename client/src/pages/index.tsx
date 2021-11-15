@@ -30,10 +30,8 @@ const Index = () => {
   if (meLoading) {
     return <Text>Loading</Text>;
   }
-  if (!meData?.me) {
-    console.log("hi");
-
-    return <Welcome posts={data?.posts.posts} />;
+  if (!meData?.me && data?.posts) {
+    return <Welcome posts={data.posts.posts} />;
   }
   if (loading) {
     return <Text>Loading</Text>;

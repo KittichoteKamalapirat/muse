@@ -2,7 +2,7 @@
 
 echo What should the version be?
 read VERSION
-echo What is your sudo password?
+echo What is your dokku password?
 read PASSWORD
 
 docker build -t kittishane/cookknow:$VERSION .
