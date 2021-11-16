@@ -86,6 +86,11 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
                 mt={4}
                 fontSize="xl"
               >
+                {/* <Text>With the right ingredient</Text> */}
+                {/* <Text>With the right recipe</Text> */}
+
+                {/* <Text>Cooking</Text> */}
+
                 <Text>มีวัตถุดิบ มีคลิปสอน </Text>
                 <Text> พร้อมทำอาหาร</Text>
               </Box>
@@ -210,8 +215,8 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
 
             <NextLink
               href={{
-                pathname: "/register",
-                query: { isCreator: true },
+                pathname: "/creator",
+                // query: { isCreator: true },
               }}
             >
               <Link>
@@ -257,16 +262,16 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
 
         {/* /no food waste */}
 
-        <Box py="20px" mb="80px" bgColor="gray.50">
+        <Box py="20px" bgColor="gray.50">
           <Wrapper>
-            <Flex direction={["column", "row"]}>
-              <Box>
+            <Flex direction={["column", "row"]} textAlign="center">
+              <Box mb={["20px", "none"]}>
                 <Heading my={2}>No Food Waste</Heading>
                 <Text>
                   Help reduce food waste by cooking the amount we can consume
                 </Text>
               </Box>
-              <Center>
+              <Center mx={6}>
                 <SvgSdg12 width="100px" height="100px" />
               </Center>
             </Flex>

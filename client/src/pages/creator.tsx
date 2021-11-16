@@ -46,7 +46,12 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
               <Text>Film your recipe, Provide ingredients</Text>
               <Text>Generate Income</Text>
             </Box>
-            <NextLink href="/register">
+            <NextLink
+              href={{
+                pathname: "/register",
+                query: { isCreator: true },
+              }}
+            >
               <Link>
                 <Button
                   rightIcon={<ChevronRightIcon />}
@@ -54,7 +59,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
                   variant="solid"
                   my={4}
                 >
-                  Make Creator Account
+                  Sign up as Creator
                 </Button>
               </Link>
             </NextLink>

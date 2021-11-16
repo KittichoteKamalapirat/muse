@@ -1,4 +1,12 @@
-import { Box, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Image,
+  Link,
+  Text,
+  Skeleton,
+} from "@chakra-ui/react";
 import React from "react";
 import { Layout } from "../components/Layout";
 import { Wrapper } from "../components/Wrapper";

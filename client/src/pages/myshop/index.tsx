@@ -139,7 +139,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               <NextLink href="/create-post">
                 <Text as={Link}>
                   {/* <SmallAddIcon />  */}
-                  Create new post with mealkits
+                  Create new video with mealkits
                 </Text>
               </NextLink>
               <Divider mt={2} />

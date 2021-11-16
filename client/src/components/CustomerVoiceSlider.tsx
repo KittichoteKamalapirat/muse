@@ -42,21 +42,21 @@ export const CustomerVoiceSlider: React.FC<CustomerVoiceSliderProps> = ({}) => {
         {" "}
         <SwiperSlide>
           <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto1.jpg"
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto1.png"
             width="100%"
             style={{ margin: "auto" }}
           />
         </SwiperSlide>
         <SwiperSlide>
           <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto2.jpg"
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto2.png"
             width="100%"
             style={{ margin: "auto" }}
           />
         </SwiperSlide>
         <SwiperSlide>
           <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.jpg"
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.png"
             width="100%"
             style={{ margin: "auto" }}
           />
