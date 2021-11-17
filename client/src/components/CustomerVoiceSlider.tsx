@@ -56,7 +56,7 @@ export const CustomerVoiceSlider: React.FC<CustomerVoiceSliderProps> = ({}) => {
         </SwiperSlide>
         <SwiperSlide>
           <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.png"
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.jpg"
             width="100%"
             style={{ margin: "auto" }}
           />

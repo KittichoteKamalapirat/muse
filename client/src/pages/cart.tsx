@@ -18,16 +18,17 @@ import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
   mappedResult,
   toCartItemsByCreatorMap,
-} from "../util/ToCartItemsByCreatorMap";
+} from "../util/toCartItemsByCreatorMap";
 
 interface cartProps {}
 
 const Cart: React.FC<cartProps> = ({}) => {
   // useupdate
   const { data: cartItems, loading, error } = useCartItemsQuery();
+  const [mappedCartItems, setMappedCartItems] = useState<mappedResult[]>();
   const [updateCartItem] = useUpdateCartItemMutation();
   const [deleteCartItem] = useDeleteCartItemMutation();
-  const [mappedCartItems, setMappedCartItems] = useState<mappedResult[]>();
+
   const [gross, setGross] = useState(0);
 
   useEffect(() => {

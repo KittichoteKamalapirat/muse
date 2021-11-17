@@ -30,7 +30,7 @@ import { useField } from "formik";
 import {
   mappedResult,
   toCartItemsByCreatorMap,
-} from "../util/ToCartItemsByCreatorMap";
+} from "../util/toCartItemsByCreatorMap";
 import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { primaryColor } from "../components/Variables";
 
@@ -359,7 +359,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   variables: {
                     cartItemIds: cartItemIds,
                     grossOrder: gross,
-                    cartItemsByCreatorInput: cartItemsByCreatorInput,
+                    cartItemsByCreatorInput: cartItemsByCreatorInput!, //check this
                   },
                 });
                 // if (!orderLoading && orderData?.createOrder.id) {

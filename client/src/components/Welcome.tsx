@@ -80,7 +80,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
           >
             <Box>
               {" "}
-              <Heading>The Meal kit Marketplace</Heading>
+              <Heading>The Meal Kit Marketplace</Heading>
               <Box
                 // flexDirection={["column", "row"]}
                 mt={4}
@@ -132,7 +132,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
                 </Heading>
                 {/* <Text>ไม่ต้องออกไปซื้อวัตถุดิบเอง</Text> */}
                 <Text textAlign="center">
-                  We provide ingredients at yoru door
+                  We provide ingredients to your door
                 </Text>
               </Flex>
 
