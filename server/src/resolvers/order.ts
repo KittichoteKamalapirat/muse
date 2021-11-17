@@ -28,6 +28,18 @@ registerEnumType(OrderStatus, {
   name: "OrderStatus",
 });
 
+@InputType()
+class CartItemsByCreatorInput {
+  @Field()
+  creatorId: string;
+
+  @Field()
+  deliveryFee: number;
+
+  @Field()
+  mealkitsFee: number;
+}
+
 @Resolver()
 export class OrderResolver {
   @UseMiddleware(isAuth)
@@ -35,7 +47,9 @@ export class OrderResolver {
   async createOrder(
     @Ctx() { req, res }: MyContext,
     @Arg("cartItemIds", () => [Int]) cartItemIds: number[],
-    @Arg("grossOrder", () => Int) grossOrder: number //need Int due to reflection system
+    @Arg("grossOrder", () => Int) grossOrder: number, //need Int due to reflection system
+    @Arg("cartItemsByCreatorInput", () => [CartItemsByCreatorInput])
+    cartItemsByCreatorInput: CartItemsByCreatorInput[]
   ): Promise<Order | undefined> {
     // S3
     const now = Date.now().toString();
@@ -54,6 +68,7 @@ export class OrderResolver {
     const order = await Order.create({
       grossOrder: grossOrder,
       status: OrderStatus.PaymentPending,
+      cartItemsByCreator: cartItemsByCreatorInput,
       userId: req.session.userId,
       paymentId: payment.id,
       //   cartItemId: 123,

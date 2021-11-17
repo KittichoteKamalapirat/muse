@@ -71,6 +71,10 @@ export class Mealkit extends BaseEntity {
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
 
+  @Column({ default: 0 })
+  @Field()
+  deliveryFee: number;
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;

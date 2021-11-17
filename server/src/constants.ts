@@ -19,3 +19,8 @@ export const TWILIO_TEST_PHONE_NUMBER = "+12183573995";
 export const SCB_API_KEY = "l7c8620ca31fc846768d57c2bc2fe01e1f";
 export const SCB_API_SECRET = "4fb2ce52351b4c22a0a08c9a820c0e78";
 export const BILLER_ID = "097741489371038";
+
+//Etrackings
+export const ETRACKINGS_API_KEY = "e9cc2b492e0030e6cdca5473bdcadd6f39655acc";
+export const ETRACKINGS_API_SECRET =
+  "c8f9d55d10246d3a3fa37f7dbb0c6d4608081eceb69a52beedbf9d931b6f094ed4af400f9298ce994a7f61fdd39e755ae75f22739f6cff6bc75c432f3879f3e8d82f2c910b33576946dd39";

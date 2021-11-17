@@ -29,6 +29,18 @@ export enum OrderStatus {
 // });
 
 @ObjectType()
+class CartItemsByCreator {
+  @Field()
+  creatorId: string;
+
+  @Field()
+  deliveryFee: number;
+
+  @Field()
+  mealkitsFee: number;
+}
+
+@ObjectType()
 @Entity()
 export class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -42,6 +54,10 @@ export class Order extends BaseEntity {
   @Column({ default: OrderStatus.PaymentPending })
   @Field()
   status: OrderStatus;
+
+  @Column("jsonb", { nullable: true })
+  @Field(() => [CartItemsByCreator], { nullable: true })
+  cartItemsByCreator: CartItemsByCreator[];
 
   //One order can have many cartitems
   @Field(() => [CartItem])

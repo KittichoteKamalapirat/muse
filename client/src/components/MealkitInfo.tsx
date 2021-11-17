@@ -57,6 +57,10 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
         >
           {mealkits.mealkits.map((mealkit, index) => (
             <Box key={index}>
+              <Heading fontSize="lg" color={primaryColor}>
+                {" "}
+                {mealkit.name}{" "}
+              </Heading>
               <Text>สำหรับ: {mealkit.portion} คน</Text>
               <Text>ราคา: {mealkit.price} บาท</Text>
               <Box>

@@ -71,6 +71,19 @@ export type CartItemInput = {
   quantity: Scalars['Float'];
 };
 
+export type CartItemsByCreator = {
+  __typename?: 'CartItemsByCreator';
+  creatorId: Scalars['String'];
+  deliveryFee: Scalars['Float'];
+  mealkitsFee: Scalars['Float'];
+};
+
+export type CartItemsByCreatorInput = {
+  creatorId: Scalars['String'];
+  deliveryFee: Scalars['Float'];
+  mealkitsFee: Scalars['Float'];
+};
+
 export type ConfirmData = {
   __typename?: 'ConfirmData';
   transRef: Scalars['String'];
@@ -138,6 +151,7 @@ export type Mealkit = {
   post?: Maybe<Post>;
   creatorId: Scalars['String'];
   creator?: Maybe<User>;
+  deliveryFee: Scalars['Float'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -307,6 +321,7 @@ export type MutationDeleteCartItemArgs = {
 
 
 export type MutationCreateOrderArgs = {
+  cartItemsByCreatorInput: Array<CartItemsByCreatorInput>;
   grossOrder: Scalars['Int'];
   cartItemIds: Array<Scalars['Int']>;
 };
@@ -337,6 +352,7 @@ export type Order = {
   id: Scalars['Float'];
   grossOrder: Scalars['Float'];
   status: Scalars['String'];
+  cartItemsByCreator?: Maybe<Array<CartItemsByCreator>>;
   cartItems: Array<CartItem>;
   userId: Scalars['String'];
   payment?: Maybe<Payment>;
@@ -637,10 +653,11 @@ export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { 
 export type CreateOrderMutationVariables = Exact<{
   cartItemIds: Array<Scalars['Int']> | Scalars['Int'];
   grossOrder: Scalars['Int'];
+  cartItemsByCreatorInput: Array<CartItemsByCreatorInput> | CartItemsByCreatorInput;
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, status: string, userId: string } };
+export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, status: string, userId: string, cartItemsByCreator?: Maybe<Array<{ __typename?: 'CartItemsByCreator', creatorId: string, deliveryFee: number, mealkitsFee: number }>> } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -825,7 +842,7 @@ export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Addr
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
+export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, mealkit?: Maybe<{ __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, creatorId: string, deliveryFee: number, postId: number, creator?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> }> }> };
 
 export type FollowersQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -844,7 +861,7 @@ export type MealkitsQueryVariables = Exact<{
 }>;
 
 
-export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>> };
+export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number }>> };
 
 export type MyOrdersQueryVariables = Exact<{
   status: OrderStatus;
@@ -1105,12 +1122,21 @@ export type CreateMealkitMutationHookResult = ReturnType<typeof useCreateMealkit
 export type CreateMealkitMutationResult = Apollo.MutationResult<CreateMealkitMutation>;
 export type CreateMealkitMutationOptions = Apollo.BaseMutationOptions<CreateMealkitMutation, CreateMealkitMutationVariables>;
 export const CreateOrderDocument = gql`
-    mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!) {
-  createOrder(cartItemIds: $cartItemIds, grossOrder: $grossOrder) {
+    mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!, $cartItemsByCreatorInput: [CartItemsByCreatorInput!]!) {
+  createOrder(
+    cartItemIds: $cartItemIds
+    grossOrder: $grossOrder
+    cartItemsByCreatorInput: $cartItemsByCreatorInput
+  ) {
     id
     grossOrder
     status
     userId
+    cartItemsByCreator {
+      creatorId
+      deliveryFee
+      mealkitsFee
+    }
   }
 }
     `;
@@ -1131,6 +1157,7 @@ export type CreateOrderMutationFn = Apollo.MutationFunction<CreateOrderMutation,
  *   variables: {
  *      cartItemIds: // value for 'cartItemIds'
  *      grossOrder: // value for 'grossOrder'
+ *      cartItemsByCreatorInput: // value for 'cartItemsByCreatorInput'
  *   },
  * });
  */
@@ -2064,12 +2091,20 @@ export const CartItemsDocument = gql`
     total
     user {
       username
+      avatar
     }
     mealkit {
       name
       images
       price
       portion
+      creatorId
+      deliveryFee
+      creator {
+        username
+        avatar
+      }
+      postId
       post {
         id
         title
@@ -2182,10 +2217,12 @@ export const MealkitsDocument = gql`
     query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
     id
+    name
     items
     images
     price
     portion
+    deliveryFee
   }
 }
     `;

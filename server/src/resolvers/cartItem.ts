@@ -51,7 +51,7 @@ export class CartItemResolver {
   async cartItems(@Ctx() { req }: MyContext): Promise<CartItem[]> {
     return await CartItem.find({
       where: { userId: req.session.userId, orderId: null },
-      relations: ["mealkit", "user", "mealkit.post"],
+      relations: ["mealkit", "user", "mealkit.post", "mealkit.creator"],
     });
   }
 

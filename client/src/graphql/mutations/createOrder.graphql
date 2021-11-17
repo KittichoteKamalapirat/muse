@@ -1,8 +1,30 @@
-mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!) {
-  createOrder(cartItemIds: $cartItemIds, grossOrder: $grossOrder) {
+mutation createOrder(
+  $cartItemIds: [Int!]!
+  $grossOrder: Int!
+  $cartItemsByCreatorInput: [CartItemsByCreatorInput!]!
+) {
+  createOrder(
+    cartItemIds: $cartItemIds
+    grossOrder: $grossOrder
+    cartItemsByCreatorInput: $cartItemsByCreatorInput
+  ) {
     id
     grossOrder
     status
     userId
+    cartItemsByCreator {
+      creatorId
+      deliveryFee
+      mealkitsFee
+    }
   }
 }
+
+# mutation createOrder($cartItemIds: [Int!]!, $grossOrder: Int!) {
+#   createOrder(cartItemIds: $cartItemIds, grossOrder: $grossOrder) {
+#     id
+#     grossOrder
+#     status
+#     userId
+#   }
+# }
