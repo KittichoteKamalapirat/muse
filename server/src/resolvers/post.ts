@@ -25,6 +25,7 @@ import {
   AWS_REGION,
 } from "../constants";
 import { s3, s3Params } from "../utils/s3";
+import { Mealkit } from "../entities/Mealkit";
 
 @InputType()
 export class signS3Params {
@@ -260,10 +261,16 @@ export class PostResolver {
       `,
       replacements
     );
-    console.log(posts);
 
-    const slicedPosts = posts.slice(0, realLimit);
+    const slicedPosts = await posts
+      .slice(0, realLimit)
+      .map(async (post: Post, index: number) => {
+        const mealkit = await Mealkit.find({ postId: post.id });
+        post.mealkits = mealkit;
+        return post;
+      });
 
+    // sliced posts is returned because above is async which = non-blocking
     return {
       posts: slicedPosts,
       hasMore: posts.length === realLimitPlusOne,

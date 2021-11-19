@@ -431,6 +431,7 @@ export type Post = {
   creatorId: Scalars['String'];
   creator: User;
   ingredients?: Maybe<Array<Ingredient>>;
+  mealkits?: Maybe<Array<Mealkit>>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   textSnippet: Scalars['String'];
@@ -612,7 +613,7 @@ export type SignedS3Result = {
   url: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -897,7 +898,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
 
 export type PostsByCreatorQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -932,6 +933,13 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   points
   voteStatus
+  mealkits {
+    id
+    name
+    images
+    price
+    portion
+  }
   creator {
     id
     username

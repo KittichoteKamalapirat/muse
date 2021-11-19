@@ -9,6 +9,23 @@
   color: black !important;
 }
 
+/* video::-webkit-media-controls-overlay-play-button {
+  display: none;
+} */
+
+/* this one hide the control panel that has play, sound, full screen etc */
+/* .welcome video::-webkit-media-controls-panel {
+  display: none;
+}
+
+.welcome video::-webkit-media-controls-play-button {
+  display: none;
+}
+
+.welcome video::-webkit-media-controls-overlay-play-button {
+  display: none;
+} */
+
 .swiper-button-prev {
   color: black !important;
 }

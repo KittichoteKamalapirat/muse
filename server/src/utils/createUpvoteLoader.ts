@@ -47,13 +47,7 @@ import { Upvote } from "../entities/Upvote";
 //   );
 
 const createUpvoteLoader = async (keys: any) => {
-  console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW");
-  console.log("keys");
-  console.log(keys);
   const upvotes = await Upvote.findByIds(keys as any);
-  console.log("upvotes");
-  console.log(upvotes);
-  console.log("--------------------------------------");
 
   const upvoteIdsToUpvote: Record<string, Upvote> = {};
   upvotes.forEach((upvote) => {

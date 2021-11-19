@@ -1,7 +1,7 @@
 import { PostsDocument, useMeQuery, usePostsQuery } from "../generated/graphql";
 import { Layout } from "../components/Layout";
 import NextLink from "next/link";
-import { Link } from "@chakra-ui/layout";
+import { Link, LinkBox, LinkOverlay } from "@chakra-ui/layout";
 import {
   Box,
   Button,
@@ -11,6 +11,7 @@ import {
   Avatar,
   Stack,
   Text,
+  Img,
 } from "@chakra-ui/react";
 import React from "react";
 import { UpvoteSection } from "../components/UpvoteSection";
@@ -63,30 +64,28 @@ const Index = () => {
               // borderWidth="1px"
             >
               <Flex alignItems="center" justifyContent="space-between">
-                <NextLink
-                  href={{
-                    pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
-                    query: { id: post.creator.id },
-                  }}
-                >
-                  <Link style={{ textDecoration: "none" }}>
-                    <Flex alignItems="center">
-                      <Avatar
-                        m={2}
-                        size="sm"
-                        src={post.creator.avatar}
-                        alt="creator avatar"
-                        border={1}
-                        // showBorder={true}
-                        // borderStyle="solid"
-                        // borderColor={primaryColor}
-                        // bg="white"
-                      />
+                <LinkBox>
+                  <NextLink
+                    href={{
+                      pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
+                      query: { id: post.creator.id },
+                    }}
+                  >
+                    <LinkOverlay>
+                      <Flex alignItems="center">
+                        <Avatar
+                          m={2}
+                          size="sm"
+                          src={post.creator.avatar}
+                          alt="creator avatar"
+                          border={1}
+                        />
 
-                      <Text>{post.creator.username}</Text>
-                    </Flex>
-                  </Link>
-                </NextLink>
+                        <Text>{post.creator.username}</Text>
+                      </Flex>
+                    </LinkOverlay>
+                  </NextLink>
+                </LinkBox>
 
                 {meData?.me?.id !== post.creator.id ? null : (
                   <Box>
@@ -97,26 +96,56 @@ const Index = () => {
 
               <Flex key={post.id}>
                 <Box flex={1}>
-                  <video controls>
-                    <source src={post.videoUrl} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
+                  <video
+                    controls
+                    src={post.videoUrl}
+                    poster={post.thumbnailUrl}
+                  />
+
                   <Flex justifyContent="space-between">
                     <UpvoteSection post={post} />
                   </Flex>
-                  <Box mx={2}>
-                    <NextLink
-                      href={{
-                        pathname: "/post/[id]",
-                        query: { id: post.id },
-                      }}
+
+                  <LinkBox>
+                    <Box mx={2}>
+                      <NextLink
+                        href={{
+                          pathname: "/post/[id]",
+                          query: { id: post.id },
+                        }}
+                      >
+                        <LinkOverlay>
+                          <Heading fontSize="xl">{post.title}</Heading>
+                          <Text>{post.textSnippet}... </Text>
+                        </LinkOverlay>
+                      </NextLink>
+                    </Box>
+
+                    <Box
+                      m={1}
+                      // borderWidth="1px" borderColor="gray.200"
                     >
-                      <Link style={{ textDecoration: "none" }}>
-                        <Heading fontSize="xl">{post.title}</Heading>
-                        <Text>{post.textSnippet}... </Text>
-                      </Link>
-                    </NextLink>
-                  </Box>
+                      {post.mealkits?.map((mealkit) => (
+                        <Flex key={mealkit.id}>
+                          <Img
+                            src={mealkit.images![0]}
+                            width="25%"
+                            borderRadius={5}
+                          />
+                          <Box m={1}>
+                            <Heading fontSize="md">
+                              Meal Kit: {mealkit.name}
+                            </Heading>
+                            <Text>
+                              For: {mealkit.portion}{" "}
+                              {mealkit.portion > 1 ? "people" : "person"}
+                            </Text>
+                            <Text>฿ {mealkit.price}</Text>
+                          </Box>
+                        </Flex>
+                      ))}
+                    </Box>
+                  </LinkBox>
                 </Box>
               </Flex>
             </Box>

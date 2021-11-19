@@ -8,6 +8,13 @@ fragment PostSnippet on Post {
   updatedAt
   points
   voteStatus
+  mealkits {
+    id
+    name
+    images
+    price
+    portion
+  }
 
   creator {
     id

@@ -45,15 +45,11 @@ const Post = ({}) => {
     <Box maxW={["none", "none", "40%"]} mx={["none", "auto"]}>
       <HeadingLayout heading={data?.post?.title}></HeadingLayout>
 
-      {/* 
-      <Box>
-        <Image src={data?.post?.thumbnailUrl} alt="image" />
-      </Box> */}
-
-      <video width="100%" controls>
-        <source src={data?.post?.videoUrl} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+      <video
+        controls
+        src={data?.post.videoUrl}
+        poster={data?.post.thumbnailUrl}
+      />
       <Wrapper>
         <Heading fontSize="x-large">เกี่ยวกับเมนูนี้</Heading>
         {!data?.post?.cooktime ? null : (
