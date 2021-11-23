@@ -7,9 +7,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
+  OneToOne,
 } from "typeorm";
 import { Mealkit } from "./Mealkit";
 import { Order } from "./Order";
+import { Tracking } from "./Tracking";
 import { User } from "./User";
 
 @ObjectType()
@@ -41,7 +44,7 @@ export class CartItem extends BaseEntity {
   @Field(() => Int)
   mealkitId: number;
 
-  @Field(() => Mealkit, { nullable: true })
+  @Field(() => Mealkit)
   @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
   mealkit: Mealkit;
 
@@ -53,6 +56,15 @@ export class CartItem extends BaseEntity {
   @Column({ nullable: true })
   @Field(() => Int)
   orderId: number;
+
+  //tracking
+
+  @Field({ nullable: true })
+  @ManyToOne(() => Tracking, (tracking) => tracking.cartItems)
+  tracking: Tracking;
+
+  @Column({ nullable: true })
+  trackingId: number;
 
   @Field(() => String)
   @CreateDateColumn()

@@ -59,7 +59,13 @@ export class MealkitResolver {
   async mealkits(
     @Arg("postId", () => Int) postId: number
   ): Promise<Mealkit[] | undefined> {
-    const mealkit = await Mealkit.find({ postId });
+    // const mealkit = await Mealkit.find({ postId });
+
+    const mealkit = await Mealkit.find({
+      where: { postId },
+      relations: ["creator"],
+    });
+
     return mealkit;
   }
 

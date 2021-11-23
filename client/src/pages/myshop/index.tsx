@@ -21,7 +21,12 @@ import {
   useMeQuery,
 } from "../../generated/graphql";
 import { Center } from "@chakra-ui/layout";
-import { SmallAddIcon, SpinnerIcon, StarIcon } from "@chakra-ui/icons";
+import {
+  PlusSquareIcon,
+  SmallAddIcon,
+  SpinnerIcon,
+  StarIcon,
+} from "@chakra-ui/icons";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 
 interface MyShopProps {}
@@ -34,7 +39,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
       <Wrapper>
         <Heading my={8}>My shop</Heading>
 
-        <Flex>
+        <Flex alignItems="center">
           <Box flex={1}>
             <Avatar
               margin="auto"
@@ -48,7 +53,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           <Box flex={3} ml={2}>
             <Heading fontSize="md">{meData?.me?.username}</Heading>
             <Text>{meData?.me?.about}</Text>
-            <Text>Follower: xxx</Text>
+            <Text>Followers: {meData?.me?.followerNum}</Text>
             <Flex alignItems="center">
               <Flex>
                 <StarIcon color={primaryColor} />
@@ -111,7 +116,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/myshop/order",
-                query: { status: OrderStatus.Complete },
+                query: { status: OrderStatus.Delivered },
               }}
             >
               <Link>
@@ -126,24 +131,24 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           <Heading fontSize="md">My products</Heading>
           <Box textAlign="left" mt={4}>
             <Box mt={2}>
-              <NextLink href="/myshop/posts/" as="/myshop/posts/">
-                <Link>
-                  {/* <AccountIcon /> */}
-                  My posts and products
-                </Link>
-              </NextLink>
-              <Divider mt={2} />
-            </Box>
-
-            <Box mt={2}>
               <NextLink href="/create-post">
                 <Text as={Link}>
-                  {/* <SmallAddIcon />  */}
+                  <PlusSquareIcon mr={2} fontSize="lg" color={primaryColor} />
                   Create new video with mealkits
                 </Text>
               </NextLink>
               <Divider mt={2} />
             </Box>
+          </Box>
+
+          <Box mt={2}>
+            <NextLink href="/myshop/posts/" as="/myshop/posts/">
+              <Link>
+                {/* <AccountIcon /> */}
+                My posts and products
+              </Link>
+            </NextLink>
+            <Divider mt={2} />
           </Box>
         </Box>
 

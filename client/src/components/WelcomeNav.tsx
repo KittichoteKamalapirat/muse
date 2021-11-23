@@ -1,32 +1,22 @@
-import { Button } from "@chakra-ui/button";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/menu";
 import React from "react";
-import { primaryColor } from "./Variables";
 import NextLink from "next/link";
-import SvgThflag from "./svgComponents/Thflag";
 import { NavDrawer } from "./NavDrawer";
+import { useMediaQuery } from "@chakra-ui/react";
+import { NavNoDrawer } from "./NavNotDrawer";
 
 interface WelcomeNavProps {}
 
 export const WelcomeNav: React.FC<WelcomeNavProps> = ({ children }) => {
+  const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
+
   return (
-    <Box pt={20}>
-      <Box
-        zIndex={1}
-        position="fixed"
-        top={0}
-        bg={primaryColor}
-        p={2}
-        ml={"auto"}
-        align="center"
-        width="100%"
-      >
+    <Box pt={4}>
+      <Box p={2} bgColor="white" ml={"auto"} align="center" width="100%">
         <Flex
           justifyContent="space-between"
           alignItems="center"
-          color="white"
+          color="gray.700"
           maxWidth="1000px"
         >
           <NextLink href="/">
@@ -34,10 +24,11 @@ export const WelcomeNav: React.FC<WelcomeNavProps> = ({ children }) => {
               style={{ textDecoration: "none" }}
               // textDecoration="none"
             >
-              <Heading fontSize="lg">Cookknow</Heading>
+              <Heading fontSize={["lg", "2xl"]}>Cookknow</Heading>
             </Link>
           </NextLink>
-          <NavDrawer />
+
+          {isLargerThan30Em ? <NavNoDrawer /> : <NavDrawer />}
         </Flex>
       </Box>
 

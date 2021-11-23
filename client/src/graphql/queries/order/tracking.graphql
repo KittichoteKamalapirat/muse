@@ -1,0 +1,26 @@
+query tracking($id: Int!) {
+  tracking(id: $id) {
+    trackingNo
+    courier
+    courierKey
+    status
+    color
+    currentStatus
+    cartItems {
+      mealkit {
+        name
+        images
+      }
+    }
+    timelines {
+      date
+      details {
+        dateTime
+        date
+        time
+        status
+        description
+      }
+    }
+  }
+}

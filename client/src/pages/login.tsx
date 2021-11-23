@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Link, Text, Heading } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
@@ -18,7 +18,7 @@ export const Login: React.FC<{}> = ({}) => {
     <WelcomeNav>
       <Wrapper variant="small">
         <Box textAlign="center">
-          <Text fontSize="xl">Log in</Text>
+          <Heading fontSize="xl">Log in</Heading>
         </Box>
 
         <Formik

@@ -18,8 +18,8 @@ import { UpvoteSection } from "../components/UpvoteSection";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { withApollo } from "../util/withApollo";
 import { Welcome } from "../components/Welcome";
-import { NewsFeedSkeleton } from "../components/Icons/NewsFeedSkeleton";
-import { primaryColor } from "../components/Variables";
+
+import { NewsFeedSkeleton } from "../components/skeletons/NewsFeedSkeleton";
 
 const Index = () => {
   const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
@@ -31,16 +31,19 @@ const Index = () => {
     },
   });
 
-  if (meLoading) {
-    return <Text>Loading</Text>;
-  }
-  if (!meData?.me && data?.posts) {
-    return <Welcome posts={data.posts.posts} />;
-  }
-  if (loading) {
+  // 1. both loading -> retunr skeleton
+  // 2. not meLoading && no meData -> redirect to welcome
+  // 3. not loading && no data
+  // 4. both not loading -> data and
+  if (loading || meLoading) {
     return <NewsFeedSkeleton />;
   }
-  if (!loading && !data) {
+
+  if (!meData?.me) {
+    return <Welcome />;
+  }
+
+  if (!data) {
     return (
       <div>
         <div>query failed</div>
@@ -93,7 +96,6 @@ const Index = () => {
                   </Box>
                 )}
               </Flex>
-
               <Flex key={post.id}>
                 <Box flex={1}>
                   <video

@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form } from "formik";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Heading, Link } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import { InputField } from "../components/InputField";
 import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
@@ -8,6 +8,8 @@ import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import { withApollo } from "../util/withApollo";
 import { HeadingLayout } from "../components/HeadingLayout";
+import { WelcomeNav } from "../components/WelcomeNav";
+import NextLink from "next/link";
 
 interface registerProps {}
 
@@ -18,10 +20,14 @@ export const Register: React.FC<registerProps> = ({}) => {
   const { isCreator } = router.query;
 
   return (
-    <HeadingLayout
-      heading={isCreator ? "Register Creator Account" : " Create Account"}
-    >
+    <WelcomeNav>
       <Wrapper variant="small">
+        <Box textAlign="center">
+          <Heading fontSize="xl">
+            {isCreator ? "Register Creator Account" : " Create Account"}
+          </Heading>
+        </Box>
+
         <Formik
           initialValues={{
             email: "",
@@ -101,8 +107,19 @@ export const Register: React.FC<registerProps> = ({}) => {
                   type="password"
                 />
               </Box>
+
+              <Box textAlign="center" mt={5}>
+                Already have an account?{" "}
+                <NextLink href="/login">
+                  <Link fontWeight="700" color="red.400">
+                    Log in
+                  </Link>
+                </NextLink>
+              </Box>
+
               <Button
                 mt={4}
+                width="100%"
                 type="submit"
                 isLoading={isSubmitting}
                 colorScheme="teal"
@@ -114,7 +131,7 @@ export const Register: React.FC<registerProps> = ({}) => {
           )}
         </Formik>
       </Wrapper>
-    </HeadingLayout>
+    </WelcomeNav>
   );
 };
 

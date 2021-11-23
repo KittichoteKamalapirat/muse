@@ -32,6 +32,8 @@ import { Follow } from "./entities/Follow";
 import { FollowResolver } from "./resolvers/follow";
 import { PaymentInfo } from "./entities/PaymentInfo";
 import { PaymentInfoResolver } from "./resolvers/paymentInfo";
+import { TrackingResolver } from "./resolvers/tracking";
+import { Tracking } from "./entities/Tracking";
 
 const main = async () => {
   const conn = await createConnection({
@@ -56,6 +58,7 @@ const main = async () => {
       Payment,
       Follow,
       PaymentInfo,
+      Tracking,
     ],
   });
 
@@ -74,8 +77,9 @@ const main = async () => {
   );
   app.use(express.json());
 
-  app.get("/redirect", (req, res) => {
-    res.redirect("http://google.com/");
+  app.post("/update-tracking", (req) => {
+    const trackingData = req.body.data;
+    Tracking.update({ id: trackingData.trackingNo }, { ...trackingData });
   });
 
   app.post("/payment-confirmation", async (req, res) => {
@@ -86,6 +90,7 @@ const main = async () => {
       const ref1 = parseInt(req.body.billPaymentRef1);
       console.log({ ref1 });
       await Order.update({ id: ref1 }, { status: OrderStatus.ToDeliver });
+      //have to send back to SCB
       res.send({
         resCode: "00",
         "resDesc ": "success",
@@ -150,6 +155,7 @@ const main = async () => {
       OrderResolver,
       FollowResolver,
       PaymentInfoResolver,
+      TrackingResolver,
     ],
     validate: false,
   });
@@ -175,7 +181,7 @@ const main = async () => {
   // Rest to test whether it is running all not
 
   apolloServer.applyMiddleware({ app, cors: false });
-  console.log(process.memoryUsage());
+  // console.log(process.memoryUsage());
 
   app.listen(parseInt(process.env.PORT), () => {
     console.log(`server started on port 4000`);

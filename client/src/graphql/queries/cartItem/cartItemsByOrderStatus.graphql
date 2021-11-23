@@ -1,0 +1,23 @@
+query cartItemsByOrderStatus($status: OrderStatus!) {
+  cartItemsByOrderStatus(status: $status) {
+    id
+    orderId
+    quantity
+    quantity
+    total
+    mealkit {
+      id
+      name
+      price
+      deliveryFee
+
+      images
+      creatorId
+      creator {
+        username
+        avatar
+      }
+    }
+    mealkitId
+  }
+}

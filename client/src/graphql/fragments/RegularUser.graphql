@@ -7,4 +7,5 @@ fragment RegularUser on User {
   avatar
   isCreator
   about
+  followerNum
 }

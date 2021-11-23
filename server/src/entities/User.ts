@@ -34,7 +34,7 @@ export class User extends BaseEntity {
   @Field()
   email!: string;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true })
   @Field()
   phonenumber!: string;
 
@@ -72,6 +72,7 @@ export class User extends BaseEntity {
   isFollowed: boolean;
 
   // relatioship with profile starts
+  @Field({ nullable: true })
   @OneToOne((type) => Address, (address) => address.user)
   @JoinColumn()
   address: Address;

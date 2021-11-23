@@ -92,11 +92,8 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
               <Field as="select" name="bankCode">
                 <option value="select">select</option>
                 {banksArray.map((bank) => (
-                  <option value={bank.bankCode}>
-                    <SvgScb />
-                    <Text>
-                      {bank.bank} ({bank.bankCode}){" "}
-                    </Text>
+                  <option value={bank.bankCode} key={bank.bank}>
+                    {bank.bank}
                   </option>
 
                   // </Box>

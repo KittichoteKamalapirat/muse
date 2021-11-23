@@ -118,7 +118,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     name: "",
     price: "",
     portion: "",
-    items: [""],
+    items: [],
     images: [""],
   });
 
@@ -466,7 +466,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
     setSubmitting(false);
   };
-
+  console.log("ingredientsField in parents");
+  console.log({ ingredientsField });
   let render: any;
   switch (step) {
     case 1:
@@ -559,6 +560,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       render = (
         <HeadingLayout heading="Add a mealkit">
           <CreateMealkit
+            ingredientsField={ingredientsField}
             input={mealkitInput}
             setInput={setMealkitInput}
             nextStep={nextStep}

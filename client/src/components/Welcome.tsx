@@ -11,6 +11,7 @@ import {
   MenuList,
   Center,
   Avatar,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import React from "react";
@@ -41,14 +42,10 @@ import { Slider } from "./Slider";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import SvgSdg12 from "./svgComponents/Sdg12";
 
-interface WelcomeProps {
-  // posts?: Post[] | undefined;
-  // posts?: Post[] | undefined;
-  posts?: PostSnippetFragment[] | undefined;
-}
+interface WelcomeProps {}
 
-export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
-  console.log({ posts });
+export const Welcome: React.FC<WelcomeProps> = ({}) => {
+  const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
 
   // const myLoader = ({ src, width, quality }) => {
   //   return `https://cookknow.com/${src}?w=${width}&q=${quality || 75}`;
@@ -69,7 +66,7 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
         <Flex
           flexDirection="column"
           alignItems="center"
-          mt={["30px", "120px"]}
+          mt={["120px", "120px"]}
           mb={["5px", "100px"]}
           pb={["40px"]}
         >
@@ -80,7 +77,9 @@ export const Welcome: React.FC<WelcomeProps> = ({ posts }) => {
           >
             <Box>
               {" "}
-              <Heading>The Meal Kit Marketplace</Heading>
+              <Heading>
+                The Meal Kit {isLargerThan30Em ? null : <br />} Marketplace
+              </Heading>
               <Box
                 // flexDirection={["column", "row"]}
                 mt={4}

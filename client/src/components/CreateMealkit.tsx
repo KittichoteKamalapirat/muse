@@ -13,9 +13,12 @@ import {
   Image,
   AspectRatio,
   Img,
+  Checkbox,
+  Stack,
+  CheckboxGroup,
 } from "@chakra-ui/react";
 import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
-import { Form } from "formik";
+import { FieldArray, Form } from "formik";
 import React, { useState } from "react";
 import { MealkitInput, useCreateMealkitMutation } from "../generated/graphql";
 import { InputField } from "./InputField";
@@ -24,6 +27,11 @@ import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
 import { HeadingLayout } from "./HeadingLayout";
 
 interface CreateMealkitProps {
+  ingredientsField: {
+    ingredient: string;
+    amount: string;
+    unit: string;
+  }[];
   input: {
     name: string;
     price: string;
@@ -40,6 +48,7 @@ interface CreateMealkitProps {
 }
 
 export const CreateMealkit: React.FC<CreateMealkitProps> = ({
+  ingredientsField,
   input,
   setInput,
   prevStep,
@@ -152,13 +161,62 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             <InputRightAddon children="people" mt={2} />
           </InputGroup>
         </Flex>
-        <InputField
+        {/* <InputField
           name="items"
           type="text"
           value={input.items}
           placeholder="items"
           onChange={(e) => setInput({ ...input, items: e.target.value })}
-        ></InputField>
+        ></InputField> */}
+        <Text>items included</Text>
+
+        {/* checkbox */}
+        <Box my={4}>
+          {" "}
+          <Heading fontSize="lg">Items include</Heading>
+          <CheckboxGroup
+            colorScheme="green"
+            // defaultValue={ingredientsField.map(
+            //   (ingredientWithUnit) => ingredientWithUnit.ingredient
+            // )}
+          >
+            {ingredientsField &&
+              ingredientsField.map((ingredientWitUnit, index) => (
+                <Stack key={index}>
+                  {" "}
+                  <Checkbox
+                    colorScheme="green"
+                    value={ingredientWitUnit.ingredient}
+                    onChange={(e) => {
+                      const index = input.items.indexOf(e.target.value);
+
+                      if (index === -1) {
+                        //not in the array yet
+                        if (input.items.length === 0) {
+                          setInput({
+                            ...input,
+                            items: [e.target.value],
+                          });
+                        } else {
+                          setInput({
+                            ...input,
+                            items: input.items.concat(e.target.value),
+                          });
+                        }
+                      } else {
+                        setInput({
+                          ...input,
+                          items: input.items.filter((_, i) => index !== i),
+                        });
+                      }
+                    }}
+                  >
+                    {ingredientWitUnit.ingredient}
+                  </Checkbox>
+                </Stack>
+              ))}
+          </CheckboxGroup>
+        </Box>
       </Form>
 
       <Flex justifyContent="space-between">

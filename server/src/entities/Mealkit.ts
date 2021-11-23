@@ -56,7 +56,7 @@ export class Mealkit extends BaseEntity {
   @Field()
   creatorId: string;
 
-  @Field(() => User, { nullable: true }) //need to have explicit type
+  @Field(() => User) //need to have explicit type
   @ManyToOne((type) => User, (user) => user.mealkits)
   //user.posts have to be added in the User type
   creator: User;

@@ -14,6 +14,7 @@ import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
 
 interface likeProps {}
 
@@ -26,6 +27,17 @@ const Like: React.FC = ({}) => {
 
   let body = null;
 
+  if (loading) {
+    return (
+      <Wrapper>
+        {[...Array(10)].map((x, index) => (
+          <Box key={index} my={4}>
+            <LikeSkeleton />{" "}
+          </Box>
+        ))}{" "}
+      </Wrapper>
+    );
+  }
   if (loading) {
     body = <Text>Loading</Text>;
   } else if (!meData?.me) {

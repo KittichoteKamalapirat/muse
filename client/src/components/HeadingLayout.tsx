@@ -48,7 +48,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
           {heading}
         </Heading>
       </Box>
-      <Box mt={mt || 20}>{children}</Box>
+      <Box mt={mt || 10}>{children}</Box>
     </>
   );
 };

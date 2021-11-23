@@ -15,6 +15,7 @@ import {
 
 import { Divider, Flex, Text } from "@chakra-ui/layout";
 import React, { LegacyRef } from "react";
+import SvgHamburger from "./svgComponents/Hamburger";
 import NextLink from "next/link";
 import { primaryColor } from "./Variables";
 import { HamburgerIcon } from "@chakra-ui/icons";
@@ -27,7 +28,6 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({}) => {
 
   return (
     <>
-      {/* fix this later */}
       <Box ref={btnRef as any} onClick={onOpen}>
         <HamburgerIcon />
       </Box>

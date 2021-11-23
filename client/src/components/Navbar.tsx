@@ -53,14 +53,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   // server knows who is me, knows who voted
   // client knows who is me
 
-  let body = null;
+  let currentUser = null;
 
   // data is loading
   if (loading) {
   } else if (!data?.me) {
     // this can return undefined, then ! turn it to true
     // user not logged in
-    body = (
+    currentUser = (
       <>
         <NextLink href="/login">
           <Link color="white" mr={2}>
@@ -73,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
       </>
     );
   } else {
-    body = (
+    currentUser = (
       <Flex align="center">
         <Box>{data.me.username}</Box>
       </Flex>
@@ -136,7 +136,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
   //         fontWeight="medium"
   //         textColor={accountActive ? primaryColor : inActiveGray}
   //       >
-  //         {body}
+  //         {currentUser}
   //       </Text>
   //     </Flex>
   //   );
@@ -173,12 +173,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           />
         </InputGroup> */}
 
-        <Flex width={["100%", "100%", "40%"]} justifyContent="space-between">
+        <Flex
+          width={["100%", "100%", "40%"]}
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <NextLink href="/">
             <Link mx={2} fontSize="sm" style={{ textDecoration: "none" }}>
-              <Heading fontSize="xl" color="{primaryColor}">
-                Cookknow
-              </Heading>
+              <Heading fontSize="sm">Cookknow</Heading>
             </Link>
           </NextLink>
 
@@ -358,20 +360,14 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                   borderColor={accountActive ? primaryColor : inActiveGray}
                 /> */}
 
-                <Avatar
-                  m={2}
-                  size="xs"
-                  src={data?.me?.avatar}
-                  alt="creator avatar"
-                  border={1}
-                />
+                <Avatar size="xs" src={data?.me?.avatar} alt="creator avatar" />
 
                 <Text
                   fontSize="xs"
                   fontWeight="medium"
                   textColor={accountActive ? primaryColor : inActiveGray}
                 >
-                  {body}
+                  {currentUser}
                 </Text>
               </Flex>
             )}

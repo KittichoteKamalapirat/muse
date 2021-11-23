@@ -1,7 +1,8 @@
 import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { CartItem } from "../generated/graphql";
 
-export type mappedResult = {
+//format = array of creator,avatar cartItems
+export type mappedCartItemsByCreatorResult = {
   creatorId: string;
   creatorName: string;
   avatar: string;
@@ -10,15 +11,28 @@ export type mappedResult = {
   cartItems: CartItem[];
 };
 
+const reformat = (item: CartItem): mappedCartItemsByCreatorResult => {
+  const cartItemByOrder = {
+    creatorId: item.mealkit?.creatorId,
+    creatorName: item.mealkit?.creator?.username,
+    avatar: item.mealkit?.creator?.avatar,
+    deliveryFee: item.mealkit?.deliveryFee,
+    totalByCreator: item.total,
+    cartItems: [item],
+  };
+
+  return cartItemByOrder;
+};
+
 export const toCartItemsByCreatorMap = (cartItems: CartItem[]) => {
-  const mappedArray: mappedResult[] = [];
+  console.log(cartItems);
+  const mappedArray: mappedCartItemsByCreatorResult[] = [];
 
   cartItems.map((item, index) => {
     if (mappedArray.length > 0) {
       const repeatedIndex = mappedArray
         .map((obj) => obj.creatorName)
         .indexOf(item.mealkit?.creator?.username as string);
-      console.log({ repeatedIndex });
 
       if (repeatedIndex > -1) {
         //same mealkit from a creator
@@ -36,27 +50,13 @@ export const toCartItemsByCreatorMap = (cartItems: CartItem[]) => {
           currentMealkitFee + item.total;
       } else {
         // no repeated one
-        console.log("hi");
-        const sellerItem: mappedResult = {
-          creatorId: item.mealkit?.creatorId as string,
-          avatar: item.mealkit?.creator?.avatar as string,
-          creatorName: item.mealkit?.creator?.username as string,
-          deliveryFee: item.mealkit?.deliveryFee!,
-          totalByCreator: item.total,
-          cartItems: [item],
-        };
+
+        const sellerItem = reformat(item);
+
         mappedArray.push(sellerItem);
       }
     } else {
-      console.log("hi2");
-      const sellerItem: mappedResult = {
-        creatorId: item.mealkit?.creatorId as string,
-        avatar: item.mealkit?.creator?.avatar as string,
-        creatorName: item.mealkit?.creator?.username as string,
-        deliveryFee: item.mealkit?.deliveryFee!,
-        totalByCreator: item.total,
-        cartItems: [item],
-      };
+      const sellerItem = reformat(item);
       mappedArray.push(sellerItem);
     }
   });

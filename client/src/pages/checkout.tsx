@@ -2,36 +2,24 @@ import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import React, { useEffect, useState } from "react";
 import { HeadingLayout } from "../components/HeadingLayout";
-import { Layout } from "../components/Layout";
 import { Wrapper } from "../components/Wrapper";
 import {
   CartItem,
   useAddressQuery,
   useCartItemsQuery,
   useCreateOrderMutation,
-  useMeQuery,
-  useUpdateCartItemMutation,
 } from "../generated/graphql";
-import { createWithApollo } from "../util/createWithApollo";
 import { withApollo } from "../util/withApollo";
 import NextLink from "next/link";
 import router, { useRouter } from "next/router";
 import { Button, IconButton } from "@chakra-ui/button";
-import {
-  AddIcon,
-  ChevronRightIcon,
-  MinusIcon,
-  SmallAddIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Table, Tr, Th, Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
 
-import axios from "axios";
-import { useField } from "formik";
 import {
   mappedResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
-import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { primaryColor } from "../components/Variables";
 
 interface checkoutProps {}

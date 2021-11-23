@@ -22,6 +22,9 @@ import { s3, s3Params } from "../utils/s3";
 import { createScbQr, scbToken } from "./payment";
 import axios from "axios";
 import { s3Bucket } from "../constants";
+import { User } from "../entities/User";
+import { Address } from "../entities/Address";
+import { Tracking } from "../entities/Tracking";
 
 //we need to make TypeGraphQL aware of the enums manually by calling the registerEnumType function and providing the enum name for GraphQL (accotding to Doc)
 registerEnumType(OrderStatus, {
@@ -134,12 +137,16 @@ export class OrderResolver {
     return cartItems;
   }
 
+  //get orderItems for current creator
+  // by status
+  // has orderId -> already ordered
+  //the mealkits in the order belongs to the current creator
   @UseMiddleware(isAuth)
   @Query(() => [CartItem])
   async creatorOrderItems(
     @Arg("status", () => OrderStatus) status: OrderStatus,
     @Ctx() { req, res }: MyContext
-  ) {
+  ): Promise<CartItem[]> {
     const cartItems = await getConnection().query(
       `
       SELECT *
@@ -156,13 +163,32 @@ export class OrderResolver {
       `
     );
 
-    cartItems.forEach((cartItem: CartItem, index: number) => {
-      const mealkit = Mealkit.findOne(cartItem.mealkitId);
-      cartItems[index].mealkit = mealkit;
-    });
+    // cartItems.map(async (cartItem: CartItem, index: number) => {
+    //   const mealkit = await Mealkit.findOne(cartItem.mealkitId);
+    //   const user = await User.findOne(cartItem.userId);
+    //   const address = await Address.findOne({
+    //     where: { userId: cartItem.userId },
+    //   });
+    //   cartItems[index].mealkit = mealkit;
+    //   cartItems[index].user = user;
+    //   cartItems[index].user.address = address;
+    // });
     console.log(cartItems);
-    return cartItems;
+    return cartItems.map(async (cartItem: CartItem, index: number) => {
+      const mealkit = await Mealkit.findOne(cartItem.mealkitId);
+      const user = await User.findOne(cartItem.userId);
+      const address = await Address.findOne({
+        where: { userId: cartItem.userId },
+      });
+      const tracking = await Tracking.findOne({ id: cartItem.trackingId });
+      mealkit && (cartItem.mealkit = mealkit);
+      user && (cartItem.user = user);
+      address && (cartItem.user.address = address);
+      tracking && (cartItem.tracking = tracking);
+      return cartItem;
+    });
   }
+
   @UseMiddleware(isAuth)
   @Query(() => [Order])
   async myOrders(
@@ -171,9 +197,46 @@ export class OrderResolver {
   ): Promise<Order[] | undefined> {
     const orders = await Order.find({
       where: { userId: req.session.userId, status: status },
-      relations: ["cartItems", "cartItems.mealkit", "payment"],
+      relations: [
+        "cartItems",
+        "cartItems.mealkit",
+        "cartItems.mealkit.creator",
+        "payment",
+      ],
     });
 
     return orders;
+  }
+
+  @UseMiddleware(isAuth)
+  @Query(() => [CartItem])
+  async cartItemsByOrderStatus(
+    @Arg("status", () => OrderStatus) status: OrderStatus,
+    @Ctx() { req, res }: MyContext
+  ): Promise<CartItem[] | undefined> {
+    // const orders = await CartItem.find({
+    //   where: { userId: req.session.userId },
+    //   // relations: ["", "cartItems.mealkit", "payment"],
+    // });
+
+    const cartItems = await getConnection().query(
+      `
+      SELECT *
+      FROM cart_item
+      INNER JOIN "order"
+      ON cart_item."orderId"="order".id 
+      WHERE "order".status = '${status}'
+      AND "order"."userId" = '${req.session.userId}'
+      AND "orderId" IS NOT NULL
+      `
+    );
+
+    return cartItems.map(async (cartItem: CartItem) => {
+      cartItem.mealkit = (await Mealkit.findOne(cartItem.mealkitId)) as Mealkit;
+      cartItem.mealkit.creator = (await User.findOne(
+        cartItem.mealkit.creatorId
+      )) as User;
+      return cartItem;
+    });
   }
 }

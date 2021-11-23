@@ -14,8 +14,14 @@ query myOrders($status: OrderStatus!) {
         name
         price
         images
+        deliveryFee
+        creator {
+          username
+          avatar
+        }
       }
     }
+    paymentId
     payment {
       id
       qrUrl
