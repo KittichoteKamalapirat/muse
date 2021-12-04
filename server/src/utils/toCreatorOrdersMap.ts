@@ -1,34 +1,58 @@
-import { Address, CartItem, Tracking } from "../generated/graphql";
+import { Field, Int, ObjectType } from "type-graphql";
+import { Address } from "../entities/Address";
+import { CartItem } from "../entities/CartItem";
+import { Tracking } from "../entities/Tracking";
 
 //format = array by orderId
 //format = array of creator,avatar cartItems
 //this page is for users! not creators
 
-export type mappedCartItemsByOrderResult = {
-  orderId: number;
-  username: string;
-  avatar: string;
-  cartItems: CartItem[];
-  address: Address;
-  deliveryFee: number;
-  // tracking: Tracking;
-};
+// export type MappedCreatorOrders = {
+//   orderId: number;
+//   username: string;
+//   avatar: string;
+//   cartItems: CartItem[];
+//   address: Address;
+//   deliveryFee: number;
+//   tracking: Tracking;
+// };
 
-const reformat = (item: CartItem): mappedCartItemsByOrderResult => {
+@ObjectType()
+export class MappedCreatorOrders {
+  @Field({ nullable: true })
+  orderId: number;
+  @Field()
+  username: string;
+  @Field()
+  avatar: string;
+  @Field(() => [CartItem])
+  cartItems: CartItem[];
+  @Field(() => Address)
+  address: Address;
+  @Field(() => Int)
+  deliveryFee: number;
+  @Field(() => Tracking, { nullable: true })
+  tracking: Tracking;
+}
+
+const reformat = (item: CartItem): MappedCreatorOrders => {
   const cartItemByOrder = {
-    orderId: item.orderId!,
+    orderId: item.orderId,
+
     username: item.user?.username!,
     avatar: item.user?.avatar!,
+
     cartItems: [item]!,
+
     address: item.user?.address!,
     deliveryFee: item.mealkit?.deliveryFee!,
-    // tracking: item.tracking!,
+    tracking: item.tracking!,
   };
   return cartItemByOrder;
 };
 
-export const toMyOrderByOrderIdMap = (cartItems: CartItem[]) => {
-  const mappedArray: mappedCartItemsByOrderResult[] = [];
+export const toCreatorOrdersMap = (cartItems: CartItem[]) => {
+  const mappedArray: MappedCreatorOrders[] = [];
 
   cartItems.map((item, index) => {
     if (mappedArray.length > 0) {
@@ -50,11 +74,11 @@ export const toMyOrderByOrderIdMap = (cartItems: CartItem[]) => {
         }
       } else {
         // different orderId
-        const cartItemByOrder: mappedCartItemsByOrderResult = reformat(item);
+        const cartItemByOrder: MappedCreatorOrders = reformat(item);
         mappedArray.push(cartItemByOrder);
       }
     } else {
-      const cartItemByOrder: mappedCartItemsByOrderResult = reformat(item);
+      const cartItemByOrder: MappedCreatorOrders = reformat(item);
       mappedArray.push(cartItemByOrder);
     }
   });

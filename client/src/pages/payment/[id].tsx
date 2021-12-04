@@ -14,6 +14,7 @@ import {
   usePaymentQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
+import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 
 interface PaymentProps {}
 
@@ -42,7 +43,11 @@ const Payment: React.FC<PaymentProps> = ({}) => {
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
   if (loading) {
-    return <Text>Loading...</Text>;
+    return (
+      <Wrapper>
+        <PaymentSkeleton />
+      </Wrapper>
+    );
   }
 
   return (

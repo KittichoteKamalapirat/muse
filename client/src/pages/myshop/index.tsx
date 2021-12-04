@@ -16,7 +16,7 @@ import { Wrapper } from "../../components/Wrapper";
 import { withApollo } from "../../util/withApollo";
 import NextLink from "next/link";
 import {
-  OrderStatus,
+  CartItemStatus,
   useFollowersQuery,
   useMeQuery,
 } from "../../generated/graphql";
@@ -28,6 +28,8 @@ import {
   StarIcon,
 } from "@chakra-ui/icons";
 import { inActiveGray, primaryColor } from "../../components/Variables";
+import SvgToDeliver from "../../components/svgComponents/ToDeliver";
+import SvgOnDelivery from "../../components/svgComponents/OnDelivery";
 
 interface MyShopProps {}
 
@@ -77,31 +79,37 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/myshop/order",
-                query: { status: OrderStatus.ToDeliver },
+                query: { status: CartItemStatus.ToDeliver },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
-                <Text>To deliver</Text>
+                <Center>
+                  <SvgToDeliver />
+                </Center>
+
+                <Text>To be shipped</Text>
               </Link>
             </NextLink>
 
             <NextLink
               href={{
                 pathname: "/myshop/order",
-                query: { status: OrderStatus.OnDelivery },
+                query: { status: CartItemStatus.OnDelivery },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
-                <Text>Shipping</Text>
+                <Center>
+                  <SvgOnDelivery />
+                </Center>
+
+                <Text>On the way</Text>
               </Link>
             </NextLink>
 
             <NextLink
               href={{
                 pathname: "/myshop/order",
-                query: { status: OrderStatus.PaymentPending },
+                query: { status: CartItemStatus.PaymentPending },
               }}
             >
               <Link textAlign="center" flex={1}>
@@ -116,7 +124,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/myshop/order",
-                query: { status: OrderStatus.Delivered },
+                query: { status: CartItemStatus.Delivered },
               }}
             >
               <Link>

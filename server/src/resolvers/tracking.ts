@@ -10,8 +10,8 @@ import {
   Resolver,
 } from "type-graphql";
 import { ETRACKINGS_API_KEY, ETRACKINGS_API_SECRET } from "../constants";
-import { CartItem } from "../entities/CartItem";
-import { Order, OrderStatus } from "../entities/Order";
+import { CartItem, CartItemStatus } from "../entities/CartItem";
+import { Order } from "../entities/Order";
 import { Tracking } from "../entities/Tracking";
 
 // @ObjectType()
@@ -44,8 +44,10 @@ import { Tracking } from "../entities/Tracking";
 
 @InputType()
 class TrackingInput {
-  @Field()
-  orderId: number;
+  // @Field()
+  // orderId: number;
+  @Field(() => [Int])
+  cartItemIds: number[];
   @Field()
   trackingNo: string;
   @Field()
@@ -125,10 +127,6 @@ export class TrackingResolver {
   @Mutation(() => Tracking)
   async createTracking(
     @Arg("input") input: TrackingInput
-    // @Arg("orderId") orderId: number,
-    // @Arg("trackingNo") trackingNo: string,
-    // @Arg("courier") courier: string
-    //   ): Promise<TrackingResult | Error> {
   ): Promise<Tracking | Error | undefined> {
     // 1. look for the tracking by the number
     // 2. if there traking exists and valid (check amount of something) - . not sure tho wto check
@@ -152,7 +150,7 @@ export class TrackingResolver {
         console.log(timeline);
       });
 
-      Order.update({ id: input.orderId }, { status: OrderStatus.OnDelivery });
+      // Order.update({ id: input.orderId }, { status: OrderStatus.OnDelivery });
 
       const tracking = await Tracking.create({
         trackingNo: trackingData.trackingNo,
@@ -165,10 +163,14 @@ export class TrackingResolver {
         timelines: trackingData.timelines,
       }).save();
 
-      await CartItem.update(
-        { orderId: input.orderId },
-        { trackingId: tracking.id }
-      );
+      input.cartItemIds.forEach(async (id) => {
+        await CartItem.update(
+          { id: id },
+          { trackingId: tracking.id, status: CartItemStatus.OnDelivery }
+        );
+      });
+
+      // CartItem.update({ id: input.cartItemId }, { status: CartItemStatus.OnDelivery });
       return tracking;
     } catch (error) {
       console.log(error.message);

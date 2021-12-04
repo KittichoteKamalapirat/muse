@@ -8,6 +8,7 @@ import {
 import { gql } from "@apollo/client";
 import { Button } from "@chakra-ui/button";
 import { inActiveGray } from "./Variables";
+import { Box } from "@chakra-ui/layout";
 
 interface FollowSectionProps {
   targetUserId: string;
@@ -63,18 +64,20 @@ export const FollowSection: React.FC<FollowSectionProps> = ({
   const [toggleFollow] = useToggleFollowMutation();
 
   return (
-    <Button
-      colorScheme={!user.isFollowed ? "teal" : inActiveGray}
-      minWidth="110px"
-      variant={!user.isFollowed ? "solid" : "outline"}
-      onClick={async () => {
-        await toggleFollow({
-          variables: { targetUserId: targetUserId },
-          update: (cache) => updateAfterToggle(cache, targetUserId),
-        });
-      }}
-    >
-      {!user.isFollowed ? "Follow" : "Following"}
-    </Button>
+    <Box my={4}>
+      <Button
+        colorScheme={!user.isFollowed ? "teal" : inActiveGray}
+        minWidth="110px"
+        variant={!user.isFollowed ? "solid" : "outline"}
+        onClick={async () => {
+          await toggleFollow({
+            variables: { targetUserId: targetUserId },
+            update: (cache) => updateAfterToggle(cache, targetUserId),
+          });
+        }}
+      >
+        {!user.isFollowed ? "Follow" : "Following"}
+      </Button>
+    </Box>
   );
 };

@@ -161,6 +161,7 @@ export class UserResolver {
   async users(): Promise<User[] | undefined> {
     return User.find();
   } // return a single user
+
   @Query(() => User)
   async user(@Arg("id") id: string): Promise<User | undefined> {
     return User.findOne(id);
@@ -172,7 +173,7 @@ export class UserResolver {
     if (!req.session.userId) {
       return null;
     }
-    console.log(req.session);
+
     // no need to await, why?
     return User.findOne(req.session.userId);
   }

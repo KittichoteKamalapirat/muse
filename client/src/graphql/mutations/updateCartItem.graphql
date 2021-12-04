@@ -2,7 +2,7 @@ mutation updateCartItem($id: Int!, $quantity: Int!, $mealkitId: Int!) {
   updateCartItem(id: $id, quantity: $quantity, mealkitId: $mealkitId) {
     id
     quantity
-    total
+    fieldTotal
     mealkit {
       price
     }

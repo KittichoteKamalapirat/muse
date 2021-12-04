@@ -4,7 +4,7 @@ query cartItems {
     quantity
     userId
     mealkitId
-    total
+    fieldTotal
     user {
       username
       avatar

@@ -1,0 +1,42 @@
+query creatorOrders($status: CartItemStatus!) {
+  creatorOrders(status: $status) {
+    orderId
+    username
+    avatar
+    cartItems {
+      id
+      orderId
+      quantity
+      total
+      quantity
+      user {
+        username
+        address {
+          id
+          line1
+        }
+      }
+      mealkit {
+        id
+        name
+        price
+        images
+        creatorId
+        creator {
+          username
+          avatar
+        }
+      }
+      mealkitId
+    }
+
+    address {
+      id
+    }
+    deliveryFee
+    tracking {
+      id
+      currentStatus
+    }
+  }
+}

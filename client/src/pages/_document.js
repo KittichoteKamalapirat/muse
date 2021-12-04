@@ -5,7 +5,10 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html>
-        <Head />
+        {/* <Head /> */}
+        <Head>
+          <link rel="shortcut icon" href="/favicon.ico" />
+        </Head>
         {/* <link rel="shortcut icon" href="/public/static/favicon.ico" /> */}
         {/* </Head> */}
         <body>

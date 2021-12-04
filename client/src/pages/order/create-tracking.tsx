@@ -17,7 +17,8 @@ interface CreateTrackingProps {}
 
 const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
   const router = useRouter();
-  const { orderId } = router.query;
+  const { cartItemIds } = router.query;
+  console.log({ cartItemIds });
 
   const [createTracking] = useCreateTrackingMutation();
   return (
@@ -34,7 +35,9 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
                 input: {
                   trackingNo: values.trackingNo,
                   courier: values.courier,
-                  orderId: parseInt(orderId as string),
+                  cartItemIds: (cartItemIds as string[]).map((id) =>
+                    parseInt(id as string)
+                  ),
                 },
               },
             });

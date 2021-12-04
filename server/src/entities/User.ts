@@ -74,7 +74,7 @@ export class User extends BaseEntity {
   // relatioship with profile starts
   @Field({ nullable: true })
   @OneToOne((type) => Address, (address) => address.user)
-  @JoinColumn()
+  // @JoinColumn()
   address: Address;
   // relatioship with account ends -> profileId
 

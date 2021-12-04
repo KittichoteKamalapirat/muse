@@ -16,7 +16,7 @@ import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { Avatar } from "@chakra-ui/avatar";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
-  mappedResult,
+  mappedCartItemsByCreatorResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
 
@@ -25,7 +25,8 @@ interface cartProps {}
 const Cart: React.FC<cartProps> = ({}) => {
   // useupdate
   const { data: cartItems, loading, error } = useCartItemsQuery();
-  const [mappedCartItems, setMappedCartItems] = useState<mappedResult[]>();
+  const [mappedCartItems, setMappedCartItems] =
+    useState<mappedCartItemsByCreatorResult[]>();
   const [updateCartItem] = useUpdateCartItemMutation();
   const [deleteCartItem] = useDeleteCartItemMutation();
 
@@ -33,9 +34,8 @@ const Cart: React.FC<cartProps> = ({}) => {
 
   useEffect(() => {
     if (cartItems) {
-      const mappedArray: mappedResult[] = toCartItemsByCreatorMap(
-        cartItems?.cartItems as CartItem[]
-      );
+      const mappedArray: mappedCartItemsByCreatorResult[] =
+        toCartItemsByCreatorMap(cartItems?.cartItems as CartItem[]);
       console.log({ mappedArray });
       setMappedCartItems(mappedArray);
       console.log({ mappedCartItems });
@@ -47,7 +47,7 @@ const Cart: React.FC<cartProps> = ({}) => {
     if (cartItems) {
       let gross: number = 0;
       cartItems?.cartItems.map((cartItem) => {
-        gross = gross + cartItem.total;
+        gross = gross + cartItem.fieldTotal;
       });
       setGross(gross);
     }
@@ -107,7 +107,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                                 <Img
                                   src={cartItem.mealkit?.images[0]}
                                   alt="image"
-                                  fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                  fallbacksrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
                                 />
                               </Box>
                             )}
@@ -137,7 +137,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                               />
 
                               <Box flex={1} m={1}>
-                                <Text>Total: {cartItem.total}</Text>
+                                <Text>Total: {cartItem.fieldTotal}</Text>
                               </Box>
                             </Box>
                           </Flex>

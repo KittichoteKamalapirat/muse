@@ -1,26 +1,25 @@
 import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
-import { CartItem } from "../../generated/graphql";
+import {
+  CartItem,
+  MappedCreatorOrders,
+  Tracking,
+} from "../../generated/graphql";
 import { mappedCartItemsByOrderResult } from "../../util/toMyOrderByOrderIdMap";
 
 interface TrackingDetailProps {
-  orderItem: mappedCartItemsByOrderResult;
+  tracking: Partial<Tracking>;
 }
 
-export const TrackingDetail: React.FC<TrackingDetailProps> = ({
-  orderItem,
-}) => {
+export const TrackingDetail: React.FC<TrackingDetailProps> = ({ tracking }) => {
   return (
     <Box bgColor="yellow.100" p="10px">
-      <Text
-        fontWeight="bold"
-        color={orderItem.tracking?.color ? orderItem.tracking.color : "none"}
-      >
-        {orderItem.tracking?.courier}
+      <Text fontWeight="bold" color={tracking?.color ? tracking.color : "none"}>
+        {tracking?.courier}
       </Text>
-      <Text>Traking No: {orderItem.tracking?.trackingNo}</Text>
-      {/* <Text>{orderItem.tracking.}</Text> */}
-      <Text>{orderItem.tracking?.currentStatus}</Text>
+      <Text>Traking No: {tracking?.trackingNo}</Text>
+      {/* <Text>{tracking.}</Text> */}
+      <Text>{tracking?.currentStatus}</Text>
     </Box>
   );
 };

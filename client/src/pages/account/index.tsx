@@ -19,9 +19,9 @@ import {
 import { Center, Heading } from "@chakra-ui/layout";
 import { withApollo } from "../../util/withApollo";
 import {
+  CartItemStatus,
   MeDocument,
   MeQuery,
-  OrderStatus,
   useAddressQuery,
   useLogoutMutation,
   useMeQuery,
@@ -39,6 +39,10 @@ import { AccountIcon } from "../../components/Icons/AccountIcon";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
+import SvgToPay from "../../components/svgComponents/ToPay";
+import SvgToDeliver from "../../components/svgComponents/ToDeliver";
+import SvgToRate from "../../components/svgComponents/ToRate";
+import SvgOnDelivery from "../../components/svgComponents/OnDelivery";
 
 interface indexProps {}
 
@@ -119,11 +123,14 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: OrderStatus.PaymentPending },
+                query: { status: CartItemStatus.PaymentPending },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
+                <Center>
+                  <SvgToPay />
+                </Center>
+
                 <Text>To pay</Text>
               </Link>
             </NextLink>
@@ -131,11 +138,14 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: OrderStatus.ToDeliver },
+                query: { status: CartItemStatus.ToDeliver },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
+                <Center>
+                  <SvgToDeliver />
+                </Center>
+
                 <Text>To deliver</Text>
               </Link>
             </NextLink>
@@ -143,22 +153,28 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: OrderStatus.OnDelivery },
+                query: { status: CartItemStatus.OnDelivery },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <SpinnerIcon />
+                <Center>
+                  <SvgOnDelivery />
+                </Center>
+
                 <Text>To recieve</Text>
               </Link>
             </NextLink>
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: OrderStatus.PaymentPending },
+                query: { status: CartItemStatus.PaymentPending },
               }}
             >
               <Link textAlign="center" flex={1}>
-                <StarIcon />
+                <Center>
+                  <SvgToRate />
+                </Center>
+
                 <Text>Rate</Text>
               </Link>
             </NextLink>
@@ -169,7 +185,7 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: OrderStatus.Cancelled },
+                query: { status: CartItemStatus.Cancelled },
               }}
             >
               <Link>

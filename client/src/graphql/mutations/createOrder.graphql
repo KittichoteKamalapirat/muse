@@ -10,7 +10,6 @@ mutation createOrder(
   ) {
     id
     grossOrder
-    status
     userId
     cartItemsByCreator {
       creatorId

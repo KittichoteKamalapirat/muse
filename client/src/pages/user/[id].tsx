@@ -59,7 +59,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
       heading={userLoading || !userData ? "" : userData.user!.username}
     >
       <Wrapper>
-        <Flex>
+        <Flex alignItems="center" mt={20}>
           <Box flex={1}>
             {" "}
             <Image

@@ -1,10 +1,14 @@
+export { default as OnDelivery } from "./OnDelivery";
+export { default as ToDeliver } from "./ToDeliver";
+export { default as ToPay } from "./ToPay";
+export { default as ToRate } from "./ToRate";
 export { default as Creator1 } from "./Creator1";
 export { default as Creator2 } from "./Creator2";
 export { default as Creator3 } from "./Creator3";
 export { default as Creator4 } from "./Creator4";
 export { default as Hamburger } from "./Hamburger";
 export { default as Scb } from "./Scb";
-export { default as Svg12 } from "./Sdg12";
+export { default as Sdg12 } from "./Sdg12";
 export { default as Thflag } from "./Thflag";
 export { default as UploadMealkitIcon } from "./UploadMealkitIcon";
 export { default as Why1 } from "./Why1";

@@ -15,7 +15,6 @@ import {
 import { getConnection } from "typeorm";
 import { CartItem } from "../entities/CartItem";
 import { Mealkit } from "../entities/Mealkit";
-import { OrderStatus } from "../entities/Order";
 import { User } from "../entities/User";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -39,7 +38,7 @@ class AddToCart {
 @Resolver(CartItem)
 export class CartItemResolver {
   @FieldResolver(() => Int)
-  async total(@Root() cartItem: CartItem): Promise<number> {
+  async fieldTotal(@Root() cartItem: CartItem): Promise<number> {
     const mealkit = await cartItem.mealkit;
 
     const total = mealkit.price * cartItem.quantity;
@@ -60,10 +59,14 @@ export class CartItemResolver {
   async createCartItem(
     @Arg("input") input: CartItemInput,
     @Ctx() { req }: MyContext
-  ): Promise<AddToCart> {
+  ): Promise<AddToCart | Error | undefined> {
     // check first whether this melakit already exsits in the cart
     const cartItem = await CartItem.findOne({
-      where: { mealkitId: input.mealkitId, orderId: null },
+      where: {
+        mealkitId: input.mealkitId,
+        userId: req.session.userId,
+        orderId: null,
+      },
     });
 
     // CartItem.create().save()
@@ -93,13 +96,20 @@ export class CartItemResolver {
         userId: req.session.userId,
         mealkitId: input.mealkitId,
       }).save();
-      console.log({ cartItem: newCartItem, newItem: true });
-      // const user = await User.findOne({ id: req.session.userId });
 
-      return { cartItem: newCartItem, newItem: true };
+      if (newCartItem) {
+        console.log({ newCartItem });
+        const mealkit = await Mealkit.findOne(input.mealkitId);
+        if (mealkit) {
+          newCartItem.mealkit = mealkit;
+          return { cartItem: newCartItem, newItem: true };
+        } else {
+          return new Error("Cannot find the following meal kit");
+        }
+      }
+      return undefined;
     }
   }
-
   @Mutation(() => CartItem)
   @UseMiddleware(isAuth)
   async updateCartItem(

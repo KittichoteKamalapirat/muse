@@ -55,22 +55,35 @@ export type AddressInput = {
 export type CartItem = {
   __typename?: 'CartItem';
   id: Scalars['Float'];
+  total: Scalars['Int'];
   quantity: Scalars['Float'];
   userId: Scalars['String'];
   user?: Maybe<User>;
+  status: Scalars['String'];
   mealkitId: Scalars['Int'];
   mealkit: Mealkit;
   orderId: Scalars['Int'];
   tracking?: Maybe<Tracking>;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
-  total: Scalars['Int'];
+  fieldTotal: Scalars['Int'];
 };
 
 export type CartItemInput = {
   mealkitId: Scalars['Float'];
   quantity: Scalars['Float'];
 };
+
+export enum CartItemStatus {
+  UnOrdered = 'UnOrdered',
+  PaymentPending = 'PaymentPending',
+  ToDeliver = 'ToDeliver',
+  OnDelivery = 'OnDelivery',
+  Delivered = 'Delivered',
+  Received = 'Received',
+  Cancelled = 'Cancelled',
+  Refunded = 'Refunded'
+}
 
 export type CartItemsByCreator = {
   __typename?: 'CartItemsByCreator';
@@ -79,10 +92,29 @@ export type CartItemsByCreator = {
   mealkitsFee: Scalars['Float'];
 };
 
+export type CartItemsByCreatorFormat = {
+  __typename?: 'CartItemsByCreatorFormat';
+  creatorId: Scalars['String'];
+  creatorName: Scalars['String'];
+  avatar: Scalars['String'];
+  deliveryFee: Scalars['Int'];
+  totalByCreator: Scalars['Float'];
+  cartItems: Array<CartItem>;
+};
+
 export type CartItemsByCreatorInput = {
   creatorId: Scalars['String'];
   deliveryFee: Scalars['Float'];
   mealkitsFee: Scalars['Float'];
+};
+
+export type CartItemsByOrderFormat = {
+  __typename?: 'CartItemsByOrderFormat';
+  orderId: Scalars['Float'];
+  grossOrder: Scalars['Float'];
+  paymentId: Scalars['Float'];
+  trackingId?: Maybe<Scalars['Float']>;
+  byCreator: Array<CartItemsByCreatorFormat>;
 };
 
 export type ConfirmData = {
@@ -138,6 +170,17 @@ export type IngredientInput = {
   ingredient: Scalars['String'];
   amount: Scalars['String'];
   unit: Scalars['String'];
+};
+
+export type MappedCreatorOrders = {
+  __typename?: 'MappedCreatorOrders';
+  orderId?: Maybe<Scalars['Float']>;
+  username: Scalars['String'];
+  avatar: Scalars['String'];
+  cartItems: Array<CartItem>;
+  address: Address;
+  deliveryFee: Scalars['Int'];
+  tracking?: Maybe<Tracking>;
 };
 
 export type Mealkit = {
@@ -358,7 +401,6 @@ export type Order = {
   __typename?: 'Order';
   id: Scalars['Float'];
   grossOrder: Scalars['Float'];
-  status: Scalars['String'];
   cartItemsByCreator?: Maybe<Array<CartItemsByCreator>>;
   cartItems: Array<CartItem>;
   userId: Scalars['String'];
@@ -367,16 +409,6 @@ export type Order = {
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
-
-export enum OrderStatus {
-  PaymentPending = 'PaymentPending',
-  ToDeliver = 'ToDeliver',
-  OnDelivery = 'OnDelivery',
-  Delivered = 'Delivered',
-  Received = 'Received',
-  Cancelled = 'Cancelled',
-  Refunded = 'Refunded'
-}
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
@@ -479,10 +511,8 @@ export type Query = {
   cartItems: Array<CartItem>;
   payment: Payment;
   confirmPayment: ConfirmationResponse;
-  orderItems: Array<CartItem>;
-  creatorOrderItems: Array<CartItem>;
-  myOrders: Array<Order>;
-  cartItemsByOrderStatus: Array<CartItem>;
+  userOrders: Array<CartItemsByOrderFormat>;
+  creatorOrders: Array<MappedCreatorOrders>;
   followers: Array<Follow>;
   following: Array<Follow>;
   paymentInfo?: Maybe<PaymentInfo>;
@@ -533,23 +563,13 @@ export type QueryConfirmPaymentArgs = {
 };
 
 
-export type QueryOrderItemsArgs = {
-  status: OrderStatus;
+export type QueryUserOrdersArgs = {
+  status: CartItemStatus;
 };
 
 
-export type QueryCreatorOrderItemsArgs = {
-  status: OrderStatus;
-};
-
-
-export type QueryMyOrdersArgs = {
-  status: OrderStatus;
-};
-
-
-export type QueryCartItemsByOrderStatusArgs = {
-  status: OrderStatus;
+export type QueryCreatorOrdersArgs = {
+  status: CartItemStatus;
 };
 
 
@@ -611,7 +631,7 @@ export type Tracking = {
 };
 
 export type TrackingInput = {
-  orderId: Scalars['Float'];
+  cartItemIds: Array<Scalars['Int']>;
   trackingNo: Scalars['String'];
   courier: Scalars['String'];
 };
@@ -716,7 +736,7 @@ export type CreateOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, status: string, userId: string, cartItemsByCreator?: Maybe<Array<{ __typename?: 'CartItemsByCreator', creatorId: string, deliveryFee: number, mealkitsFee: number }>> } };
+export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, userId: string, cartItemsByCreator?: Maybe<Array<{ __typename?: 'CartItemsByCreator', creatorId: string, deliveryFee: number, mealkitsFee: number }>> } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -860,7 +880,7 @@ export type UpdateCartItemMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCartItemMutation = { __typename?: 'Mutation', updateCartItem: { __typename?: 'CartItem', id: number, quantity: number, total: number, mealkit: { __typename?: 'Mealkit', price?: Maybe<number> } } };
+export type UpdateCartItemMutation = { __typename?: 'Mutation', updateCartItem: { __typename?: 'CartItem', id: number, quantity: number, fieldTotal: number, mealkit: { __typename?: 'Mealkit', price?: Maybe<number> } } };
 
 export type UpdateMealkitMutationVariables = Exact<{
   input: MealkitInput;
@@ -898,24 +918,10 @@ export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', name: string, phonenumber: string, id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
-export type CartItemsByOrderStatusQueryVariables = Exact<{
-  status: OrderStatus;
-}>;
-
-
-export type CartItemsByOrderStatusQuery = { __typename?: 'Query', cartItemsByOrderStatus: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, deliveryFee: number, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }> };
-
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, creatorId: string, deliveryFee: number, postId: number, creator: { __typename?: 'User', username: string, avatar: string }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
-
-export type CreatorOrderItemsQueryVariables = Exact<{
-  status: OrderStatus;
-}>;
-
-
-export type CreatorOrderItemsQuery = { __typename?: 'Query', creatorOrderItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, orderId: number, total: number, tracking?: Maybe<{ __typename?: 'Tracking', id: number, trackingNo: string, courier: string, color: string, currentStatus: string, timelines: Array<{ __typename?: 'TimeLine', date: string, details: Array<{ __typename?: 'TimelineDetail', time: string, date: string, description: string }> }> }>, user?: Maybe<{ __typename?: 'User', username: string, avatar: string, address?: Maybe<{ __typename?: 'Address', name: string, phonenumber: string, line1: string, line2: string, subdistrict: string, district: string, province: string, postcode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, deliveryFee: number } }> };
+export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, fieldTotal: number, user?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, creatorId: string, deliveryFee: number, postId: number, creator: { __typename?: 'User', username: string, avatar: string }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
 
 export type FollowersQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -936,12 +942,12 @@ export type MealkitsQueryVariables = Exact<{
 
 export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number }>> };
 
-export type MyOrdersQueryVariables = Exact<{
-  status: OrderStatus;
+export type CreatorOrdersQueryVariables = Exact<{
+  status: CartItemStatus;
 }>;
 
 
-export type MyOrdersQuery = { __typename?: 'Query', myOrders: Array<{ __typename?: 'Order', id: number, grossOrder: number, status: string, userId: string, paymentId: number, cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, total: number, mealkitId: number, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, deliveryFee: number, creator: { __typename?: 'User', username: string, avatar: string } } }>, payment?: Maybe<{ __typename?: 'Payment', id: number, qrUrl: string, amount: number }> }> };
+export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus: string }> }> };
 
 export type TrackingQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -949,13 +955,6 @@ export type TrackingQueryVariables = Exact<{
 
 
 export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'TimeLine', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
-
-export type OrderItemsQueryVariables = Exact<{
-  status: OrderStatus;
-}>;
-
-
-export type OrderItemsQuery = { __typename?: 'Query', orderItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
 
 export type PaymentQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -992,6 +991,13 @@ export type UserQueryVariables = Exact<{
 
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about?: Maybe<string>, avatar: string, isFollowed: boolean, followerNum: number } };
+
+export type UserOrdersQueryVariables = Exact<{
+  status: CartItemStatus;
+}>;
+
+
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'CartItemsByOrderFormat', orderId: number, grossOrder: number, paymentId: number, trackingId?: Maybe<number>, byCreator: Array<{ __typename?: 'CartItemsByCreatorFormat', creatorId: string, creatorName: string, avatar: string, deliveryFee: number, totalByCreator: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }> }> }> };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1218,7 +1224,6 @@ export const CreateOrderDocument = gql`
   ) {
     id
     grossOrder
-    status
     userId
     cartItemsByCreator {
       creatorId
@@ -1930,7 +1935,7 @@ export const UpdateCartItemDocument = gql`
   updateCartItem(id: $id, quantity: $quantity, mealkitId: $mealkitId) {
     id
     quantity
-    total
+    fieldTotal
     mealkit {
       price
     }
@@ -2156,58 +2161,6 @@ export function useAddressLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ad
 export type AddressQueryHookResult = ReturnType<typeof useAddressQuery>;
 export type AddressLazyQueryHookResult = ReturnType<typeof useAddressLazyQuery>;
 export type AddressQueryResult = Apollo.QueryResult<AddressQuery, AddressQueryVariables>;
-export const CartItemsByOrderStatusDocument = gql`
-    query cartItemsByOrderStatus($status: OrderStatus!) {
-  cartItemsByOrderStatus(status: $status) {
-    id
-    orderId
-    quantity
-    quantity
-    total
-    mealkit {
-      id
-      name
-      price
-      deliveryFee
-      images
-      creatorId
-      creator {
-        username
-        avatar
-      }
-    }
-    mealkitId
-  }
-}
-    `;
-
-/**
- * __useCartItemsByOrderStatusQuery__
- *
- * To run a query within a React component, call `useCartItemsByOrderStatusQuery` and pass it any options that fit your needs.
- * When your component renders, `useCartItemsByOrderStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCartItemsByOrderStatusQuery({
- *   variables: {
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useCartItemsByOrderStatusQuery(baseOptions: Apollo.QueryHookOptions<CartItemsByOrderStatusQuery, CartItemsByOrderStatusQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CartItemsByOrderStatusQuery, CartItemsByOrderStatusQueryVariables>(CartItemsByOrderStatusDocument, options);
-      }
-export function useCartItemsByOrderStatusLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CartItemsByOrderStatusQuery, CartItemsByOrderStatusQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CartItemsByOrderStatusQuery, CartItemsByOrderStatusQueryVariables>(CartItemsByOrderStatusDocument, options);
-        }
-export type CartItemsByOrderStatusQueryHookResult = ReturnType<typeof useCartItemsByOrderStatusQuery>;
-export type CartItemsByOrderStatusLazyQueryHookResult = ReturnType<typeof useCartItemsByOrderStatusLazyQuery>;
-export type CartItemsByOrderStatusQueryResult = Apollo.QueryResult<CartItemsByOrderStatusQuery, CartItemsByOrderStatusQueryVariables>;
 export const CartItemsDocument = gql`
     query cartItems {
   cartItems {
@@ -2215,7 +2168,7 @@ export const CartItemsDocument = gql`
     quantity
     userId
     mealkitId
-    total
+    fieldTotal
     user {
       username
       avatar
@@ -2267,82 +2220,6 @@ export function useCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type CartItemsQueryHookResult = ReturnType<typeof useCartItemsQuery>;
 export type CartItemsLazyQueryHookResult = ReturnType<typeof useCartItemsLazyQuery>;
 export type CartItemsQueryResult = Apollo.QueryResult<CartItemsQuery, CartItemsQueryVariables>;
-export const CreatorOrderItemsDocument = gql`
-    query creatorOrderItems($status: OrderStatus!) {
-  creatorOrderItems(status: $status) {
-    id
-    quantity
-    userId
-    tracking {
-      id
-      trackingNo
-      courier
-      color
-      currentStatus
-      timelines {
-        date
-        details {
-          time
-          date
-          description
-        }
-      }
-    }
-    user {
-      username
-      avatar
-      address {
-        name
-        phonenumber
-        line1
-        line2
-        subdistrict
-        district
-        province
-        postcode
-      }
-    }
-    mealkitId
-    mealkit {
-      id
-      name
-      price
-      images
-      deliveryFee
-    }
-    orderId
-    total
-  }
-}
-    `;
-
-/**
- * __useCreatorOrderItemsQuery__
- *
- * To run a query within a React component, call `useCreatorOrderItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCreatorOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCreatorOrderItemsQuery({
- *   variables: {
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useCreatorOrderItemsQuery(baseOptions: Apollo.QueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
-      }
-export function useCreatorOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>(CreatorOrderItemsDocument, options);
-        }
-export type CreatorOrderItemsQueryHookResult = ReturnType<typeof useCreatorOrderItemsQuery>;
-export type CreatorOrderItemsLazyQueryHookResult = ReturnType<typeof useCreatorOrderItemsLazyQuery>;
-export type CreatorOrderItemsQueryResult = Apollo.QueryResult<CreatorOrderItemsQuery, CreatorOrderItemsQueryVariables>;
 export const FollowersDocument = gql`
     query followers($userId: String!) {
   followers(userId: $userId) {
@@ -2457,67 +2334,77 @@ export function useMealkitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<M
 export type MealkitsQueryHookResult = ReturnType<typeof useMealkitsQuery>;
 export type MealkitsLazyQueryHookResult = ReturnType<typeof useMealkitsLazyQuery>;
 export type MealkitsQueryResult = Apollo.QueryResult<MealkitsQuery, MealkitsQueryVariables>;
-export const MyOrdersDocument = gql`
-    query myOrders($status: OrderStatus!) {
-  myOrders(status: $status) {
-    id
-    grossOrder
-    status
-    userId
+export const CreatorOrdersDocument = gql`
+    query creatorOrders($status: CartItemStatus!) {
+  creatorOrders(status: $status) {
+    orderId
+    username
+    avatar
     cartItems {
       id
+      orderId
       quantity
       total
-      mealkitId
+      quantity
+      user {
+        username
+        address {
+          id
+          line1
+        }
+      }
       mealkit {
         id
         name
         price
         images
-        deliveryFee
+        creatorId
         creator {
           username
           avatar
         }
       }
+      mealkitId
     }
-    paymentId
-    payment {
+    address {
       id
-      qrUrl
-      amount
+    }
+    deliveryFee
+    tracking {
+      id
+      currentStatus
     }
   }
 }
     `;
 
 /**
- * __useMyOrdersQuery__
+ * __useCreatorOrdersQuery__
  *
- * To run a query within a React component, call `useMyOrdersQuery` and pass it any options that fit your needs.
- * When your component renders, `useMyOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCreatorOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCreatorOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useMyOrdersQuery({
+ * const { data, loading, error } = useCreatorOrdersQuery({
  *   variables: {
  *      status: // value for 'status'
  *   },
  * });
  */
-export function useMyOrdersQuery(baseOptions: Apollo.QueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>) {
+export function useCreatorOrdersQuery(baseOptions: Apollo.QueryHookOptions<CreatorOrdersQuery, CreatorOrdersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MyOrdersQuery, MyOrdersQueryVariables>(MyOrdersDocument, options);
+        return Apollo.useQuery<CreatorOrdersQuery, CreatorOrdersQueryVariables>(CreatorOrdersDocument, options);
       }
-export function useMyOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyOrdersQuery, MyOrdersQueryVariables>) {
+export function useCreatorOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CreatorOrdersQuery, CreatorOrdersQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MyOrdersQuery, MyOrdersQueryVariables>(MyOrdersDocument, options);
+          return Apollo.useLazyQuery<CreatorOrdersQuery, CreatorOrdersQueryVariables>(CreatorOrdersDocument, options);
         }
-export type MyOrdersQueryHookResult = ReturnType<typeof useMyOrdersQuery>;
-export type MyOrdersLazyQueryHookResult = ReturnType<typeof useMyOrdersLazyQuery>;
-export type MyOrdersQueryResult = Apollo.QueryResult<MyOrdersQuery, MyOrdersQueryVariables>;
+export type CreatorOrdersQueryHookResult = ReturnType<typeof useCreatorOrdersQuery>;
+export type CreatorOrdersLazyQueryHookResult = ReturnType<typeof useCreatorOrdersLazyQuery>;
+export type CreatorOrdersQueryResult = Apollo.QueryResult<CreatorOrdersQuery, CreatorOrdersQueryVariables>;
 export const TrackingDocument = gql`
     query tracking($id: Int!) {
   tracking(id: $id) {
@@ -2574,58 +2461,6 @@ export function useTrackingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<T
 export type TrackingQueryHookResult = ReturnType<typeof useTrackingQuery>;
 export type TrackingLazyQueryHookResult = ReturnType<typeof useTrackingLazyQuery>;
 export type TrackingQueryResult = Apollo.QueryResult<TrackingQuery, TrackingQueryVariables>;
-export const OrderItemsDocument = gql`
-    query orderItems($status: OrderStatus!) {
-  orderItems(status: $status) {
-    id
-    quantity
-    userId
-    mealkitId
-    total
-    user {
-      username
-    }
-    mealkit {
-      name
-      images
-      price
-      portion
-      post {
-        id
-        title
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useOrderItemsQuery__
- *
- * To run a query within a React component, call `useOrderItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useOrderItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOrderItemsQuery({
- *   variables: {
- *      status: // value for 'status'
- *   },
- * });
- */
-export function useOrderItemsQuery(baseOptions: Apollo.QueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
-      }
-export function useOrderItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderItemsQuery, OrderItemsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<OrderItemsQuery, OrderItemsQueryVariables>(OrderItemsDocument, options);
-        }
-export type OrderItemsQueryHookResult = ReturnType<typeof useOrderItemsQuery>;
-export type OrderItemsLazyQueryHookResult = ReturnType<typeof useOrderItemsLazyQuery>;
-export type OrderItemsQueryResult = Apollo.QueryResult<OrderItemsQuery, OrderItemsQueryVariables>;
 export const PaymentDocument = gql`
     query payment($id: Int!) {
   payment(id: $id) {
@@ -2838,6 +2673,77 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserOrdersDocument = gql`
+    query userOrders($status: CartItemStatus!) {
+  userOrders(status: $status) {
+    orderId
+    grossOrder
+    paymentId
+    trackingId
+    byCreator {
+      creatorId
+      creatorName
+      avatar
+      deliveryFee
+      totalByCreator
+      cartItems {
+        id
+        orderId
+        quantity
+        total
+        quantity
+        user {
+          username
+          address {
+            id
+            line1
+          }
+        }
+        mealkit {
+          id
+          name
+          price
+          images
+          creatorId
+          creator {
+            username
+            avatar
+          }
+        }
+        mealkitId
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserOrdersQuery__
+ *
+ * To run a query within a React component, call `useUserOrdersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserOrdersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserOrdersQuery({
+ *   variables: {
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useUserOrdersQuery(baseOptions: Apollo.QueryHookOptions<UserOrdersQuery, UserOrdersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserOrdersQuery, UserOrdersQueryVariables>(UserOrdersDocument, options);
+      }
+export function useUserOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserOrdersQuery, UserOrdersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserOrdersQuery, UserOrdersQueryVariables>(UserOrdersDocument, options);
+        }
+export type UserOrdersQueryHookResult = ReturnType<typeof useUserOrdersQuery>;
+export type UserOrdersLazyQueryHookResult = ReturnType<typeof useUserOrdersLazyQuery>;
+export type UserOrdersQueryResult = Apollo.QueryResult<UserOrdersQuery, UserOrdersQueryVariables>;
 export const VotedPostsDocument = gql`
     query votedPosts($limit: Int!, $cursor: String) {
   votedPosts(limit: $limit, cursor: $cursor) {

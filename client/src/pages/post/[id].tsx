@@ -1,26 +1,14 @@
 import React from "react";
 import { useMeQuery } from "../../generated/graphql";
 import { Layout } from "../../components/Layout";
-import {
-  Box,
-  Heading,
-  Image,
-  Text,
-  Divider,
-  Flex,
-  Avatar,
-  IconButton,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Divider, Flex, Avatar } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import { withApollo } from "../../util/withApollo";
 import IngredientList from "../../components/IngredientList";
 import { HeadingLayout } from "../../components/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
-
-import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { MealkitInfo } from "../../components/MealkitInfo";
-import { dataURItoBlob } from "dropzone";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();

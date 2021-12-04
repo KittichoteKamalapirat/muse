@@ -1,5 +1,5 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import React, { useState } from "react";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import React, { useEffect, useState } from "react";
 import {
   Mealkit,
   useCartItemsQuery,
@@ -11,18 +11,21 @@ import { Layout } from "./Layout";
 import { Wrapper } from "./Wrapper";
 import NextLink from "next/link";
 import { Button } from "@chakra-ui/button";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, CheckCircleIcon, CheckIcon } from "@chakra-ui/icons";
 import { Image, Img } from "@chakra-ui/image";
 import { inActiveGray, primaryColor } from "./Variables";
 import { graphqlSync } from "graphql";
 import router from "next/router";
+import { useToast } from "@chakra-ui/react";
 
 interface MealkitInfoProps {
   postId: number;
 }
 
 export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
-  const [createCartItem] = useCreateCartItemMutation();
+  const toast = useToast();
+  const [createCartItem, { data: cartItemData, loading: cartItemLoading }] =
+    useCreateCartItemMutation();
   const [cartLoading, setCartLoading] = useState(false);
   const { data: mealkits, loading } = useMealkitsQuery({
     variables: { postId: postId },
@@ -35,6 +38,28 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       </Layout>
     );
   }
+
+  // useEffect(() => {
+  //   if (cartItemData) {
+  //     toast({
+  //       title: "Added to Cart.",
+  //       description: `xxxhas been added to your cart.`,
+  //       status: "success",
+  //       duration: 4000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // }, [cartItemData]);
+
+  // {cartItemData &&
+  //   toast({
+  //     title: "Added to Cart.",
+  //     description: `${mealkit.name}has been added to your cart.`,
+  //     status: "success",
+  //     duration: 4000,
+  //     isClosable: true,
+  //   })}
+
   return (
     <Box bgColor="white" py="1px">
       <Wrapper>
@@ -59,10 +84,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     </Box>
                   ))}
                 </Flex>
-                <Heading fontSize="lg" color={primaryColor}>
-                  {" "}
-                  {mealkit.name}{" "}
-                </Heading>
+                <Heading fontSize="lg"> {mealkit.name} </Heading>
                 <Text>สำหรับ: {mealkit.portion} คน</Text>
                 <Text>ราคา: {mealkit.price} บาท</Text>
                 <Box>
@@ -129,11 +151,48 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       },
                     });
                     setCartLoading(false);
-                    router.push("/cart");
+                    console.log({ cartItemLoading });
+                    console.log({ cartItemData });
+                    // router.push("/cart");
                   }}
                 >
                   ใส่ตะกร้า
                 </Button>
+                <Box display="none">
+                  {cartItemData &&
+                    toast({
+                      title: "Added to Cart.",
+                      description: `${mealkit.name} has been added to your cart.`,
+                      status: "success",
+                      duration: 4000,
+                      isClosable: true,
+                      position: "top",
+                      render: () => (
+                        <Box width="100%" bgColor="white" p={4} boxShadow="lg">
+                          <Flex alignItems="center">
+                            <CheckCircleIcon color="teal.300" m={2} />
+                            <Box m={2}>
+                              <Heading fontSize="lg">Added to Cart</Heading>
+                              <Text color="blackAlpha.600">
+                                {" "}
+                                {mealkit.name} has been added to your cart.
+                              </Text>
+
+                              <Button
+                                as={Link}
+                                mr={2}
+                                colorScheme="teal"
+                                onClick={() => router.push("/cart")}
+                              >
+                                See Cart
+                              </Button>
+                            </Box>
+                          </Flex>
+                        </Box>
+                      ),
+                      // variant: "subtle",
+                    })}
+                </Box>
               </Box>
             ))}
           </Box>

@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  JoinColumn,
 } from "typeorm";
 import { User } from "./User";
 
@@ -63,6 +64,7 @@ export class Address extends BaseEntity {
 
   @Field(() => User)
   @OneToOne((type) => User, (user) => user.address)
+  @JoinColumn()
   user: User;
 
   // relatioship with user ends

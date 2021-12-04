@@ -1,7 +1,8 @@
 import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
-import { CartItem } from "../generated/graphql";
+import { CartItem, Tracking } from "../generated/graphql";
 
 //format = array of creator,avatar cartItems
+//this page is for mainly for users! not creators
 export type mappedCartItemsByCreatorResult = {
   creatorId: string;
   creatorName: string;
@@ -9,6 +10,7 @@ export type mappedCartItemsByCreatorResult = {
   deliveryFee: number;
   totalByCreator: number;
   cartItems: CartItem[];
+  tracking: Tracking;
 };
 
 const reformat = (item: CartItem): mappedCartItemsByCreatorResult => {
@@ -17,15 +19,15 @@ const reformat = (item: CartItem): mappedCartItemsByCreatorResult => {
     creatorName: item.mealkit?.creator?.username,
     avatar: item.mealkit?.creator?.avatar,
     deliveryFee: item.mealkit?.deliveryFee,
-    totalByCreator: item.total,
+    totalByCreator: item.fieldTotal,
     cartItems: [item],
+    tracking: item.tracking!,
   };
 
   return cartItemByOrder;
 };
 
 export const toCartItemsByCreatorMap = (cartItems: CartItem[]) => {
-  console.log(cartItems);
   const mappedArray: mappedCartItemsByCreatorResult[] = [];
 
   cartItems.map((item, index) => {
@@ -47,7 +49,7 @@ export const toCartItemsByCreatorMap = (cartItems: CartItem[]) => {
 
         const currentMealkitFee = mappedArray[repeatedIndex].totalByCreator;
         mappedArray[repeatedIndex].totalByCreator =
-          currentMealkitFee + item.total;
+          currentMealkitFee + item.fieldTotal;
       } else {
         // no repeated one
 

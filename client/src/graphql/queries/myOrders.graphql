@@ -1,31 +1,31 @@
-query myOrders($status: OrderStatus!) {
-  myOrders(status: $status) {
-    id
-    grossOrder
-    status
-    userId
-    cartItems {
-      id
-      quantity
-      total
-      mealkitId
-      mealkit {
-        id
-        name
-        price
-        images
-        deliveryFee
-        creator {
-          username
-          avatar
-        }
-      }
-    }
-    paymentId
-    payment {
-      id
-      qrUrl
-      amount
-    }
-  }
-}
+# query myOrders($status: OrderStatus!) {
+#   myOrders(status: $status) {
+#     id
+#     grossOrder
+#     status
+#     userId
+#     cartItems {
+#       id
+#       quantity
+#       total
+#       mealkitId
+#       mealkit {
+#         id
+#         name
+#         price
+#         images
+#         deliveryFee
+#         creator {
+#           username
+#           avatar
+#         }
+#       }
+#     }
+#     paymentId
+#     payment {
+#       id
+#       qrUrl
+#       amount
+#     }
+#   }
+# }

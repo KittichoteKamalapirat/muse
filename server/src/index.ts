@@ -18,14 +18,14 @@ import { Upvote } from "./entities/Upvote";
 import { createUserLoader } from "./utils/createUserLoader";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { Address } from "./entities/Address";
-import { CartItem } from "./entities/CartItem";
+import { CartItem, CartItemStatus } from "./entities/CartItem";
 import { Mealkit } from "./entities/Mealkit";
 import { AddressResolver } from "./resolvers/address";
 import { MealkitResolver } from "./resolvers/mealkit";
 import { CartItemResolver } from "./resolvers/cartItem";
 import "dotenv-safe/config";
 import { PaymentResolver } from "./resolvers/payment";
-import { Order, OrderStatus } from "./entities/Order";
+import { Order } from "./entities/Order";
 import { OrderResolver } from "./resolvers/order";
 import { Payment } from "./entities/Payment";
 import { Follow } from "./entities/Follow";
@@ -89,7 +89,11 @@ const main = async () => {
       console.log(req.body);
       const ref1 = parseInt(req.body.billPaymentRef1);
       console.log({ ref1 });
-      await Order.update({ id: ref1 }, { status: OrderStatus.ToDeliver });
+      // await Order.update({ id: ref1 }, { status: OrderStatus.ToDeliver });
+      await CartItem.update(
+        { orderId: ref1 },
+        { status: CartItemStatus.ToDeliver }
+      );
       //have to send back to SCB
       res.send({
         resCode: "00",

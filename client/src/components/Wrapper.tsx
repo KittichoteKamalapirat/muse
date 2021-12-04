@@ -8,11 +8,13 @@ interface WrapperProps {
   m?: number;
   mb?: number;
   mt?: number;
+  py?: number;
 }
 
 export const Wrapper: React.FC<WrapperProps> = ({
   children,
   m,
+  py,
   mb,
   mt,
   variant = "regular",

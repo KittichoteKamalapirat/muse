@@ -17,10 +17,11 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Table, Tr, Th, Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
 
 import {
-  mappedResult,
+  mappedCartItemsByCreatorResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
 import { primaryColor } from "../components/Variables";
+import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
 
 interface checkoutProps {}
 
@@ -35,7 +36,8 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
   const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
 
-  const [mappedCartItems, setMappedCartItems] = useState<mappedResult[]>();
+  const [mappedCartItems, setMappedCartItems] =
+    useState<mappedCartItemsByCreatorResult[]>();
 
   const [cartItemsByCreatorInput, setCartItemsByCreatorInput] =
     useState<CartItemsByCreatorInput[]>();
@@ -48,9 +50,8 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
 
   useEffect(() => {
     if (cartItems) {
-      const mappedArray: mappedResult[] = toCartItemsByCreatorMap(
-        cartItems?.cartItems as CartItem[]
-      );
+      const mappedArray: mappedCartItemsByCreatorResult[] =
+        toCartItemsByCreatorMap(cartItems?.cartItems as CartItem[]);
       console.log({ mappedArray });
       setMappedCartItems(mappedArray);
       console.log({ mappedCartItems });
@@ -63,8 +64,8 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       let gross: number = 0;
       // let counter: number = 0;
       cartItems?.cartItems.map((cartItem) => {
-        console.log(cartItem.total);
-        gross = gross + cartItem.total;
+        console.log(cartItem.fieldTotal);
+        gross = gross + cartItem.fieldTotal;
 
         // counter = counter + 1;
       });
@@ -80,7 +81,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       console.log("check");
       mappedCartItems.map((itemsbycreator) => {
         const mealkitFee = itemsbycreator.cartItems
-          .map((item) => item.total)
+          .map((item) => item.fieldTotal)
           .reduce((a, b) => a + b, 0);
         const deliveryFeeArray = itemsbycreator.cartItems.map(
           (item) => item.mealkit?.deliveryFee
@@ -125,7 +126,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
   }
 
   if (orderLoading) {
-    return <Text>Creating payment</Text>;
+    return <PaymentSkeleton />;
   }
   if (orderData) {
     router.push(`/payment/${orderData?.createOrder.id}`);
@@ -275,7 +276,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
 
                               <Flex justifyContent="space-between">
                                 <Text>Total</Text>
-                                <Text>฿ {cartItem.total}</Text>
+                                <Text>฿ {cartItem.fieldTotal}</Text>
                               </Flex>
                             </Box>
                           </Flex>
@@ -311,6 +312,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                       <Flex justifyContent="space-between">
                         <Text>Total order</Text>
                         <Heading fontSize="md" color={primaryColor}>
+                        
                           ฿ {item.totalByCreator + item.deliveryFee}
                         </Heading>
                       </Flex>
@@ -343,6 +345,9 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                 cartItems?.cartItems.forEach((cartItem) => {
                   cartItemIds.push(cartItem.id);
                 });
+                console.log({cartItemIds})
+                console.log({gross})
+                console.log({cartItemsByCreatorInput})
                 await createOrder({
                   variables: {
                     cartItemIds: cartItemIds,

@@ -1,22 +1,22 @@
-query orderItems($status: OrderStatus!) {
-  orderItems(status: $status) {
-    id
-    quantity
-    userId
-    mealkitId
-    total
-    user {
-      username
-    }
-    mealkit {
-      name
-      images
-      price
-      portion
-      post {
-        id
-        title
-      }
-    }
-  }
-}
+# query orderItems($status: OrderStatus!) {
+#   orderItems(status: $status) {
+#     id
+#     quantity
+#     userId
+#     mealkitId
+#     total
+#     user {
+#       username
+#     }
+#     mealkit {
+#       name
+#       images
+#       price
+#       portion
+#       post {
+#         id
+#         title
+#       }
+#     }
+#   }
+# }

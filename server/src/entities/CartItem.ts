@@ -15,12 +15,28 @@ import { Order } from "./Order";
 import { Tracking } from "./Tracking";
 import { User } from "./User";
 
+export enum CartItemStatus {
+  UnOrdered = "UnOrdered", // user: to pay, creator: payment pending. User has made an order.
+  PaymentPending = "PaymentPending", // user: to pay, creator: payment pending. User has made an order.
+  ToDeliver = "ToDeliver", // user: to be delivered, creator: to deliver. User paid and waiting for the creator to deliver
+  OnDelivery = "OnDelivery", // user and creator: the products are being delivered. waiting for the courrier to deliver
+  Delivered = "Delivered", // user and creator: complete.
+  Received = "Received", //user confirmed
+  Cancelled = "Cancelled", //user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER
+  Refunded = "Refunded", //user: waiting for refund, creator: to refund
+}
+
 @ObjectType()
 @Entity()
 export class CartItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
+
+  @Field((type) => Int)
+  total(): number {
+    return this.quantity * this.mealkit.price;
+  }
 
   @Column()
   @Field()
@@ -35,6 +51,10 @@ export class CartItem extends BaseEntity {
   @Field(() => User, { nullable: true })
   @ManyToOne((type) => User, (user) => user.cartItems)
   user: User;
+
+  @Column({ default: CartItemStatus.UnOrdered })
+  @Field()
+  status: CartItemStatus;
 
   //belongs to mealkit
   // one mealkit -> many cart

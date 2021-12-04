@@ -11,19 +11,15 @@ import { TrackingDetail } from "../../components/Icons/TrackingDetail";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import NextLink from "next/link";
-import {
-  CartItem,
-  useCreatorOrderItemsLazyQuery,
-  useCreatorOrderItemsQuery,
-} from "../../generated/graphql";
-import {
-  mappedCartItemsByOrderResult,
-  toMyOrderByOrderIdMap,
-} from "../../util/toMyOrderByOrderIdMap";
+import { useCreatorOrdersLazyQuery } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 
-export enum OrderStatus {
+//format
+// by orderId
+// then by creator inside
+
+export enum CartItemStatus {
   PaymentPending = "PaymentPending",
   ToDeliver = "ToDeliver",
   OnDelivery = "OnDelivery",
@@ -36,37 +32,25 @@ export enum OrderStatus {
 interface OrderProps {}
 
 const Order: React.FC<OrderProps> = ({}) => {
-  const [orderStatus, setOrderStatus] = useState<OrderStatus>();
-  const [mappedToItemsByOrderId, setMappedToItemsByOrderId] =
-    useState<mappedCartItemsByOrderResult[]>();
+  const [cartItemStatus, setCartItemStatus] = useState<CartItemStatus>();
 
   const router = useRouter();
   const { status: statusParam } = router.query;
 
-  const [creatorOrderitems, { loading, error, data }] =
-    useCreatorOrderItemsLazyQuery();
+  const [creatorOrders, { loading, error, data: creatorOrdersData }] =
+    useCreatorOrdersLazyQuery();
 
   useEffect(() => {
-    creatorOrderitems({
+    creatorOrders({
       variables: {
-        status: OrderStatus[statusParam as keyof typeof OrderStatus],
+        status: CartItemStatus[statusParam as keyof typeof CartItemStatus],
       },
     });
 
-    setOrderStatus(OrderStatus[statusParam as keyof typeof OrderStatus]);
+    setCartItemStatus(
+      CartItemStatus[statusParam as keyof typeof CartItemStatus]
+    );
   }, [statusParam]);
-
-  useEffect(() => {
-    if (data) {
-      //if no this -> cannot read map of undefined
-
-      const mapped = toMyOrderByOrderIdMap(
-        data?.creatorOrderItems as CartItem[]
-      );
-      setMappedToItemsByOrderId(mapped);
-      console.log({ mapped });
-    }
-  }, [data]);
 
   if (loading) {
     return (
@@ -91,43 +75,45 @@ const Order: React.FC<OrderProps> = ({}) => {
         justifyContent="flex-end"
         overflowX="scroll"
       >
-        {/* <Box
+        <Box
           flex={1}
           textAlign="center"
           borderBottom={1}
           borderStyle="solid"
           borderColor={
-            orderStatus === "PaymentPending" ? primaryColor : "white"
+            cartItemStatus === "PaymentPending" ? primaryColor : "white"
           }
-          color={orderStatus === "PaymentPending" ? primaryColor : inActiveGray}
+          color={
+            cartItemStatus === "PaymentPending" ? primaryColor : inActiveGray
+          }
           mx={1}
           onClick={() => {
-            creatorOrderitems({
+            creatorOrders({
               variables: {
-                status: OrderStatus.PaymentPending,
+                status: CartItemStatus.PaymentPending,
               },
             });
-            setOrderStatus(OrderStatus.PaymentPending);
+            setCartItemStatus(CartItemStatus.PaymentPending);
           }}
         >
           Not paid
-        </Box> */}
+        </Box>
 
         <Box
           flex={1}
           textAlign="center"
           borderBottom={1}
           borderStyle="solid"
-          borderColor={orderStatus === "ToDeliver" ? primaryColor : "white"}
-          color={orderStatus === "ToDeliver" ? primaryColor : inActiveGray}
+          borderColor={cartItemStatus === "ToDeliver" ? primaryColor : "white"}
+          color={cartItemStatus === "ToDeliver" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorOrderitems({
+            creatorOrders({
               variables: {
-                status: OrderStatus.ToDeliver,
+                status: CartItemStatus.ToDeliver,
               },
             });
-            setOrderStatus(OrderStatus.ToDeliver);
+            setCartItemStatus(CartItemStatus.ToDeliver);
           }}
         >
           To deliver
@@ -138,17 +124,17 @@ const Order: React.FC<OrderProps> = ({}) => {
           textAlign="center"
           borderBottom={1}
           borderStyle="solid"
-          borderColor={orderStatus === "OnDelivery" ? primaryColor : "white"}
-          color={orderStatus === "OnDelivery" ? primaryColor : inActiveGray}
+          borderColor={cartItemStatus === "OnDelivery" ? primaryColor : "white"}
+          color={cartItemStatus === "OnDelivery" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorOrderitems({
+            creatorOrders({
               variables: {
-                status: OrderStatus.OnDelivery,
+                status: CartItemStatus.OnDelivery,
               },
             });
 
-            setOrderStatus(OrderStatus.OnDelivery);
+            setCartItemStatus(CartItemStatus.OnDelivery);
           }}
         >
           Shipping
@@ -159,28 +145,28 @@ const Order: React.FC<OrderProps> = ({}) => {
           textAlign="center"
           borderBottom={1}
           borderStyle="solid"
-          borderColor={orderStatus === "Delivered" ? primaryColor : "white"}
-          color={orderStatus === "Delivered" ? primaryColor : inActiveGray}
+          borderColor={cartItemStatus === "Delivered" ? primaryColor : "white"}
+          color={cartItemStatus === "Delivered" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
-            creatorOrderitems({
+            creatorOrders({
               variables: {
-                status: OrderStatus.Delivered,
+                status: CartItemStatus.Delivered,
               },
             });
 
-            setOrderStatus(OrderStatus.Delivered);
+            setCartItemStatus(CartItemStatus.Delivered);
           }}
         >
           Delivered
         </Box>
       </Flex>
 
-      {!data ? (
+      {!creatorOrdersData ? (
         <Text>No data</Text>
       ) : (
         <Box bgColor="gray.200">
-          {mappedToItemsByOrderId?.map((orderItem, index) => (
+          {creatorOrdersData.creatorOrders.map((orderItem, index) => (
             <Box bgColor="white">
               <Flex key={index} m="10px">
                 <Box>
@@ -221,21 +207,6 @@ const Order: React.FC<OrderProps> = ({}) => {
                             <Text> {cartItem.total} </Text>
                           </Flex>
                           <Divider />
-                          <Flex justifyContent="space-between" fontSize="sm">
-                            <Text>Delivery Fee</Text>
-                            <Text color="gray.700" fontWeight="normal">
-                              {cartItem.mealkit?.deliveryFee}
-                            </Text>
-                          </Flex>
-
-                          <Divider />
-                          <Flex justifyContent="space-between" fontSize="sm">
-                            <Text>Gross</Text>
-
-                            <Text>
-                              {cartItem.total + cartItem.mealkit?.deliveryFee!}{" "}
-                            </Text>
-                          </Flex>
                         </Box>
                       </Flex>
                     </Box>
@@ -244,7 +215,22 @@ const Order: React.FC<OrderProps> = ({}) => {
               </Flex>
 
               {/* show delivery info and action */}
-              {orderStatus !== OrderStatus.ToDeliver ? null : (
+
+              <Flex justifyContent="space-between" fontSize="sm">
+                <Text>Delivery Fee</Text>
+                <Text color="gray.700" fontWeight="normal">
+                  {orderItem.deliveryFee}
+                </Text>
+              </Flex>
+
+              <Divider />
+              <Flex justifyContent="space-between" fontSize="sm">
+                <Text>Gross</Text>
+
+                <Text>{orderItem.deliveryFee!} </Text>
+              </Flex>
+
+              {cartItemStatus !== CartItemStatus.ToDeliver ? null : (
                 <Box bgColor="teal.50">
                   <Box p="10px">
                     <Flex alignItems="center">
@@ -270,8 +256,18 @@ const Order: React.FC<OrderProps> = ({}) => {
                     <NextLink
                       href={{
                         pathname: "/order/create-tracking",
-                        query: { orderId: orderItem.orderId },
+                        query: {
+                          cartItemIds: orderItem.cartItems.map(
+                            (cartItem) => cartItem.id
+                          ),
+                        },
                       }}
+
+                      // <NextLink
+                      // href={{
+                      //   pathname: "/order/create-tracking",
+                      //   query: { orderId: orderItem.orderId },
+                      // }}
                       //  as={`/create-tracking`}
                     >
                       <Link>
@@ -284,9 +280,10 @@ const Order: React.FC<OrderProps> = ({}) => {
                 </Box>
               )}
 
-              {orderStatus !== OrderStatus.OnDelivery ? null : (
-                <TrackingDetail orderItem={orderItem} />
-              )}
+              {cartItemStatus !== CartItemStatus.OnDelivery &&
+                orderItem.tracking && (
+                  <TrackingDetail tracking={orderItem.tracking} />
+                )}
             </Box>
           ))}
         </Box>
