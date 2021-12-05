@@ -34,7 +34,7 @@ import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
 
 import { mappedCartItemsByCreatorResult } from "../../util/toCartItemsByCreatorMap";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
-import { OrderStatusTab } from "../../components/Icons/OrderStatusTab";
+import { CartItemStatusTab } from "../../components/Icons/CartItemStatusTab";
 import { primaryColor } from "../../components/Variables";
 
 export enum CartItemStatus {
@@ -105,7 +105,7 @@ const Order: React.FC<OrderProps> = ({}) => {
 
   return (
     <HeadingLayout heading="My order" mt={10}>
-      <OrderStatusTab
+      <CartItemStatusTab
         userOrders={userOrders}
         cartItemStatus={cartItemStatus}
         setCartItemStatus={setCartItemStatus}

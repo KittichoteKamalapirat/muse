@@ -129,7 +129,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
                     <Text>{post.title}</Text>
                     <Text>{post.text.slice(0, 60)} ...</Text>
                     <Flex alignItems="center">
-                      <HeartIcon isactive={true} />
+                      <HeartIcon isactive={true ? "true" : undefined} />
                       <Text ml={2}>{post.points}</Text>
                     </Flex>
                   </Box>

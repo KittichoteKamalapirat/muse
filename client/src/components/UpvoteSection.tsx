@@ -82,7 +82,7 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
         isLoading={loadingState === "upvote-loading"}
         icon={
           <HeartIcon
-            isactive={post.voteStatus === 1}
+            isactive={post.voteStatus === 1 ? "true" : undefined}
             // color={post.voteStatus === 1 ? "green" : "grey"}
             // borderColor={post.voteStatus === 1 ? "green" : "dark.100"}
           />

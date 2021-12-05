@@ -1,7 +1,6 @@
 import { Flex, Link, Avatar, Text, Box } from "@chakra-ui/react";
 import React from "react";
 import { AccountIcon } from "./Icons/AccountIcon";
-import { ActivityIcon } from "./Icons/ActivityIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { HomeIcon } from "./Icons/HomeIcon";
 import { ShopIcon } from "./Icons/ShopIcon";
@@ -10,6 +9,9 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useMeQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
+import SvgBell from "./svgComponents/Bell";
+import { BellIcon } from "./Icons/BellIcon";
+import { BasketIcon } from "./Icons/BasketIcon";
 
 interface MainNavProps {}
 
@@ -23,11 +25,18 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
 
   const homeActive = router.pathname === "/";
   const likeActive = router.pathname === "/like";
-  const activityActive = router.pathname === "/activity";
-  const basketActive = router.pathname === "/basket";
+  const notiActive = router.pathname === "/notification";
+  // const cartActive = router.pathname === "/cart";
   const shopActive = router.pathname === "/myshop";
-
   const accountActive = router.pathname === "/account";
+
+  console.log({ homeActive });
+  console.log({ likeActive });
+  console.log({ notiActive });
+  console.log({ shopActive });
+  console.log({ accountActive });
+
+  console.log({ data });
 
   // this is SSR so browser -> next.js -> graphql
 
@@ -44,9 +53,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
 
   // data is loading
   if (loading) {
+    return null;
   } else if (!data?.me) {
-    // this can return undefined, then ! turn it to true
+    // this can return undefined, then ! turn it to "true"
     // user not logged in
+
     currentUser = (
       <>
         <NextLink href="/login">
@@ -69,17 +80,19 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
     );
   }
 
+  if (!data) {
+    return <Text>no data</Text>; //without this line -> icon messedup
+  }
+
   return (
     <Flex
       direction={["row", "row", "column"]}
       zIndex={1}
       position="fixed"
       bottom={0}
-      left={0}
       bg={"white"}
       p={2}
-      ml={"auto"}
-      align="center"
+      alignItems="center"
       width={["100%", "100%", "80px"]}
       height={[null, null, "100%"]}
       justifyContent="space-around"
@@ -88,16 +101,13 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       borderRightWidth="1px"
     >
       <NextLink href="/">
-        <Link
-          style={{ textDecoration: "none" }}
-          // textDecoration="none"
-        >
+        <Link style={{ textDecoration: "none" }} flex={1}>
           <Flex
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
           >
-            <HomeIcon isactive={homeActive} />
+            <HomeIcon isactive={homeActive ? "true" : undefined} />
             <Text
               fontSize="xs"
               fontWeight="medium"
@@ -108,19 +118,18 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
           </Flex>
         </Link>
       </NextLink>
-
       <NextLink
         href={{
           pathname: "/like",
         }}
       >
-        <Link style={{ textDecoration: "none" }}>
+        <Link style={{ textDecoration: "none" }} flex={1}>
           <Flex
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
           >
-            <HeartIcon isactive={likeActive} />
+            <HeartIcon isactive={likeActive ? "true" : undefined} />
             <Text
               fontSize="xs"
               fontWeight="medium"
@@ -131,17 +140,15 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
           </Flex>
         </Link>
       </NextLink>
-
-      {!data?.me?.isCreator ? null : (
+      {data?.me?.isCreator && (
         <NextLink href="/myshop">
-          <Link as={Link} mr={2} style={{ textDecoration: "none" }}>
+          <Link as={Link} mr={2} style={{ textDecoration: "none" }} flex={1}>
             <Flex
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
             >
-              {" "}
-              <ShopIcon isactive={shopActive} />
+              <ShopIcon isactive={shopActive ? "true" : undefined} />
               <Text
                 fontSize="xs"
                 fontWeight="medium"
@@ -150,75 +157,71 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
                 My shop
               </Text>
             </Flex>
-            {/* <SmallAddIcon />{" "} */}
           </Link>
         </NextLink>
       )}
 
       <NextLink
         href={{
-          pathname: "/activity",
+          pathname: "/notification",
         }}
       >
-        <Link style={{ textDecoration: "none" }}>
+        <Link style={{ textDecoration: "none" }} flex={1}>
           <Flex
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
           >
-            <ActivityIcon isactive={activityActive} />
+            <BellIcon isactive={notiActive ? "true" : undefined} />
+
             <Text
               fontSize="xs"
               fontWeight="medium"
-              textColor={activityActive ? primaryColor : inActiveGray}
+              textColor={notiActive ? primaryColor : inActiveGray}
             >
-              Activity
+              Notification
             </Text>
           </Flex>
         </Link>
       </NextLink>
-
       <NextLink
         href={{
           pathname: "/account",
         }}
       >
-        <Link style={{ textDecoration: "none" }}>
-          {!data?.me ? (
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <AccountIcon isactive={accountActive} />
-              <Text
-                fontSize="xs"
-                fontWeight="medium"
-                textColor={accountActive ? primaryColor : inActiveGray}
-              >
-                Account
-              </Text>
-            </Flex>
-          ) : (
-            <Flex
-              flexDirection="column"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Avatar size="xs" src={data?.me?.avatar} alt="creator avatar" />
+        <Link style={{ textDecoration: "none" }} flex={1}>
+          <Flex
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {!data?.me ? (
+              <>
+                <AccountIcon isactive={accountActive ? "true" : undefined} />
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={accountActive ? primaryColor : inActiveGray}
+                >
+                  Account
+                </Text>
+              </>
+            ) : (
+              <>
+                <Avatar size="xs" src={data?.me?.avatar} alt="creator avatar" />
 
-              <Text
-                fontSize="xs"
-                fontWeight="medium"
-                textColor={accountActive ? primaryColor : inActiveGray}
-              >
-                {currentUser}
-              </Text>
-            </Flex>
-          )}
+                <Text
+                  fontSize="xs"
+                  fontWeight="medium"
+                  textColor={accountActive ? primaryColor : inActiveGray}
+                >
+                  {currentUser}
+                </Text>
+              </>
+            )}
+          </Flex>
         </Link>
       </NextLink>
-      {/* {loading ? null : accountIcon} */}
     </Flex>
   );
 };

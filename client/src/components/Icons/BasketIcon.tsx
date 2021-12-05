@@ -3,7 +3,7 @@ import React from "react";
 import { primaryColor, inActiveGray } from "../Variables";
 
 interface BasketIconProps {
-  isactive?: boolean;
+  isactive?: string;
 }
 
 export const BasketIcon = (props: BasketIconProps) => (

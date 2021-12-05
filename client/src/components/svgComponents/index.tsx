@@ -1,7 +1,8 @@
 export { default as OnDelivery } from "./OnDelivery";
-export { default as ToDeliver } from "./ToDeliver";
+export { default as ToDelivery } from "./ToDelivery";
 export { default as ToPay } from "./ToPay";
 export { default as ToRate } from "./ToRate";
+export { default as Bell } from "./Bell";
 export { default as Creator1 } from "./Creator1";
 export { default as Creator2 } from "./Creator2";
 export { default as Creator3 } from "./Creator3";

@@ -3,7 +3,7 @@ import React from "react";
 import { inActiveGray, primaryColor } from "../Variables";
 
 interface HeartProps {
-  isactive?: boolean;
+  isactive?: string;
   mr?: number;
 }
 

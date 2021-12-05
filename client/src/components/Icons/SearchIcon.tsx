@@ -2,7 +2,7 @@ import { Icon } from "@chakra-ui/react";
 import React from "react";
 
 interface SearchProps {
-  isactive: boolean;
+  isactive?: string;
 }
 
 export const SearchIcon = (props: SearchProps) => (

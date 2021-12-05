@@ -5,9 +5,9 @@ import { Layout } from "../components/Layout";
 import { Wrapper } from "../components/Wrapper";
 import { useMeQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
-interface ActivityProps {}
+interface NotificationProps {}
 
-const Activity: React.FC<ActivityProps> = ({}) => {
+const Notification: React.FC<NotificationProps> = ({}) => {
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
 
@@ -18,10 +18,10 @@ const Activity: React.FC<ActivityProps> = ({}) => {
   return (
     <Layout>
       <Wrapper>
-        <Heading>My Activity</Heading>
+        <Heading>My Notification</Heading>
       </Wrapper>
     </Layout>
   );
 };
 
-export default withApollo({ ssr: false })(Activity);
+export default withApollo({ ssr: false })(Notification);

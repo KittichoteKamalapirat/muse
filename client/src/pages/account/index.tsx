@@ -222,7 +222,7 @@ const Account: React.FC<indexProps> = ({}) => {
           <Box mt={2}>
             <NextLink href="/like" as="/like">
               <Link>
-                <HeartIcon isactive={false} mr={2} />
+                <HeartIcon mr={2} />
                 Liked recipe
               </Link>
             </NextLink>

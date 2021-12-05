@@ -3,7 +3,7 @@ import React from "react";
 import { inActiveGray, primaryColor } from "../Variables";
 
 interface HomeProps {
-  isactive: boolean;
+  isactive?: string;
 }
 
 export const HomeIcon = (props: HomeProps) => (
