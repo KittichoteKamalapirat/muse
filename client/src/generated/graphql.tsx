@@ -64,6 +64,7 @@ export type CartItem = {
   mealkit: Mealkit;
   orderId: Scalars['Int'];
   tracking?: Maybe<Tracking>;
+  cartItemNoti: CartItemNoti;
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   fieldTotal: Scalars['Int'];
@@ -72,6 +73,18 @@ export type CartItem = {
 export type CartItemInput = {
   mealkitId: Scalars['Float'];
   quantity: Scalars['Float'];
+};
+
+export type CartItemNoti = {
+  __typename?: 'CartItemNoti';
+  id: Scalars['Float'];
+  read: Scalars['Boolean'];
+  creatorId: Scalars['String'];
+  cartItemId: Scalars['Float'];
+  cartItem: CartItem;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  message: Scalars['String'];
 };
 
 export enum CartItemStatus {
@@ -239,6 +252,7 @@ export type Mutation = {
   updatePaymentInfo?: Maybe<PaymentInfoResponse>;
   deletePaymentInfo: Scalars['Boolean'];
   createTracking: Tracking;
+  readOrderNotis: Scalars['Boolean'];
 };
 
 
@@ -517,6 +531,7 @@ export type Query = {
   following: Array<Follow>;
   paymentInfo?: Maybe<PaymentInfo>;
   tracking: Tracking;
+  orderNotis: Array<CartItemNoti>;
 };
 
 
@@ -800,6 +815,11 @@ export type CreateTrackingMutationVariables = Exact<{
 
 export type CreateTrackingMutation = { __typename?: 'Mutation', createTracking: { __typename?: 'Tracking', id: number } };
 
+export type ReadOrderNotisMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ReadOrderNotisMutation = { __typename?: 'Mutation', readOrderNotis: boolean };
+
 export type CreatePaymentInfoMutationVariables = Exact<{
   input: PaymentInfoInput;
 }>;
@@ -948,6 +968,11 @@ export type CreatorOrdersQueryVariables = Exact<{
 
 
 export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus: string }> }> };
+
+export type OrderNotisQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OrderNotisQuery = { __typename?: 'Query', orderNotis: Array<{ __typename?: 'CartItemNoti', id: number, message: string, read: boolean, cartItemId: number, createdAt: any, cartItem: { __typename?: 'CartItem', id: number, quantity: number, status: string, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } } }> };
 
 export type TrackingQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1560,6 +1585,36 @@ export function useCreateTrackingMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateTrackingMutationHookResult = ReturnType<typeof useCreateTrackingMutation>;
 export type CreateTrackingMutationResult = Apollo.MutationResult<CreateTrackingMutation>;
 export type CreateTrackingMutationOptions = Apollo.BaseMutationOptions<CreateTrackingMutation, CreateTrackingMutationVariables>;
+export const ReadOrderNotisDocument = gql`
+    mutation readOrderNotis {
+  readOrderNotis
+}
+    `;
+export type ReadOrderNotisMutationFn = Apollo.MutationFunction<ReadOrderNotisMutation, ReadOrderNotisMutationVariables>;
+
+/**
+ * __useReadOrderNotisMutation__
+ *
+ * To run a mutation, you first call `useReadOrderNotisMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReadOrderNotisMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [readOrderNotisMutation, { data, loading, error }] = useReadOrderNotisMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useReadOrderNotisMutation(baseOptions?: Apollo.MutationHookOptions<ReadOrderNotisMutation, ReadOrderNotisMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReadOrderNotisMutation, ReadOrderNotisMutationVariables>(ReadOrderNotisDocument, options);
+      }
+export type ReadOrderNotisMutationHookResult = ReturnType<typeof useReadOrderNotisMutation>;
+export type ReadOrderNotisMutationResult = Apollo.MutationResult<ReadOrderNotisMutation>;
+export type ReadOrderNotisMutationOptions = Apollo.BaseMutationOptions<ReadOrderNotisMutation, ReadOrderNotisMutationVariables>;
 export const CreatePaymentInfoDocument = gql`
     mutation createPaymentInfo($input: PaymentInfoInput!) {
   createPaymentInfo(input: $input) {
@@ -2405,6 +2460,56 @@ export function useCreatorOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type CreatorOrdersQueryHookResult = ReturnType<typeof useCreatorOrdersQuery>;
 export type CreatorOrdersLazyQueryHookResult = ReturnType<typeof useCreatorOrdersLazyQuery>;
 export type CreatorOrdersQueryResult = Apollo.QueryResult<CreatorOrdersQuery, CreatorOrdersQueryVariables>;
+export const OrderNotisDocument = gql`
+    query orderNotis {
+  orderNotis {
+    id
+    message
+    read
+    cartItemId
+    createdAt
+    cartItem {
+      id
+      quantity
+      status
+      user {
+        username
+      }
+      mealkit {
+        name
+        images
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useOrderNotisQuery__
+ *
+ * To run a query within a React component, call `useOrderNotisQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOrderNotisQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderNotisQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOrderNotisQuery(baseOptions?: Apollo.QueryHookOptions<OrderNotisQuery, OrderNotisQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OrderNotisQuery, OrderNotisQueryVariables>(OrderNotisDocument, options);
+      }
+export function useOrderNotisLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OrderNotisQuery, OrderNotisQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OrderNotisQuery, OrderNotisQueryVariables>(OrderNotisDocument, options);
+        }
+export type OrderNotisQueryHookResult = ReturnType<typeof useOrderNotisQuery>;
+export type OrderNotisLazyQueryHookResult = ReturnType<typeof useOrderNotisLazyQuery>;
+export type OrderNotisQueryResult = Apollo.QueryResult<OrderNotisQuery, OrderNotisQueryVariables>;
 export const TrackingDocument = gql`
     query tracking($id: Int!) {
   tracking(id: $id) {

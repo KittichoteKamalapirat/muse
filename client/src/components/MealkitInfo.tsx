@@ -68,9 +68,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
           <Box>
             <Text>ไม่มีชุดทำอาหาร</Text>
             <NextLink href="/" as="/">
-              <Button colorScheme="teal" leftIcon={<AddIcon />}>
-                เพิ่มชุดทำอาหาร
-              </Button>
+              <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
             </NextLink>
           </Box>
         ) : (
@@ -97,7 +95,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                 </Box>
 
                 <Button
-                  colorScheme="teal"
                   mt="20px"
                   width="100%"
                   leftIcon={<AddIcon />}
@@ -170,7 +167,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       render: () => (
                         <Box width="100%" bgColor="white" p={4} boxShadow="lg">
                           <Flex alignItems="center">
-                            <CheckCircleIcon color="teal.300" m={2} />
+                            <CheckCircleIcon color="brand" m={2} />
                             <Box m={2}>
                               <Heading fontSize="lg">Added to Cart</Heading>
                               <Text color="blackAlpha.600">
@@ -181,7 +178,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                               <Button
                                 as={Link}
                                 mr={2}
-                                colorScheme="teal"
                                 onClick={() => router.push("/cart")}
                               >
                                 See Cart

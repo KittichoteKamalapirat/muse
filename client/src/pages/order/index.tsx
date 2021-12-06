@@ -133,9 +133,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                       <AddressComponent address={address?.address} />
                       <NextLink href="/account/address/edit">
                         <Link>
-                          <Button colorScheme="teal" my="10px">
-                            Edit Address
-                          </Button>
+                          <Button my="10px">Edit Address</Button>
                         </Link>
                       </NextLink>
                     </AccordionPanel>
@@ -149,9 +147,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                   href="/account/address/create"
                   as="/account/address/create"
                 >
-                  <Button colorScheme="teal" leftIcon={<AddIcon />}>
-                    Add address
-                  </Button>
+                  <Button leftIcon={<AddIcon />}>Add address</Button>
                 </NextLink>
               </Box>
             ))}
@@ -279,7 +275,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                       as={`/payment/${order.paymentId}`}
                     >
                       <Link>
-                        <Button colorScheme="teal" my="10px" width="100%">
+                        <Button my="10px" width="100%">
                           Make a payment
                         </Button>
                       </Link>

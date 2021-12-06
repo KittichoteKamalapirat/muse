@@ -92,7 +92,6 @@ export const Login: React.FC<{}> = ({}) => {
                 width="100%"
                 type="submit"
                 isLoading={isSubmitting}
-                colorScheme="teal"
               >
                 {" "}
                 Login

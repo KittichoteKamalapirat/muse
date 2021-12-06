@@ -65,12 +65,7 @@ const UpdateUser: React.FC<userProps> = ({}) => {
                 placeholder="about"
                 label="about"
               />
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                colorScheme="teal"
-              >
+              <Button mt={4} type="submit" isLoading={isSubmitting}>
                 {" "}
                 Update
               </Button>

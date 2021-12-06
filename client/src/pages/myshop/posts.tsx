@@ -56,7 +56,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
             <Heading fontWeight="normal" fontSize="md" m={2}>
               You have not created any posts yet!{" "}
             </Heading>
-            <Button colorScheme="teal">
+            <Button>
               <NextLink href="/create-post">
                 <Text as={Link}>
                   {/* <SmallAddIcon />  */}

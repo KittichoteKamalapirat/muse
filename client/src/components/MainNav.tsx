@@ -1,5 +1,5 @@
 import { Flex, Link, Avatar, Text, Box } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AccountIcon } from "./Icons/AccountIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { HomeIcon } from "./Icons/HomeIcon";
@@ -7,7 +7,7 @@ import { ShopIcon } from "./Icons/ShopIcon";
 import { primaryColor, inActiveGray } from "./Variables";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useMeQuery } from "../generated/graphql";
+import { useMeQuery, useOrderNotisQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import SvgBell from "./svgComponents/Bell";
 import { BellIcon } from "./Icons/BellIcon";
@@ -18,10 +18,18 @@ interface MainNavProps {}
 export const MainNav: React.FC<MainNavProps> = ({}) => {
   const router = useRouter();
 
+  const {
+    data: orderNoti,
+    loading: orderNotiLoading,
+    error: errorNori,
+  } = useOrderNotisQuery();
+
   const { data, loading } = useMeQuery({
     skip: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
     // no need to request in the browser side, just on client, but the server still knows anyway due to cookei forwarding
   });
+
+  // const [notiLength, setNotiLength] = useState<number>(0)
 
   const homeActive = router.pathname === "/";
   const likeActive = router.pathname === "/like";
@@ -52,7 +60,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   let currentUser = null;
 
   // data is loading
-  if (loading) {
+  if (loading || orderNotiLoading) {
     return null;
   } else if (!data?.me) {
     // this can return undefined, then ! turn it to "true"
@@ -172,7 +180,33 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
             alignItems="center"
             justifyContent="center"
           >
-            <BellIcon isactive={notiActive ? "true" : undefined} />
+            <Box position="relative">
+              <BellIcon isactive={notiActive ? "true" : undefined} />
+              <Text
+                display={
+                  orderNoti?.orderNotis.filter((noti) => noti.read == false)
+                    .length === 0
+                    ? "none"
+                    : "block"
+                }
+                position="absolute"
+                top="-6px"
+                right="-7px"
+                bgColor="alert"
+                color="white"
+                minWidth="1.2rem"
+                maxH="1.2rem"
+                borderRadius="8px"
+                textAlign="center"
+                fontSize="xs"
+                px="2px"
+              >
+                {
+                  orderNoti?.orderNotis.filter((noti) => noti.read == false)
+                    .length
+                }
+              </Text>
+            </Box>
 
             <Text
               fontSize="xs"

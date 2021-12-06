@@ -122,7 +122,6 @@ export const Register: React.FC<registerProps> = ({}) => {
                 width="100%"
                 type="submit"
                 isLoading={isSubmitting}
-                colorScheme="teal"
               >
                 {" "}
                 Register

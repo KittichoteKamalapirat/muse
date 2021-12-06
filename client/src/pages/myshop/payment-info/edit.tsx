@@ -77,12 +77,7 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
                 placeholder="bankAccount"
                 label="Bank Account"
               />
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                colorScheme="teal"
-              >
+              <Button mt={4} type="submit" isLoading={isSubmitting}>
                 {" "}
                 Update
               </Button>

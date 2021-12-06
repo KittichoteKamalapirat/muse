@@ -11,6 +11,7 @@ import {
   ObjectType,
   Query,
   Resolver,
+  Subscription,
   UseMiddleware,
 } from "type-graphql";
 import { isAuth } from "../middlware/isAuth";
@@ -240,6 +241,11 @@ export class PaymentResolver {
   //     console.log(error);
   //     return undefined;
   //   }
+  // }
+  //   @UseMiddleware(isAuth)
+  //   @Subscription()
+  // async paymentWaiting: {
+  //   subscribe: (root, args, {injector}) =>injector.get(PubSub).asyncIterator([POST_ADDED]),
   // }
 
   @Query(() => Payment)

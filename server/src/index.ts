@@ -34,6 +34,9 @@ import { PaymentInfo } from "./entities/PaymentInfo";
 import { PaymentInfoResolver } from "./resolvers/paymentInfo";
 import { TrackingResolver } from "./resolvers/tracking";
 import { Tracking } from "./entities/Tracking";
+import { CartItemNoti } from "./entities/CartItemNoti";
+import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
+import { FlowValidateList } from "twilio/lib/rest/studio/v2/flowValidate";
 
 const main = async () => {
   const conn = await createConnection({
@@ -54,6 +57,7 @@ const main = async () => {
       Address,
       Mealkit,
       CartItem,
+      CartItemNoti,
       Order,
       Payment,
       Follow,
@@ -94,6 +98,18 @@ const main = async () => {
         { orderId: ref1 },
         { status: CartItemStatus.ToDeliver }
       );
+
+      const cartItems = await CartItem.find({ where: { orderId: ref1 } });
+      cartItems.forEach(async (cartItem) => {
+        const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
+        await CartItemNoti.create({
+          read: false,
+          message: message,
+          cartItemId: cartItem.id,
+          creatorId: cartItem.mealkit.creatorId,
+        }).save();
+      });
+
       //have to send back to SCB
       res.send({
         resCode: "00",
@@ -155,6 +171,7 @@ const main = async () => {
       AddressResolver,
       MealkitResolver,
       CartItemResolver,
+      CartItemNotiResolver,
       PaymentResolver,
       OrderResolver,
       FollowResolver,

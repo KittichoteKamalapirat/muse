@@ -40,12 +40,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
                   type="email"
                 />
 
-                <Button
-                  mt={4}
-                  type="submit"
-                  isLoading={isSubmitting}
-                  colorScheme="teal"
-                >
+                <Button mt={4} type="submit" isLoading={isSubmitting}>
                   {" "}
                   Change password
                 </Button>

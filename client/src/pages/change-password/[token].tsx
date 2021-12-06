@@ -82,12 +82,7 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
               </Flex>
             ) : null}
 
-            <Button
-              mt={4}
-              type="submit"
-              isLoading={isSubmitting}
-              colorScheme="teal"
-            >
+            <Button mt={4} type="submit" isLoading={isSubmitting}>
               {" "}
               Change password
             </Button>

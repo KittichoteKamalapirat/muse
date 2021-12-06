@@ -53,12 +53,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
               }}
             >
               <Link>
-                <Button
-                  rightIcon={<ChevronRightIcon />}
-                  colorScheme="teal"
-                  variant="solid"
-                  my={4}
-                >
+                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
                   Sign up as Creator
                 </Button>
               </Link>

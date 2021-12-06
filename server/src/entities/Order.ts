@@ -16,20 +16,6 @@ import { Payment } from "./Payment";
 import { Tracking } from "./Tracking";
 import { User } from "./User";
 
-// export enum OrderStatus {
-//   PaymentPending = "PaymentPending", // user: to pay, creator: payment pending. User has made an order.
-//   ToDeliver = "ToDeliver", // user: to be delivered, creator: to deliver. User paid and waiting for the creator to deliver
-//   OnDelivery = "OnDelivery", // user and creator: the products are being delivered. waiting for the courrier to deliver
-//   Delivered = "Delivered", // user and creator: complete.
-//   Received = "Received", //user confirmed
-//   Cancelled = "Cancelled", //user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER
-//   Refunded = "Refunded", //user: waiting for refund, creator: to refund
-// }
-
-// registerEnumType(OrderStatus, {
-//   name: "OrderStatus", // this one is mandatory
-// });
-
 @ObjectType()
 class CartItemsByCreator {
   @Field()
@@ -52,18 +38,6 @@ export class Order extends BaseEntity {
   @Column() //type: int?
   @Field()
   grossOrder: number;
-
-  // @Column() //type: int?
-  // @Field()
-  // grossOrder(): number {
-  //   let gross: number = 0
-  //   this.cartItems
-
-  // };
-
-  // @Column({ default: OrderStatus.PaymentPending })
-  // @Field()
-  // status: OrderStatus;
 
   @Column("jsonb", { nullable: true })
   @Field(() => [CartItemsByCreator], { nullable: true })

@@ -601,12 +601,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 {step !== 4 ? null : (
                   <Flex mt={10} justifyContent="center">
                     {" "}
-                    <Button
-                      mb="4rem"
-                      type="submit"
-                      isLoading={submitting}
-                      colorScheme="teal"
-                    >
+                    <Button mb="4rem" type="submit" isLoading={submitting}>
                       {" "}
                       Create Post
                     </Button>

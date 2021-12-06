@@ -56,7 +56,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
               <Box>
                 {byDate.details.map((detail, subindex) => (
                   <Flex
-                    color={index === 0 && subindex == 0 ? "teal.400" : "none"}
+                    color={index === 0 && subindex == 0 ? "brand" : "none"}
                     fontWeight={index === 0 && subindex == 0 ? "bold" : "none"}
                   >
                     <Text mr={2}>{detail.time}</Text>

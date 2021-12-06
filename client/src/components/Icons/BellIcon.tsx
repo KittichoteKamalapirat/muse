@@ -1,4 +1,4 @@
-import { Icon } from "@chakra-ui/react";
+import { Icon, Box, Text } from "@chakra-ui/react";
 import React from "react";
 import { inActiveGray, primaryColor } from "../Variables";
 
@@ -15,6 +15,7 @@ export const BellIcon = (props: BellProps) => (
       strokeMiterlimit={10}
       strokeWidth={2}
     />
+
     <path
       d="M10 18.8a.26.26 0 0 1 .34.28A3 3 0 0 1 5 20.67a.27.27 0 0 1 .13-.42Z"
       fill={props.isactive ? primaryColor : inActiveGray}

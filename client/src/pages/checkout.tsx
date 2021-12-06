@@ -108,9 +108,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
         <NextLink href="/account/address/create" as="/account/address/create">
-          <Button colorScheme="teal" leftIcon={<AddIcon />}>
-            Add address
-          </Button>
+          <Button leftIcon={<AddIcon />}>Add address</Button>
         </NextLink>
       </Flex>
     </Flex>
@@ -312,7 +310,6 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                       <Flex justifyContent="space-between">
                         <Text>Total order</Text>
                         <Heading fontSize="md" color={primaryColor}>
-                        
                           ฿ {item.totalByCreator + item.deliveryFee}
                         </Heading>
                       </Flex>
@@ -345,9 +342,9 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                 cartItems?.cartItems.forEach((cartItem) => {
                   cartItemIds.push(cartItem.id);
                 });
-                console.log({cartItemIds})
-                console.log({gross})
-                console.log({cartItemsByCreatorInput})
+                console.log({ cartItemIds });
+                console.log({ gross });
+                console.log({ cartItemsByCreatorInput });
                 await createOrder({
                   variables: {
                     cartItemIds: cartItemIds,

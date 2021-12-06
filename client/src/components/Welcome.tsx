@@ -77,7 +77,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
           >
             <Box>
               {" "}
-              <Heading>
+              <Heading color="brand">
                 The Meal Kit {isLargerThan30Em ? null : <br />} Marketplace
               </Heading>
               <Box
@@ -97,7 +97,6 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 <Link>
                   <Button
                     rightIcon={<ChevronRightIcon />}
-                    colorScheme="teal"
                     variant="solid"
                     my={8}
                   >
@@ -219,12 +218,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               }}
             >
               <Link>
-                <Button
-                  rightIcon={<ChevronRightIcon />}
-                  colorScheme="teal"
-                  variant="solid"
-                  my={4}
-                >
+                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
                   Become a creator
                 </Button>
               </Link>

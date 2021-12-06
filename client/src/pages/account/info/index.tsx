@@ -66,9 +66,7 @@ const Info: React.FC<infoProps> = ({}) => {
           <Flex justifyContent="center" mt={4}>
             <NextLink href="/account/info/update">
               <Link style={{ textDecoration: "none" }}>
-                <Button colorScheme="teal" mx="auto">
-                  Edit account info
-                </Button>
+                <Button mx="auto">Edit account info</Button>
               </Link>
             </NextLink>
           </Flex>

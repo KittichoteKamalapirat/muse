@@ -135,12 +135,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
                 />{" "}
               </Flex>
 
-              <Button
-                mt={4}
-                type="submit"
-                isLoading={isSubmitting}
-                colorScheme="teal"
-              >
+              <Button mt={4} type="submit" isLoading={isSubmitting}>
                 {" "}
                 Update
               </Button>

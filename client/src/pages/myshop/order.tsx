@@ -231,7 +231,7 @@ const Order: React.FC<OrderProps> = ({}) => {
               </Flex>
 
               {cartItemStatus !== CartItemStatus.ToDeliver ? null : (
-                <Box bgColor="teal.50">
+                <Box bgColor="brand">
                   <Box p="10px">
                     <Flex alignItems="center">
                       <Avatar
@@ -271,7 +271,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                       //  as={`/create-tracking`}
                     >
                       <Link>
-                        <Button colorScheme="teal" my="10px">
+                        <Button my="10px">
                           Deliver to {orderItem.username}
                         </Button>
                       </Link>

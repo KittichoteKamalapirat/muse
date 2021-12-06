@@ -66,7 +66,7 @@ export const FollowSection: React.FC<FollowSectionProps> = ({
   return (
     <Box my={4}>
       <Button
-        colorScheme={!user.isFollowed ? "teal" : inActiveGray}
+        colorScheme={!user.isFollowed ? "brand" : inActiveGray}
         minWidth="110px"
         variant={!user.isFollowed ? "solid" : "outline"}
         onClick={async () => {

@@ -113,7 +113,7 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                     href="/order/tracking/[id]"
                     as={`/order/tracking/${order.trackingId}`}
                   >
-                    <Button as={Link} colorScheme="teal" my="10px" width="100%">
+                    <Button as={Link} my="10px" width="100%">
                       Tracking Info
                     </Button>
                   </NextLink>

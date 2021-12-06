@@ -53,13 +53,6 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   return (
     <HeadingLayout heading="Payment Detail">
       <Box mb={20}>
-        {/* <Box bgColor="teal.300" p={2}>
-          <Text>
-            Please complete the payment by xxxxx. Otherwise, the system will
-            cancel the order automatically
-          </Text>
-        </Box> */}
-
         <Wrapper>
           <Flex justifyContent="space-between">
             <Text>Total amount</Text>
@@ -89,17 +82,6 @@ const Payment: React.FC<PaymentProps> = ({}) => {
             <Text>Scan the QR code</Text>
             <Image src={imgSrc} alt="paymentqr" />
           </Box>
-
-          {/* <Box>
-            <Button
-              variant="outline"
-              width="100%"
-              colorScheme="linkedin"
-              color="black"
-            >
-              Cancel this order
-            </Button>
-          </Box> */}
         </Wrapper>
 
         <Flex

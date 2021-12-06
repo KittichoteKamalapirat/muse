@@ -34,6 +34,7 @@ import {
   CartItemsByOrderFormat,
   toUserOrdersMap,
 } from "../utils/toUserOrdersMap";
+import { CartItemNoti } from "../entities/CartItemNoti";
 
 //we need to make TypeGraphQL aware of the enums manually by calling the registerEnumType function and providing the enum name for GraphQL (accotding to Doc)
 
@@ -73,6 +74,7 @@ export class OrderResolver {
     //s3 signed request done
 
     // payment object
+
     const payment = await Payment.create({
       amount: grossOrder,
       qrUrl: url,
@@ -106,14 +108,32 @@ export class OrderResolver {
     // loop through every cartItem
     // orderId
 
-    cartItemIds.forEach(async (cartItemId) => {
-      await getConnection()
-        .createQueryBuilder()
-        .update(CartItem)
-        .set({ orderId: order.id, status: CartItemStatus.PaymentPending })
-        .where("id = :id", { id: cartItemId })
-        .execute();
-    });
+    try {
+      cartItemIds.forEach(async (cartItemId) => {
+        await getConnection()
+          .createQueryBuilder()
+          .update(CartItem)
+          .set({ orderId: order.id, status: CartItemStatus.PaymentPending })
+          .where("id = :id", { id: cartItemId })
+          .execute();
+
+        // CartItem Noti
+
+        const cartItem = await CartItem.findOne({
+          where: { id: cartItemId },
+          relations: ["mealkit", "user"],
+        });
+
+        CartItemNoti.create({
+          read: false,
+          message: `You received an order for ${cartItem?.quantity} ${cartItem?.mealkit.name} from ${cartItem?.user.username}.`,
+          cartItemId: cartItemId,
+          creatorId: cartItem?.mealkit.creatorId,
+        }).save();
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     return order;
   }

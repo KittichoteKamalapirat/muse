@@ -46,9 +46,7 @@ const Address: React.FC<addressProps> = ({}) => {
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
         <NextLink href="/account/address/create" as="/account/address/create">
-          <Button colorScheme="teal" leftIcon={<AddIcon />}>
-            Add address
-          </Button>
+          <Button leftIcon={<AddIcon />}>Add address</Button>
         </NextLink>
       </Flex>
     </Flex>
@@ -131,7 +129,6 @@ const Address: React.FC<addressProps> = ({}) => {
                 <Button
                   m={1}
                   // size="xs"
-                  colorScheme="teal"
                   leftIcon={<EditIcon />}
                 >
                   Edit address

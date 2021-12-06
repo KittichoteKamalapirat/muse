@@ -10,6 +10,7 @@ import {
   JoinColumn,
   OneToOne,
 } from "typeorm";
+import { CartItemNoti } from "./CartItemNoti";
 import { Mealkit } from "./Mealkit";
 import { Order } from "./Order";
 import { Tracking } from "./Tracking";
@@ -85,6 +86,10 @@ export class CartItem extends BaseEntity {
 
   @Column({ nullable: true })
   trackingId: number;
+
+  @Field(() => CartItemNoti)
+  @OneToOne((type) => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
+  cartItemNoti: CartItemNoti;
 
   @Field(() => String)
   @CreateDateColumn()
