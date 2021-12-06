@@ -1,0 +1,259 @@
+import { PlusSquareIcon, ChevronLeftIcon } from "@chakra-ui/icons";
+import { Box, Flex, IconButton, Button, Img, Text } from "@chakra-ui/react";
+import axios from "axios";
+import moment from "moment";
+import router from "next/router";
+import React, { useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
+import {
+  Mutation,
+  MutationUpdateAvatarArgs,
+  UpdateAvatarDocument,
+  UpdateAvatarMutation,
+  useSignSingleFileS3Mutation,
+  useUpdateAvatarMutation,
+  useUploadSlipMutation,
+} from "../generated/graphql";
+import { withApollo } from "../util/withApollo";
+
+interface SingleFileUploadProps {
+  params?: string;
+  currentUrl?: string;
+  updateAvatar?: any;
+  uploadSlip?: any;
+}
+
+interface UploadedFileType {
+  path: string;
+  name: string;
+  size: number;
+  type: string;
+}
+
+export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
+  params,
+  currentUrl,
+  updateAvatar,
+  uploadSlip,
+}) => {
+  // useState
+
+  const [thumbnailPreview, setThumbnailPreview] = useState<string>(
+    currentUrl as string
+  );
+  const [autofileUrl, setAutofileUrl] = useState<string>("");
+  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
+  const [thumbnailFile, setThumbnailFile] = useState<{
+    file: UploadedFileType;
+  }>({
+    file: { path: "", name: "", size: 0, type: "" },
+  });
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
+  console.log({ thumbnailFile });
+
+  // Apollo Hooks
+
+  // const [signS3] = useSignS3Mutation();
+  const [signSingleFileS3] = useSignSingleFileS3Mutation();
+
+  //local functions
+
+  const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
+    console.log({ acceptedFiles });
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+
+    setThumbnailFile({ file: acceptedFiles[0] });
+    console.log(thumbnailFile.file);
+  };
+
+  const uploadToS3 = async (
+    thumbnailFile: UploadedFileType,
+    signedRequest: string
+  ) => {
+    console.log("oh yeah");
+    console.log({ thumbnailFile });
+    const thumbnailOptions = {
+      headers: {
+        "Content-Type": thumbnailFile.type,
+      },
+    };
+    console.log({ thumbnailOptions });
+    await axios.put(
+      signedRequest,
+      thumbnailFile || autoThumbnailBlob,
+      thumbnailOptions
+    );
+  };
+
+  const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
+    const reader = new FileReader();
+    if (reader.error) {
+      console.log(reader.error.message);
+    }
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setThumbnailPreview(reader.result);
+      }
+    };
+
+    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
+  };
+
+  const formatFilename = (filename: string) => {
+    const date = moment().format("YYYYMMDD");
+    const randomString = Math.random().toString(36).substring(2, 7);
+    const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-");
+    const newFilename = `images/${date}-${randomString}-${cleanFileName}`;
+    return newFilename.substring(0, 60);
+  };
+
+  const handleSubmit = async (values: any) => {
+    setSubmitting(true);
+    try {
+      console.log(1);
+      // S3 Video and images starts
+      const response = await signSingleFileS3({
+        variables: {
+          filename: formatFilename(thumbnailFile.file.name),
+          filetype: thumbnailFile.file.type,
+        },
+      });
+      console.log(2);
+      if (response.data?.signSingleFileS3) {
+        console.log(2.5);
+        const fileUrl = response.data.signSingleFileS3.fileUrl;
+        const signedRequest = response.data.signSingleFileS3.signedRequest;
+        console.log(2.6);
+
+        await uploadToS3(thumbnailFile.file, signedRequest);
+        console.log(2.7);
+
+        //have to check what operation it is
+        if (uploadSlip) {
+          await uploadSlip({
+            variables: {
+              paymentId: parseInt(params as string),
+              // paymentId: 1,
+              slipUrl: fileUrl,
+            },
+          });
+        }
+
+        if (updateAvatar) {
+          await updateAvatar({
+            variables: {
+              newAvatar: fileUrl,
+            },
+          });
+
+          router.push("/account");
+        }
+
+        console.log(3);
+        setSubmitting(false);
+      } else {
+        return new Error("cannot upload");
+      }
+      // S3 end
+    } catch (error) {
+      // console.log("errro here 2");
+      console.error(error);
+      return;
+      // console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log({ currentUrl });
+    setThumbnailPreview(currentUrl);
+  }, [currentUrl]);
+
+  return (
+    <Box mb="70px">
+      {!thumbnailPreview ? (
+        <Flex justifyContent="center">
+          <Img src={autofileUrl} />
+        </Flex>
+      ) : (
+        <Flex justifyContent="center">
+          <Img
+            src={thumbnailPreview}
+            alt="image"
+            boxSize="90%"
+            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+          />
+        </Flex>
+      )}
+      <Dropzone
+        onDrop={(acceptedFiles: any, rejectedFiles: any) =>
+          handleOnDropThumbnail(acceptedFiles, rejectedFiles)
+        }
+        // maxSize={1000 * 3}
+        multiple={true}
+        accept="image/*"
+      >
+        {({ getRootProps, getInputProps }) => (
+          <Box mt={2}>
+            <Box cursor="pointer" padding={4}>
+              <Box
+                {...getRootProps({
+                  onChange: (e: React.FormEvent<HTMLDivElement>) =>
+                    thumbnailPreviewHandler(e),
+                })}
+              >
+                <input {...getInputProps()} />
+
+                <Flex
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  border={!thumbnailPreview ? "1px" : undefined}
+                  borderColor="gray.400"
+                  borderStyle="dashed"
+                >
+                  {!thumbnailPreview ? (
+                    <PlusSquareIcon mr={2} />
+                  ) : (
+                    <Img
+                      border="1px"
+                      borderColor="black"
+                      mr={2}
+                      borderRadius="20%"
+                      src={thumbnailPreview}
+                      alt="image"
+                      boxSize="2rem"
+                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                    />
+                  )}
+                  {updateAvatar && (
+                    <Text textAlign="center">Update a new avatar</Text>
+                  )}
+                  {uploadSlip && <Text textAlign="center">Upload a slip</Text>}
+                </Flex>
+              </Box>
+            </Box>
+          </Box>
+        )}
+      </Dropzone>
+      <Box>
+        {thumbnailFile.file.name.length > 0 && (
+          <Button
+            onClick={handleSubmit}
+            width="100%"
+            type="submit"
+            isLoading={submitting}
+          >
+            {" "}
+            {updateAvatar && <Text textAlign="center">Update</Text>}
+            {uploadSlip && <Text textAlign="center">Upload</Text>}
+          </Button>
+        )}
+      </Box>
+    </Box>
+  );
+};
+
+// export default withApollo({ ssr: false })(SingleFileUpload);

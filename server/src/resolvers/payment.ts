@@ -19,6 +19,12 @@ import { s3, s3Params } from "../utils/s3";
 import { MyContext } from "../types";
 import axios from "axios";
 import { Payment } from "../entities/Payment";
+import { PubSub } from "graphql-subscriptions";
+import { Connection, getConnection } from "typeorm";
+import { CartItemStatus } from "../entities/CartItem";
+import { OrderStatus } from "aws-sdk/clients/outposts";
+
+export const pubsub = new PubSub();
 
 // const qrcode = require('qrcode ')
 // const generatePaylload = require('promptpay-qr')
@@ -192,62 +198,6 @@ export const createScbQr = async (
 
 @Resolver()
 export class PaymentResolver {
-  // @Query(() => qrOutput)
-  // @UseMiddleware(isAuth)
-  // async createScbQr(
-  //   // @Arg('requestId',() => String) requestId: string
-  //   @Arg("amount", () => Int) amount: number,
-  //   @Ctx() { req, res }: MyContext
-  // ): Promise<qrOutput | undefined> {
-  //   try {
-  //     const token = await scbToken();
-  //     console.log(token);
-
-  //     const qr_headers = {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "accept-language": "EN", //or "TH"
-  //         authorization: `Bearer ${token}`,
-  //         requestUId: "later",
-  //         resourceOwnerId: SCB_API_KEY,
-  //       },
-
-  //       body: JSON.stringify({
-  //         qrType: "PP", //QR30
-  //         ppType: "BILLERID", //change later
-  //         ppId: BILLER_ID,
-  //         amount: amount,
-  //         ref1: "REFERENCE1",
-  //         ref2: "REFERENCE2",
-  //         ref3: "SCB", // -> NEED UNTIL THIS
-  //       }),
-  //     };
-  //     console.log(qr_headers.headers.authorization);
-
-  //     const response = await fetch(
-  //       "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create",
-  //       { ...qr_headers }
-  //     );
-
-  //     console.log({ response });
-  //     const data: any = await response.json();
-  //     console.log({ data });
-
-  //     //save to s3 end
-
-  //     return data;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return undefined;
-  //   }
-  // }
-  //   @UseMiddleware(isAuth)
-  //   @Subscription()
-  // async paymentWaiting: {
-  //   subscribe: (root, args, {injector}) =>injector.get(PubSub).asyncIterator([POST_ADDED]),
-  // }
-
   @Query(() => Payment)
   @UseMiddleware(isAuth)
   async payment(
@@ -298,6 +248,54 @@ export class PaymentResolver {
     } catch (error) {
       console.log(error);
       return undefined;
+    }
+  }
+
+  @UseMiddleware(isAuth)
+  @Query(() => Boolean)
+  async manuallyConfirmPayment(
+    @Arg("paymentId", () => Int) paymentId: number
+  ): Promise<boolean | Error> {
+    try {
+      const statusArray: { status: CartItemStatus }[] = await getConnection()
+        .query(`
+      SELECT status
+      FROM cart_item
+      LEFT JOIN "order"
+      ON cart_item."orderId" = "order".id
+      WHERE "order"."paymentId" = '${paymentId}';
+    `);
+
+      const length = statusArray.length;
+
+      const paidItems = statusArray.filter(
+        (status) => status.status == CartItemStatus.ToDeliver
+      );
+      const paidLength = paidItems.length;
+
+      if (length === paidLength) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return new Error("Payment confirmation failed");
+    }
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async uploadSlip(
+    @Arg("paymentId", () => Int) paymentId: number,
+    @Arg("slipUrl") slipUrl: string
+  ) {
+    try {
+      await Payment.update({ id: paymentId }, { slipUrl: slipUrl });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
     }
   }
 }

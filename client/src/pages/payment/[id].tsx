@@ -12,9 +12,12 @@ import {
   useAddressQuery,
   usePaymentLazyQuery,
   usePaymentQuery,
+  useUploadSlipMutation,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
+import { isServer } from "../../util/isServer";
+import { SingleFileUpload } from "../../components/SingleFileUpload";
 
 interface PaymentProps {}
 
@@ -22,18 +25,46 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();
   const { id } = router.query;
 
+  // native hooks
+
+  const [imgSrc, setImageSrc] = useState<string>("");
+
+  // apollo hooks
+
+  const [uploadSlip] = useUploadSlipMutation();
+
   const {
     data: paymentData,
     loading,
     error,
   } = usePaymentQuery({ variables: { id: parseInt(id as string) } });
 
-  const [imgSrc, setImageSrc] = useState<string>("");
-
+  //functions
   const fetchMyAPI = async () => {
     const res = await axios(paymentData!.payment.qrUrl);
     setImageSrc(res.data);
   };
+
+  const paymentSuccess = (status: boolean): string => {
+    if (status) {
+      return "paymnt successful";
+    } else {
+      return "the payment failed";
+    }
+  };
+
+  //SSE starts
+  if (!isServer()) {
+    const eventSource = new EventSource("/payment-confirmation");
+    useEffect(() => {
+      eventSource.onmessage = (e: any) => {
+        console.log("yoyo listening");
+        paymentSuccess(e);
+      };
+    });
+  }
+
+  //SSE finishes
 
   useEffect(() => {
     if (!loading && paymentData) {
@@ -113,6 +144,12 @@ const Payment: React.FC<PaymentProps> = ({}) => {
           </Button>
         </Flex>
       </Box>
+
+      <SingleFileUpload
+        params={id as string}
+        currentUrl={paymentData?.payment.slipUrl}
+        uploadSlip={uploadSlip}
+      />
     </HeadingLayout>
   );
 };

@@ -15,6 +15,8 @@ import {
   MenuItem,
   MenuList,
   Text,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import { Center, Heading } from "@chakra-ui/layout";
 import { withApollo } from "../../util/withApollo";
@@ -103,17 +105,21 @@ const Account: React.FC<indexProps> = ({}) => {
         )}
 
         <Center mt={8}>
-          <Avatar
-            margin="auto"
-            m={2}
-            size="2xl"
-            src={meData?.me?.avatar}
-            alt="creator avatar"
-            border={5}
-            borderStyle="solid"
-            borderColor="red.400"
-            bg="white"
-          />
+          <LinkBox>
+            <Avatar
+              margin="auto"
+              m={2}
+              size="2xl"
+              src={meData?.me?.avatar}
+              alt="creator avatar"
+              border={5}
+              borderStyle="solid"
+              borderColor="red.400"
+              bg="white"
+            />
+
+            <LinkOverlay href="/account/avatar" />
+          </LinkBox>
         </Center>
 
         <Box mt={4}>

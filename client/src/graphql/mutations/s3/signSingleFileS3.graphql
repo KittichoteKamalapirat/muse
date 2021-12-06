@@ -1,0 +1,6 @@
+mutation signSingleFileS3($filename: String!, $filetype: String!) {
+  signSingleFileS3(filename: $filename, filetype: $filetype) {
+    signedRequest
+    fileUrl
+  }
+}

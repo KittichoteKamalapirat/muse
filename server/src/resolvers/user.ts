@@ -384,4 +384,19 @@ export class UserResolver {
     );
     return true;
   }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async updateAvatar(
+    @Ctx() { req }: MyContext,
+    @Arg("newAvatar") newAvatar: string
+  ): Promise<boolean | Error> {
+    try {
+      User.update({ id: req.session.userId }, { avatar: newAvatar });
+      return true;
+    } catch (error) {
+      console.log(error);
+      return Error("cannot update avatar");
+    }
+  }
 }

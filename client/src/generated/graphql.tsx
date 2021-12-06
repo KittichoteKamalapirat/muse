@@ -79,12 +79,12 @@ export type CartItemNoti = {
   __typename?: 'CartItemNoti';
   id: Scalars['Float'];
   read: Scalars['Boolean'];
+  message: Scalars['String'];
   creatorId: Scalars['String'];
   cartItemId: Scalars['Float'];
   cartItem: CartItem;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
-  message: Scalars['String'];
 };
 
 export enum CartItemStatus {
@@ -230,6 +230,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   switchAccountType: Scalars['Boolean'];
+  updateAvatar: Scalars['Boolean'];
   vote: Scalars['Boolean'];
   createPost: Post;
   updatePost?: Maybe<Post>;
@@ -246,6 +247,7 @@ export type Mutation = {
   createCartItem: AddToCart;
   updateCartItem: CartItem;
   deleteCartItem: Scalars['Boolean'];
+  uploadSlip: Scalars['Boolean'];
   createOrder: Order;
   toggleFollow: Scalars['Boolean'];
   createPaymentInfo: PaymentInfoResponse;
@@ -253,6 +255,7 @@ export type Mutation = {
   deletePaymentInfo: Scalars['Boolean'];
   createTracking: Tracking;
   readOrderNotis: Scalars['Boolean'];
+  signSingleFileS3: SingleFileSignedS3;
 };
 
 
@@ -285,6 +288,11 @@ export type MutationLoginArgs = {
 
 export type MutationSwitchAccountTypeArgs = {
   becomeCreator: Scalars['Boolean'];
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  newAvatar: Scalars['String'];
 };
 
 
@@ -379,6 +387,12 @@ export type MutationDeleteCartItemArgs = {
 };
 
 
+export type MutationUploadSlipArgs = {
+  slipUrl: Scalars['String'];
+  paymentId: Scalars['Int'];
+};
+
+
 export type MutationCreateOrderArgs = {
   cartItemsByCreatorInput: Array<CartItemsByCreatorInput>;
   grossOrder: Scalars['Int'];
@@ -411,6 +425,12 @@ export type MutationCreateTrackingArgs = {
   input: TrackingInput;
 };
 
+
+export type MutationSignSingleFileS3Args = {
+  filetype: Scalars['String'];
+  filename: Scalars['String'];
+};
+
 export type Order = {
   __typename?: 'Order';
   id: Scalars['Float'];
@@ -435,6 +455,7 @@ export type Payment = {
   id: Scalars['Float'];
   amount: Scalars['Float'];
   qrUrl: Scalars['String'];
+  slipUrl: Scalars['String'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -525,6 +546,7 @@ export type Query = {
   cartItems: Array<CartItem>;
   payment: Payment;
   confirmPayment: ConfirmationResponse;
+  manuallyConfirmPayment: Scalars['Boolean'];
   userOrders: Array<CartItemsByOrderFormat>;
   creatorOrders: Array<MappedCreatorOrders>;
   followers: Array<Follow>;
@@ -578,6 +600,11 @@ export type QueryConfirmPaymentArgs = {
 };
 
 
+export type QueryManuallyConfirmPaymentArgs = {
+  paymentId: Scalars['Int'];
+};
+
+
 export type QueryUserOrdersArgs = {
   status: CartItemStatus;
 };
@@ -606,6 +633,12 @@ export type SignedS3 = {
   __typename?: 'SignedS3';
   signedRequest: Scalars['String'];
   url: Scalars['String'];
+};
+
+export type SingleFileSignedS3 = {
+  __typename?: 'SingleFileSignedS3';
+  signedRequest: Scalars['String'];
+  fileUrl: Scalars['String'];
 };
 
 export type Status = {
@@ -820,6 +853,14 @@ export type ReadOrderNotisMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type ReadOrderNotisMutation = { __typename?: 'Mutation', readOrderNotis: boolean };
 
+export type UploadSlipMutationVariables = Exact<{
+  paymentId: Scalars['Int'];
+  slipUrl: Scalars['String'];
+}>;
+
+
+export type UploadSlipMutation = { __typename?: 'Mutation', uploadSlip: boolean };
+
 export type CreatePaymentInfoMutationVariables = Exact<{
   input: PaymentInfoInput;
 }>;
@@ -853,6 +894,14 @@ export type RegisterMutationVariables = Exact<{
 
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> } };
+
+export type SignSingleFileS3MutationVariables = Exact<{
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+}>;
+
+
+export type SignSingleFileS3Mutation = { __typename?: 'Mutation', signSingleFileS3: { __typename?: 'SingleFileSignedS3', signedRequest: string, fileUrl: string } };
 
 export type SignMealkitS3MutationVariables = Exact<{
   input: Array<SignS3Params> | SignS3Params;
@@ -925,6 +974,13 @@ export type UpdateUserMutationVariables = Exact<{
 
 export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, email: string, phonenumber: string, about?: Maybe<string> } };
 
+export type UpdateAvatarMutationVariables = Exact<{
+  newAvatar: Scalars['String'];
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: boolean };
+
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
   postId: Scalars['Int'];
@@ -986,7 +1042,7 @@ export type PaymentQueryVariables = Exact<{
 }>;
 
 
-export type PaymentQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: number, qrUrl: string, amount: number } };
+export type PaymentQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: number, qrUrl: string, slipUrl: string, amount: number } };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1615,6 +1671,38 @@ export function useReadOrderNotisMutation(baseOptions?: Apollo.MutationHookOptio
 export type ReadOrderNotisMutationHookResult = ReturnType<typeof useReadOrderNotisMutation>;
 export type ReadOrderNotisMutationResult = Apollo.MutationResult<ReadOrderNotisMutation>;
 export type ReadOrderNotisMutationOptions = Apollo.BaseMutationOptions<ReadOrderNotisMutation, ReadOrderNotisMutationVariables>;
+export const UploadSlipDocument = gql`
+    mutation uploadSlip($paymentId: Int!, $slipUrl: String!) {
+  uploadSlip(paymentId: $paymentId, slipUrl: $slipUrl)
+}
+    `;
+export type UploadSlipMutationFn = Apollo.MutationFunction<UploadSlipMutation, UploadSlipMutationVariables>;
+
+/**
+ * __useUploadSlipMutation__
+ *
+ * To run a mutation, you first call `useUploadSlipMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadSlipMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadSlipMutation, { data, loading, error }] = useUploadSlipMutation({
+ *   variables: {
+ *      paymentId: // value for 'paymentId'
+ *      slipUrl: // value for 'slipUrl'
+ *   },
+ * });
+ */
+export function useUploadSlipMutation(baseOptions?: Apollo.MutationHookOptions<UploadSlipMutation, UploadSlipMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadSlipMutation, UploadSlipMutationVariables>(UploadSlipDocument, options);
+      }
+export type UploadSlipMutationHookResult = ReturnType<typeof useUploadSlipMutation>;
+export type UploadSlipMutationResult = Apollo.MutationResult<UploadSlipMutation>;
+export type UploadSlipMutationOptions = Apollo.BaseMutationOptions<UploadSlipMutation, UploadSlipMutationVariables>;
 export const CreatePaymentInfoDocument = gql`
     mutation createPaymentInfo($input: PaymentInfoInput!) {
   createPaymentInfo(input: $input) {
@@ -1801,6 +1889,41 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const SignSingleFileS3Document = gql`
+    mutation signSingleFileS3($filename: String!, $filetype: String!) {
+  signSingleFileS3(filename: $filename, filetype: $filetype) {
+    signedRequest
+    fileUrl
+  }
+}
+    `;
+export type SignSingleFileS3MutationFn = Apollo.MutationFunction<SignSingleFileS3Mutation, SignSingleFileS3MutationVariables>;
+
+/**
+ * __useSignSingleFileS3Mutation__
+ *
+ * To run a mutation, you first call `useSignSingleFileS3Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignSingleFileS3Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signSingleFileS3Mutation, { data, loading, error }] = useSignSingleFileS3Mutation({
+ *   variables: {
+ *      filename: // value for 'filename'
+ *      filetype: // value for 'filetype'
+ *   },
+ * });
+ */
+export function useSignSingleFileS3Mutation(baseOptions?: Apollo.MutationHookOptions<SignSingleFileS3Mutation, SignSingleFileS3MutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SignSingleFileS3Mutation, SignSingleFileS3MutationVariables>(SignSingleFileS3Document, options);
+      }
+export type SignSingleFileS3MutationHookResult = ReturnType<typeof useSignSingleFileS3Mutation>;
+export type SignSingleFileS3MutationResult = Apollo.MutationResult<SignSingleFileS3Mutation>;
+export type SignSingleFileS3MutationOptions = Apollo.BaseMutationOptions<SignSingleFileS3Mutation, SignSingleFileS3MutationVariables>;
 export const SignMealkitS3Document = gql`
     mutation signMealkitS3($input: [signS3Params!]!) {
   signMealkitS3(input: $input) {
@@ -2140,6 +2263,37 @@ export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
 export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
+export const UpdateAvatarDocument = gql`
+    mutation updateAvatar($newAvatar: String!) {
+  updateAvatar(newAvatar: $newAvatar)
+}
+    `;
+export type UpdateAvatarMutationFn = Apollo.MutationFunction<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+
+/**
+ * __useUpdateAvatarMutation__
+ *
+ * To run a mutation, you first call `useUpdateAvatarMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateAvatarMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateAvatarMutation, { data, loading, error }] = useUpdateAvatarMutation({
+ *   variables: {
+ *      newAvatar: // value for 'newAvatar'
+ *   },
+ * });
+ */
+export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAvatarMutation, UpdateAvatarMutationVariables>(UpdateAvatarDocument, options);
+      }
+export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
+export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
+export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: Int!, $postId: Int!) {
   vote(value: $value, postId: $postId)
@@ -2571,6 +2725,7 @@ export const PaymentDocument = gql`
   payment(id: $id) {
     id
     qrUrl
+    slipUrl
     amount
   }
 }

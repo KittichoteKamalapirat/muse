@@ -37,6 +37,7 @@ import { Tracking } from "./entities/Tracking";
 import { CartItemNoti } from "./entities/CartItemNoti";
 import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
 import { FlowValidateList } from "twilio/lib/rest/studio/v2/flowValidate";
+import { S3Resolver } from "./utils/resolvers/s3";
 
 const main = async () => {
   const conn = await createConnection({
@@ -88,6 +89,12 @@ const main = async () => {
 
   app.post("/payment-confirmation", async (req, res) => {
     try {
+      // SSE starts
+      res.writeHead(200, {
+        Connection: "keep-alive",
+        "Content-Type": "text/event-streatm",
+        "Cache-Control": "no-cache",
+      });
       console.log(req);
       console.log("req.body");
       console.log(req.body);
@@ -99,7 +106,10 @@ const main = async () => {
         { status: CartItemStatus.ToDeliver }
       );
 
-      const cartItems = await CartItem.find({ where: { orderId: ref1 } });
+      const cartItems = await CartItem.find({
+        where: { orderId: ref1 },
+        relations: ["user", "mealkit"],
+      });
       cartItems.forEach(async (cartItem) => {
         const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
         await CartItemNoti.create({
@@ -110,6 +120,10 @@ const main = async () => {
         }).save();
       });
 
+      // SSE Continue
+      res.write("success");
+      res.writeHead(404);
+
       //have to send back to SCB
       res.send({
         resCode: "00",
@@ -117,6 +131,8 @@ const main = async () => {
         transactionId: "xxx",
         confirmId: "xxx",
       });
+
+      res.end;
 
       // res.redirect("http://google.com/");
       // res.writeHead(302, {
@@ -177,6 +193,7 @@ const main = async () => {
       FollowResolver,
       PaymentInfoResolver,
       TrackingResolver,
+      S3Resolver,
     ],
     validate: false,
   });

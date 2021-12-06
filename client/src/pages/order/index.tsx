@@ -34,8 +34,8 @@ import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
 
 import { mappedCartItemsByCreatorResult } from "../../util/toCartItemsByCreatorMap";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
-import { CartItemStatusTab } from "../../components/Icons/CartItemStatusTab";
 import { primaryColor } from "../../components/Variables";
+import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 
 export enum CartItemStatus {
   PaymentPending = "PaymentPending",
