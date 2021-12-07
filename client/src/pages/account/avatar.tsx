@@ -12,7 +12,7 @@ const Avatar: React.FC<AvatarProps> = ({}) => {
   return (
     <HeadingLayout heading="Update my avatar">
       <SingleFileUpload
-        currentUrl={meData?.me?.avatar}
+        currentUrl={meData?.me?.avatar as string}
         updateAvatar={updateAvatar}
       />
     </HeadingLayout>

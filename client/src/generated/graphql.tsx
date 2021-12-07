@@ -1025,6 +1025,13 @@ export type CreatorOrdersQueryVariables = Exact<{
 
 export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus: string }> }> };
 
+export type ManuallyConfirmPaymentQueryVariables = Exact<{
+  paymentId: Scalars['Int'];
+}>;
+
+
+export type ManuallyConfirmPaymentQuery = { __typename?: 'Query', manuallyConfirmPayment: boolean };
+
 export type OrderNotisQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2614,6 +2621,39 @@ export function useCreatorOrdersLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type CreatorOrdersQueryHookResult = ReturnType<typeof useCreatorOrdersQuery>;
 export type CreatorOrdersLazyQueryHookResult = ReturnType<typeof useCreatorOrdersLazyQuery>;
 export type CreatorOrdersQueryResult = Apollo.QueryResult<CreatorOrdersQuery, CreatorOrdersQueryVariables>;
+export const ManuallyConfirmPaymentDocument = gql`
+    query manuallyConfirmPayment($paymentId: Int!) {
+  manuallyConfirmPayment(paymentId: $paymentId)
+}
+    `;
+
+/**
+ * __useManuallyConfirmPaymentQuery__
+ *
+ * To run a query within a React component, call `useManuallyConfirmPaymentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useManuallyConfirmPaymentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useManuallyConfirmPaymentQuery({
+ *   variables: {
+ *      paymentId: // value for 'paymentId'
+ *   },
+ * });
+ */
+export function useManuallyConfirmPaymentQuery(baseOptions: Apollo.QueryHookOptions<ManuallyConfirmPaymentQuery, ManuallyConfirmPaymentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ManuallyConfirmPaymentQuery, ManuallyConfirmPaymentQueryVariables>(ManuallyConfirmPaymentDocument, options);
+      }
+export function useManuallyConfirmPaymentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ManuallyConfirmPaymentQuery, ManuallyConfirmPaymentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ManuallyConfirmPaymentQuery, ManuallyConfirmPaymentQueryVariables>(ManuallyConfirmPaymentDocument, options);
+        }
+export type ManuallyConfirmPaymentQueryHookResult = ReturnType<typeof useManuallyConfirmPaymentQuery>;
+export type ManuallyConfirmPaymentLazyQueryHookResult = ReturnType<typeof useManuallyConfirmPaymentLazyQuery>;
+export type ManuallyConfirmPaymentQueryResult = Apollo.QueryResult<ManuallyConfirmPaymentQuery, ManuallyConfirmPaymentQueryVariables>;
 export const OrderNotisDocument = gql`
     query orderNotis {
   orderNotis {

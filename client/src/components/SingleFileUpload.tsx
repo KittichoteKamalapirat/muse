@@ -1,5 +1,13 @@
 import { PlusSquareIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import { Box, Flex, IconButton, Button, Img, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  IconButton,
+  Button,
+  Img,
+  Text,
+  Heading,
+} from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import router from "next/router";
@@ -10,6 +18,8 @@ import {
   MutationUpdateAvatarArgs,
   UpdateAvatarDocument,
   UpdateAvatarMutation,
+  useManuallyConfirmPaymentLazyQuery,
+  useManuallyConfirmPaymentQuery,
   useSignSingleFileS3Mutation,
   useUpdateAvatarMutation,
   useUploadSlipMutation,
@@ -21,7 +31,13 @@ interface SingleFileUploadProps {
   currentUrl?: string;
   updateAvatar?: any;
   uploadSlip?: any;
+  manuallyConfirmPayment?: any;
+  isPaid?: boolean | undefined;
+  paymentId?: string | string[] | undefined;
+  // isPaidLoading: boolean;
 }
+
+// const [x] = useManuallyConfirmPaymentLazyQuery();
 
 interface UploadedFileType {
   path: string;
@@ -35,6 +51,10 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   currentUrl,
   updateAvatar,
   uploadSlip,
+  manuallyConfirmPayment,
+  isPaid,
+  paymentId,
+  // isPaidLoading,
 }) => {
   // useState
 
@@ -67,6 +87,14 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
 
     setThumbnailFile({ file: acceptedFiles[0] });
     console.log(thumbnailFile.file);
+
+    if (uploadSlip) {
+      manuallyConfirmPayment({
+        variables: {
+          paymentId: parseInt(paymentId as string),
+        },
+      });
+    }
   };
 
   const uploadToS3 = async (
@@ -95,7 +123,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     }
     reader.onload = () => {
       if (reader.readyState === 2) {
-        setThumbnailPreview(reader.result);
+        setThumbnailPreview(reader.result as string);
       }
     };
 
@@ -132,14 +160,29 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
         console.log(2.7);
 
         //have to check what operation it is
-        if (uploadSlip) {
-          await uploadSlip({
-            variables: {
-              paymentId: parseInt(params as string),
-              // paymentId: 1,
-              slipUrl: fileUrl,
-            },
-          });
+        console.log(uploadSlip);
+        console.log(manuallyConfirmPayment);
+        if (uploadSlip && manuallyConfirmPayment) {
+          console.log("1111111");
+          try {
+            await uploadSlip({
+              variables: {
+                paymentId: parseInt(params as string),
+                // paymentId: 1,
+                slipUrl: fileUrl,
+              },
+            });
+
+            if (isPaid) {
+              router.push("/payment-status?status=success");
+            } else {
+              router.push("/payment-status?status=fail");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+
+          // confirmpayment
         }
 
         if (updateAvatar) {
@@ -168,7 +211,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
 
   useEffect(() => {
     console.log({ currentUrl });
-    setThumbnailPreview(currentUrl);
+    setThumbnailPreview(currentUrl as string);
   }, [currentUrl]);
 
   return (
@@ -182,11 +225,12 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           <Img
             src={thumbnailPreview}
             alt="image"
-            boxSize="90%"
+            boxSize="50%"
             fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
           />
         </Flex>
       )}
+
       <Dropzone
         onDrop={(acceptedFiles: any, rejectedFiles: any) =>
           handleOnDropThumbnail(acceptedFiles, rejectedFiles)

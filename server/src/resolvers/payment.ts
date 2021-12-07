@@ -201,10 +201,33 @@ export class PaymentResolver {
   @Query(() => Payment)
   @UseMiddleware(isAuth)
   async payment(
-    @Arg("id", () => Int) id: number
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
   ): Promise<Payment | undefined> {
-    const payment = await Payment.findOne(id);
-    return payment;
+    // const payment = await Payment.findOne({ where: { id: id } });
+
+    // const result = await getConnection()
+    //   .createQueryBuilder()
+    //   .select("payment")
+    //   .leftJoinAndSelect("payment.order", "order")
+    //   .leftJoinAndSelect("order.user", "user")
+    //   .where("order.userId=:userId", { userId: req.session.userId });
+    try {
+      // const payment = await Payment.findOne({ where: { id: id } });
+      const payment = await getConnection().query(
+        `SELECT payment.* FROM payment
+      LEFT JOIN "order"
+      ON payment.id = "order"."paymentId"
+      LEFT JOIN "user"
+      ON "user".id = "order"."userId"
+      WHERE payment.id = ${id} AND "user".id = '${req.session.userId}';`
+      );
+
+      return payment[0];
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   }
 
   //check
@@ -257,6 +280,7 @@ export class PaymentResolver {
     @Arg("paymentId", () => Int) paymentId: number
   ): Promise<boolean | Error> {
     try {
+      //check whether all the cartitems associated to this paymentId (orderId) have the status ToDelivery or not
       const statusArray: { status: CartItemStatus }[] = await getConnection()
         .query(`
       SELECT status

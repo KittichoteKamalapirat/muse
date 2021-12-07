@@ -10,6 +10,7 @@ import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {
   useAddressQuery,
+  useManuallyConfirmPaymentLazyQuery,
   usePaymentLazyQuery,
   usePaymentQuery,
   useUploadSlipMutation,
@@ -18,6 +19,7 @@ import { withApollo } from "../../util/withApollo";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 import { isServer } from "../../util/isServer";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
+import { UnAuthorized } from "../../components/UnAuthorized";
 
 interface PaymentProps {}
 
@@ -30,9 +32,9 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   const [imgSrc, setImageSrc] = useState<string>("");
 
   // apollo hooks
-
   const [uploadSlip] = useUploadSlipMutation();
-
+  const [manuallyConfirmPayment, { data: isPaid, loading: isPaidLoading }] =
+    useManuallyConfirmPaymentLazyQuery();
   const {
     data: paymentData,
     loading,
@@ -54,15 +56,15 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   };
 
   //SSE starts
-  if (!isServer()) {
-    const eventSource = new EventSource("/payment-confirmation");
-    useEffect(() => {
-      eventSource.onmessage = (e: any) => {
-        console.log("yoyo listening");
-        paymentSuccess(e);
-      };
-    });
-  }
+  // if (!isServer()) {
+  //   const eventSource = new EventSource("/payment-confirmation");
+  //   useEffect(() => {
+  //     eventSource.onmessage = (e: any) => {
+  //       console.log("yoyo listening");
+  //       paymentSuccess(e);
+  //     };
+  //   });
+  // }
 
   //SSE finishes
 
@@ -79,6 +81,8 @@ const Payment: React.FC<PaymentProps> = ({}) => {
         <PaymentSkeleton />
       </Wrapper>
     );
+  } else if (!loading && !paymentData) {
+    return <UnAuthorized />;
   }
 
   return (
@@ -139,9 +143,9 @@ const Payment: React.FC<PaymentProps> = ({}) => {
             </Heading>
           </Box>
 
-          <Button width="100%" bgColor={primaryColor} color="white">
+          {/* <Button width="100%" bgColor={primaryColor} color="white">
             Upload slip
-          </Button>
+          </Button> */}
         </Flex>
       </Box>
 
@@ -149,6 +153,10 @@ const Payment: React.FC<PaymentProps> = ({}) => {
         params={id as string}
         currentUrl={paymentData?.payment.slipUrl}
         uploadSlip={uploadSlip}
+        manuallyConfirmPayment={manuallyConfirmPayment}
+        isPaid={isPaid?.manuallyConfirmPayment}
+        paymentId={id}
+        // isPaidLoading={isPaidLoading}
       />
     </HeadingLayout>
   );
