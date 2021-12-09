@@ -1,5 +1,5 @@
 import React from "react";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
 import { useMeQuery, useUpdateAvatarMutation } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";

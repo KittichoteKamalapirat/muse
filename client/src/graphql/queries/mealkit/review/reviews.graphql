@@ -1,0 +1,17 @@
+query reviews($mealkitId: Int!) {
+  reviews(mealkitId: $mealkitId) {
+    id
+    score
+    title
+    text
+    createdAt
+    user {
+      username
+      avatar
+    }
+    cartItemId
+    mealkit {
+      name
+    }
+  }
+}

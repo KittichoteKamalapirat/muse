@@ -1,7 +1,7 @@
 import { InfoIcon } from "@chakra-ui/icons";
 import { Box, Divider, Heading, Link, Text, Flex } from "@chakra-ui/layout";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper";
 import { useMeQuery } from "../../../generated/graphql";
 import { isServer } from "../../../util/isServer";

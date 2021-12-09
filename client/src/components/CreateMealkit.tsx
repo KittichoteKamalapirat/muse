@@ -24,7 +24,7 @@ import { MealkitInput, useCreateMealkitMutation } from "../generated/graphql";
 import { InputField } from "./InputField";
 import Dropzone from "react-dropzone";
 import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
-import { HeadingLayout } from "./HeadingLayout";
+import { HeadingLayout } from "./Layout/HeadingLayout";
 
 interface CreateMealkitProps {
   ingredientsField: {

@@ -38,14 +38,6 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   const shopActive = router.pathname === "/myshop";
   const accountActive = router.pathname === "/account";
 
-  console.log({ homeActive });
-  console.log({ likeActive });
-  console.log({ notiActive });
-  console.log({ shopActive });
-  console.log({ accountActive });
-
-  console.log({ data });
-
   // this is SSR so browser -> next.js -> graphql
 
   // without cookie  forwarding, and pause in the server

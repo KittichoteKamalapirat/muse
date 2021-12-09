@@ -5,7 +5,7 @@ import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
 import { Link, Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { AddressComponent } from "../../components/Icons/AddressComponent";
 import { TrackingDetail } from "../../components/Icons/TrackingDetail";
 import { inActiveGray, primaryColor } from "../../components/Variables";
@@ -66,7 +66,7 @@ const Order: React.FC<OrderProps> = ({}) => {
     );
   }
   return (
-    <HeadingLayout heading="My order" mt={10}>
+    <HeadingLayout heading="My order" mt={"40px"}>
       <Flex
         width="100%"
         p={2}

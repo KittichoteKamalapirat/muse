@@ -1,14 +1,15 @@
 import React from "react";
 import { useMeQuery } from "../../generated/graphql";
-import { Layout } from "../../components/Layout";
+
 import { Box, Heading, Text, Divider, Flex, Avatar } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import { withApollo } from "../../util/withApollo";
 import IngredientList from "../../components/IngredientList";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
 import { MealkitInfo } from "../../components/MealkitInfo";
+import { Layout } from "../../components/Layout/Layout";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();

@@ -7,7 +7,7 @@ import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import { withApollo } from "../util/withApollo";
-import { HeadingLayout } from "../components/HeadingLayout";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { WelcomeNav } from "../components/WelcomeNav";
 import NextLink from "next/link";
 

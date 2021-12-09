@@ -3,7 +3,7 @@ import { Flex, Text } from "@chakra-ui/layout";
 import { Formik, Form } from "formik";
 import router from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { InputField } from "../../../components/InputField";
 import { Wrapper } from "../../../components/Wrapper";
 import {

@@ -12,7 +12,7 @@ import {
 import { dataURItoBlob } from "dropzone";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { Layout } from "../components/Layout";
+import { Layout } from "../components/Layout/Layout";
 import {
   activeColor,
   inactiveColor,

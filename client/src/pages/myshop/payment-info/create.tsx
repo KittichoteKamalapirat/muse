@@ -5,7 +5,7 @@ import { Field, Form, Formik } from "formik";
 import { BreakingChangeType } from "graphql";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { InputField } from "../../../components/InputField";
 import { Wrapper } from "../../../components/Wrapper";
 import {

@@ -1,0 +1,14 @@
+mutation createReview(
+  $input: ReviewInput!
+  $mealkitId: Int!
+  $cartItemId: Int!
+) {
+  createReview(input: $input, mealkitId: $mealkitId, cartItemId: $cartItemId) {
+    id
+    score
+    title
+    text
+    mealkitId
+    userId
+  }
+}

@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { CartItem } from "./CartItem";
 import { Post } from "./Post";
+import { Review } from "./Review";
 import { User } from "./User";
 
 @ObjectType()
@@ -74,6 +75,21 @@ export class Mealkit extends BaseEntity {
   @Column({ default: 0 })
   @Field()
   deliveryFee: number;
+
+  // relationship with reviews
+  @OneToMany(() => Review, (reviews) => reviews.mealkit)
+  @Field(() => [Review])
+  reviews: Review[];
+
+  @Column({ type: "int", default: 0 })
+  @Field(() => Int)
+  reviewsSum: number;
+
+  @Column({ type: "int", default: 0 })
+  @Field(() => Int)
+  reviewsCounter: number;
+
+  //Date
 
   @Field(() => String)
   @CreateDateColumn()

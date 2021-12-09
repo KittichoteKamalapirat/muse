@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { withApollo } from "../util/withApollo";
-import { HeadingLayout } from "../components/HeadingLayout";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import NextLink from "next/link";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
@@ -9,6 +9,7 @@ import { CartItemStatus } from "../generated/graphql";
 import { Button } from "@chakra-ui/button";
 import SvgSuccess from "../components/svgComponents/Success";
 import SvgFail from "../components/svgComponents/Fail";
+import { MainNav } from "../components/MainNav";
 
 interface PaymentStatusProps {}
 
@@ -75,20 +76,23 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({}) => {
   }
 
   return (
-    <HeadingLayout
-      heading={status === "success" ? "Payment Sucess" : "Payment Fail"}
-      back={false}
-    >
-      <Flex
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-        textAlign="center"
-        height="80vh"
+    <>
+      <HeadingLayout
+        heading={status === "success" ? "Payment Sucess" : "Payment Fail"}
+        back={false}
       >
-        {body}
-      </Flex>
-    </HeadingLayout>
+        <Flex
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          textAlign="center"
+          height="80vh"
+        >
+          {body}
+        </Flex>
+      </HeadingLayout>
+      <MainNav />
+    </>
   );
 };
 

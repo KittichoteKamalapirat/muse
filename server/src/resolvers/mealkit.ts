@@ -2,12 +2,15 @@ import {
   Arg,
   Ctx,
   Field,
+  FieldResolver,
+  Float,
   InputType,
   Int,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
@@ -16,6 +19,7 @@ import { Mealkit } from "../entities/Mealkit";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
+import { ReviewResolver } from "./review";
 
 @InputType()
 class MealkitInput {
@@ -47,13 +51,21 @@ class signedS3Result {
   url: string;
 }
 
-@Resolver()
+@Resolver(Mealkit)
 export class MealkitResolver {
   // @Query(() => [Mealkit], { nullable: true })
   // async mealkits(): Promise<Mealkit[] | undefined> {
   //   const mealkits = await Mealkit.find();
   //   return mealkits;
   // }
+
+  @FieldResolver(() => Float)
+  reviewAvg(@Root() mealkit: Mealkit): number {
+    if (mealkit.reviewsCounter === 0 || mealkit.reviewsSum === 0) {
+      return 0;
+    }
+    return mealkit.reviewsSum / mealkit.reviewsCounter;
+  }
 
   @Query(() => [Mealkit], { nullable: true })
   async mealkits(
@@ -67,6 +79,18 @@ export class MealkitResolver {
     });
 
     return mealkit;
+  }
+
+  @Query(() => Mealkit, { nullable: true })
+  async mealkit(
+    @Arg("id", () => Int) id: number
+  ): Promise<Mealkit | Error | undefined> {
+    try {
+      return Mealkit.findOne({ where: { id }, relations: ["creator"] });
+    } catch (error) {
+      console.log(error);
+      return new Error(error);
+    }
   }
 
   //   @Query(() => Mealkit, { nullable: true })

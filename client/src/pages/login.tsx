@@ -8,7 +8,7 @@ import { toErrorMap } from "../util/toErrorMap";
 import { useRouter } from "next/dist/client/router";
 import NextLink from "next/link";
 import { withApollo } from "../util/withApollo";
-import { Layout } from "../components/Layout";
+import { Layout } from "../components/Layout/Layout";
 import { WelcomeNav } from "../components/WelcomeNav";
 
 export const Login: React.FC<{}> = ({}) => {

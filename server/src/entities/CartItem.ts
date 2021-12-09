@@ -91,6 +91,10 @@ export class CartItem extends BaseEntity {
   @OneToOne((type) => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
   cartItemNoti: CartItemNoti;
 
+  @Field()
+  @Column({ default: false })
+  isReviewed: boolean;
+
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;

@@ -38,6 +38,8 @@ import { CartItemNoti } from "./entities/CartItemNoti";
 import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
 import { FlowValidateList } from "twilio/lib/rest/studio/v2/flowValidate";
 import { S3Resolver } from "./utils/resolvers/s3";
+import { Review } from "./entities/Review";
+import { ReviewResolver } from "./resolvers/review";
 
 const main = async () => {
   const conn = await createConnection({
@@ -64,6 +66,7 @@ const main = async () => {
       Follow,
       PaymentInfo,
       Tracking,
+      Review,
     ],
   });
 
@@ -194,6 +197,7 @@ const main = async () => {
       PaymentInfoResolver,
       TrackingResolver,
       S3Resolver,
+      ReviewResolver,
     ],
     validate: false,
   });

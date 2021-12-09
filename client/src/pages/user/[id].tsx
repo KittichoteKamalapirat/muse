@@ -3,9 +3,9 @@ import { Image } from "@chakra-ui/image";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import React from "react";
 import { FollowSection } from "../../components/FollowSection";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
-import { Layout } from "../../components/Layout";
+import { Layout } from "../../components/Layout/Layout";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {

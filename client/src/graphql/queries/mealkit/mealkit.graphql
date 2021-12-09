@@ -1,0 +1,16 @@
+query mealkit($id: Int!) {
+  mealkit(id: $id) {
+    id
+    name
+    images
+    portion
+    price
+    postId
+    reviewAvg
+    reviewsCounter
+    creator {
+      username
+      avatar
+    }
+  }
+}

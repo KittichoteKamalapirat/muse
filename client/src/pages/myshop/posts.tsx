@@ -9,7 +9,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import React from "react";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { usePostsByCreatorQuery, useMeQuery } from "../../generated/graphql";
 import { Wrapper } from "../../components/Wrapper";

@@ -7,5 +7,7 @@ query mealkits($postId: Int!) {
     price
     portion
     deliveryFee
+    reviewAvg
+    reviewsCounter
   }
 }

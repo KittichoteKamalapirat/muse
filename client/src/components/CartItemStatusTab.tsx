@@ -59,7 +59,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
           setCartItemStatus(CartItemStatus.ToDeliver);
         }}
       >
-        Be shipped
+        Packing
       </Box>
 
       <Box
@@ -88,17 +88,12 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         color={cartItemStatus === "Delivered" ? primaryColor : inActiveGray}
         mx={1}
         onClick={() => {
-          // cartItemsByCartItemStatus({
-          //   variables: {
-          //     status: CartItemStatus.Delivered,
-          //   },
-          // });
           userOrders({ variables: { status: CartItemStatus.Delivered } });
 
           setCartItemStatus(CartItemStatus.Delivered);
         }}
       >
-        Rate
+        Complete
       </Box>
     </Flex>
   );

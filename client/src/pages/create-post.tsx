@@ -22,7 +22,7 @@ import { CreateMealkit } from "../components/CreateMealkit";
 import { CreateRecipe } from "../components/CreateRecipe";
 import { CreatePostForm } from "../components/CreatePostForm";
 import { CreateVideo } from "../components/CreateVideo";
-import { HeadingLayout } from "../components/HeadingLayout";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { printSourceLocation } from "graphql";
 import { dataURItoBlob } from "../util/dataURItoBlob";

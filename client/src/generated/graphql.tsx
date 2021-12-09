@@ -65,6 +65,7 @@ export type CartItem = {
   orderId: Scalars['Int'];
   tracking?: Maybe<Tracking>;
   cartItemNoti: CartItemNoti;
+  isReviewed: Scalars['Boolean'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
   fieldTotal: Scalars['Int'];
@@ -209,8 +210,12 @@ export type Mealkit = {
   creatorId: Scalars['String'];
   creator: User;
   deliveryFee: Scalars['Float'];
+  reviews: Array<Review>;
+  reviewsSum: Scalars['Int'];
+  reviewsCounter: Scalars['Int'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  reviewAvg: Scalars['Float'];
 };
 
 export type MealkitInput = {
@@ -256,6 +261,9 @@ export type Mutation = {
   createTracking: Tracking;
   readOrderNotis: Scalars['Boolean'];
   signSingleFileS3: SingleFileSignedS3;
+  createReview: Review;
+  updateReview: Review;
+  deleteReview: Scalars['Boolean'];
 };
 
 
@@ -431,6 +439,26 @@ export type MutationSignSingleFileS3Args = {
   filename: Scalars['String'];
 };
 
+
+export type MutationCreateReviewArgs = {
+  cartItemId: Scalars['Int'];
+  mealkitId: Scalars['Int'];
+  input: ReviewInput;
+};
+
+
+export type MutationUpdateReviewArgs = {
+  cartItemId: Scalars['Int'];
+  mealkitId: Scalars['Int'];
+  input: ReviewInput;
+};
+
+
+export type MutationDeleteReviewArgs = {
+  cartItemId: Scalars['Int'];
+  mealkitId: Scalars['Int'];
+};
+
 export type Order = {
   __typename?: 'Order';
   id: Scalars['Float'];
@@ -455,7 +483,7 @@ export type Payment = {
   id: Scalars['Float'];
   amount: Scalars['Float'];
   qrUrl: Scalars['String'];
-  slipUrl: Scalars['String'];
+  slipUrl?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -543,6 +571,7 @@ export type Query = {
   post?: Maybe<Post>;
   address: Address;
   mealkits?: Maybe<Array<Mealkit>>;
+  mealkit?: Maybe<Mealkit>;
   cartItems: Array<CartItem>;
   payment: Payment;
   confirmPayment: ConfirmationResponse;
@@ -554,6 +583,7 @@ export type Query = {
   paymentInfo?: Maybe<PaymentInfo>;
   tracking: Tracking;
   orderNotis: Array<CartItemNoti>;
+  reviews: Array<Review>;
 };
 
 
@@ -586,6 +616,11 @@ export type QueryPostArgs = {
 
 export type QueryMealkitsArgs = {
   postId: Scalars['Int'];
+};
+
+
+export type QueryMealkitArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -627,6 +662,33 @@ export type QueryFollowingArgs = {
 
 export type QueryTrackingArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryReviewsArgs = {
+  mealkitId: Scalars['Int'];
+};
+
+export type Review = {
+  __typename?: 'Review';
+  id: Scalars['Int'];
+  title?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  score: Scalars['Int'];
+  images?: Maybe<Array<Scalars['String']>>;
+  user: User;
+  userId: Scalars['String'];
+  mealkit: Mealkit;
+  mealkitId: Scalars['Int'];
+  cartItemId: Scalars['Int'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type ReviewInput = {
+  score: Scalars['Int'];
+  title: Scalars['String'];
+  text: Scalars['String'];
 };
 
 export type SignedS3 = {
@@ -702,6 +764,7 @@ export type User = {
   followerNum: Scalars['Float'];
   isFollowed: Scalars['Boolean'];
   address?: Maybe<Address>;
+  reviews: Array<Review>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -739,7 +802,7 @@ export type SignedS3Result = {
   url: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -895,6 +958,15 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> } };
 
+export type CreateReviewMutationVariables = Exact<{
+  input: ReviewInput;
+  mealkitId: Scalars['Int'];
+  cartItemId: Scalars['Int'];
+}>;
+
+
+export type CreateReviewMutation = { __typename?: 'Mutation', createReview: { __typename?: 'Review', id: number, score: number, title?: Maybe<string>, text?: Maybe<string>, mealkitId: number, userId: string } };
+
 export type SignSingleFileS3MutationVariables = Exact<{
   filename: Scalars['String'];
   filetype: Scalars['String'];
@@ -1011,12 +1083,26 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> };
 
+export type MealkitQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MealkitQuery = { __typename?: 'Query', mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, portion: number, price?: Maybe<number>, postId: number, reviewAvg: number, reviewsCounter: number, creator: { __typename?: 'User', username: string, avatar: string } }> };
+
+export type ReviewsQueryVariables = Exact<{
+  mealkitId: Scalars['Int'];
+}>;
+
+
+export type ReviewsQuery = { __typename?: 'Query', reviews: Array<{ __typename?: 'Review', id: number, score: number, title?: Maybe<string>, text?: Maybe<string>, createdAt: string, cartItemId: number, user: { __typename?: 'User', username: string, avatar: string }, mealkit: { __typename?: 'Mealkit', name: string } }> };
+
 export type MealkitsQueryVariables = Exact<{
   postId: Scalars['Int'];
 }>;
 
 
-export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number }>> };
+export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, reviewAvg: number, reviewsCounter: number }>> };
 
 export type CreatorOrdersQueryVariables = Exact<{
   status: CartItemStatus;
@@ -1049,7 +1135,7 @@ export type PaymentQueryVariables = Exact<{
 }>;
 
 
-export type PaymentQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: number, qrUrl: string, slipUrl: string, amount: number } };
+export type PaymentQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: number, qrUrl: string, slipUrl?: Maybe<string>, amount: number } };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1064,7 +1150,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> } };
 
 export type PostsByCreatorQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -1085,7 +1171,7 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'CartItemsByOrderFormat', orderId: number, grossOrder: number, paymentId: number, trackingId?: Maybe<number>, byCreator: Array<{ __typename?: 'CartItemsByCreatorFormat', creatorId: string, creatorName: string, avatar: string, deliveryFee: number, totalByCreator: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }> }> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'CartItemsByOrderFormat', orderId: number, grossOrder: number, paymentId: number, trackingId?: Maybe<number>, byCreator: Array<{ __typename?: 'CartItemsByCreatorFormat', creatorId: string, creatorName: string, avatar: string, deliveryFee: number, totalByCreator: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, isReviewed: boolean, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }> }> }> };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1112,6 +1198,8 @@ export const PostSnippetFragmentDoc = gql`
     images
     price
     portion
+    reviewAvg
+    reviewsCounter
   }
   creator {
     id
@@ -1896,6 +1984,46 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const CreateReviewDocument = gql`
+    mutation createReview($input: ReviewInput!, $mealkitId: Int!, $cartItemId: Int!) {
+  createReview(input: $input, mealkitId: $mealkitId, cartItemId: $cartItemId) {
+    id
+    score
+    title
+    text
+    mealkitId
+    userId
+  }
+}
+    `;
+export type CreateReviewMutationFn = Apollo.MutationFunction<CreateReviewMutation, CreateReviewMutationVariables>;
+
+/**
+ * __useCreateReviewMutation__
+ *
+ * To run a mutation, you first call `useCreateReviewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReviewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReviewMutation, { data, loading, error }] = useCreateReviewMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      mealkitId: // value for 'mealkitId'
+ *      cartItemId: // value for 'cartItemId'
+ *   },
+ * });
+ */
+export function useCreateReviewMutation(baseOptions?: Apollo.MutationHookOptions<CreateReviewMutation, CreateReviewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateReviewMutation, CreateReviewMutationVariables>(CreateReviewDocument, options);
+      }
+export type CreateReviewMutationHookResult = ReturnType<typeof useCreateReviewMutation>;
+export type CreateReviewMutationResult = Apollo.MutationResult<CreateReviewMutation>;
+export type CreateReviewMutationOptions = Apollo.BaseMutationOptions<CreateReviewMutation, CreateReviewMutationVariables>;
 export const SignSingleFileS3Document = gql`
     mutation signSingleFileS3($filename: String!, $filetype: String!) {
   signSingleFileS3(filename: $filename, filetype: $filetype) {
@@ -2509,6 +2637,99 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MealkitDocument = gql`
+    query mealkit($id: Int!) {
+  mealkit(id: $id) {
+    id
+    name
+    images
+    portion
+    price
+    postId
+    reviewAvg
+    reviewsCounter
+    creator {
+      username
+      avatar
+    }
+  }
+}
+    `;
+
+/**
+ * __useMealkitQuery__
+ *
+ * To run a query within a React component, call `useMealkitQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMealkitQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMealkitQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMealkitQuery(baseOptions: Apollo.QueryHookOptions<MealkitQuery, MealkitQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MealkitQuery, MealkitQueryVariables>(MealkitDocument, options);
+      }
+export function useMealkitLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MealkitQuery, MealkitQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MealkitQuery, MealkitQueryVariables>(MealkitDocument, options);
+        }
+export type MealkitQueryHookResult = ReturnType<typeof useMealkitQuery>;
+export type MealkitLazyQueryHookResult = ReturnType<typeof useMealkitLazyQuery>;
+export type MealkitQueryResult = Apollo.QueryResult<MealkitQuery, MealkitQueryVariables>;
+export const ReviewsDocument = gql`
+    query reviews($mealkitId: Int!) {
+  reviews(mealkitId: $mealkitId) {
+    id
+    score
+    title
+    text
+    createdAt
+    user {
+      username
+      avatar
+    }
+    cartItemId
+    mealkit {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useReviewsQuery__
+ *
+ * To run a query within a React component, call `useReviewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useReviewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useReviewsQuery({
+ *   variables: {
+ *      mealkitId: // value for 'mealkitId'
+ *   },
+ * });
+ */
+export function useReviewsQuery(baseOptions: Apollo.QueryHookOptions<ReviewsQuery, ReviewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ReviewsQuery, ReviewsQueryVariables>(ReviewsDocument, options);
+      }
+export function useReviewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ReviewsQuery, ReviewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ReviewsQuery, ReviewsQueryVariables>(ReviewsDocument, options);
+        }
+export type ReviewsQueryHookResult = ReturnType<typeof useReviewsQuery>;
+export type ReviewsLazyQueryHookResult = ReturnType<typeof useReviewsLazyQuery>;
+export type ReviewsQueryResult = Apollo.QueryResult<ReviewsQuery, ReviewsQueryVariables>;
 export const MealkitsDocument = gql`
     query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
@@ -2519,6 +2740,8 @@ export const MealkitsDocument = gql`
     price
     portion
     deliveryFee
+    reviewAvg
+    reviewsCounter
   }
 }
     `;
@@ -2992,6 +3215,7 @@ export const UserOrdersDocument = gql`
         quantity
         total
         quantity
+        isReviewed
         user {
           username
           address {

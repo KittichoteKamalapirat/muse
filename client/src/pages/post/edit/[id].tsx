@@ -2,9 +2,9 @@ import { Box, Button } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { InputField } from "../../../components/InputField";
-import { Layout } from "../../../components/Layout";
+import { Layout } from "../../../components/Layout/Layout";
 import { Wrapper } from "../../../components/Wrapper";
 import {
   usePostQuery,

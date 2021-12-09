@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout } from "../../../components/Layout";
+import { Layout } from "../../../components/Layout/Layout";
 import {
   useAddressQuery,
   useDeleteAddressMutation,
@@ -20,7 +20,7 @@ import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 import { useApolloClient } from "@apollo/client";
 import { Wrapper } from "../../../components/Wrapper";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { useRouter } from "next/router";
 import { primaryColor } from "../../../components/Variables";
 

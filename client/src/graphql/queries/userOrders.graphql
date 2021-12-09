@@ -16,6 +16,8 @@ query userOrders($status: CartItemStatus!) {
         quantity
         total
         quantity
+        isReviewed
+
         user {
           username
           address {

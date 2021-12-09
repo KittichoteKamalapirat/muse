@@ -1,7 +1,7 @@
 import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../components/HeadingLayout";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Wrapper } from "../components/Wrapper";
 import {
   CartItem,

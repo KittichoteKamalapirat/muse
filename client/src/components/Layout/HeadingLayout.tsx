@@ -6,7 +6,7 @@ import React from "react";
 interface HeadingLayoutProps {
   heading: string;
   back?: boolean;
-  mt?: number;
+  mt?: string;
 }
 
 export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
@@ -45,10 +45,11 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
         )}
 
         <Heading fontSize="xl" textAlign="center" mt={1}>
-          {heading}
+          {heading.substr(0, 30)}
+          {heading.length > 30 && "..."}
         </Heading>
       </Box>
-      <Box mt={mt || 10}>{children}</Box>
+      <Box mt={mt || "40px"}>{children}</Box>
     </>
   );
 };

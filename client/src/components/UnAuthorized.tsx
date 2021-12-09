@@ -1,6 +1,6 @@
 import { Box, Center, Flex, Heading, Text } from "@chakra-ui/layout";
 import React from "react";
-import { HeadingLayout } from "./HeadingLayout";
+import { HeadingLayout } from "./Layout/HeadingLayout";
 import { MainNav } from "./MainNav";
 import SvgFail from "./svgComponents/Fail";
 

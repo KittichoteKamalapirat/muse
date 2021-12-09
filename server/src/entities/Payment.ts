@@ -26,7 +26,7 @@ export class Payment extends BaseEntity {
   qrUrl: string;
 
   @Column({ nullable: true })
-  @Field()
+  @Field({ nullable: true })
   slipUrl: string;
 
   @OneToOne(() => Order, (order) => order.payment)

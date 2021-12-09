@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout } from "../../components/Layout";
+import { Layout } from "../../components/Layout/Layout";
 import NextLink from "next/link";
 import {
   Box,

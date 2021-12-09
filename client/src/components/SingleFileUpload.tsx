@@ -151,17 +151,12 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
       });
       console.log(2);
       if (response.data?.signSingleFileS3) {
-        console.log(2.5);
         const fileUrl = response.data.signSingleFileS3.fileUrl;
         const signedRequest = response.data.signSingleFileS3.signedRequest;
-        console.log(2.6);
 
         await uploadToS3(thumbnailFile.file, signedRequest);
-        console.log(2.7);
 
         //have to check what operation it is
-        console.log(uploadSlip);
-        console.log(manuallyConfirmPayment);
         if (uploadSlip && manuallyConfirmPayment) {
           console.log("1111111");
           try {
@@ -197,6 +192,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
 
         console.log(3);
         setSubmitting(false);
+        return;
       } else {
         return new Error("cannot upload");
       }

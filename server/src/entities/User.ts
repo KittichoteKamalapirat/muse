@@ -17,6 +17,7 @@ import { Mealkit } from "./Mealkit";
 import { Order } from "./Order";
 import { PaymentInfo } from "./PaymentInfo";
 import { Post } from "./Post";
+import { Review } from "./Review";
 import { Upvote } from "./Upvote";
 
 @ObjectType()
@@ -96,6 +97,11 @@ export class User extends BaseEntity {
   @OneToOne((type) => PaymentInfo, (paymentInfo) => paymentInfo.user)
   @JoinColumn()
   paymentInfo: PaymentInfo;
+
+  // relationshiop with reviews
+  @OneToMany(() => Review, (reviews) => reviews.user)
+  @Field(() => [Review])
+  reviews: Review[];
 
   @CreateDateColumn()
   @Field()

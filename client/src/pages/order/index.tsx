@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
 import NextLink from "next/link";
 import {
@@ -104,7 +104,7 @@ const Order: React.FC<OrderProps> = ({}) => {
   }
 
   return (
-    <HeadingLayout heading="My order" mt={10}>
+    <HeadingLayout heading="My order" mt={"40px"}>
       <CartItemStatusTab
         userOrders={userOrders}
         cartItemStatus={cartItemStatus}

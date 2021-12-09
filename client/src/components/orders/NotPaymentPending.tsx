@@ -81,19 +81,48 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                               </Text>
                             </Flex>
                             <Divider />
-                            <Flex justifyContent="space-between" fontSize="sm">
-                              <Text>Total</Text>
+                            <Flex justifyContent="end" fontSize="sm">
                               <Text> {cartItem.total} </Text>
                             </Flex>
-                            <Divider />
 
-                            <Divider />
                             <Flex
                               justifyContent="space-between"
                               fontSize="sm"
                             ></Flex>
                           </Box>
                         </Flex>
+
+                        {cartItemStatus === CartItemStatus.Delivered &&
+                        cartItem.isReviewed ? (
+                          <NextLink
+                            href={`/mealkit/[id]`}
+                            as={`/mealkit/${cartItem.mealkitId}`}
+                          >
+                            <Button
+                              variant="outline"
+                              as={Link}
+                              my="10px"
+                              width="100%"
+                            >
+                              Reviewed
+                            </Button>
+                          </NextLink>
+                        ) : (
+                          <NextLink
+                            href={{
+                              pathname: "/review/create",
+                              query: {
+                                cartItemId: cartItem.id,
+                                mealkitId: cartItem.mealkitId,
+                              },
+                            }}
+                            as={`/review/create`}
+                          >
+                            <Button as={Link} my="10px" width="100%">
+                              Leave a Review
+                            </Button>
+                          </NextLink>
+                        )}
                       </Box>
                     ))}
                   </Box>
@@ -118,6 +147,8 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                     </Button>
                   </NextLink>
                 )}
+
+                {/* show review button */}
               </Box>
             ))}
           </Box>

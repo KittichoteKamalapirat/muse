@@ -3,7 +3,7 @@ import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
 import { Skeleton } from "@chakra-ui/skeleton";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { primaryColor } from "../../../components/Variables";
 import { Wrapper } from "../../../components/Wrapper";
 import { useTrackingQuery } from "../../../generated/graphql";

@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { AccountIcon } from "../../components/Icons/AccountIcon";
-import { Layout } from "../../components/Layout";
+import { Layout } from "../../components/Layout/Layout";
 import { Wrapper } from "../../components/Wrapper";
 import { withApollo } from "../../util/withApollo";
 import NextLink from "next/link";

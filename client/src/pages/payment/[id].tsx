@@ -5,7 +5,7 @@ import axios from "axios";
 import { DirectiveLocation } from "graphql";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/HeadingLayout";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {
@@ -40,6 +40,8 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     loading,
     error,
   } = usePaymentQuery({ variables: { id: parseInt(id as string) } });
+  console.log({ id });
+  console.log({ paymentData });
 
   //functions
   const fetchMyAPI = async () => {
@@ -49,24 +51,11 @@ const Payment: React.FC<PaymentProps> = ({}) => {
 
   const paymentSuccess = (status: boolean): string => {
     if (status) {
-      return "paymnt successful";
+      return "payment successful";
     } else {
       return "the payment failed";
     }
   };
-
-  //SSE starts
-  // if (!isServer()) {
-  //   const eventSource = new EventSource("/payment-confirmation");
-  //   useEffect(() => {
-  //     eventSource.onmessage = (e: any) => {
-  //       console.log("yoyo listening");
-  //       paymentSuccess(e);
-  //     };
-  //   });
-  // }
-
-  //SSE finishes
 
   useEffect(() => {
     if (!loading && paymentData) {
@@ -81,8 +70,12 @@ const Payment: React.FC<PaymentProps> = ({}) => {
         <PaymentSkeleton />
       </Wrapper>
     );
-  } else if (!loading && !paymentData) {
+  } else if (!paymentData) {
     return <UnAuthorized />;
+  }
+
+  if (error) {
+    console.log(error);
   }
 
   return (
@@ -151,7 +144,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
 
       <SingleFileUpload
         params={id as string}
-        currentUrl={paymentData?.payment.slipUrl}
+        currentUrl={paymentData?.payment.slipUrl as string}
         uploadSlip={uploadSlip}
         manuallyConfirmPayment={manuallyConfirmPayment}
         isPaid={isPaid?.manuallyConfirmPayment}

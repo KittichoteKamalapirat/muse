@@ -2,7 +2,7 @@ import { Text, Button } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import router from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/HeadingLayout";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { InputField } from "../../../components/InputField";
 import { Wrapper } from "../../../components/Wrapper";
 import {
