@@ -58,7 +58,11 @@ const Index = () => {
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
 
-      <Stack spacing={4} maxW={["none", "40%"]} mx={["none", "auto"]}>
+      <Stack
+        spacing={4}
+        maxW={["none", "none", "30%", " 20%"]}
+        mx={["none", "auto"]}
+      >
         {data!.posts.posts.map((post) =>
           !post ? (
             <NewsFeedSkeleton />

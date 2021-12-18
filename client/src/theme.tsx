@@ -37,6 +37,12 @@ const theme = extendTheme(
           bgColor: "brand",
           color: "white",
         },
+        variants: {
+          transparent: (props) => ({
+            bg: "transparent",
+            color: "black",
+          }),
+        },
       },
     },
     colors: {

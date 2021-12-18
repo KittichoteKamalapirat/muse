@@ -17,6 +17,7 @@ import { ReviewStars } from "./ReviewStars";
 import { Reviews } from "./Reviews";
 import { Layout } from "./Layout/Layout";
 import { FooterLayout } from "./Layout/FooterLayout";
+import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -41,28 +42,29 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
 
   return (
     <Box bgColor="white" py="1px">
-      <Wrapper>
-        <Heading size="lg">Meal kit</Heading>
+      {/* <Wrapper> */}
+      <Heading size="lg">Meal kit</Heading>
 
-        {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
-          <Box>
-            <Text>ไม่มีชุดทำอาหาร</Text>
-            <NextLink href="/" as="/">
-              <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
-            </NextLink>
-          </Box>
-        ) : (
-          <Box>
-            {mealkits.mealkits.map((mealkit, index) => (
-              <Box key={index}>
-                <Box overflowX="auto" width="90%" margin="auto">
-                  {mealkit.images?.map((url, index) => (
-                    <Center key={index} m={1} minW="150px">
-                      <Img src={url} alt="image" borderRadius="10%" />
-                    </Center>
-                  ))}
-                </Box>
+      {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
+        <Box>
+          <Text>ไม่มีชุดทำอาหาร</Text>
+          <NextLink href="/" as="/">
+            <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
+          </NextLink>
+        </Box>
+      ) : (
+        <Box>
+          {mealkits.mealkits.map((mealkit, index) => (
+            <Box key={index}>
+              <Box overflowX="auto" width="90%" margin="auto">
+                {mealkit.images?.map((url, index) => (
+                  <Center key={index} m={1} minW="150px">
+                    <Img src={url} alt="image" borderRadius="10%" />
+                  </Center>
+                ))}
+              </Box>
 
+              <ContentWrapper>
                 <Box>
                   <Heading fontSize="lg"> {mealkit.name} </Heading>
                   <ReviewStars
@@ -89,18 +91,27 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                 <Box
                   zIndex={1}
                   position="fixed"
-                  bottom="0"
-                  left="0"
-                  bgColor="white"
+                  // bottom="0"
+                  // left="0"
                   width="100%"
+                  bottom={[0, 0, null, null]}
+                  right={[0, 0, 0, 0]}
+                  maxW={[null, null, "30%", "30%"]}
+                  bgColor="white"
                   boxShadow="xs"
                 >
-                  <Box width="90%" mx="auto" pt={5} pb={3}>
+                  <Box
+                    width="90%"
+                    mx="auto"
+                    pt={2}
+                    pb={2}
+                    maxW={[null, "40%", "none", "none"]}
+                  >
                     {" "}
                     <Flex
                       justifyContent="space-between"
                       alignItems="center"
-                      mb={5}
+                      my={2}
                     >
                       <Flex alignItems="center">
                         <Avatar src={mealkit.images![0]} size="sm" />
@@ -176,53 +187,54 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     </Button>
                   </Box>
                 </Box>
+              </ContentWrapper>
 
-                <Box my={4}>
-                  <Heading fontSize="xl">Reviews</Heading>
-                  <Reviews mealkitId={mealkit.id} />
-                </Box>
-
-                <Box display="none">
-                  {cartItemData &&
-                    toast({
-                      title: "Added to Cart.",
-                      description: `${mealkit.name} has been added to your cart.`,
-                      status: "success",
-                      duration: 4000,
-                      isClosable: true,
-                      position: "top",
-                      render: () => (
-                        <Box width="100%" bgColor="white" p={4} boxShadow="lg">
-                          <Flex alignItems="center">
-                            <CheckCircleIcon color="brand" m={2} />
-                            <Box m={2}>
-                              <Heading fontSize="lg">Added to Cart</Heading>
-                              <Text color="blackAlpha.600">
-                                {" "}
-                                {mealkit.name} has been added to your cart.
-                              </Text>
-
-                              <Button
-                                as={Link}
-                                mr={2}
-                                onClick={() => router.push("/cart")}
-                              >
-                                See Cart
-                              </Button>
-                            </Box>
-                          </Flex>
-                        </Box>
-                      ),
-                      // variant: "subtle",
-                    })}
-                </Box>
+              <Box my={4}>
+                <Heading fontSize="xl">Reviews</Heading>
+                <Reviews mealkitId={mealkit.id} />
               </Box>
-            ))}
-          </Box>
-        )}
 
-        <FooterLayout mb="130px" />
-      </Wrapper>
+              <Box display="none">
+                {cartItemData &&
+                  toast({
+                    title: "Added to Cart.",
+                    description: `${mealkit.name} has been added to your cart.`,
+                    status: "success",
+                    duration: 4000,
+                    isClosable: true,
+                    position: "top",
+                    render: () => (
+                      <Box width="100%" bgColor="white" p={4} boxShadow="lg">
+                        <Flex alignItems="center">
+                          <CheckCircleIcon color="brand" m={2} />
+                          <Box m={2}>
+                            <Heading fontSize="lg">Added to Cart</Heading>
+                            <Text color="blackAlpha.600">
+                              {" "}
+                              {mealkit.name} has been added to your cart.
+                            </Text>
+
+                            <Button
+                              as={Link}
+                              mr={2}
+                              onClick={() => router.push("/cart")}
+                            >
+                              See Cart
+                            </Button>
+                          </Box>
+                        </Flex>
+                      </Box>
+                    ),
+                    // variant: "subtle",
+                  })}
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      )}
+
+      <FooterLayout mb="130px" />
+      {/* </Wrapper> */}
     </Box>
   );
 };

@@ -15,6 +15,7 @@ import { withApollo } from "../util/withApollo";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 
 interface likeProps {}
 
@@ -77,8 +78,10 @@ const Like: React.FC = ({}) => {
   return (
     <Layout>
       <Wrapper>
-        <Text fontSize="xl">เมนูโปรดของฉัน</Text>
-        <Box>{body}</Box>
+        <ContentWrapper>
+          <Heading fontSize="2xl">My Likes</Heading>
+          <Box>{body}</Box>
+        </ContentWrapper>
       </Wrapper>
     </Layout>
   );

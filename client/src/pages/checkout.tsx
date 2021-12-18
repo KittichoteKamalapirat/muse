@@ -32,7 +32,7 @@ interface CartItemsByCreatorInput {
 }
 
 const Checkout: React.FC<checkoutProps> = ({}) => {
-  // useupdate
+  // use update
   const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
 
@@ -43,37 +43,28 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     useState<CartItemsByCreatorInput[]>();
 
   // const { data: me, loading: meLoading } = useMeQuery();
+
+  // mutation for create order when "make payment" is clicked
   const [createOrder, { data: orderData, loading: orderLoading }] =
     useCreateOrderMutation();
 
   const [gross, setGross] = useState(0);
 
+  // map the cartItems into byCreator
   useEffect(() => {
     if (cartItems) {
       const mappedArray: mappedCartItemsByCreatorResult[] =
         toCartItemsByCreatorMap(cartItems?.cartItems as CartItem[]);
       console.log({ mappedArray });
       setMappedCartItems(mappedArray);
-      console.log({ mappedCartItems });
+
+      let gross: number = 0;
+      mappedArray.map((byCreator) => {
+        gross = gross + byCreator.totalByCreator + byCreator.deliveryFee;
+      });
+      setGross(gross);
     }
   }, [cartItems]);
-
-  //run everytime when re-render
-  useEffect(() => {
-    if (cartItems) {
-      let gross: number = 0;
-      // let counter: number = 0;
-      cartItems?.cartItems.map((cartItem) => {
-        console.log(cartItem.fieldTotal);
-        gross = gross + cartItem.fieldTotal;
-
-        // counter = counter + 1;
-      });
-      // if (counter === cartItems.cartItems.length) {
-      setGross(gross);
-      // }
-    }
-  }, []);
 
   useEffect(() => {
     const inputArray: CartItemsByCreatorInput[] = [];
@@ -322,29 +313,38 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
           </Box>
         )}
 
-        <Flex
+        <Box
           zIndex={1}
           position="fixed"
-          bottom={0}
-          bg={["white", "red"]}
+          bottom={[0, 0, null, null]}
+          right={[0, 0, 0, 0]}
+          bgColor="white"
           ml={"auto"}
           align="center"
           width="100%"
+          maxW={[null, null, "30%", "30%"]}
           justifyContent="end"
+          boxShadow="xs"
         >
-          <Box m={2}>
-            <Text>Total: ฿{gross}</Text>
-          </Box>
-          <Box p={3} bgColor="red.400" color="white">
-            <Box
+          <Box
+            width="90%"
+            mx="auto"
+            py={4}
+            maxW={[null, "40%", "none", "none"]}
+            fontWeight="bold"
+          >
+            <Flex justifyContent="space-between" py={2}>
+              <Text>Total</Text>
+              <Text>฿{gross}</Text>
+            </Flex>
+
+            <Button
               onClick={async () => {
                 const cartItemIds: number[] = [];
                 cartItems?.cartItems.forEach((cartItem) => {
                   cartItemIds.push(cartItem.id);
                 });
-                console.log({ cartItemIds });
-                console.log({ gross });
-                console.log({ cartItemsByCreatorInput });
+
                 await createOrder({
                   variables: {
                     cartItemIds: cartItemIds,
@@ -352,17 +352,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                     cartItemsByCreatorInput: cartItemsByCreatorInput!, //check this
                   },
                 });
-                // if (!orderLoading && orderData?.createOrder.id) {
-                //   console.log(orderLoading);
-                //   console.log(3);
-                //   router.push(`/payment/${orderData?.createOrder.id}`);
-                // }
               }}
+              p={3}
+              color="white"
+              width="100%"
             >
               Make a payment
-            </Box>
+            </Button>
           </Box>
-        </Flex>
+        </Box>
 
         {/* {!qrLoading ? null : <Image src={qrData?.createScbQr.data.qrImage} />} */}
       </Box>

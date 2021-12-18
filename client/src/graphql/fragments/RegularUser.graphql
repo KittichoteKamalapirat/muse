@@ -5,6 +5,10 @@ fragment RegularUser on User {
   email
   phonenumber
   avatar
+  userReview {
+    reviewScore
+    reviewCounter
+  }
   isCreator
   about
   followerNum

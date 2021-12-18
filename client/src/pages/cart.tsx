@@ -2,7 +2,7 @@ import { Image, Img } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import React, { useEffect, useState } from "react";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import { LinkBox, LinkOverlay } from "@chakra-ui/react";
+import { Button, LinkBox, LinkOverlay } from "@chakra-ui/react";
 import { Wrapper } from "../components/Wrapper";
 import {
   CartItem,
@@ -99,7 +99,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                   {item.cartItems.map((cartItem, subindex) => (
                     <Box flex={2} m={1} textAlign="left" key={subindex}>
                       <Box flex={1} m={1}>
-                        <LinkBox>
+                        <Box>
                           <Flex>
                             {/* show one image if there is */}
                             {!cartItem.mealkit?.images ? null : (
@@ -112,13 +112,13 @@ const Cart: React.FC<cartProps> = ({}) => {
                               </Box>
                             )}
                             <Box flex={2}>
-                              <LinkOverlay
+                              {/* <LinkOverlay
                                 href={`/post/${cartItem.mealkit?.postId}`}
-                              >
-                                <Heading size="md">
-                                  {cartItem.mealkit?.name}
-                                </Heading>
-                              </LinkOverlay>
+                              > */}
+                              <Heading size="md">
+                                {cartItem.mealkit?.name}
+                              </Heading>
+                              {/* </LinkOverlay> */}
                               <Text>
                                 For {cartItem.mealkit?.portion}{" "}
                                 {cartItem.mealkit?.portion &&
@@ -141,7 +141,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                               </Box>
                             </Box>
                           </Flex>
-                        </LinkBox>
+                        </Box>
                       </Box>
                     </Box>
                   ))}
@@ -152,25 +152,38 @@ const Cart: React.FC<cartProps> = ({}) => {
         )}
       </Wrapper>
 
-      <Flex
+      <Box
         zIndex={1}
         position="fixed"
-        bottom={0}
-        bg="white"
+        bottom={[0, 0, null, null]}
+        right={[0, 0, 0, 0]}
+        bgColor="white"
         ml={"auto"}
         align="center"
         width="100%"
+        maxW={[null, null, "30%", "30%"]}
         justifyContent="end"
+        boxShadow="xs"
       >
-        <Box m={2}>
-          <Text>totle: ฿{gross}</Text>
+        <Box
+          width="90%"
+          mx="auto"
+          py={4}
+          maxW={[null, "40%", "none", "none"]}
+          fontWeight="bold"
+        >
+          <Flex justifyContent="space-between" py={2}>
+            <Text>Total</Text>
+            <Text>฿{gross}</Text>
+          </Flex>
+
+          <Button p={3} color="white" width="100%">
+            <NextLink href={{ pathname: "/checkout" }}>
+              <Link>Checkout</Link>
+            </NextLink>
+          </Button>
         </Box>
-        <Box p={3} bgColor="red.400" color="white">
-          <NextLink href={{ pathname: "/checkout" }}>
-            <Link>Checkout</Link>
-          </NextLink>
-        </Box>
-      </Flex>
+      </Box>
     </HeadingLayout>
   );
 };

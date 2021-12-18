@@ -767,6 +767,7 @@ export type User = {
   reviews: Array<Review>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  userReview: UserReview;
 };
 
 export type UserInput = {
@@ -780,6 +781,12 @@ export type UserResponse = {
   __typename?: 'UserResponse';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
+};
+
+export type UserReview = {
+  __typename?: 'UserReview';
+  reviewScore: Scalars['Int'];
+  reviewCounter: Scalars['Int'];
 };
 
 /** Argument for register user */
@@ -806,9 +813,9 @@ export type PostSnippetFragment = { __typename?: 'Post', id: number, title: stri
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -816,7 +823,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type CreateAddressMutationVariables = Exact<{
   input: AddressInput;
@@ -897,7 +904,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -956,7 +963,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type CreateReviewMutationVariables = Exact<{
   input: ReviewInput;
@@ -1081,7 +1088,7 @@ export type FollowersQuery = { __typename?: 'Query', followers: Array<{ __typena
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
 
 export type MealkitQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1164,7 +1171,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about?: Maybe<string>, avatar: string, isFollowed: boolean, followerNum: number } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, username: string, about?: Maybe<string>, avatar: string, isFollowed: boolean, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } } };
 
 export type UserOrdersQueryVariables = Exact<{
   status: CartItemStatus;
@@ -1221,6 +1228,10 @@ export const RegularUserFragmentDoc = gql`
   email
   phonenumber
   avatar
+  userReview {
+    reviewScore
+    reviewCounter
+  }
   isCreator
   about
   followerNum
@@ -3165,6 +3176,10 @@ export const UserDocument = gql`
     avatar
     isFollowed
     followerNum
+    userReview {
+      reviewScore
+      reviewCounter
+    }
   }
 }
     `;

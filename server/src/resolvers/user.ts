@@ -11,6 +11,7 @@ import {
   Resolver,
   UseMiddleware,
   InputType,
+  Int,
 } from "type-graphql";
 import { MyContext } from "../types";
 import { v4 } from "uuid";
@@ -23,6 +24,8 @@ import { UsernamePasswordInput } from "./UsernamePasswordInput";
 import { validateRegister } from "../utils/validateRegister";
 import { sendEmail } from "../utils/sendEmail";
 import { FieldError } from "../utils/FieldError";
+import { Mealkit } from "../entities/Mealkit";
+import { truncate } from "fs";
 
 // For User
 @ObjectType()
@@ -31,6 +34,14 @@ class UserResponse {
   errors?: FieldError[];
   @Field(() => User, { nullable: true })
   user?: User;
+}
+
+@ObjectType()
+class UserReview {
+  @Field(() => Int)
+  reviewScore: number;
+  @Field(() => Int)
+  reviewCounter: number;
 }
 
 @InputType()
@@ -157,6 +168,25 @@ export class UserResolver {
     );
     return true;
   }
+
+  @FieldResolver(() => UserReview)
+  async userReview(@Root() user: User): Promise<UserReview | Error> {
+    try {
+      const mealkits = await Mealkit.find({ where: { creatorId: user.id } });
+      let sum: number = 0;
+      let counter: number = 0;
+      mealkits.map((mealkit) => {
+        sum = sum + mealkit.reviewsSum;
+        counter = counter + mealkit.reviewsCounter;
+      });
+      const avg = sum / counter;
+      return { reviewCounter: counter, reviewScore: avg };
+    } catch (error) {
+      console.log(error);
+      return new Error("cannot find");
+    }
+  }
+
   @Query(() => [User])
   async users(): Promise<User[] | undefined> {
     return User.find();

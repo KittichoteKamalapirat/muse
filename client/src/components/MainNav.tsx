@@ -7,11 +7,16 @@ import { ShopIcon } from "./Icons/ShopIcon";
 import { primaryColor, inActiveGray } from "./Variables";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import { useMeQuery, useOrderNotisQuery } from "../generated/graphql";
+import {
+  useMeQuery,
+  useOrderNotisQuery,
+  useReadOrderNotisMutation,
+} from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import SvgBell from "./svgComponents/Bell";
 import { BellIcon } from "./Icons/BellIcon";
 import { BasketIcon } from "./Icons/BasketIcon";
+import { updateAfterRead } from "../pages/notification";
 
 interface MainNavProps {}
 
@@ -28,6 +33,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
     skip: isServer(), //we paused this because it will return null anyway (no cookie, without cookie forwarding)
     // no need to request in the browser side, just on client, but the server still knows anyway due to cookei forwarding
   });
+  // const [readOrderNotis] = useReadOrderNotisMutation();
 
   // const [notiLength, setNotiLength] = useState<number>(0)
 
@@ -50,6 +56,17 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   // client knows who is me
 
   let currentUser = null;
+
+  // useEffect(() => {
+  //   console.log("from mainnav");
+  //   if (notiActive) {
+  //     console.log("from mainnav2");
+  //     readOrderNotis({
+  //       update: (cache) => updateAfterRead(cache),
+  //     });
+  //   }
+  //   console.log("from mainnav3");
+  // }, []);
 
   // data is loading
   if (loading || orderNotiLoading) {
@@ -99,6 +116,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       borderRight="solid"
       borderRightColor="gray.200"
       borderRightWidth="1px"
+      py={[null, null, 20]}
     >
       <NextLink href="/">
         <Link style={{ textDecoration: "none" }} flex={1}>

@@ -22,10 +22,10 @@ export const Wrapper: React.FC<WrapperProps> = ({
 }) => {
   return (
     <Box
-      m={m ? m : 8}
+      m={m || 8}
       mx="auto"
-      maxW={["none", "400px", "40%"]}
-      w={["90%", "70%", "50%"]}
+      maxW={["none", "60%", "40%", "30%"]}
+      // w={["90%", "70%", "50%"]}
       mb={mb}
       mt={mt}
       {...props}

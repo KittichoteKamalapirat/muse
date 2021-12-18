@@ -54,7 +54,6 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         color={cartItemStatus === "ToDeliver" ? primaryColor : inActiveGray}
         mx={1}
         onClick={() => {
-          console.log("hi");
           userOrders({ variables: { status: CartItemStatus.ToDeliver } });
           setCartItemStatus(CartItemStatus.ToDeliver);
         }}

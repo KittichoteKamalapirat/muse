@@ -40,7 +40,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
             position="fixed"
             fontSize="x-large"
             color="dark.200"
-            variant="none"
+            variant="transparent"
           />
         )}
 

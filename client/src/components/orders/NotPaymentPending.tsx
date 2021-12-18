@@ -93,36 +93,36 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                         </Flex>
 
                         {cartItemStatus === CartItemStatus.Delivered &&
-                        cartItem.isReviewed ? (
-                          <NextLink
-                            href={`/mealkit/[id]`}
-                            as={`/mealkit/${cartItem.mealkitId}`}
-                          >
-                            <Button
-                              variant="outline"
-                              as={Link}
-                              my="10px"
-                              width="100%"
+                          (cartItem.isReviewed ? (
+                            <NextLink
+                              href={`/mealkit/[id]`}
+                              as={`/mealkit/${cartItem.mealkitId}`}
                             >
-                              Reviewed
-                            </Button>
-                          </NextLink>
-                        ) : (
-                          <NextLink
-                            href={{
-                              pathname: "/review/create",
-                              query: {
-                                cartItemId: cartItem.id,
-                                mealkitId: cartItem.mealkitId,
-                              },
-                            }}
-                            as={`/review/create`}
-                          >
-                            <Button as={Link} my="10px" width="100%">
-                              Leave a Review
-                            </Button>
-                          </NextLink>
-                        )}
+                              <Button
+                                variant="outline"
+                                as={Link}
+                                my="10px"
+                                width="100%"
+                              >
+                                Reviewed
+                              </Button>
+                            </NextLink>
+                          ) : (
+                            <NextLink
+                              href={{
+                                pathname: "/review/create",
+                                query: {
+                                  cartItemId: cartItem.id,
+                                  mealkitId: cartItem.mealkitId,
+                                },
+                              }}
+                              as={`/review/create`}
+                            >
+                              <Button as={Link} my="10px" width="100%">
+                                Leave a Review
+                              </Button>
+                            </NextLink>
+                          ))}
                       </Box>
                     ))}
                   </Box>

@@ -1,3 +1,4 @@
+import { ApolloCache } from "@apollo/client";
 import { Avatar } from "@chakra-ui/avatar";
 import { Img } from "@chakra-ui/image";
 import {
@@ -12,6 +13,7 @@ import {
 import { dataURItoBlob } from "dropzone";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { gql } from "urql";
 import { Layout } from "../components/Layout/Layout";
 import {
   activeColor,
@@ -20,13 +22,36 @@ import {
 } from "../components/Variables";
 import { Wrapper } from "../components/Wrapper";
 import {
+  CartItemNoti,
   CartItemStatus,
+  OrderNotisDocument,
+  ReadOrderNotisMutation,
+  ToggleFollowMutation,
   useMeQuery,
   useOrderNotisQuery,
   useReadOrderNotisMutation,
 } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 interface NotificationProps {}
+
+export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
+  console.log("hi1");
+
+  cache.modify({
+    fields: {
+      orderNotis(existingNotis = []) {
+        console.log({ existingNotis });
+        return existingNotis.map((noti: CartItemNoti) => {
+          // console.log({ ...noti, read: true });
+          return { read: true }; //somehow this works
+          // return { ...noti, read: true };
+          // return "x";
+        });
+      },
+    },
+  });
+  console.log("hi2");
+};
 
 const Notification: React.FC<NotificationProps> = ({}) => {
   const { data: meData, loading: meLoading } = useMeQuery();
@@ -36,15 +61,17 @@ const Notification: React.FC<NotificationProps> = ({}) => {
     data: orderNoti,
     loading: orderNotiLoading,
     error: errorNori,
-  } = useOrderNotisQuery();
+  } = useOrderNotisQuery({});
 
   const [readOrderNotis] = useReadOrderNotisMutation();
   // readOrderNotis();
 
   useEffect(() => {
     setTimeout(() => {
-      readOrderNotis();
-    }, 5000);
+      readOrderNotis({
+        update: (cache) => updateAfterRead(cache),
+      });
+    }, 1000);
   }, []);
 
   if (meLoading || orderNotiLoading) {
@@ -57,22 +84,23 @@ const Notification: React.FC<NotificationProps> = ({}) => {
 
   return (
     <Layout>
-      <Box mx={3}>
-        <Heading>My Notification</Heading>
-        <Box mt={5}>
-          {" "}
-          <Heading fontSize="lg">Order Updates</Heading>
-          {orderNoti?.orderNotis.map((noti, index) => (
-            <LinkBox>
-              <Flex
-                key={index}
-                mt={2}
-                borderRight={noti.read ? "null" : "4px"}
-                borderColor={primaryColor}
-                borderRadius="4px"
-              >
-                <Avatar src={noti.cartItem.mealkit.images![0]} mx={2} />
-                {/* {noti.cartItem.status === CartItemStatus.PaymentPending && (
+      <Wrapper>
+        <Box mx={3}>
+          <Heading fontSize="2xl">Notification</Heading>
+          <Box mt={5}>
+            {" "}
+            <Heading fontSize="lg">Order Updates</Heading>
+            {orderNoti?.orderNotis.map((noti, index) => (
+              <LinkBox>
+                <Flex
+                  key={index}
+                  mt={2}
+                  borderRight={noti.read ? "null" : "4px"}
+                  borderColor={primaryColor}
+                  borderRadius="4px"
+                >
+                  <Avatar src={noti.cartItem.mealkit.images![0]} mx={2} />
+                  {/* {noti.cartItem.status === CartItemStatus.PaymentPending && (
                   <>
                     <Text>
                       You received an order for{" "}
@@ -103,13 +131,14 @@ const Notification: React.FC<NotificationProps> = ({}) => {
                   </>
                 )} */}
 
-                <Text>{noti.message}</Text>
-              </Flex>
-              <LinkOverlay href="/myshop/order?status=ToDeliver"></LinkOverlay>
-            </LinkBox>
-          ))}
+                  <Text>{noti.message}</Text>
+                </Flex>
+                <LinkOverlay href="/myshop/order?status=ToDeliver"></LinkOverlay>
+              </LinkBox>
+            ))}
+          </Box>
         </Box>
-      </Box>
+      </Wrapper>
     </Layout>
   );
 };

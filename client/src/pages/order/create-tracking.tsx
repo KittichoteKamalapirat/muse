@@ -30,14 +30,19 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
             courier: "",
           }}
           onSubmit={async (values, { setErrors }) => {
+            console.log({ cartItemIds });
             const response = await createTracking({
               variables: {
                 input: {
                   trackingNo: values.trackingNo,
                   courier: values.courier,
-                  cartItemIds: (cartItemIds as string[]).map((id) =>
-                    parseInt(id as string)
-                  ),
+                  // if only 1 cartItem => not array but string, so i have to turn it to array
+                  cartItemIds:
+                    typeof cartItemIds === "string"
+                      ? [parseInt(cartItemIds)]
+                      : (cartItemIds as string[]).map((id) =>
+                          parseInt(id as string)
+                        ),
                 },
               },
             });

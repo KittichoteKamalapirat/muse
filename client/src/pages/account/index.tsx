@@ -45,6 +45,13 @@ import SvgToPay from "../../components/svgComponents/ToPay";
 import SvgToDeliver from "../../components/svgComponents/ToDeliver";
 import SvgToRate from "../../components/svgComponents/ToRate";
 import SvgOnDelivery from "../../components/svgComponents/OnDelivery";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
+import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
+import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
+import SvgRateIcon from "../../components/svgComponents/RateIcon";
+import SvgAccountIcon from "../../components/svgComponents/AccountIcon";
+import SvgPinIcon from "../../components/svgComponents/PinIcon";
 
 interface indexProps {}
 
@@ -95,14 +102,10 @@ const Account: React.FC<indexProps> = ({}) => {
   } else {
     body = (
       <Box>
-        {meData?.me?.isCreator ? (
-          <Heading textAlign="center" fontSize="xl">
-            {" "}
-            Creator
-          </Heading>
-        ) : (
-          ""
-        )}
+        <Heading textAlign="center" fontSize="2xl">
+          {meData?.me?.username}
+          {meData?.me?.isCreator && <Text color="brand">(Creator)</Text>}
+        </Heading>
 
         <Center mt={8}>
           <LinkBox>
@@ -134,7 +137,7 @@ const Account: React.FC<indexProps> = ({}) => {
             >
               <Link textAlign="center" flex={1}>
                 <Center>
-                  <SvgToPay />
+                  <SvgWalletIcon />
                 </Center>
 
                 <Text>To pay</Text>
@@ -149,7 +152,7 @@ const Account: React.FC<indexProps> = ({}) => {
             >
               <Link textAlign="center" flex={1}>
                 <Center>
-                  <SvgToDeliver />
+                  <SvgBoxIcon />
                 </Center>
 
                 <Text>To deliver</Text>
@@ -164,7 +167,7 @@ const Account: React.FC<indexProps> = ({}) => {
             >
               <Link textAlign="center" flex={1}>
                 <Center>
-                  <SvgOnDelivery />
+                  <SvgTruckIcon fontSize="1.2rem" />
                 </Center>
 
                 <Text>To recieve</Text>
@@ -178,7 +181,7 @@ const Account: React.FC<indexProps> = ({}) => {
             >
               <Link textAlign="center" flex={1}>
                 <Center>
-                  <SvgToRate />
+                  <SvgRateIcon fontSize="1.2rem" />
                 </Center>
 
                 <Text>Rate</Text>
@@ -204,36 +207,62 @@ const Account: React.FC<indexProps> = ({}) => {
 
         <Box textAlign="left" mt={4}>
           <Heading fontSize="md">Account Info</Heading>
-          <Box mt={2}>
-            <NextLink href="/account/info/" as="/account/info">
-              <Link>
-                <AccountIcon />
-                My profile
-                {/* ข้อมูลบัญชี */}
-              </Link>
-            </NextLink>
-            <Divider mt={2} />
-          </Box>
 
-          <Box mt={2}>
-            <NextLink href="/account/address/" as="/account/address">
-              <Link>
-                <InfoIcon mr={2} />
-                ที่อยู่จัดส่ง
-              </Link>
-            </NextLink>
-            <Divider mt={2} />
-          </Box>
+          <Flex>
+            <LinkBox flex={1}>
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                boxShadow="xs"
+                p={4}
+                m={1}
+                rounded="md"
+              >
+                <SvgAccountIcon />
+                <NextLink href="/account/info/" as="/account/info">
+                  <LinkOverlay>
+                    <Text fontSize="md">My profile</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </Flex>
+            </LinkBox>
 
-          <Box mt={2}>
-            <NextLink href="/like" as="/like">
-              <Link>
-                <HeartIcon mr={2} />
-                Liked recipe
-              </Link>
-            </NextLink>
-            <Divider mt={2} />
-          </Box>
+            <LinkBox flex={1}>
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                boxShadow="xs"
+                p={4}
+                m={1}
+                rounded="md"
+              >
+                <SvgPinIcon />
+                <NextLink href="/account/address/" as="/account/address">
+                  <LinkOverlay>
+                    <Text fontSize="md">My profile</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </Flex>
+            </LinkBox>
+
+            <LinkBox flex={1}>
+              <Flex
+                flexDirection="column"
+                alignItems="center"
+                boxShadow="xs"
+                p={4}
+                m={1}
+                rounded="md"
+              >
+                <HeartIcon />
+                <NextLink href="/like" as="/like">
+                  <LinkOverlay>
+                    <Text fontSize="md">My profile</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </Flex>
+            </LinkBox>
+          </Flex>
 
           <Box mt={2}>
             {" "}
@@ -317,7 +346,9 @@ const Account: React.FC<indexProps> = ({}) => {
 
   return (
     <Layout>
-      <Wrapper>{body}</Wrapper>
+      <Wrapper>
+        <ContentWrapper>{body}</ContentWrapper>
+      </Wrapper>
     </Layout>
   );
 };

@@ -6,5 +6,9 @@ query user($id: String!) {
     avatar
     isFollowed
     followerNum
+    userReview {
+      reviewScore
+      reviewCounter
+    }
   }
 }

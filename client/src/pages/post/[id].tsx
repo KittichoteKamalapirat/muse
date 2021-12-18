@@ -10,6 +10,7 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
 import { MealkitInfo } from "../../components/MealkitInfo";
 import { Layout } from "../../components/Layout/Layout";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();
@@ -32,88 +33,98 @@ const Post = ({}) => {
     );
   }
   return (
-    <Box bgColor="gray.100">
-      <HeadingLayout heading={data?.post?.title}></HeadingLayout>
+    // <Box bgColor="gray.100">
+    <>
+      <HeadingLayout heading={data?.post?.title}>
+        <Wrapper>
+          <Box
+            // maxW={["none", "none", "40%"]}
+            mx={["none", "auto"]}
+            bgColor="white"
+          >
+            <Flex justifyContent="space-between">
+              <Flex alignItems="center">
+                {" "}
+                <Avatar
+                  m={2}
+                  size="sm"
+                  src={data?.post.creator.avatar}
+                  alt="creator avatar"
+                  border={1}
+                />
+                <Text>{data?.post.creator.username}</Text>
+              </Flex>
 
-      <Box maxW={["none", "none", "40%"]} mx={["none", "auto"]} bgColor="white">
-        <Flex justifyContent="space-between">
-          <Flex alignItems="center">
-            {" "}
-            <Avatar
-              m={2}
-              size="sm"
-              src={data?.post.creator.avatar}
-              alt="creator avatar"
-              border={1}
+              {meData?.me?.id !== data.post.creator.id ? null : (
+                <EditDeletePostButtons id={data.post.id} />
+              )}
+            </Flex>
+            <video
+              controls
+              src={data?.post.videoUrl}
+              poster={data?.post.thumbnailUrl}
             />
-            <Text>{data?.post.creator.username}</Text>
-          </Flex>
 
-          {meData?.me?.id !== data.post.creator.id ? null : (
-            <EditDeletePostButtons id={data.post.id} />
-          )}
-        </Flex>
-        <video
-          controls
-          src={data?.post.videoUrl}
-          poster={data?.post.thumbnailUrl}
-        />
-        <Wrapper m={2} py={6}>
-          <Heading fontSize="x-large">เกี่ยวกับเมนูนี้</Heading>
-          {!data?.post?.cooktime ? null : (
-            <Text mb={4}> เวลาในการทำ: {data.post.cooktime}</Text>
-          )}
-          <Text mb={4}> {data?.post?.text}</Text>
+            <ContentWrapper>
+              <Heading fontSize="x-large">เกี่ยวกับเมนูนี้</Heading>
+              {!data?.post?.cooktime ? null : (
+                <Text mb={4}> เวลาในการทำ: {data.post.cooktime}</Text>
+              )}
+              <Text mb={4}> {data?.post?.text}</Text>
 
-          <Heading fontSize="large" fontWeight="semibold">
-            วัตถุดิบ
-          </Heading>
-          {!data.post.portion ? null : (
-            <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
-          )}
-
-          {!data.post.ingredients ? null : (
-            <IngredientList ingredients={data.post.ingredients} />
-          )}
-
-          {!data.post.instruction ? null : (
-            <Box>
-              {" "}
-              <Heading fontSize="large" fontWeight="semibold" mt={5}>
-                ขั้นตอน
+              <Heading fontSize="large" fontWeight="semibold">
+                วัตถุดิบ
               </Heading>
-              {data.post.instruction.map((instruction, index) => (
-                <Box key={index}>
-                  <Flex justifyContent="flex-start">
-                    <Text>{index + 1}. </Text> <Text ml={2}>{instruction}</Text>
-                  </Flex>
-                  <Divider variant="dashed" />
-                </Box>
-              ))}
-            </Box>
-          )}
+              {!data.post.portion ? null : (
+                <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
+              )}
 
-          {!data.post.advice ? null : (
-            <Box>
-              {" "}
-              <Heading fontSize="large" fontWeight="semibold" mt={5}>
-                ข้อแนะนำ
-              </Heading>
-              {data.post.advice.map((advice, index) => (
-                <Box key={index}>
-                  <Flex justifyContent="flex-start">
-                    <Text>{index + 1}. </Text> <Text ml={2}>{advice}</Text>
-                  </Flex>
-                  <Divider variant="dashed" />
+              {!data.post.ingredients ? null : (
+                <IngredientList ingredients={data.post.ingredients} />
+              )}
+
+              {!data.post.instruction ? null : (
+                <Box>
+                  {" "}
+                  <Heading fontSize="large" fontWeight="semibold" mt={5}>
+                    ขั้นตอน
+                  </Heading>
+                  {data.post.instruction.map((instruction, index) => (
+                    <Box key={index}>
+                      <Flex justifyContent="flex-start">
+                        <Text>{index + 1}. </Text>{" "}
+                        <Text ml={2}>{instruction}</Text>
+                      </Flex>
+                      <Divider variant="dashed" />
+                    </Box>
+                  ))}
                 </Box>
-              ))}
-            </Box>
-          )}
+              )}
+
+              {!data.post.advice ? null : (
+                <Box>
+                  {" "}
+                  <Heading fontSize="large" fontWeight="semibold" mt={5}>
+                    ข้อแนะนำ
+                  </Heading>
+                  {data.post.advice.map((advice, index) => (
+                    <Box key={index}>
+                      <Flex justifyContent="flex-start">
+                        <Text>{index + 1}. </Text> <Text ml={2}>{advice}</Text>
+                      </Flex>
+                      <Divider variant="dashed" />
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </ContentWrapper>
+          </Box>
+
+          {/* </Box> */}
+          <MealkitInfo postId={data.post.id} />
         </Wrapper>
-      </Box>
-
-      <MealkitInfo postId={data.post.id} />
-    </Box>
+      </HeadingLayout>
+    </>
   );
 };
 
