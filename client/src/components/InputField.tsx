@@ -4,6 +4,7 @@ import {
   Input,
   FormErrorMessage,
   Textarea,
+  Flex,
 } from "@chakra-ui/react";
 import { useField } from "formik";
 import React from "react";
@@ -34,16 +35,53 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <FormLabel htmlFor={field.name}>{label}</FormLabel>
-      <InputOrTextarea
-        //   label cannot bu in props, so have to stick it outside
+      <Flex alignItems="center" position="relative">
+        <InputOrTextarea
+          //   label cannot bu in props, so have to stick it outside
+          className="form-input"
+          {...field}
+          {...props}
+          variant={variant}
+          id={field.name}
+          // placeholder={props.placeholder}
+          placeholder="    "
+          pt="30px"
+          pb="20px"
+          // _focus={{
+          //   fontSize: "sm",
+          //   fontWeight: "400",
+          //   color: "inputField",
+          //   top: "4px",
+          //   left: "10px",
+          //   px: "5px",
+          //   // backgroundColor: "white",
+          //   zIndex: 1,
+          //   transition: "all 0.3s ease",
+          // }}
+        />
+        <FormLabel
+          className="form-label"
+          htmlFor={field.name}
+          position="absolute"
+          color="inputLabel"
+          left={4}
+          top="14px"
+          // _focus={{
+          //   fontSize: "sm",
+          //   fontWeight: "400",
+          //   color: "inputField",
+          //   top: "4px",
+          //   left: "10px",
+          //   px: "5px",
+          //   // backgroundColor: "white",
+          //   zIndex: 1,
+          //   transition: "all 0.3s ease",
+          // }}
+        >
+          {label}
+        </FormLabel>
+      </Flex>
 
-        {...field}
-        {...props}
-        variant={variant}
-        id={field.name}
-        placeholder={props.placeholder}
-      />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>
   );

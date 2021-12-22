@@ -19,6 +19,7 @@ import {
   mappedCartItemsByCreatorResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 
 interface cartProps {}
 
@@ -69,121 +70,123 @@ const Cart: React.FC<cartProps> = ({}) => {
   return (
     <HeadingLayout heading="Cart">
       <Wrapper>
-        <Heading>My cart</Heading>
+        <ContentWrapper>
+          <Heading>My cart</Heading>
 
-        {cartItems?.cartItems.length === 0 ? (
-          <Text>Your cart is empty</Text>
-        ) : (
-          <Box>
-            {!mappedCartItems ? (
-              <Text>loading</Text>
-            ) : (
-              mappedCartItems.map((item, index) => (
-                <Box key={index}>
-                  <LinkBox>
-                    <Flex alignItems="center">
-                      <Avatar
-                        margin="auto"
-                        m={2}
-                        size="xs"
-                        src={item.avatar}
-                        alt="creator avatar"
-                      />
-                      <LinkOverlay href={`/user/${item.creatorId}`}>
-                        <Text>{item.creatorName}</Text>
-                      </LinkOverlay>
+          {cartItems?.cartItems.length === 0 ? (
+            <Text>Your cart is empty</Text>
+          ) : (
+            <Box>
+              {!mappedCartItems ? (
+                <Text>loading</Text>
+              ) : (
+                mappedCartItems.map((item, index) => (
+                  <Box key={index}>
+                    <LinkBox>
+                      <Flex alignItems="center">
+                        <Avatar
+                          margin="auto"
+                          m={2}
+                          size="xs"
+                          src={item.avatar}
+                          alt="creator avatar"
+                        />
+                        <LinkOverlay href={`/user/${item.creatorId}`}>
+                          <Text>{item.creatorName}</Text>
+                        </LinkOverlay>
 
-                      <ChevronRightIcon mt="2px" />
-                    </Flex>
-                  </LinkBox>
-                  {item.cartItems.map((cartItem, subindex) => (
-                    <Box flex={2} m={1} textAlign="left" key={subindex}>
-                      <Box flex={1} m={1}>
-                        <Box>
-                          <Flex>
-                            {/* show one image if there is */}
-                            {!cartItem.mealkit?.images ? null : (
-                              <Box flex={1} m={1}>
-                                <Img
-                                  src={cartItem.mealkit?.images[0]}
-                                  alt="image"
-                                  fallbacksrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                                />
-                              </Box>
-                            )}
-                            <Box flex={2}>
-                              {/* <LinkOverlay
+                        <ChevronRightIcon mt="2px" />
+                      </Flex>
+                    </LinkBox>
+                    {item.cartItems.map((cartItem, subindex) => (
+                      <Box flex={2} m={1} textAlign="left" key={subindex}>
+                        <Box flex={1} m={1}>
+                          <Box>
+                            <Flex>
+                              {/* show one image if there is */}
+                              {!cartItem.mealkit?.images ? null : (
+                                <Box flex={1} m={1}>
+                                  <Img
+                                    src={cartItem.mealkit?.images[0]}
+                                    alt="image"
+                                    fallbacksrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                  />
+                                </Box>
+                              )}
+                              <Box flex={2}>
+                                {/* <LinkOverlay
                                 href={`/post/${cartItem.mealkit?.postId}`}
                               > */}
-                              <Heading size="md">
-                                {cartItem.mealkit?.name}
-                              </Heading>
-                              {/* </LinkOverlay> */}
-                              <Text>
-                                For {cartItem.mealkit?.portion}{" "}
-                                {cartItem.mealkit?.portion &&
-                                cartItem.mealkit.portion > 1
-                                  ? "people"
-                                  : "person"}
-                              </Text>
-                              <Box flex={1} m={1}>
-                                <Text>฿{cartItem.mealkit?.price}</Text>
-                              </Box>
+                                <Heading size="md">
+                                  {cartItem.mealkit?.name}
+                                </Heading>
+                                {/* </LinkOverlay> */}
+                                <Text>
+                                  For {cartItem.mealkit?.portion}{" "}
+                                  {cartItem.mealkit?.portion &&
+                                  cartItem.mealkit.portion > 1
+                                    ? "people"
+                                    : "person"}
+                                </Text>
+                                <Box flex={1} m={1}>
+                                  <Text>฿{cartItem.mealkit?.price}</Text>
+                                </Box>
 
-                              <EditCartItemAmountButton
-                                cartItem={cartItem as CartItem}
-                                deleteCartItem={deleteCartItem}
-                                updateCartItem={updateCartItem}
-                              />
+                                <EditCartItemAmountButton
+                                  cartItem={cartItem as CartItem}
+                                  deleteCartItem={deleteCartItem}
+                                  updateCartItem={updateCartItem}
+                                />
 
-                              <Box flex={1} m={1}>
-                                <Text>Total: {cartItem.fieldTotal}</Text>
+                                <Box flex={1} m={1}>
+                                  <Text>Total: {cartItem.fieldTotal}</Text>
+                                </Box>
                               </Box>
-                            </Box>
-                          </Flex>
+                            </Flex>
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  ))}
+                    ))}
+                  </Box>
+                ))
+              )}
+
+              <Box
+                zIndex={1}
+                position="fixed"
+                bottom={[0, 0, null, null]}
+                right={[0, 0, 0, 0]}
+                bgColor="white"
+                ml={"auto"}
+                align="center"
+                width="100%"
+                maxW={[null, null, "30%", "30%"]}
+                justifyContent="end"
+                boxShadow="xs"
+              >
+                <Box
+                  width="90%"
+                  mx="auto"
+                  py={4}
+                  maxW={[null, "40%", "none", "none"]}
+                  fontWeight="bold"
+                >
+                  <Flex justifyContent="space-between" py={2}>
+                    <Text>Total</Text>
+                    <Text>฿{gross}</Text>
+                  </Flex>
+
+                  <Button p={3} color="white" width="100%">
+                    <NextLink href={{ pathname: "/checkout" }}>
+                      <Link>Checkout</Link>
+                    </NextLink>
+                  </Button>
                 </Box>
-              ))
-            )}
-          </Box>
-        )}
+              </Box>
+            </Box>
+          )}
+        </ContentWrapper>
       </Wrapper>
-
-      <Box
-        zIndex={1}
-        position="fixed"
-        bottom={[0, 0, null, null]}
-        right={[0, 0, 0, 0]}
-        bgColor="white"
-        ml={"auto"}
-        align="center"
-        width="100%"
-        maxW={[null, null, "30%", "30%"]}
-        justifyContent="end"
-        boxShadow="xs"
-      >
-        <Box
-          width="90%"
-          mx="auto"
-          py={4}
-          maxW={[null, "40%", "none", "none"]}
-          fontWeight="bold"
-        >
-          <Flex justifyContent="space-between" py={2}>
-            <Text>Total</Text>
-            <Text>฿{gross}</Text>
-          </Flex>
-
-          <Button p={3} color="white" width="100%">
-            <NextLink href={{ pathname: "/checkout" }}>
-              <Link>Checkout</Link>
-            </NextLink>
-          </Button>
-        </Box>
-      </Box>
     </HeadingLayout>
   );
 };

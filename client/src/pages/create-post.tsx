@@ -1,8 +1,14 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 
 import { Button, IconButton, Img } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
-import React, { useState } from "react";
+import { Formik, Form, useFormikContext, FormikProps } from "formik";
+import React, {
+  MutableRefObject,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Wrapper } from "../components/Wrapper";
 import {
   SignS3Params,
@@ -30,7 +36,11 @@ import { dataURItoBlob } from "../util/dataURItoBlob";
 const CreatePost: React.FC<{}> = ({ children }) => {
   //router import for below, not for useIsAuth
 
+  //useState Hooks
   const [step, setStep] = useState(1);
+
+  const [submittable, setSubmittable] = useState<boolean>(false);
+
   const nextStep = () => {
     setStep(step + 1);
   };
@@ -67,6 +77,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
 
     setVideoFile({ file: acceptedFiles[0] });
+    setTimeout(() => {
+      setStep(2);
+    }, 1000);
+    //  redirect to the next page after metadata is load (is set to 500 ms)
   };
 
   const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
@@ -316,7 +330,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     // const params = {Key: "file_name", ContentType: "image/jpeg", Body: blobData};
     // bucket.upload(params, function (err, data) {});
 
-    setStep(2);
+    // setStep(2); //redirect if there is data
   };
 
   const handleSubmit = async (values: any) => {
@@ -527,21 +541,16 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 onClick={() => prevStep()}
                 fontSize="x-large"
                 color="dark.200"
-                variant="none"
+                variant="transparent"
               />
 
-              <Button color="green.400" onClick={() => nextStep()}>
+              <Button
+                variant="transparent"
+                color="brand"
+                onClick={() => nextStep()}
+              >
                 Next
               </Button>
-
-              {/* <IconButton
-                aria-label="Search database"
-                icon={<ChevronRightIcon />}
-                onClick={() => nextStep()}
-                fontSize="x-large"
-                color="dark.200"
-                variant="none"
-              /> */}
             </Flex>
           </Box>
         </HeadingLayout>
@@ -574,11 +583,57 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     default:
       render = <Text>step default {step}</Text>;
   }
+
+  // const formRef = useRef() as MutableRefObject<HTMLInputElement>;
+  const formRef = useRef() as RefObject<
+    FormikProps<{
+      title: string;
+      text: string;
+      portion: string;
+      cooktime: string;
+      advice: string;
+      videoUrl: string;
+    }>
+  >;
+
+  useEffect(() => {
+    let mealkitSubmittable: boolean = false;
+    let postSubmittable: boolean = false;
+
+    if (
+      mealkitInput.name != "" &&
+      mealkitInput.portion != "" &&
+      mealkitInput.price != "" &&
+      mealkitInput.images.length > 0 &&
+      mealkitInput.items.length > 0
+    ) {
+      mealkitSubmittable = true;
+      console.log({ mealkitSubmittable });
+    }
+
+    if (
+      formRef.current?.values.title != "" &&
+      formRef.current?.values.text != "" &&
+      formRef.current?.values.cooktime != "" &&
+      formRef.current?.values.portion != "" &&
+      formRef.current?.values.videoUrl != ""
+    ) {
+      postSubmittable = true;
+      console.log({ postSubmittable });
+    }
+
+    if (mealkitSubmittable && postSubmittable) {
+      setSubmittable(true);
+    } else {
+      setSubmittable(false);
+    }
+  }, [postValues, mealkitInput]);
   return (
     <Box>
       <Box m="1rem">
         <Formik
           initialValues={postValues}
+          innerRef={formRef}
           onSubmit={async (values) => {
             handleSubmit(values);
 
@@ -589,12 +644,25 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             <Box>
               <Form>
                 {render}
-                {/* <CreateIngredient /> */}
+
                 {step !== 4 ? null : (
-                  <Flex mt={10} justifyContent="center">
-                    {" "}
-                    <Button mb="4rem" type="submit" isLoading={submitting}>
-                      {" "}
+                  <Flex
+                    flexDirection="column"
+                    mt={10}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    {!submittable && (
+                      <Text color="alert">
+                        Some required fields are missing
+                      </Text>
+                    )}
+                    <Button
+                      type="submit"
+                      width="100%"
+                      isLoading={submitting}
+                      disabled={!submittable} //post page (won't be empty), thumbnail page (empty is ok since there's default one),  post details page (only advice can be empty), mealkit page (can't be empty)
+                    >
                       Create Post
                     </Button>
                   </Flex>

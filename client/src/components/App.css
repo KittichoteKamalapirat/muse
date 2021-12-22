@@ -134,3 +134,20 @@
   height: 5px;
   border-radius: 5px;
 }
+
+/* for floating form */
+
+/* if placeholder is not shown (means the form not empty) or when it is focus */
+/* also :-webkit-autofill helps when it alto fills and placeholder-shown is not updated */
+
+.form-input:not(:placeholder-shown) + .form-label,
+.form-input:-webkit-autofill + .form-label,
+.form-input:focus .form-label:focus {
+  font-size: "small";
+  font-weight: 400;
+  color: "#3dc795";
+  top: 4px;
+  left: 10px;
+  padding: 0 5px 0 5px;
+  transition: all 0.3s ease;
+}

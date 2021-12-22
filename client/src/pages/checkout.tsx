@@ -22,6 +22,7 @@ import {
 } from "../util/toCartItemsByCreatorMap";
 import { primaryColor } from "../components/Variables";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 
 interface checkoutProps {}
 
@@ -125,26 +126,30 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     <HeadingLayout heading="Checkout">
       <Box mb="50px">
         {!address ? (
-          <Wrapper>{noAddress}</Wrapper>
+          <Wrapper>
+            <ContentWrapper>{noAddress}</ContentWrapper>
+          </Wrapper>
         ) : (
           <Wrapper>
-            <Box>
-              <Heading size="sm" flex={1}>
-                ที่อยู่สำหรับจัดส่ง
-              </Heading>
+            <ContentWrapper>
               <Box>
-                {/* <Text>{meLoading ? null : me?.me?.username}</Text> */}
-                <Text flex={3}>add name to address</Text>
-                <Text flex={3}>add phone number to address</Text>
+                <Heading size="md" flex={1}>
+                  ที่อยู่สำหรับจัดส่ง
+                </Heading>
+                <Box>
+                  {/* <Text>{meLoading ? null : me?.me?.username}</Text> */}
+                  <Text flex={3}>add name to address</Text>
+                  <Text flex={3}>add phone number to address</Text>
+                </Box>
+                <Text d="inline">{address?.address.line1}</Text>
+                <Text d="inline">{address?.address.line2}, </Text>
+                <Text d="inline">{address?.address.subdistrict} </Text>
+                <Text>{address?.address.district} </Text>
+                <Text d="inline">{address?.address.province}</Text>
+                {/* <Text d="inline">{address?.address.country}</Text>{" "} */}
+                <Text d="inline">{address?.address.postcode}</Text>
               </Box>
-              <Text d="inline">{address?.address.line1}</Text>
-              <Text d="inline">{address?.address.line2}, </Text>
-              <Text d="inline">{address?.address.subdistrict} </Text>
-              <Text>{address?.address.district} </Text>
-              <Text d="inline">{address?.address.province}</Text>
-              {/* <Text d="inline">{address?.address.country}</Text>{" "} */}
-              <Text d="inline">{address?.address.postcode}</Text>
-            </Box>
+            </ContentWrapper>
           </Wrapper>
         )}
 
@@ -277,20 +282,22 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   {/* summary of each creator */}
                   <Box py={4}>
                     <Wrapper mt={0} mb={0}>
-                      <Heading fontSize="md">Delivery</Heading>
-                      <Flex justifyContent="space-between">
-                        <Box>
-                          <Text>By Inter Express</Text>
-                          <Text color="gray.600"> arrive on tomorrow</Text>
-                        </Box>
-                        <Text>฿ {item.deliveryFee}</Text>
-                      </Flex>
+                      <ContentWrapper>
+                        <Heading fontSize="md">Delivery</Heading>
+                        <Flex justifyContent="space-between">
+                          <Box>
+                            <Text>By Inter Express</Text>
+                            <Text color="gray.600"> arrive on tomorrow</Text>
+                          </Box>
+                          <Text>฿ {item.deliveryFee}</Text>
+                        </Flex>
+                      </ContentWrapper>
                     </Wrapper>
                   </Box>
                   <Divider />
                   {/* summary of the order */}
 
-                  <Box
+                  {/* <Box
                     bgColor="green.50"
                     py={2}
                     borderTopWidth="1px"
@@ -305,13 +312,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                         </Heading>
                       </Flex>
                     </Wrapper>
-                  </Box>
+                  </Box> */}
                   <Divider />
                 </Box>
               ))
             )}
           </Box>
         )}
+
+        {/* fixed bottom */}
 
         <Box
           zIndex={1}

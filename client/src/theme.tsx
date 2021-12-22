@@ -50,6 +50,7 @@ const theme = extendTheme(
       brand: "#3dc795",
       action: "#3dc795",
       alert: "#EB5757",
+      inputLabel: "#4f4c4d",
     },
 
     fonts,

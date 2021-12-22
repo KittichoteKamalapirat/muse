@@ -226,7 +226,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           onClick={() => prevStep()}
           fontSize="x-large"
           color="dark.200"
-          variant="none"
+          variant="transparent"
         />
       </Flex>
     </Box>

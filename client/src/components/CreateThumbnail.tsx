@@ -127,10 +127,10 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           onClick={() => prevStep()}
           fontSize="x-large"
           color="dark.200"
-          variant="none"
+          variant="transparent"
         />
 
-        <Button color="green.400" onClick={() => nextStep()}>
+        <Button variant="transparent" color="brand" onClick={() => nextStep()}>
           Next
         </Button>
         {/* <IconButton

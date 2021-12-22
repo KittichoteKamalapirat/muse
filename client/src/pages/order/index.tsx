@@ -120,7 +120,7 @@ const Order: React.FC<OrderProps> = ({}) => {
             CartItemStatus.OnDelivery,
           ].includes(cartItemStatus!) &&
             (address ? (
-              <Box mt={2}>
+              <Box mt={2} bgColor="white">
                 <Accordion allowToggle={true}>
                   <AccordionItem>
                     <h2>
@@ -167,7 +167,7 @@ const Order: React.FC<OrderProps> = ({}) => {
             !userOrderLoading && (
               <Box>
                 {userOrderData?.userOrders.map((order, index) => (
-                  <Box mt={5} p={5} bgColor="white">
+                  <Box mt={1} p={5} bgColor="white">
                     {order.byCreator.map((byCreator) => (
                       <Box bgColor="white">
                         <Flex alignItems="center">

@@ -100,7 +100,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                         onLoadedMetadata={() => {
                           setTimeout(() => {
                             handleMetadata();
-                          }, 100);
+                          }, 500);
                         }}
                         src={videoPreview}
                       />
@@ -135,7 +135,12 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         )}
       </Dropzone>
       <Flex justifyContent="right">
-        <Button color="green.400" mt="5rem" onClick={() => nextStep()}>
+        <Button
+          variant="transparent"
+          color="brand"
+          mt="5rem"
+          onClick={() => nextStep()}
+        >
           Next
         </Button>
       </Flex>

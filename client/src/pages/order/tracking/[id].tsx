@@ -6,6 +6,7 @@ import React from "react";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { primaryColor } from "../../../components/Variables";
 import { Wrapper } from "../../../components/Wrapper";
+import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
 import { useTrackingQuery } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
 
@@ -38,59 +39,62 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
   return (
     <HeadingLayout heading="Track my order">
       <Wrapper>
-        <Flex></Flex>
-        <Box flex={3}>
-          <Text color={trackingData?.tracking.color} fontWeight="bold">
-            {" "}
-            {trackingData?.tracking.courier}
-          </Text>
-          <Text>Tracking Number: {trackingData?.tracking.trackingNo}</Text>
-        </Box>
+        <ContentWrapper>
+          <Box flex={3}>
+            <Text color={trackingData?.tracking.color} fontWeight="bold">
+              {" "}
+              {trackingData?.tracking.courier}
+            </Text>
+            <Text>Tracking Number: {trackingData?.tracking.trackingNo}</Text>
+          </Box>
 
-        {/* <Text>Status: {trackingData?.tracking.status === 'onDelivery'}</Text> */}
+          {/* <Text>Status: {trackingData?.tracking.status === 'onDelivery'}</Text> */}
 
-        <Box my={4}>
-          <Text fontWeight="bold">Detail</Text>
-          {trackingData?.tracking.timelines.map((byDate, index) => (
-            <Box my={2}>
-              <Box>
-                {byDate.details.map((detail, subindex) => (
-                  <Flex
-                    color={index === 0 && subindex == 0 ? "brand" : "none"}
-                    fontWeight={index === 0 && subindex == 0 ? "bold" : "none"}
-                  >
-                    <Text mr={2}>{detail.time}</Text>
-                    <Text>{detail.description.substr(5)}</Text>
-                  </Flex>
-                ))}
+          <Box my={4}>
+            <Text fontWeight="bold">Detail</Text>
+            {trackingData?.tracking.timelines.map((byDate, index) => (
+              <Box my={2}>
+                <Box>
+                  {byDate.details.map((detail, subindex) => (
+                    <Flex
+                      color={index === 0 && subindex == 0 ? "brand" : "none"}
+                      fontWeight={
+                        index === 0 && subindex == 0 ? "bold" : "none"
+                      }
+                    >
+                      <Text mr={2}>{detail.time}</Text>
+                      <Text>{detail.description.substr(5)}</Text>
+                    </Flex>
+                  ))}
 
-                <Text fontSize="sm" color="gray.400">
-                  {byDate.date}
-                </Text>
+                  <Text fontSize="sm" color="gray.400">
+                    {byDate.date}
+                  </Text>
+                </Box>
+                <Divider my={2} />
               </Box>
-              <Divider my={2} />
-            </Box>
-          ))}
-        </Box>
+            ))}
+          </Box>
 
-        <Box>
-          <Heading fontSize="md">Products</Heading>
-          {trackingData?.tracking.cartItems.map((cartItem) => (
-            <Flex alignItems="center" m={1}>
-              <Img
-                src={
-                  cartItem.mealkit?.images ? cartItem.mealkit?.images[0] : ""
-                }
-                flex={1}
-                width="10%"
-                mr={2}
-              />
-              <Box flex={3}>
-                <Text>{cartItem.mealkit?.name}</Text>
-              </Box>
-            </Flex>
-          ))}
-        </Box>
+          <Box>
+            <Heading fontSize="md">Products</Heading>
+            {trackingData?.tracking.cartItems.map((cartItem) => (
+              <Flex alignItems="center" m={1}>
+                <Img
+                  src={
+                    cartItem.mealkit?.images ? cartItem.mealkit?.images[0] : ""
+                  }
+                  flex={1}
+                  width="10%"
+                  mr={2}
+                />
+                <Box flex={3}>
+                  <Text>{cartItem.mealkit?.name}</Text>
+                </Box>
+              </Flex>
+            ))}
+          </Box>
+        </ContentWrapper>
       </Wrapper>
     </HeadingLayout>
   );

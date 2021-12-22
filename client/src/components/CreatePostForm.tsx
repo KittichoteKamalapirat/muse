@@ -47,7 +47,9 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
 
         <Box flex={2}>
           {" "}
+          <Heading fontSize="md">Menu</Heading>
           <InputField name="title" placeholder="ชื่อเมนู" label="" />
+          <Heading fontSize="md">Details</Heading>
           <InputField
             textarea={true}
             name="text"

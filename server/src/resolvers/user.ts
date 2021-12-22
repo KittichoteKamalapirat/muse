@@ -179,7 +179,11 @@ export class UserResolver {
         sum = sum + mealkit.reviewsSum;
         counter = counter + mealkit.reviewsCounter;
       });
-      const avg = sum / counter;
+
+      const avg = sum / counter || counter;
+      console.log({ sum });
+      console.log({ counter });
+      console.log({ avg });
       return { reviewCounter: counter, reviewScore: avg };
     } catch (error) {
       console.log(error);

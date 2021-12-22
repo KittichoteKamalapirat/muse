@@ -22,7 +22,10 @@ function SvgToDeliver(props: React.SVGProps<SVGSVGElement>) {
             className="ToDelivery_svg__cls-1"
             d="M1 53.16V16.65L11.43 1h31.3l10.43 15.65v36.51zm0-36.51h52.16"
           />
-          <path d="M8 39.25h17.34v7H8zM27.08 1v15.65" />
+          <path
+            className="ToDelivery_svg__cls-1"
+            d="M8 39.25h17.34v7H8zM27.08 1v15.65"
+          />
         </g>
       </g>
     </svg>
