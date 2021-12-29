@@ -66,14 +66,18 @@ const Post = ({}) => {
             />
 
             <ContentWrapper>
-              <Heading fontSize="x-large">เกี่ยวกับเมนูนี้</Heading>
+              <Heading fontSize="x-large">
+                {/* เกี่ยวกับเมนูนี้ */}
+                About this dish
+              </Heading>
               {!data?.post?.cooktime ? null : (
                 <Text mb={4}> เวลาในการทำ: {data.post.cooktime}</Text>
               )}
               <Text mb={4}> {data?.post?.text}</Text>
 
               <Heading fontSize="large" fontWeight="semibold">
-                วัตถุดิบ
+                {/* วัตถุดิบ */}
+                Ingredients
               </Heading>
               {!data.post.portion ? null : (
                 <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
@@ -87,7 +91,8 @@ const Post = ({}) => {
                 <Box>
                   {" "}
                   <Heading fontSize="large" fontWeight="semibold" mt={5}>
-                    ขั้นตอน
+                    {/* ขั้นตอน */}
+                    Instruction
                   </Heading>
                   {data.post.instruction.map((instruction, index) => (
                     <Box key={index}>
@@ -105,7 +110,8 @@ const Post = ({}) => {
                 <Box>
                   {" "}
                   <Heading fontSize="large" fontWeight="semibold" mt={5}>
-                    ข้อแนะนำ
+                    {/* ข้อแนะนำ */}
+                    Tips
                   </Heading>
                   {data.post.advice.map((advice, index) => (
                     <Box key={index}>

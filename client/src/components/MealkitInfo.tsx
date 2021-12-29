@@ -43,7 +43,9 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
   return (
     <Box bgColor="white" py="1px">
       {/* <Wrapper> */}
-      <Heading size="lg">Meal kit</Heading>
+      <ContentWrapper>
+        <Heading size="lg">Meal kit</Heading>
+      </ContentWrapper>
 
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
@@ -190,7 +192,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
               </ContentWrapper>
 
               <Box my={4}>
-                <Heading fontSize="xl">Reviews</Heading>
                 <Reviews mealkitId={mealkit.id} />
               </Box>
 

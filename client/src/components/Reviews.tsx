@@ -4,6 +4,7 @@ import moment from "moment";
 import React from "react";
 import { useMealkitsQuery, useReviewsQuery } from "../generated/graphql";
 import { ReviewStars } from "./ReviewStars";
+import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
 interface ReviewsProps {
   mealkitId: number;
@@ -25,7 +26,8 @@ export const Reviews: React.FC<ReviewsProps> = ({ mealkitId }) => {
   console.log(moment());
 
   return (
-    <>
+    <ContentWrapper>
+      <Heading fontSize="xl">Reviews</Heading>
       {data?.reviews.map((review) => (
         <>
           {" "}
@@ -51,6 +53,6 @@ export const Reviews: React.FC<ReviewsProps> = ({ mealkitId }) => {
           </Box>
         </>
       ))}
-    </>
+    </ContentWrapper>
   );
 };

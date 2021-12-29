@@ -100,36 +100,6 @@ const Notification: React.FC<NotificationProps> = ({}) => {
                   borderRadius="4px"
                 >
                   <Avatar src={noti.cartItem.mealkit.images![0]} mx={2} />
-                  {/* {noti.cartItem.status === CartItemStatus.PaymentPending && (
-                  <>
-                    <Text>
-                      You received an order for{" "}
-                      <Text fontWeight="bold" d="inline">
-                        {noti.cartItem.quantity} {noti.cartItem.mealkit.name}
-                      </Text>{" "}
-                      from{" "}
-                      <Text fontWeight="bold" d="inline">
-                        {noti.cartItem.user?.username}.
-                      </Text>{" "}
-                      <Text d="inline">Waiting for payment.</Text>
-                    </Text>
-                  </>
-                )}
-
-                {noti.cartItem.status === CartItemStatus.ToDeliver && (
-                  <>
-                    <Text>
-                      <Text fontWeight="bold" d="inline">
-                        {noti.cartItem.user?.username}.
-                      </Text>{" "}
-                      has completed the payment for{" "}
-                      <Text fontWeight="bold" d="inline">
-                        {noti.cartItem.quantity} {noti.cartItem.mealkit.name}
-                      </Text>{" "}
-                      <Text d="inline">Please deliver soon.</Text>
-                    </Text>
-                  </>
-                )} */}
 
                   <Text>{noti.message}</Text>
                 </Flex>
