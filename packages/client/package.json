@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.0.0",
     "@types/dropzone": "^5.7.4",
     "@types/qrcode": "^1.4.1",
+    "@types/react-table": "^7.7.9",
     "@types/swiper": "^5.4.3",
     "@urql/exchange-graphcache": "^4.3.3",
     "axios": "^0.21.4",
@@ -35,6 +36,7 @@
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.5",
     "react-is": "^17.0.2",
+    "react-table": "^7.7.0",
     "swiper": "*",
     "urql": "^2.0.4"
   },

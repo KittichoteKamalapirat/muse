@@ -1,0 +1,37 @@
+query allCartItems {
+  allCartItems {
+    id
+    quantity
+    userId
+    mealkitId
+    total
+    status
+    user {
+      id
+      username
+      paymentInfo {
+        id
+        bankAccount
+        bankCode
+      }
+    }
+    mealkit {
+      id
+      name
+      images
+      price
+      portion
+      deliveryFee
+      creatorId
+      creator {
+        username
+        avatar
+      }
+      postId
+      post {
+        id
+        title
+      }
+    }
+  }
+}

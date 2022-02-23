@@ -24,51 +24,51 @@ export type AddToCart = {
 
 export type Address = {
   __typename?: 'Address';
+  country: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  district: Scalars['String'];
   id: Scalars['Float'];
-  name: Scalars['String'];
-  phonenumber: Scalars['String'];
   line1: Scalars['String'];
   line2: Scalars['String'];
-  subdistrict: Scalars['String'];
-  district: Scalars['String'];
-  province: Scalars['String'];
-  country: Scalars['String'];
+  name: Scalars['String'];
+  phonenumber: Scalars['String'];
   postcode: Scalars['String'];
-  userId: Scalars['String'];
-  user: User;
-  createdAt: Scalars['DateTime'];
+  province: Scalars['String'];
+  subdistrict: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type AddressInput = {
-  name: Scalars['String'];
-  phonenumber: Scalars['String'];
+  country: Scalars['String'];
+  district: Scalars['String'];
   line1: Scalars['String'];
   line2: Scalars['String'];
-  subdistrict: Scalars['String'];
-  district: Scalars['String'];
-  province: Scalars['String'];
-  country: Scalars['String'];
+  name: Scalars['String'];
+  phonenumber: Scalars['String'];
   postcode: Scalars['String'];
+  province: Scalars['String'];
+  subdistrict: Scalars['String'];
 };
 
 export type CartItem = {
   __typename?: 'CartItem';
-  id: Scalars['Float'];
-  total: Scalars['Int'];
-  quantity: Scalars['Float'];
-  userId: Scalars['String'];
-  user?: Maybe<User>;
-  status: Scalars['String'];
-  mealkitId: Scalars['Int'];
-  mealkit: Mealkit;
-  orderId: Scalars['Int'];
-  tracking?: Maybe<Tracking>;
   cartItemNoti: CartItemNoti;
-  isReviewed: Scalars['Boolean'];
   createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
   fieldTotal: Scalars['Int'];
+  id: Scalars['Float'];
+  isReviewed: Scalars['Boolean'];
+  mealkit: Mealkit;
+  mealkitId: Scalars['Int'];
+  orderId: Scalars['Int'];
+  quantity: Scalars['Float'];
+  status: Scalars['String'];
+  total: Scalars['Int'];
+  tracking?: Maybe<Tracking>;
+  updatedAt: Scalars['String'];
+  user?: Maybe<User>;
+  userId: Scalars['String'];
 };
 
 export type CartItemInput = {
@@ -78,25 +78,26 @@ export type CartItemInput = {
 
 export type CartItemNoti = {
   __typename?: 'CartItemNoti';
-  id: Scalars['Float'];
-  read: Scalars['Boolean'];
-  message: Scalars['String'];
-  creatorId: Scalars['String'];
-  cartItemId: Scalars['Float'];
   cartItem: CartItem;
+  cartItemId: Scalars['Float'];
   createdAt: Scalars['DateTime'];
+  creatorId: Scalars['String'];
+  id: Scalars['Float'];
+  message: Scalars['String'];
+  read: Scalars['Boolean'];
   updatedAt: Scalars['DateTime'];
 };
 
 export enum CartItemStatus {
-  UnOrdered = 'UnOrdered',
-  PaymentPending = 'PaymentPending',
-  ToDeliver = 'ToDeliver',
-  OnDelivery = 'OnDelivery',
-  Delivered = 'Delivered',
-  Received = 'Received',
   Cancelled = 'Cancelled',
-  Refunded = 'Refunded'
+  Complete = 'Complete',
+  Delivered = 'Delivered',
+  OnDelivery = 'OnDelivery',
+  PaymentPending = 'PaymentPending',
+  Received = 'Received',
+  Refunded = 'Refunded',
+  ToDeliver = 'ToDeliver',
+  UnOrdered = 'UnOrdered'
 }
 
 export type CartItemsByCreator = {
@@ -108,12 +109,12 @@ export type CartItemsByCreator = {
 
 export type CartItemsByCreatorFormat = {
   __typename?: 'CartItemsByCreatorFormat';
+  avatar: Scalars['String'];
+  cartItems: Array<CartItem>;
   creatorId: Scalars['String'];
   creatorName: Scalars['String'];
-  avatar: Scalars['String'];
   deliveryFee: Scalars['Int'];
   totalByCreator: Scalars['Float'];
-  cartItems: Array<CartItem>;
 };
 
 export type CartItemsByCreatorInput = {
@@ -124,35 +125,35 @@ export type CartItemsByCreatorInput = {
 
 export type CartItemsByOrderFormat = {
   __typename?: 'CartItemsByOrderFormat';
-  orderId: Scalars['Float'];
+  byCreator: Array<CartItemsByCreatorFormat>;
   grossOrder: Scalars['Float'];
+  orderId: Scalars['Float'];
   paymentId: Scalars['Float'];
   trackingId?: Maybe<Scalars['Float']>;
-  byCreator: Array<CartItemsByCreatorFormat>;
 };
 
 export type ConfirmData = {
   __typename?: 'ConfirmData';
-  transRef: Scalars['String'];
-  sendingBank: Scalars['String'];
-  receivingBank: Scalars['String'];
-  transDate: Scalars['String'];
-  transTime: Scalars['String'];
-  sender: Person;
-  receiver: Person;
   amount: Scalars['String'];
+  countryCode: Scalars['String'];
   paidLocalAmount: Scalars['String'];
   paidLocalCurrency: Scalars['String'];
-  countryCode: Scalars['String'];
+  receiver: Person;
+  receivingBank: Scalars['String'];
   ref1: Scalars['String'];
   ref2: Scalars['String'];
   ref3: Scalars['String'];
+  sender: Person;
+  sendingBank: Scalars['String'];
+  transDate: Scalars['String'];
+  transRef: Scalars['String'];
+  transTime: Scalars['String'];
 };
 
 export type ConfirmationResponse = {
   __typename?: 'ConfirmationResponse';
-  status: Status;
   data: ConfirmData;
+  status: Status;
 };
 
 
@@ -164,179 +165,118 @@ export type FieldError = {
 
 export type Follow = {
   __typename?: 'Follow';
-  id: Scalars['Float'];
-  userId: Scalars['String'];
-  user: User;
-  followerId: Scalars['String'];
-  follower: User;
   createdAt: Scalars['String'];
+  follower: User;
+  followerId: Scalars['String'];
+  id: Scalars['Float'];
   updatedAt: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type Ingredient = {
   __typename?: 'Ingredient';
-  ingredient: Scalars['String'];
   amount: Scalars['String'];
+  ingredient: Scalars['String'];
   unit: Scalars['String'];
 };
 
 export type IngredientInput = {
-  ingredient: Scalars['String'];
   amount: Scalars['String'];
+  ingredient: Scalars['String'];
   unit: Scalars['String'];
 };
 
 export type MappedCreatorOrders = {
   __typename?: 'MappedCreatorOrders';
-  orderId?: Maybe<Scalars['Float']>;
-  username: Scalars['String'];
+  address: Address;
   avatar: Scalars['String'];
   cartItems: Array<CartItem>;
-  address: Address;
   deliveryFee: Scalars['Int'];
+  orderId?: Maybe<Scalars['Float']>;
   tracking?: Maybe<Tracking>;
+  username: Scalars['String'];
 };
 
 export type Mealkit = {
   __typename?: 'Mealkit';
-  id: Scalars['Float'];
-  name: Scalars['String'];
-  price?: Maybe<Scalars['Int']>;
-  portion: Scalars['Float'];
-  items?: Maybe<Array<Scalars['String']>>;
-  images?: Maybe<Array<Scalars['String']>>;
-  postId: Scalars['Float'];
-  post?: Maybe<Post>;
-  creatorId: Scalars['String'];
-  creator: User;
-  deliveryFee: Scalars['Float'];
-  reviews: Array<Review>;
-  reviewsSum: Scalars['Int'];
-  reviewsCounter: Scalars['Int'];
   createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  creator: User;
+  creatorId: Scalars['String'];
+  deliveryFee: Scalars['Float'];
+  id: Scalars['Float'];
+  images?: Maybe<Array<Scalars['String']>>;
+  items?: Maybe<Array<Scalars['String']>>;
+  name: Scalars['String'];
+  portion: Scalars['Float'];
+  post?: Maybe<Post>;
+  postId: Scalars['Float'];
+  price?: Maybe<Scalars['Int']>;
   reviewAvg: Scalars['Float'];
+  reviews: Array<Review>;
+  reviewsCounter: Scalars['Int'];
+  reviewsSum: Scalars['Int'];
+  updatedAt: Scalars['String'];
 };
 
 export type MealkitInput = {
-  name: Scalars['String'];
-  items: Array<Scalars['String']>;
   images: Array<Scalars['String']>;
-  price: Scalars['Float'];
+  items: Array<Scalars['String']>;
+  name: Scalars['String'];
   portion: Scalars['Float'];
+  price: Scalars['Float'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
   changePassword: UserResponse;
+  completeCartItem: Scalars['Boolean'];
+  createAddress: Address;
+  createCartItem: AddToCart;
+  createMealkit: Mealkit;
+  createOrder: Order;
+  createPaymentInfo: PaymentInfoResponse;
+  createPost: Post;
+  createReview: Review;
+  createTracking: Tracking;
+  deleteAddress: Scalars['Boolean'];
+  deleteCartItem: Scalars['Boolean'];
+  deleteMealkit: Scalars['Boolean'];
+  deletePaymentInfo: Scalars['Boolean'];
+  deletePost: Scalars['Boolean'];
+  deleteReview: Scalars['Boolean'];
   forgotPassword: Scalars['Boolean'];
-  register: UserResponse;
-  updateUser: User;
   login: UserResponse;
   logout: Scalars['Boolean'];
-  switchAccountType: Scalars['Boolean'];
-  updateAvatar: Scalars['Boolean'];
-  vote: Scalars['Boolean'];
-  createPost: Post;
-  updatePost?: Maybe<Post>;
-  deletePost: Scalars['Boolean'];
-  signS3: PostSignedS3;
-  signAvatarS3: SignedS3;
-  createAddress: Address;
-  updateAddress?: Maybe<Address>;
-  deleteAddress: Scalars['Boolean'];
-  createMealkit: Mealkit;
-  updateMealkit?: Maybe<Mealkit>;
-  deleteMealkit: Scalars['Boolean'];
-  signMealkitS3: Array<SignedS3Result>;
-  createCartItem: AddToCart;
-  updateCartItem: CartItem;
-  deleteCartItem: Scalars['Boolean'];
-  uploadSlip: Scalars['Boolean'];
-  createOrder: Order;
-  toggleFollow: Scalars['Boolean'];
-  createPaymentInfo: PaymentInfoResponse;
-  updatePaymentInfo?: Maybe<PaymentInfoResponse>;
-  deletePaymentInfo: Scalars['Boolean'];
-  createTracking: Tracking;
   readOrderNotis: Scalars['Boolean'];
+  register: UserResponse;
+  signAvatarS3: SignedS3;
+  signMealkitS3: Array<SignedS3Result>;
+  signS3: PostSignedS3;
   signSingleFileS3: SingleFileSignedS3;
-  createReview: Review;
+  switchAccountType: Scalars['Boolean'];
+  toggleFollow: Scalars['Boolean'];
+  updateAddress?: Maybe<Address>;
+  updateAvatar: Scalars['Boolean'];
+  updateCartItem: CartItem;
+  updateMealkit?: Maybe<Mealkit>;
+  updatePaymentInfo?: Maybe<PaymentInfoResponse>;
+  updatePost?: Maybe<Post>;
   updateReview: Review;
-  deleteReview: Scalars['Boolean'];
+  updateUser: User;
+  uploadSlip: Scalars['Boolean'];
+  vote: Scalars['Boolean'];
 };
 
 
 export type MutationChangePasswordArgs = {
-  token: Scalars['String'];
   newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
-export type MutationForgotPasswordArgs = {
-  email: Scalars['String'];
-};
-
-
-export type MutationRegisterArgs = {
-  data: UsernamePasswordInput;
-};
-
-
-export type MutationUpdateUserArgs = {
-  input: UserInput;
-};
-
-
-export type MutationLoginArgs = {
-  password: Scalars['String'];
-  usernameOrEmailOrPhonenumber: Scalars['String'];
-};
-
-
-export type MutationSwitchAccountTypeArgs = {
-  becomeCreator: Scalars['Boolean'];
-};
-
-
-export type MutationUpdateAvatarArgs = {
-  newAvatar: Scalars['String'];
-};
-
-
-export type MutationVoteArgs = {
-  value: Scalars['Int'];
-  postId: Scalars['Int'];
-};
-
-
-export type MutationCreatePostArgs = {
-  input: PostInput;
-};
-
-
-export type MutationUpdatePostArgs = {
+export type MutationCompleteCartItemArgs = {
   id: Scalars['Int'];
-  input: PostInput;
-};
-
-
-export type MutationDeletePostArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationSignS3Args = {
-  thumbnailFiletype: Scalars['String'];
-  videoFiletype: Scalars['String'];
-  thumbnailname: Scalars['String'];
-  videoname: Scalars['String'];
-};
-
-
-export type MutationSignAvatarS3Args = {
-  filetype: Scalars['String'];
-  name: Scalars['String'];
 };
 
 
@@ -345,71 +285,21 @@ export type MutationCreateAddressArgs = {
 };
 
 
-export type MutationUpdateAddressArgs = {
-  input: AddressInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteAddressArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCreateMealkitArgs = {
-  postId: Scalars['Int'];
-  input: MealkitInput;
-};
-
-
-export type MutationUpdateMealkitArgs = {
-  id: Scalars['Int'];
-  input: MealkitInput;
-};
-
-
-export type MutationDeleteMealkitArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationSignMealkitS3Args = {
-  input: Array<SignS3Params>;
-};
-
-
 export type MutationCreateCartItemArgs = {
   input: CartItemInput;
 };
 
 
-export type MutationUpdateCartItemArgs = {
-  mealkitId: Scalars['Int'];
-  id: Scalars['Int'];
-  quantity: Scalars['Int'];
-};
-
-
-export type MutationDeleteCartItemArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationUploadSlipArgs = {
-  slipUrl: Scalars['String'];
-  paymentId: Scalars['Int'];
+export type MutationCreateMealkitArgs = {
+  input: MealkitInput;
+  postId: Scalars['Int'];
 };
 
 
 export type MutationCreateOrderArgs = {
+  cartItemIds: Array<Scalars['Int']>;
   cartItemsByCreatorInput: Array<CartItemsByCreatorInput>;
   grossOrder: Scalars['Int'];
-  cartItemIds: Array<Scalars['Int']>;
-};
-
-
-export type MutationToggleFollowArgs = {
-  targetUserId: Scalars['String'];
 };
 
 
@@ -418,8 +308,34 @@ export type MutationCreatePaymentInfoArgs = {
 };
 
 
-export type MutationUpdatePaymentInfoArgs = {
-  input: PaymentInfoInput;
+export type MutationCreatePostArgs = {
+  input: PostInput;
+};
+
+
+export type MutationCreateReviewArgs = {
+  cartItemId: Scalars['Int'];
+  input: ReviewInput;
+  mealkitId: Scalars['Int'];
+};
+
+
+export type MutationCreateTrackingArgs = {
+  input: TrackingInput;
+};
+
+
+export type MutationDeleteAddressArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteCartItemArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteMealkitArgs = {
   id: Scalars['Int'];
 };
 
@@ -429,28 +345,8 @@ export type MutationDeletePaymentInfoArgs = {
 };
 
 
-export type MutationCreateTrackingArgs = {
-  input: TrackingInput;
-};
-
-
-export type MutationSignSingleFileS3Args = {
-  filetype: Scalars['String'];
-  filename: Scalars['String'];
-};
-
-
-export type MutationCreateReviewArgs = {
-  cartItemId: Scalars['Int'];
-  mealkitId: Scalars['Int'];
-  input: ReviewInput;
-};
-
-
-export type MutationUpdateReviewArgs = {
-  cartItemId: Scalars['Int'];
-  mealkitId: Scalars['Int'];
-  input: ReviewInput;
+export type MutationDeletePostArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -459,44 +355,155 @@ export type MutationDeleteReviewArgs = {
   mealkitId: Scalars['Int'];
 };
 
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
+};
+
+
+export type MutationLoginArgs = {
+  password: Scalars['String'];
+  usernameOrEmailOrPhonenumber: Scalars['String'];
+};
+
+
+export type MutationRegisterArgs = {
+  data: UsernamePasswordInput;
+};
+
+
+export type MutationSignAvatarS3Args = {
+  filetype: Scalars['String'];
+  name: Scalars['String'];
+};
+
+
+export type MutationSignMealkitS3Args = {
+  input: Array<SignS3Params>;
+};
+
+
+export type MutationSignS3Args = {
+  thumbnailFiletype: Scalars['String'];
+  thumbnailname: Scalars['String'];
+  videoFiletype: Scalars['String'];
+  videoname: Scalars['String'];
+};
+
+
+export type MutationSignSingleFileS3Args = {
+  filename: Scalars['String'];
+  filetype: Scalars['String'];
+};
+
+
+export type MutationSwitchAccountTypeArgs = {
+  becomeCreator: Scalars['Boolean'];
+};
+
+
+export type MutationToggleFollowArgs = {
+  targetUserId: Scalars['String'];
+};
+
+
+export type MutationUpdateAddressArgs = {
+  id: Scalars['Int'];
+  input: AddressInput;
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  newAvatar: Scalars['String'];
+};
+
+
+export type MutationUpdateCartItemArgs = {
+  id: Scalars['Int'];
+  mealkitId: Scalars['Int'];
+  quantity: Scalars['Int'];
+};
+
+
+export type MutationUpdateMealkitArgs = {
+  id: Scalars['Int'];
+  input: MealkitInput;
+};
+
+
+export type MutationUpdatePaymentInfoArgs = {
+  id: Scalars['Int'];
+  input: PaymentInfoInput;
+};
+
+
+export type MutationUpdatePostArgs = {
+  id: Scalars['Int'];
+  input: PostInput;
+};
+
+
+export type MutationUpdateReviewArgs = {
+  cartItemId: Scalars['Int'];
+  input: ReviewInput;
+  mealkitId: Scalars['Int'];
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UserInput;
+};
+
+
+export type MutationUploadSlipArgs = {
+  paymentId: Scalars['Int'];
+  slipUrl: Scalars['String'];
+};
+
+
+export type MutationVoteArgs = {
+  postId: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
 export type Order = {
   __typename?: 'Order';
-  id: Scalars['Float'];
-  grossOrder: Scalars['Float'];
-  cartItemsByCreator?: Maybe<Array<CartItemsByCreator>>;
   cartItems: Array<CartItem>;
-  userId: Scalars['String'];
+  cartItemsByCreator?: Maybe<Array<CartItemsByCreator>>;
+  createdAt: Scalars['DateTime'];
+  grossOrder: Scalars['Float'];
+  id: Scalars['Float'];
   payment?: Maybe<Payment>;
   paymentId: Scalars['Float'];
-  createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
 };
 
 export type PaginatedPosts = {
   __typename?: 'PaginatedPosts';
-  posts: Array<Post>;
   hasMore: Scalars['Boolean'];
+  posts: Array<Post>;
 };
 
 export type Payment = {
   __typename?: 'Payment';
-  id: Scalars['Float'];
   amount: Scalars['Float'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Float'];
   qrUrl: Scalars['String'];
   slipUrl?: Maybe<Scalars['String']>;
-  createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
 
 export type PaymentInfo = {
   __typename?: 'PaymentInfo';
-  id: Scalars['Float'];
   bankAccount: Scalars['String'];
   bankCode: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Float'];
+  updatedAt: Scalars['DateTime'];
   user: User;
   userId: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
 };
 
 export type PaymentInfoInput = {
@@ -512,136 +519,85 @@ export type PaymentInfoResponse = {
 
 export type Person = {
   __typename?: 'Person';
+  account: TypeAndValue;
   displayName: Scalars['String'];
   name: Scalars['String'];
   proxy: TypeAndValue;
-  account: TypeAndValue;
 };
 
 export type Post = {
   __typename?: 'Post';
-  id: Scalars['Float'];
-  title: Scalars['String'];
-  text: Scalars['String'];
-  instruction?: Maybe<Array<Scalars['String']>>;
   advice?: Maybe<Array<Scalars['String']>>;
   cooktime?: Maybe<Scalars['String']>;
-  portion?: Maybe<Scalars['Int']>;
-  points: Scalars['Float'];
-  voteStatus?: Maybe<Scalars['Int']>;
-  thumbnailUrl: Scalars['String'];
-  videoUrl: Scalars['String'];
-  creatorId: Scalars['String'];
-  creator: User;
-  ingredients?: Maybe<Array<Ingredient>>;
-  mealkits?: Maybe<Array<Mealkit>>;
   createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  creator: User;
+  creatorId: Scalars['String'];
+  id: Scalars['Float'];
+  ingredients?: Maybe<Array<Ingredient>>;
+  instruction?: Maybe<Array<Scalars['String']>>;
+  mealkits?: Maybe<Array<Mealkit>>;
+  points: Scalars['Float'];
+  portion?: Maybe<Scalars['Int']>;
+  text: Scalars['String'];
   textSnippet: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
+  title: Scalars['String'];
+  updatedAt: Scalars['String'];
+  videoUrl: Scalars['String'];
+  voteStatus?: Maybe<Scalars['Int']>;
 };
 
 export type PostInput = {
-  title: Scalars['String'];
-  text: Scalars['String'];
-  instruction: Array<Scalars['String']>;
-  cooktime: Scalars['String'];
-  portion: Scalars['Float'];
   advice: Array<Scalars['String']>;
-  videoUrl: Scalars['String'];
-  thumbnailUrl: Scalars['String'];
+  cooktime: Scalars['String'];
   ingredients: Array<IngredientInput>;
+  instruction: Array<Scalars['String']>;
+  portion: Scalars['Float'];
+  text: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
+  title: Scalars['String'];
+  videoUrl: Scalars['String'];
 };
 
 export type PostSignedS3 = {
   __typename?: 'PostSignedS3';
-  videoSignedRequest: Scalars['String'];
   thumbnailSignedRequest: Scalars['String'];
-  videoUrl: Scalars['String'];
   thumbnailUrl: Scalars['String'];
+  videoSignedRequest: Scalars['String'];
+  videoUrl: Scalars['String'];
 };
 
 export type Query = {
   __typename?: 'Query';
-  users: Array<User>;
-  user: User;
-  me?: Maybe<User>;
-  votedPosts: PaginatedPosts;
-  posts: PaginatedPosts;
-  postsByCreator: Array<Post>;
-  post?: Maybe<Post>;
   address: Address;
-  mealkits?: Maybe<Array<Mealkit>>;
-  mealkit?: Maybe<Mealkit>;
+  allCartItems: Array<CartItem>;
   cartItems: Array<CartItem>;
-  payment: Payment;
   confirmPayment: ConfirmationResponse;
-  manuallyConfirmPayment: Scalars['Boolean'];
-  userOrders: Array<CartItemsByOrderFormat>;
   creatorOrders: Array<MappedCreatorOrders>;
   followers: Array<Follow>;
   following: Array<Follow>;
-  paymentInfo?: Maybe<PaymentInfo>;
-  tracking: Tracking;
+  manuallyConfirmPayment: Scalars['Boolean'];
+  me?: Maybe<User>;
+  mealkit?: Maybe<Mealkit>;
+  mealkits?: Maybe<Array<Mealkit>>;
   orderNotis: Array<CartItemNoti>;
+  payment: Payment;
+  paymentInfo?: Maybe<PaymentInfo>;
+  post?: Maybe<Post>;
+  posts: PaginatedPosts;
+  postsByCreator: Array<Post>;
   reviews: Array<Review>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryVotedPostsArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-};
-
-
-export type QueryPostsArgs = {
-  cursor?: Maybe<Scalars['String']>;
-  limit: Scalars['Int'];
-};
-
-
-export type QueryPostsByCreatorArgs = {
-  userId: Scalars['String'];
-};
-
-
-export type QueryPostArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryMealkitsArgs = {
-  postId: Scalars['Int'];
-};
-
-
-export type QueryMealkitArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryPaymentArgs = {
-  id: Scalars['Int'];
+  tracking: Tracking;
+  user: User;
+  userOrders: Array<CartItemsByOrderFormat>;
+  users: Array<User>;
+  votedPosts: PaginatedPosts;
 };
 
 
 export type QueryConfirmPaymentArgs = {
   sendingBank: Scalars['String'];
   transRef: Scalars['String'];
-};
-
-
-export type QueryManuallyConfirmPaymentArgs = {
-  paymentId: Scalars['Int'];
-};
-
-
-export type QueryUserOrdersArgs = {
-  status: CartItemStatus;
 };
 
 
@@ -660,8 +616,39 @@ export type QueryFollowingArgs = {
 };
 
 
-export type QueryTrackingArgs = {
+export type QueryManuallyConfirmPaymentArgs = {
+  paymentId: Scalars['Int'];
+};
+
+
+export type QueryMealkitArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryMealkitsArgs = {
+  postId: Scalars['Int'];
+};
+
+
+export type QueryPaymentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryPostArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryPostsByCreatorArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -669,26 +656,47 @@ export type QueryReviewsArgs = {
   mealkitId: Scalars['Int'];
 };
 
+
+export type QueryTrackingArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['String'];
+};
+
+
+export type QueryUserOrdersArgs = {
+  status: CartItemStatus;
+};
+
+
+export type QueryVotedPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
+};
+
 export type Review = {
   __typename?: 'Review';
-  id: Scalars['Int'];
-  title?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
-  score: Scalars['Int'];
-  images?: Maybe<Array<Scalars['String']>>;
-  user: User;
-  userId: Scalars['String'];
-  mealkit: Mealkit;
-  mealkitId: Scalars['Int'];
   cartItemId: Scalars['Int'];
   createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  images?: Maybe<Array<Scalars['String']>>;
+  mealkit: Mealkit;
+  mealkitId: Scalars['Int'];
+  score: Scalars['Int'];
+  text?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
   updatedAt: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
 };
 
 export type ReviewInput = {
   score: Scalars['Int'];
-  title: Scalars['String'];
   text: Scalars['String'];
+  title: Scalars['String'];
 };
 
 export type SignedS3 = {
@@ -699,8 +707,8 @@ export type SignedS3 = {
 
 export type SingleFileSignedS3 = {
   __typename?: 'SingleFileSignedS3';
-  signedRequest: Scalars['String'];
   fileUrl: Scalars['String'];
+  signedRequest: Scalars['String'];
 };
 
 export type Status = {
@@ -717,33 +725,33 @@ export type TimeLine = {
 
 export type TimelineDetail = {
   __typename?: 'TimelineDetail';
-  dateTime: Scalars['String'];
   date: Scalars['String'];
-  time: Scalars['String'];
-  status: Scalars['String'];
+  dateTime: Scalars['String'];
   description: Scalars['String'];
+  status: Scalars['String'];
+  time: Scalars['String'];
 };
 
 export type Tracking = {
   __typename?: 'Tracking';
-  id: Scalars['Float'];
-  trackingNo: Scalars['String'];
+  cartItems: Array<CartItem>;
+  color: Scalars['String'];
   courier: Scalars['String'];
   courierKey: Scalars['String'];
-  color: Scalars['String'];
-  status: Scalars['String'];
-  currentStatus: Scalars['String'];
-  shareLink: Scalars['String'];
-  timelines: Array<TimeLine>;
-  cartItems: Array<CartItem>;
   createdAt: Scalars['String'];
+  currentStatus: Scalars['String'];
+  id: Scalars['Float'];
+  shareLink: Scalars['String'];
+  status: Scalars['String'];
+  timelines: Array<TimeLine>;
+  trackingNo: Scalars['String'];
   updatedAt: Scalars['String'];
 };
 
 export type TrackingInput = {
   cartItemIds: Array<Scalars['Int']>;
-  trackingNo: Scalars['String'];
   courier: Scalars['String'];
+  trackingNo: Scalars['String'];
 };
 
 export type TypeAndValue = {
@@ -754,27 +762,29 @@ export type TypeAndValue = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['String'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  phonenumber: Scalars['String'];
-  isCreator: Scalars['Boolean'];
-  avatar: Scalars['String'];
   about?: Maybe<Scalars['String']>;
-  followerNum: Scalars['Float'];
-  isFollowed: Scalars['Boolean'];
   address?: Maybe<Address>;
-  reviews: Array<Review>;
+  avatar: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  email: Scalars['String'];
+  followerNum: Scalars['Float'];
+  id: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
+  isCreator: Scalars['Boolean'];
+  isFollowed: Scalars['Boolean'];
+  paymentInfo?: Maybe<PaymentInfo>;
+  phonenumber: Scalars['String'];
+  reviews: Array<Review>;
   updatedAt: Scalars['DateTime'];
   userReview: UserReview;
+  username: Scalars['String'];
 };
 
 export type UserInput = {
-  username: Scalars['String'];
+  about: Scalars['String'];
   email: Scalars['String'];
   phonenumber: Scalars['String'];
-  about: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type UserResponse = {
@@ -785,17 +795,17 @@ export type UserResponse = {
 
 export type UserReview = {
   __typename?: 'UserReview';
-  reviewScore: Scalars['Int'];
   reviewCounter: Scalars['Int'];
+  reviewScore: Scalars['Int'];
 };
 
 /** Argument for register user */
 export type UsernamePasswordInput = {
-  username: Scalars['String'];
   email: Scalars['String'];
-  phonenumber: Scalars['String'];
-  password?: Maybe<Scalars['String']>;
   isCreator?: Maybe<Scalars['Boolean']>;
+  password?: Maybe<Scalars['String']>;
+  phonenumber: Scalars['String'];
+  username: Scalars['String'];
 };
 
 export type SignS3Params = {
@@ -813,9 +823,16 @@ export type PostSnippetFragment = { __typename?: 'Post', id: number, title: stri
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } };
 
-export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
+export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
+
+export type CompleteCartItemMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CompleteCartItemMutation = { __typename?: 'Mutation', completeCartItem: boolean };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -823,7 +840,7 @@ export type ChangePasswordMutationVariables = Exact<{
 }>;
 
 
-export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
+export type ChangePasswordMutation = { __typename?: 'Mutation', changePassword: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type CreateAddressMutationVariables = Exact<{
   input: AddressInput;
@@ -904,7 +921,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -963,7 +980,7 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> } };
 
 export type CreateReviewMutationVariables = Exact<{
   input: ReviewInput;
@@ -1073,6 +1090,11 @@ export type AddressQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Address', name: string, phonenumber: string, id: number, userId: string, line1: string, line2: string, subdistrict: string, district: string, province: string, country: string, postcode: string } };
 
+export type AllCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllCartItemsQuery = { __typename?: 'Query', allCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, status: string, user?: Maybe<{ __typename?: 'User', id: string, username: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, creatorId: string, postId: number, creator: { __typename?: 'User', username: string, avatar: string }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
+
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1088,7 +1110,7 @@ export type FollowersQuery = { __typename?: 'Query', followers: Array<{ __typena
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
 
 export type MealkitQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1235,6 +1257,7 @@ export const RegularUserFragmentDoc = gql`
   isCreator
   about
   followerNum
+  isAdmin
 }
     `;
 export const RegularUserResponseFragmentDoc = gql`
@@ -1248,6 +1271,37 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
+export const CompleteCartItemDocument = gql`
+    mutation completeCartItem($id: Int!) {
+  completeCartItem(id: $id)
+}
+    `;
+export type CompleteCartItemMutationFn = Apollo.MutationFunction<CompleteCartItemMutation, CompleteCartItemMutationVariables>;
+
+/**
+ * __useCompleteCartItemMutation__
+ *
+ * To run a mutation, you first call `useCompleteCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCompleteCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [completeCartItemMutation, { data, loading, error }] = useCompleteCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCompleteCartItemMutation(baseOptions?: Apollo.MutationHookOptions<CompleteCartItemMutation, CompleteCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CompleteCartItemMutation, CompleteCartItemMutationVariables>(CompleteCartItemDocument, options);
+      }
+export type CompleteCartItemMutationHookResult = ReturnType<typeof useCompleteCartItemMutation>;
+export type CompleteCartItemMutationResult = Apollo.MutationResult<CompleteCartItemMutation>;
+export type CompleteCartItemMutationOptions = Apollo.BaseMutationOptions<CompleteCartItemMutation, CompleteCartItemMutationVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {
@@ -2516,6 +2570,72 @@ export function useAddressLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ad
 export type AddressQueryHookResult = ReturnType<typeof useAddressQuery>;
 export type AddressLazyQueryHookResult = ReturnType<typeof useAddressLazyQuery>;
 export type AddressQueryResult = Apollo.QueryResult<AddressQuery, AddressQueryVariables>;
+export const AllCartItemsDocument = gql`
+    query allCartItems {
+  allCartItems {
+    id
+    quantity
+    userId
+    mealkitId
+    total
+    status
+    user {
+      id
+      username
+      paymentInfo {
+        id
+        bankAccount
+        bankCode
+      }
+    }
+    mealkit {
+      id
+      name
+      images
+      price
+      portion
+      deliveryFee
+      creatorId
+      creator {
+        username
+        avatar
+      }
+      postId
+      post {
+        id
+        title
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAllCartItemsQuery__
+ *
+ * To run a query within a React component, call `useAllCartItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllCartItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllCartItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllCartItemsQuery(baseOptions?: Apollo.QueryHookOptions<AllCartItemsQuery, AllCartItemsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllCartItemsQuery, AllCartItemsQueryVariables>(AllCartItemsDocument, options);
+      }
+export function useAllCartItemsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllCartItemsQuery, AllCartItemsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllCartItemsQuery, AllCartItemsQueryVariables>(AllCartItemsDocument, options);
+        }
+export type AllCartItemsQueryHookResult = ReturnType<typeof useAllCartItemsQuery>;
+export type AllCartItemsLazyQueryHookResult = ReturnType<typeof useAllCartItemsLazyQuery>;
+export type AllCartItemsQueryResult = Apollo.QueryResult<AllCartItemsQuery, AllCartItemsQueryVariables>;
 export const CartItemsDocument = gql`
     query cartItems {
   cartItems {

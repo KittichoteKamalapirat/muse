@@ -35,6 +35,7 @@ import { dataURItoBlob } from "../util/dataURItoBlob";
 import { uploadToS3 } from "../util/createPost/uploadToS3";
 
 const CreatePost: React.FC<{}> = ({ children }) => {
+  useIsAuth();
   const router = useRouter();
   //router import for below, not for useIsAuth
 
@@ -55,7 +56,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   //custom hooks
-  useIsAuth();
+
   const [signS3] = useSignS3Mutation();
   const [createPost] = useCreatePostMutation();
   const [videoPreview, setVideoPreview] = useState("" as any);
