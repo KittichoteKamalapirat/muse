@@ -6,4 +6,9 @@ workflows:
     jobs:
       - node/test:
           version: "16.10"
-          pkg-manager: npm
+          pkg-manager: yarn
+      - checkout
+      - run: yarn install
+      - run: yarn test
+      - run: yarn build
+      # - run: vercel --prod
