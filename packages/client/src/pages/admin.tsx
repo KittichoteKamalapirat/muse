@@ -64,8 +64,8 @@ const Admin: React.FC<AdminProps> = ({}) => {
     prepareRow,
   } = useTable(
     {
-      columns,
-      data,
+      columns: columns,
+      data: data,
       // initialState: {
       //   filters: [
       //     {
@@ -75,7 +75,6 @@ const Admin: React.FC<AdminProps> = ({}) => {
       //   ],
       // },
     },
-
     useFilters,
     useSortBy,
     usePagination
