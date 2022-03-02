@@ -15,19 +15,19 @@ jobs:
       # checkout is alias for git clone
       - checkout
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: Install dependencies
           working_directory: packages/client
           command: yarn install
       - save_cache:
-        paths:
-          - packages/client/node_modules
-          - packages/client/.next/cache
-        key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
+          paths:
+            - packages/client/node_modules
+            - packages/client/.next/cache
+          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
 
       - run:
           name: "run unit test"
