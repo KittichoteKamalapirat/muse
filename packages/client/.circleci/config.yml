@@ -57,9 +57,9 @@ jobs:
           working_directory: packages/client
           command: |
             vercel --prod
-          filters:
-            branches:
-              only: master
+          # filters:
+          #   branches:
+          #     only: master
 
 # hi
 # workflow will run the job. I can define the jobs first then run by jobs name
