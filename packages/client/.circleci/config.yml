@@ -2,56 +2,54 @@ version: 2.1
 # orbs:
 # node: circleci/node@4.7
 
-
 # define the job to be used in the owrkflow
 jobs:
   job1:
     docker:
       - image: circleci/node:17.5.0
     # - node/test:
-        # version: "16.10"
-        # pkg-manager: yarn
+    # version: "16.10"
+    # pkg-manager: yarn
     working_directory: ~/repo
     steps:
-    # checkout is alias for git clone
-      - checkout 
+      # checkout is alias for git clone
+      - checkout
       - restore_cache:
         keys:
           - v1-dependencies-{{ checksum "package.json"}}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
       - run: yarn install
-      - save_cache: 
+      - save_cache:
         paths:
           - node_modules
         key: v1-dependencies-{{ checksum "package.json"}}
 
-      - run: 
+      - run:
           name: "run unit test"
           command: |
             yarn test
-      # - run: 
           # name: "run integration test"
           # command: |
           # yarn cypress run --project ./spec
 
         # save test results
         # - store_artifacts:
-          # path: vulcan/spec/cypress/videos
+        # path: vulcan/spec/cypress/videos
         # - store_artifacts:
-          # path: vulcan/spec/cypress/screenshots
+        # path: vulcan/spec/cypress/screenshots
+      # - run:
       - run: yarn build
-      - run: vercel --prod
+      - run:
+          name: "deploy to vercel"
+          command: |
+            vercel --prod
           filters:
             branches:
               only: master
 
-
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   my-cool-workflow:
-    jobs: 
+    jobs:
       - job1
-
-
-   
