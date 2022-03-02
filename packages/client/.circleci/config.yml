@@ -47,16 +47,16 @@ jobs:
           working_directory: packages/client
           command: yarn build
       - save_cache:
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
           paths:
             - packages/client/node_modules
             - packages/client/.next/cache
-          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
+
       - run:
           name: "deploy to vercel"
           working_directory: packages/client
           command: |
-            vercel --prod
+            vercel
           # filters:
           #   branches:
           #     only: master
