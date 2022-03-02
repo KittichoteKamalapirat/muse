@@ -28,8 +28,8 @@ jobs:
 
       - run: 
           name: "run unit test"
-          command: |
-          yarn test
+            command: |
+              yarn test
       # - run: 
           # name: "run integration test"
           # command: |
@@ -42,9 +42,9 @@ jobs:
           # path: vulcan/spec/cypress/screenshots
       - run: yarn build
       - run: vercel --prod
-        filters:
-          branches:
-            only: master
+          filters:
+            branches:
+              only: master
 
 
 # workflow will run the job. I can define the jobs first then run by jobs name
