@@ -56,7 +56,7 @@ jobs:
           name: "deploy to vercel"
           working_directory: packages/client
           command: |
-            vercel
+            yarn vercel:deploy
           # filters:
           #   branches:
           #     only: master
