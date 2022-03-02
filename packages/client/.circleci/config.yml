@@ -6,7 +6,7 @@ version: 2.1
 jobs:
   job1:
     docker:
-      - image: circleci/node:17.5.0
+      - image: cimg/node:17.6.0
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
