@@ -27,9 +27,9 @@ jobs:
         key: v1-dependencies-{{ checksum "package.json"}}
 
       - run: 
-          name: "run unit test"
-            command: |
-              yarn test
+        name: "run unit test"
+          command: |
+            yarn test
       # - run: 
           # name: "run integration test"
           # command: |
