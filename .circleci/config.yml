@@ -1,5 +1,7 @@
 version: 2.1
 
+# if setup = true, circleci will know that this is a dynamic config
+setup: << pipeline.parameters.run-setup >>
 # orbs:
 #   node: circleci/node@4.7
 
