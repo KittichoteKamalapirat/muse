@@ -26,11 +26,6 @@ jobs:
           name: Install dependencies
           working_directory: packages/client
           command: yarn install
-      - save_cache:
-          paths:
-            - packages/client/node_modules
-            - packages/client/.next/cache
-          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
 
       # - run:
       #     name: "run unit test"
@@ -48,9 +43,15 @@ jobs:
       # path: vulcan/spec/cypress/screenshots
       # - run:
       - run:
-          name: Build
+          name: Build Next.JS App
           working_directory: packages/client
           command: yarn build
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - packages/client/node_modules
+            - packages/client/.next/cache
+          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
       - run:
           name: "deploy to vercel"
           working_directory: packages/client
