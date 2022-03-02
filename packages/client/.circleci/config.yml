@@ -16,17 +16,22 @@ jobs:
       - checkout
       - restore_cache:
         keys:
-          - v1-dependencies-{{ checksum "package.json"}}
+          - v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: yarn install
+      - run:
+          name: Install dependencies
+          working_directory: packages/client
+          command: yarn install
       - save_cache:
         paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json"}}
+          - packages/client/node_modules
+          - packages/client/.next/cache
+        key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
 
       - run:
           name: "run unit test"
+          working_directory: packages/client
           command: |
             yarn test
           # name: "run integration test"
@@ -39,16 +44,18 @@ jobs:
         # - store_artifacts:
         # path: vulcan/spec/cypress/screenshots
       # - run:
-      - run: yarn build
+      - run:
+          name: Build
+          working_directory: packages/client
+          command: yarn build
       - run:
           name: "deploy to vercel"
+          working_directory: packages/client
           command: |
             vercel --prod
           filters:
             branches:
               only: master
-
-#x
 
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
