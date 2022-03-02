@@ -47,7 +47,7 @@ jobs:
           working_directory: packages/client
           command: yarn build
       - save_cache:
-          key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
+          key: dependencies-{{ checksum "packages/client/yarn.lock"}}
           paths:
             - packages/client/node_modules
             - packages/client/.next/cache
@@ -61,7 +61,6 @@ jobs:
           #   branches:
           #     only: master
 
-# hi
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:
