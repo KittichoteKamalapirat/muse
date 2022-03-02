@@ -32,20 +32,20 @@ jobs:
             - packages/client/.next/cache
           key: v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
 
-      - run:
-          name: "run unit test"
-          working_directory: packages/client
-          command: |
-            yarn test
-          # name: "run integration test"
-          # command: |
-          # yarn cypress run --project ./spec
+      # - run:
+      #     name: "run unit test"
+      #     working_directory: packages/client
+      #     command: |
+      #       yarn test
+      # name: "run integration test"
+      # command: |
+      # yarn cypress run --project ./spec
 
-        # save test results
-        # - store_artifacts:
-        # path: vulcan/spec/cypress/videos
-        # - store_artifacts:
-        # path: vulcan/spec/cypress/screenshots
+      # save test results
+      # - store_artifacts:
+      # path: vulcan/spec/cypress/videos
+      # - store_artifacts:
+      # path: vulcan/spec/cypress/screenshots
       # - run:
       - run:
           name: Build
