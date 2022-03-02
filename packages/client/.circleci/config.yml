@@ -7,6 +7,9 @@ jobs:
   job1:
     docker:
       - image: circleci/node:17.5.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     # - node/test:
     # version: "16.10"
     # pkg-manager: yarn
@@ -60,6 +63,6 @@ jobs:
 # hi
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
-  my-cool-workflow:
+  client-workflow:
     jobs:
       - job1
