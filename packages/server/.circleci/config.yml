@@ -22,10 +22,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "packages/server/yarn.lock"}}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ checksum "packages/server/yarn.lock"}}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
       - run:
           name: Install dependencies
           working_directory: packages/server
@@ -51,7 +51,7 @@ jobs:
 
       # premium feature
       - setup_remote_docker:
-        docker_layer_caching: true
+          docker_layer_caching: true
 
       # priting all tags for debugging purpose
       - run: git tag
