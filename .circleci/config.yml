@@ -27,7 +27,7 @@ workflows:
           # if pitch is modified, the job for pitch will run
           # similarly, if vulcan is modified, the job for vulcan will run
           modules: |
-            packages/client
+
             packages/server
 
 orbs:
