@@ -60,7 +60,6 @@ jobs:
           # filters:
           #   branches:
           #     only: master
-#yoyo
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:
