@@ -9,7 +9,7 @@
     "start": "next start",
     "gen": "graphql-codegen --config codegen.yml",
     "postinstall": "expo-yarn-workspaces postinstall",
-    "vercel:deploy": "vercel --prod"
+    "ci:vercel": "vercel --prod --token $VERCEL_TOKEN_FOR_CIRCLECI"
   },
   "dependencies": {
     "@apollo/client": "^3.4.13",
