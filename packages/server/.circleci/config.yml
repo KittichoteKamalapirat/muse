@@ -1,0 +1,92 @@
+version: 2.1
+jobs:
+  job1:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: cimg/postgres:14.1.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: chain123
+          POSTGRES_DB: cookknowdb2
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    steps:
+      - checkout
+      - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "packages/server/yarn.lock"}}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run:
+          name: Install dependencies
+          working_directory: packages/server
+          command: yarn install
+
+      - save_cache:
+          key: dependencies-{{ checksum "packages/server/yarn.lock"}}
+          paths:
+            - packages/client/node_modules
+            - packages/client/.next/cache
+
+      #prepare to deploy
+      - run: git config --global user.email $GITHUB_EMAIL
+      - run: git config --global user.name $GITHUB_USER
+
+      # run on root
+      - run:
+          name: Create a new version with lerna
+          command: yarn new-version
+
+      - setup_remote_docker:
+          docker_layer_caching: true
+
+      # premium feature
+      - setup_remote_docker:
+        docker_layer_caching: true
+
+      # priting all tags for debugging purpose
+      - run: git tag
+      - run: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=2) | sed -n 2p`' >> $BASH_ENV
+      - run: echo $TAG
+
+      - run:
+          name: Build docker image
+          working_directory: packages/server
+          command: yarn ci:docker
+      - run:
+          name: Login and push in Dokku
+          working_directory: packages/server
+          command: yarn ci:dokku
+
+# like docker build
+# - run:
+# name: "Install Docker client"
+# command: |
+# # do  docker thingy here
+# - run: yarn build
+
+#  "docker:build": "docker build -t benawad/example:latest .",
+#     "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
+#     "docker:push": "docker push benawad/example:latest",
+#     "ci:docker": "npm run docker:build && npm run docker:login && npm run docker:push"
+
+workflows:
+  server-workflow:
+    jobs:
+      - job1
+#test here too
+#test here too
+#test
+#test
+#test
+#test
+#test

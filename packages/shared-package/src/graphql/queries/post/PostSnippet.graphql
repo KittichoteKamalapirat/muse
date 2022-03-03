@@ -1,0 +1,26 @@
+fragment PostSnippet on Post {
+  id
+  title
+  textSnippet
+  videoUrl
+  thumbnailUrl
+  createdAt
+  updatedAt
+  points
+  voteStatus
+  mealkits {
+    id
+    name
+    images
+    price
+    portion
+    reviewAvg
+    reviewsCounter
+  }
+
+  creator {
+    id
+    username
+    avatar
+  }
+}

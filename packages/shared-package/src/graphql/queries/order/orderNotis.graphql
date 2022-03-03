@@ -1,0 +1,21 @@
+query orderNotis {
+  orderNotis {
+    id
+    message
+    read
+    cartItemId
+    createdAt
+    cartItem {
+      id
+      quantity
+      status
+      user {
+        username
+      }
+      mealkit {
+        name
+        images
+      }
+    }
+  }
+}
