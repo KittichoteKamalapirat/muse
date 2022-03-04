@@ -54,9 +54,10 @@ jobs:
       - run: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=2) | sed -n 2p`' >> $BASH_ENV
       - run: echo $TAG
 
+      # run from root
       - run:
           name: Build docker image
-          working_directory: packages/server
+          # working_directory: packages/server
           command: yarn ci:docker
 
       # circleci_digital_ocean_cookknow private ssh key

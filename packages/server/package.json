@@ -13,12 +13,7 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "start2": "ts-node src/index.ts",
-    "postinstall": "expo-yarn-workspaces postinstall",
-    "docker:build": "docker build -t kittishane/cookknow:$VERSION .",
-    "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
-    "docker:push": "docker push kittishane/cookknow:$VERSION",
-    "ci:docker": "yarn docker:build && yarn docker:login && yarn docker:push",
-    "ci:dokku": "ssh shane@128.199.205.119 && docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:latest && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server latest"
+    "postinstall": "expo-yarn-workspaces postinstall"
   },
   "keywords": [],
   "author": "",
