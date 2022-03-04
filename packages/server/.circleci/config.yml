@@ -52,7 +52,7 @@ jobs:
       # priting all tags for debugging purpose
       - run: git tag
       - run: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=2) | sed -n 2p`' >> $BASH_ENV
-      - run: echo $TAG
+      - run: echo $VERSION
 
       # run from root
       - run:
