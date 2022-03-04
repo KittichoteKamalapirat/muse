@@ -1,6 +1,6 @@
 {
   "name": "@cookknow/shared-package",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A shared package for cookknow's mobile and web",
   "main": "dist/index.js",
   "type": "module",
