@@ -41,6 +41,7 @@ jobs:
       - run: git config --global user.name $GITHUB_USER
 
       # run on root
+      # increase from version in apckage.json
       - run:
           name: Create a new version with lerna
           command: yarn new-version
