@@ -43,7 +43,7 @@ jobs:
       # run on root
       - run:
           name: Create a new version with lerna
-          command: yarn new-versionhaah s
+          command: yarn new-version
 
       - setup_remote_docker:
           docker_layer_caching: true
