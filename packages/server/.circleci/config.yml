@@ -45,9 +45,6 @@ jobs:
           name: Create a new version with lerna
           command: yarn new-version
 
-      - setup_remote_docker:
-          docker_layer_caching: true
-
       # premium feature
       - setup_remote_docker:
           docker_layer_caching: true
