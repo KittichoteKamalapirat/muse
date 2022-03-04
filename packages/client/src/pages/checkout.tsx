@@ -210,7 +210,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                         m={2}
                         size="xs"
                         src={item.avatar}
-                        alt="creator avatar"
+                        name="creator avatar"
                       />
                       <LinkOverlay href={`/user/${item.creatorId}`}>
                         <Text>{item.creatorName}</Text>
@@ -329,7 +329,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
           right={[0, 0, 0, 0]}
           bgColor="white"
           ml={"auto"}
-          align="center"
+          alignItems="center"
           width="100%"
           maxW={[null, null, "30%", "30%"]}
           justifyContent="end"

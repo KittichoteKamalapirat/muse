@@ -12,7 +12,7 @@ export const WelcomeNav: React.FC<WelcomeNavProps> = ({ children }) => {
 
   return (
     <Box pt={4}>
-      <Box p={2} bgColor="white" ml={"auto"} align="center" width="100%">
+      <Box p={2} bgColor="white" ml={"auto"} alignItems="center" width="100%">
         <Flex
           justifyContent="space-between"
           alignItems="center"

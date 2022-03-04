@@ -252,7 +252,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
               </>
             ) : (
               <>
-                <Avatar size="xs" src={data?.me?.avatar} alt="creator avatar" />
+                <Avatar
+                  size="xs"
+                  src={data?.me?.avatar}
+                  name="creator avatar"
+                />
 
                 <Text
                   fontSize="xs"

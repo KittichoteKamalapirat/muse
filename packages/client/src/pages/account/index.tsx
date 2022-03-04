@@ -114,7 +114,7 @@ const Account: React.FC<indexProps> = ({}) => {
               m={2}
               size="2xl"
               src={meData?.me?.avatar}
-              alt="creator avatar"
+              name="creator avatar"
               border={5}
               borderStyle="solid"
               borderColor="red.400"

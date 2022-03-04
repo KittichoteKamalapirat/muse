@@ -49,7 +49,7 @@ const Post = ({}) => {
                   m={2}
                   size="sm"
                   src={data?.post.creator.avatar}
-                  alt="creator avatar"
+                  name="creator avatar"
                   border={1}
                 />
                 <Text>{data?.post.creator.username}</Text>

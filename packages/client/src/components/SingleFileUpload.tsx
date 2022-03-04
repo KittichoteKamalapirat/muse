@@ -7,6 +7,7 @@ import {
   Img,
   Text,
   Heading,
+  Image,
 } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
@@ -218,7 +219,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
         </Flex>
       ) : (
         <Flex justifyContent="center">
-          <Img
+          <Image
             src={thumbnailPreview}
             alt="image"
             boxSize="50%"
@@ -257,7 +258,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                   {!thumbnailPreview ? (
                     <PlusSquareIcon mr={2} />
                   ) : (
-                    <Img
+                    <Image
                       border="1px"
                       borderColor="black"
                       mr={2}

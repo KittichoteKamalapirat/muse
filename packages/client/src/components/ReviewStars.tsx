@@ -27,7 +27,7 @@ export const ReviewStars: React.FC<ReviewStarsProps> = ({
           return (
             <StarIcon
               key={index}
-              value={starIndex}
+              // value={starIndex}
               fontSize="1rem"
               color={reviewScore >= starIndex ? "orange" : "gray.200"}
             />

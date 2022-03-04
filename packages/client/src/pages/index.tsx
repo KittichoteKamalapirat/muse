@@ -86,7 +86,7 @@ const Index = () => {
                           m={2}
                           size="sm"
                           src={post.creator.avatar}
-                          alt="creator avatar"
+                          name="creator avatar"
                           border={1}
                         />
 

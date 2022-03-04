@@ -141,7 +141,7 @@ const Address: React.FC<addressProps> = ({}) => {
               >
                 <Box
                   textAlign="center"
-                  size="xs"
+                  fontSize="xs"
                   m={1}
                   color={primaryColor}
                   // leftIcon={<DeleteIcon />}

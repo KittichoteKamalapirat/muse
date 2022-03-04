@@ -10,7 +10,7 @@ import {
   LinkOverlay,
   Link,
 } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
+import { Button, Image } from "@chakra-ui/react";
 import { Img } from "@chakra-ui/react";
 import React from "react";
 import { CartItemStatus, UserOrdersQuery } from "../../generated/graphql";
@@ -40,7 +40,7 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                     m={2}
                     size="sm"
                     src={byCreator.avatar}
-                    alt="creator avatar"
+                    name="creator avatar"
                     border={1}
                   />
                   <Text>{byCreator.creatorName}</Text>
@@ -52,7 +52,7 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                         <Flex>
                           {!cartItem.mealkit?.images ? null : (
                             <Box flex={1}>
-                              <Img
+                              <Image
                                 src={cartItem.mealkit.images[0]}
                                 alt="image"
                                 fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"

@@ -89,7 +89,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                           m={2}
                           size="xs"
                           src={item.avatar}
-                          alt="creator avatar"
+                          name="creator avatar"
                         />
                         <LinkOverlay href={`/user/${item.creatorId}`}>
                           <Text>{item.creatorName}</Text>
@@ -106,10 +106,10 @@ const Cart: React.FC<cartProps> = ({}) => {
                               {/* show one image if there is */}
                               {!cartItem.mealkit?.images ? null : (
                                 <Box flex={1} m={1}>
-                                  <Img
+                                  <Image
                                     src={cartItem.mealkit?.images[0]}
                                     alt="image"
-                                    fallbacksrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                    fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
                                   />
                                 </Box>
                               )}
@@ -158,7 +158,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                 right={[0, 0, 0, 0]}
                 bgColor="white"
                 ml={"auto"}
-                align="center"
+                // align="center"
                 width="100%"
                 maxW={[null, null, "30%", "30%"]}
                 justifyContent="end"

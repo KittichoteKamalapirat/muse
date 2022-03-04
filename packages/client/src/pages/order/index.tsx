@@ -176,7 +176,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                             m={2}
                             size="sm"
                             src={byCreator.avatar}
-                            alt="creator avatar"
+                            name="creator avatar"
                             border={1}
                           />
                           <Text>{byCreator.creatorName}</Text>
@@ -188,7 +188,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                                 <Flex>
                                   {!cartItem.mealkit?.images ? null : (
                                     <Box flex={1}>
-                                      <Img
+                                      <Image
                                         src={cartItem.mealkit.images[0]}
                                         alt="image"
                                         fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"

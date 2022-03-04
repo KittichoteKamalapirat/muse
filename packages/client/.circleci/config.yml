@@ -52,14 +52,14 @@ jobs:
             - ./node_modules
             - ./.next/cache
 
-      - run:
-          name: "deploy to vercel"
-          working_directory: packages/client
-          command: |
-            yarn ci:vercel
-          # filters:
-          #   branches:
-          #     only: master
+      # - run:
+      #     name: "deploy to vercel"
+      #     working_directory: packages/client
+      #     command: |
+      #       yarn ci:vercel
+      #     filters:
+      #       branches:
+      #         only: master
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:

@@ -64,7 +64,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 m={2}
                 size="xl"
                 src={meData?.me?.avatar}
-                alt="creator avatar"
+                name="creator avatar"
               />
             </Box>
 
@@ -226,7 +226,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 position="fixed"
                 right="2rem"
                 bottom="5rem"
-                bgcolor="brand"
+                bgColor="brand"
                 borderRadius="50%"
                 width="2rem"
                 padding-top="100%"
