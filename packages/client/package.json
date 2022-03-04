@@ -11,12 +11,6 @@
     "postinstall": "expo-yarn-workspaces postinstall",
     "ci:vercel": "vercel --prod --token $VERCEL_TOKEN_FOR_CIRCLECI",
     "ci:docker": "docker build -t kittishane/cookknow:$VERSION . && docker push kittishane/cookknow:$VERSION && ssh shane@128.199.205.119 && docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:latest && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server latest"
-
-    
-    
-
-
-
   },
   "dependencies": {
     "@apollo/client": "^3.4.13",

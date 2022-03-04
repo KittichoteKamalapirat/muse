@@ -19,12 +19,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "packages/client/yarn.lock"}}
+            - v1-dependencies-{{ checksum "yarn.lock"}}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
           name: Install dependencies
-          working_directory: packages/client
+          # working_directory: packages/client
           command: yarn install
 
       # - run:
@@ -47,10 +47,10 @@ jobs:
           working_directory: packages/client
           command: yarn build
       - save_cache:
-          key: dependencies-{{ checksum "packages/client/yarn.lock"}}
+          key: dependencies-{{ checksum "yarn.lock"}}
           paths:
-            - packages/client/node_modules
-            - packages/client/.next/cache
+            - ./node_modules
+            - ./.next/cache
 
       - run:
           name: "deploy to vercel"

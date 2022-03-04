@@ -23,19 +23,18 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "packages/server/yarn.lock"}}
+            - v1-dependencies-{{ checksum "yarn.lock"}}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
       - run:
           name: Install dependencies
-          working_directory: packages/server
+          # working_directory: packages/server
           command: yarn install
 
       - save_cache:
-          key: dependencies-{{ checksum "packages/server/yarn.lock"}}
+          key: dependencies-{{ checksum "yarn.lock"}}
           paths:
-            - packages/client/node_modules
-            - packages/client/.next/cache
+            - ./node_modules
 
       #prepare to deploy
       - run: git config --global user.email $GITHUB_EMAIL
