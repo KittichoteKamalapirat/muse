@@ -4,7 +4,7 @@ version: 2.1
 
 # define the job to be used in the owrkflow
 jobs:
-  job1:
+  client-job1:
     docker:
       - image: cimg/node:17.6.0
         auth:
@@ -64,5 +64,5 @@ jobs:
 workflows:
   client-workflow:
     jobs:
-      - job1
+      - client-job1
 #test

@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  job1:
+  server-job1:
     docker:
       - image: cimg/node:17.6.0
         auth:
@@ -81,11 +81,9 @@ jobs:
 workflows:
   server-workflow:
     jobs:
-      - job1
+      - server-job1
 #test here too
 #test here too
-#test
-#test
 #test
 #test
 #test
