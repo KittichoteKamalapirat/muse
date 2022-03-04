@@ -47,6 +47,7 @@ jobs:
           command: yarn new-version
 
       # premium feature
+      #default version is 17.09.0-ce which gives ERROR EPERM: operation not permitted
       - setup_remote_docker:
           version: 19.03.13
           docker_layer_caching: true
@@ -60,16 +61,16 @@ jobs:
       - run:
           name: Build docker image
           # working_directory: packages/server
+
           command: yarn ci:docker
 
       # circleci_digital_ocean_cookknow private ssh key
       - add_ssh_keys:
           fingerprints:
             - "8f:6b:c1:a9:7c:d6:e6:cc:e7:c7:61:07:f9:30:35:93"
-
+      # run from root
       - run:
           name: Login and push in Dokku
-          working_directory: packages/server
           command: yarn ci:dokku
 
 # like docker build
