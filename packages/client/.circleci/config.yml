@@ -47,7 +47,7 @@ jobs:
           working_directory: packages/client
           command: yarn build
       - save_cache:
-          key: dependencies-{{ checksum "yarn.lock"}}
+          key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
             - ./.next/cache
