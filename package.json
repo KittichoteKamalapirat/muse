@@ -8,7 +8,7 @@
   },
   "name": "app",
   "scripts": {
-    "new-version": "lerna version --no-push --conventional-commits --yes",
+    "new-version": "lerna version",
     "docker:build": "docker build -t kittishane/cookknow:$VERSION .",
     "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
     "docker:push": "docker push kittishane/cookknow:$VERSION",
