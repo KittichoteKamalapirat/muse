@@ -59,7 +59,7 @@ jobs:
 
       # run from root
       - run:
-          name: Build docker image
+          name: Build docker image and push to docker hub
           # working_directory: packages/server
 
           command: yarn ci:docker
@@ -89,5 +89,3 @@ workflows:
   server-workflow:
     jobs:
       - server-job1
-#test here too
-
