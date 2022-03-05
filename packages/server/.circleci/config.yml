@@ -30,9 +30,16 @@ jobs:
           name: Install dependencies
           # working_directory: packages/server
           command: yarn install
+
+      - run:
+          name: update ubuntu
+          command: sudo apt update
       - run:
           name: Install SSH so I can run ssh-keyscan to add droplet to known hosts
           command: sudo apt install openssh-server
+      - run:
+          name: Add dokku as know host so not prompted for trust (this one  for some reasons take some time)
+          command: ssh-keyscan 128.199.205.119 >> ~/.ssh/known_hosts
 
       - save_cache:
           key: v1-dependencies-{{ checksum "yarn.lock"}}
@@ -72,9 +79,6 @@ jobs:
           fingerprints:
             - "8f:6b:c1:a9:7c:d6:e6:cc:e7:c7:61:07:f9:30:35:93"
 
-      - run:
-          name: Add dokku as know host so not prompted for trust
-          command: ssh-keyscan 128.199.205.119 >> ~/.ssh/known_hosts
       # run from root
       - run:
           name: Login and push in Dokku
