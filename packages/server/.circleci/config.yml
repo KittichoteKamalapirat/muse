@@ -81,8 +81,16 @@ jobs:
 
       # run from root
       - run:
-          name: Login and push in Dokku
-          command: yarn ci:dokku
+          name: ssh into dokku
+          command: ssh shane@128.199.205.119
+
+      - run:
+          name: pull from hub, tag, and deploy
+          command: docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:latest && echo $PASSWORD | sudo -S dokku tags:deploy server latest
+
+      # - run:
+      #     name: Login and push in Dokku
+      #     command: yarn ci:dokku
 
 # like docker build
 # - run:
