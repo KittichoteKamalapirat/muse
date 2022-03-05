@@ -32,7 +32,7 @@ jobs:
           command: yarn install
 
       - save_cache:
-          key: dependencies-{{ checksum "yarn.lock"}}
+          key: v1-dependencies-{{ checksum "yarn.lock"}}
           paths:
             - ./node_modules
 
@@ -63,6 +63,10 @@ jobs:
           # working_directory: packages/server
 
           command: yarn ci:docker
+
+      - run:
+          name: Add dokku as know host so not prompted for trust
+          command: ssh-keyscan 128.199.205.119 >> ~/.ssh/known_hosts
 
       # circleci_digital_ocean_cookknow private ssh key
       - add_ssh_keys:
