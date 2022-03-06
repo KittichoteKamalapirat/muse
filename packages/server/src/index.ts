@@ -40,36 +40,39 @@ import { FlowValidateList } from "twilio/lib/rest/studio/v2/flowValidate";
 import { S3Resolver } from "./utils/resolvers/s3";
 import { Review } from "./entities/Review";
 import { ReviewResolver } from "./resolvers/review";
+import { createTypeORMConn } from "./utils/createTypeORMConn";
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
 const main = async () => {
-  const conn = await createConnection({
-    type: "postgres",
-    host: "localhost",
-    url: process.env.DATABASE_URL,
-    port: 5432,
-    // username: "postgres",
-    // password: "chain123",
-    // database: "cookknowdb",
-    logging: true,
-    synchronize: true,
-    migrations: [path.join(__dirname, "./migrations/*")],
-    entities: [
-      User,
-      Post,
-      Upvote,
-      Address,
-      Mealkit,
-      CartItem,
-      CartItemNoti,
-      Order,
-      Payment,
-      Follow,
-      PaymentInfo,
-      Tracking,
-      Review,
-    ],
-  });
+  // const conn = await createConnection({
+  //   type: "postgres",
+  //   host: "localhost",
+  //   url: process.env.DATABASE_URL,
+  //   port: 5432,
+  //   // username: "postgres",
+  //   // password: "chain123",
+  //   // database: "cookknowdb",
+  //   logging: true,
+  //   synchronize: true,
+  //   migrations: [path.join(__dirname, "./migrations/*")],
+  //   entities: [
+  //     User,
+  //     Post,
+  //     Upvote,
+  //     Address,
+  //     Mealkit,
+  //     CartItem,
+  //     CartItemNoti,
+  //     Order,
+  //     Payment,
+  //     Follow,
+  //     PaymentInfo,
+  //     Tracking,
+  //     Review,
+  //   ],
+  // });
+
+  const conn = await createTypeORMConn();
 
   // await conn.runMigrations();
   const app = express();

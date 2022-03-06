@@ -73,7 +73,7 @@ export class User extends BaseEntity {
   isFollowed: boolean;
 
   // relatioship with profile starts
-  @Field({ nullable: true })
+  @Field(() => Address, { nullable: true })
   @OneToOne((type) => Address, (address) => address.user)
   // @JoinColumn()
   address: Address;

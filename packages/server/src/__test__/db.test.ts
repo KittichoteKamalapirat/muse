@@ -1,18 +1,24 @@
-import { createConnection } from "typeorm";
+import { v4 } from "uuid";
 import { User } from "../entities/User";
+import { createTypeORMConn } from "../utils/createTypeORMConn";
 
 describe("db tests", () => {
+  beforeAll(async () => {
+    await createTypeORMConn(); //drop a schema, config in ormconfig for test
+  });
   it("create user", async () => {
-    const connection = await createConnection({
-      type: "postgres",
-      host: "localhost",
-      url: process.env.DATABASE_URL,
-      port: 5432,
-      entities: [User],
-    });
-    const user = new User();
-    user.username = "User1";
-    user.email = "user1@gmail.com";
-    await connection.manager.save(user);
+    const uuid = v4();
+    const data = {
+      username: "User2",
+      email: "user1@gmail.com",
+      phonenumber: "0900000000",
+      password: "123",
+      isCreator: false,
+      avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
+    };
+
+    const user = User.create(data);
+    console.log(user);
+    return user.save();
   });
 });

@@ -6,14 +6,15 @@
   "main": "index.js",
   "scripts": {
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
-    "test": "NODE_ENV=test jest",
-    "ci:test": "jest NODE_ENV=test jest --ci --runInBand --detectOpenHandles --forceExit",
     "build": "tsc",
     "watch": "tsc -w",
-    "dev": "nodemon dist/index.js",
+    "dev": "NODE_ENV=development nodemon dist/index.js",
+    "test-server": "NODE_ENV=test PORT=3003 ts-node src/index.ts",
+    "test": "NODE_ENV=test jest",
     "start": "node dist/index.js",
     "start2": "ts-node src/index.ts",
-    "postinstall": "expo-yarn-workspaces postinstall"
+    "postinstall": "expo-yarn-workspaces postinstall",
+    "ci:test": "jest NODE_ENV=test jest --ci --runInBand --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "",
