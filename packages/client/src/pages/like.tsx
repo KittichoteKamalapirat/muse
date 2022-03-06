@@ -16,6 +16,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Loading } from "../components/skeletons/Loading";
 
 interface likeProps {}
 
@@ -40,7 +41,11 @@ const Like: React.FC = ({}) => {
     );
   }
   if (loading) {
-    body = <Text>Loading</Text>;
+    body = (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   } else if (!meData?.me) {
     router.push("/");
     // body = <Text>You don't have a favorite recipe</Text>;

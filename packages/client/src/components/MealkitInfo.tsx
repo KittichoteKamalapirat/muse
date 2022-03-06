@@ -18,6 +18,7 @@ import { Reviews } from "./Reviews";
 import { Layout } from "./Layout/Layout";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
+import { Loading } from "./skeletons/Loading";
 
 interface MealkitInfoProps {
   postId: number;
@@ -35,7 +36,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   }

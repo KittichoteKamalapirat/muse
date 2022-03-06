@@ -6,6 +6,7 @@ import React from "react";
 interface HeadingLayoutProps {
   heading: string;
   back?: boolean;
+  backUrl?: string;
   mt?: string;
 }
 
@@ -13,6 +14,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
   children,
   heading,
   back = true,
+  backUrl = null,
   mt,
 }) => {
   const router = useRouter();
@@ -35,6 +37,9 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
             aria-label="Search database"
             icon={<ChevronLeftIcon />}
             onClick={() => {
+              if (backUrl) {
+                return router.push(backUrl);
+              }
               router.back();
             }}
             position="fixed"

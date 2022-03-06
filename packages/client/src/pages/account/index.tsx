@@ -52,6 +52,7 @@ import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgRateIcon from "../../components/svgComponents/RateIcon";
 import SvgAccountIcon from "../../components/svgComponents/AccountIcon";
 import SvgPinIcon from "../../components/svgComponents/PinIcon";
+import { Loading } from "../../components/skeletons/Loading";
 
 interface indexProps {}
 
@@ -68,7 +69,7 @@ const Account: React.FC<indexProps> = ({}) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   } else if (!loading && !meData?.me) {

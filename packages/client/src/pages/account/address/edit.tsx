@@ -13,6 +13,7 @@ import {
 } from "../../../generated/graphql";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
+import { Loading } from "../../../components/skeletons/Loading";
 
 interface EditAddressProps {}
 
@@ -52,7 +53,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   }

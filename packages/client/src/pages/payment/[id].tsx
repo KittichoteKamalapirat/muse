@@ -28,7 +28,6 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   const { id } = router.query;
 
   // native hooks
-
   const [imgSrc, setImageSrc] = useState<string>("");
 
   // apollo hooks
@@ -79,7 +78,10 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   }
 
   return (
-    <HeadingLayout heading="Payment Detail">
+    <HeadingLayout
+      heading="Payment Detail"
+      backUrl="/order?status=PaymentPending"
+    >
       <Box mb={20}>
         <Wrapper>
           <Flex justifyContent="space-between">

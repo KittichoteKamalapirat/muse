@@ -28,7 +28,7 @@ export const Routes: React.FC<RoutesProps> = ({}) => {
         if (userString) {
           //decode
           //   setLoading(false);
-          login(); //automatically log in
+          login(); //automatically log in //fix later
         }
         //user is null
         setLoading(false); //no need to do anything

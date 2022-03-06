@@ -12,6 +12,7 @@ import {
 } from "../../../generated/graphql";
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
+import { Loading } from "../../../components/skeletons/Loading";
 
 const EditPost = ({}) => {
   const router = useRouter(); //for pushing after we finished updating
@@ -26,7 +27,7 @@ const EditPost = ({}) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   }

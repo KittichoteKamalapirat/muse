@@ -1,4 +1,4 @@
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, background } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { CartItemStatus, useUserOrdersLazyQuery } from "../generated/graphql";
 import { primaryColor, inActiveGray } from "./Variables";
@@ -25,7 +25,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
       <Box
         flex={1}
         textAlign="center"
-        borderBottom={1}
+        borderBottom={2}
         borderStyle="solid"
         borderColor={
           cartItemStatus === "PaymentPending" ? primaryColor : "white"
@@ -48,7 +48,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
       <Box
         flex={1}
         textAlign="center"
-        borderBottom={1}
+        borderBottom={2}
         borderStyle="solid"
         borderColor={cartItemStatus === "ToDeliver" ? primaryColor : "white"}
         color={cartItemStatus === "ToDeliver" ? primaryColor : inActiveGray}
@@ -64,7 +64,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
       <Box
         flex={1}
         textAlign="center"
-        borderBottom={1}
+        borderBottom={2}
         borderStyle="solid"
         borderColor={cartItemStatus === "OnDelivery" ? primaryColor : "white"}
         color={cartItemStatus === "OnDelivery" ? primaryColor : inActiveGray}
@@ -81,7 +81,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
       <Box
         flex={1}
         textAlign="center"
-        borderBottom={1}
+        borderBottom={2}
         borderStyle="solid"
         borderColor={cartItemStatus === "Delivered" ? primaryColor : "white"}
         color={cartItemStatus === "Delivered" ? primaryColor : inActiveGray}

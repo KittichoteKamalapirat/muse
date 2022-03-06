@@ -23,6 +23,7 @@ import { Wrapper } from "../../../components/Wrapper";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { useRouter } from "next/router";
 import { primaryColor } from "../../../components/Variables";
+import { Loading } from "../../../components/skeletons/Loading";
 
 interface addressProps {}
 
@@ -37,7 +38,7 @@ const Address: React.FC<addressProps> = ({}) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   }

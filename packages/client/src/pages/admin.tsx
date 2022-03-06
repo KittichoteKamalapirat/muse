@@ -29,6 +29,7 @@ import {
 import { adminColumn } from "../components/admin/adminColumn";
 import { adminData } from "../components/admin/adminData";
 import { Layout } from "../components/Layout/Layout";
+import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import {
   useAllCartItemsQuery,
@@ -81,7 +82,11 @@ const Admin: React.FC<AdminProps> = ({}) => {
   );
 
   if (loading) {
-    return <Text> Loading </Text>;
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   }
   if (error) {
     return <Text> {error.message} </Text>;

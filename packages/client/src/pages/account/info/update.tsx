@@ -12,6 +12,8 @@ import {
   useUpdateUserMutation,
 } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
+import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
 
 interface userProps {}
 
@@ -31,7 +33,11 @@ const UpdateUser: React.FC<userProps> = ({}) => {
   };
 
   if (loading) {
-    return <Text>loading ...</Text>;
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   }
   return (
     <HeadingLayout heading="Edit Profile">

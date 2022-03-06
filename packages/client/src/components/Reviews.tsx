@@ -3,7 +3,9 @@ import { Flex, Box, Text, Heading } from "@chakra-ui/layout";
 import moment from "moment";
 import React from "react";
 import { useMealkitsQuery, useReviewsQuery } from "../generated/graphql";
+import { Layout } from "./Layout/Layout";
 import { ReviewStars } from "./ReviewStars";
+import { Loading } from "./skeletons/Loading";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
 interface ReviewsProps {
@@ -16,7 +18,11 @@ export const Reviews: React.FC<ReviewsProps> = ({ mealkitId }) => {
   });
 
   if (loading) {
-    return <Text>loading</Text>;
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   }
   if (error) {
     return <Text>{error.message}</Text>;

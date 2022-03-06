@@ -11,6 +11,7 @@ import { Wrapper } from "../../components/Wrapper";
 import { MealkitInfo } from "../../components/MealkitInfo";
 import { Layout } from "../../components/Layout/Layout";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { Loading } from "../../components/skeletons/Loading";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();
@@ -19,7 +20,7 @@ const Post = ({}) => {
   if (loading) {
     return (
       <Layout>
-        <div>loading ...</div>
+        <Loading />
       </Layout>
     );
   }

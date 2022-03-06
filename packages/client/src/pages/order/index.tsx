@@ -104,7 +104,7 @@ const Order: React.FC<OrderProps> = ({}) => {
   }
 
   return (
-    <HeadingLayout heading="My order" mt={"40px"}>
+    <HeadingLayout heading="My order" mt={"40px"} backUrl="/account">
       <CartItemStatusTab
         userOrders={userOrders}
         cartItemStatus={cartItemStatus}

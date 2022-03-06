@@ -20,6 +20,8 @@ import {
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Layout } from "../components/Layout/Layout";
+import { Loading } from "../components/skeletons/Loading";
 
 interface cartProps {}
 
@@ -55,7 +57,11 @@ const Cart: React.FC<cartProps> = ({}) => {
   }, [cartItems]);
 
   if (loading) {
-    return <Text>Loading</Text>;
+    return (
+      <Layout>
+        <Loading />
+      </Layout>
+    );
   }
 
   if (!loading && !cartItems) {
