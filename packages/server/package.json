@@ -10,7 +10,7 @@
     "watch": "tsc -w",
     "dev": "NODE_ENV=development nodemon dist/index.js",
     "test-server": "NODE_ENV=test PORT=3003 ts-node src/index.ts",
-    "test": "NODE_ENV=test jest",
+    "test": "NODE_ENV=test jest ",
     "start": "node dist/index.js",
     "start2": "ts-node src/index.ts",
     "postinstall": "expo-yarn-workspaces postinstall",

@@ -1,12 +1,19 @@
 [
   {
+    "name": "production",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "logging": true,
+    "synchronize": true
+  },
+  {
     "name": "development",
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "username": "postgres",
-    "password": "chain123",
-    "database": "cookknowdb_dev",
     "entities": ["dist/entities/*.js"],
     "migrations": ["dist/migrations/*.js"],
     "logging": true,
@@ -17,9 +24,6 @@
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "username": "postgres",
-    "password": "chain123",
-    "database": "cookknowdb_test",
     "entities": ["src/entities/*.ts"],
     "migrations": ["src/migrations/*.ts"],
     "logging": false,
