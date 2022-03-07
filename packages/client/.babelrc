@@ -1,0 +1,3 @@
+{
+  "presets": ["@babel/preset-react"] // otherwise, Support for the experimental syntax 'jsx' isn't currently enabled
+}
