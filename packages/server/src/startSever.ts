@@ -1,7 +1,8 @@
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
-import "dotenv-safe/config";
+// import "dotenv-safe/config";
+import dotenv from "dotenv-safe";
 import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
@@ -26,7 +27,26 @@ import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
+
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
+
+//determine which .env file to use
+//if production -> dockerfile copy and put in .env
+switch (process.env.NODE_ENV) {
+  case "test":
+    dotenv.config({ path: `${__dirname}/../.env.test` });
+    break;
+  case "development":
+    dotenv.config({ path: `${__dirname}/../.env.dev` });
+    break;
+  default:
+    dotenv.config();
+}
+// if (process.env.NODE_ENV==="test") {
+//   dotenv.config({ path: `${__dirname}/../.env.${process.env.NODE_ENV}` });
+// } else {
+//   dotenv.config();
+// }
 
 export const startServer = async () => {
   // const conn = await createConnection({
@@ -153,9 +173,7 @@ export const startServer = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
   // console.log(process.memoryUsage());
 
-  console.log("port", process.env.PORT); //spicicy in .env
-
-  const PORT = process.env.NODE_ENV === "test" ? 0 : process.env.PORT;
+  const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
   const server = app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
   });

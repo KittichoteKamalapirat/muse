@@ -7,6 +7,7 @@ import { startServer } from "../startSever";
 import { createTypeORMConn } from "../utils/createTypeORMConn";
 
 describe("db tests", () => {
+  console.log(process.env.DATABASE_URL);
   let expressServer: Server;
   let postgresDb: Connection;
   beforeAll(async () => {
