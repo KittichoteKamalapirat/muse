@@ -6,22 +6,22 @@ import { User } from "../entities/User";
 import { startServer } from "../startSever";
 import { createTypeORMConn } from "../utils/createTypeORMConn";
 
-describe("db tests", () => {
-  console.log(process.env.DATABASE_URL);
-  let expressServer: Server;
-  let postgresDb: Connection;
-  beforeAll(async () => {
-    // const conn = await createTypeORMConn(); //drop a schema, config in ormconfig for test
-    const serverAndDb = await startServer();
-    expressServer = serverAndDb.server;
-    postgresDb = serverAndDb.connection;
-  });
+let expressServer: Server;
+let postgresDb: Connection;
 
-  afterAll((done) => {
-    postgresDb.close(); //error -> Jest did not exit one second after the test run has completed
-    expressServer.close(); //close express ? close postgres
-    done();
-  });
+beforeAll(async () => {
+  // const conn = await createTypeORMConn(); //drop a schema, config in ormconfig for test
+  const serverAndDb = await startServer();
+  expressServer = serverAndDb.server;
+  postgresDb = serverAndDb.connection;
+});
+
+afterAll(async () => {
+  await postgresDb.close; //error -> Jest did not exit one second after the test run has completed
+  await expressServer.close(); //close express ? close postgres
+});
+
+describe("db tests", () => {
   it("create user", async () => {
     const uuid = v4();
     const data = {

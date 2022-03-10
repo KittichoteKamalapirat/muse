@@ -32,50 +32,30 @@ import { S3Resolver } from "./utils/resolvers/s3";
 
 //determine which .env file to use
 //if production -> dockerfile copy and put in .env
-switch (process.env.NODE_ENV) {
-  case "test":
-    dotenv.config({ path: `${__dirname}/../.env.test` });
-    break;
-  case "development":
-    dotenv.config({ path: `${__dirname}/../.env.dev` });
-    break;
-  default:
-    dotenv.config();
-}
+
 // if (process.env.NODE_ENV==="test") {
 //   dotenv.config({ path: `${__dirname}/../.env.${process.env.NODE_ENV}` });
 // } else {
 //   dotenv.config();
 // }
 
+if (process.env.NODE_ENV) {
+  switch (process.env.NODE_ENV) {
+    case "test":
+      dotenv.config({ path: `${__dirname}/../.env.test` });
+      break;
+    case "development":
+      dotenv.config({ path: `${__dirname}/../.env.dev` });
+      break;
+    default:
+      dotenv.config({ path: `${__dirname}/../.env.test` });
+  }
+} else {
+  dotenv.config();
+}
+
 export const startServer = async () => {
-  // const conn = await createConnection({
-  //   type: "postgres",
-  //   host: "localhost",
-  //   url: process.env.DATABASE_URL,
-  //   port: 5432,
-  //   // username: "postgres",
-  //   // password: "chain123",
-  //   // database: "cookknowdb",
-  //   logging: true,
-  //   synchronize: true,
-  //   migrations: [path.join(__dirname, "./migrations/*")],
-  //   entities: [
-  //     User,
-  //     Post,
-  //     Upvote,
-  //     Address,
-  //     Mealkit,
-  //     CartItem,
-  //     CartItemNoti,
-  //     Order,
-  //     Payment,
-  //     Follow,
-  //     PaymentInfo,
-  //     Tracking,
-  //     Review,
-  //   ],
-  // });
+  console.log("This is ", process.env.NODE_ENV, "environment.");
 
   const conn = await createTypeORMConn();
 
@@ -109,13 +89,11 @@ export const startServer = async () => {
     })
   );
 
-  // const redisClient = redis.createClient（）
   app.use(
     session({
       name: COOKIE_NAME,
       store: new RedisStore({
         client: redis,
-
         disableTouch: true,
       }),
       cookie: {
@@ -168,12 +146,12 @@ export const startServer = async () => {
   //         validate: false,
   //     })
   // })
-  // Rest to test whether it is running all not
 
   apolloServer.applyMiddleware({ app, cors: false });
   // console.log(process.memoryUsage());
 
-  const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
+  //   const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
+  const PORT = parseInt(process.env.PORT);
   const server = app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
   });
