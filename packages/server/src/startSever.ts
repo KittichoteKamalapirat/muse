@@ -75,8 +75,6 @@ export const startServer = async () => {
     })
   );
   app.use(express.json());
-  app.use("/api/payment", paymentRouter);
-  app.use("/api/tracking", trackingRouter);
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
@@ -88,6 +86,9 @@ export const startServer = async () => {
       credentials: true,
     })
   );
+
+  app.use("/api/payment", paymentRouter);
+  app.use("/api/tracking", trackingRouter);
 
   app.use(
     session({

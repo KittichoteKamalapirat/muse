@@ -4,7 +4,7 @@ import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { DirectiveLocation } from "graphql";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
@@ -20,6 +20,7 @@ import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 import { isServer } from "../../util/isServer";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
 import { UnAuthorized } from "../../components/UnAuthorized";
+import useFetch from "../../utils/useFetch";
 
 interface PaymentProps {}
 
@@ -28,7 +29,6 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   const { id } = router.query;
 
   // native hooks
-  const [imgSrc, setImageSrc] = useState<string>("");
 
   // apollo hooks
   const [uploadSlip] = useUploadSlipMutation();
@@ -39,15 +39,12 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     loading,
     error,
   } = usePaymentQuery({ variables: { id: parseInt(id as string) } });
-  console.log({ id });
-  console.log({ paymentData });
 
   //functions
-  const fetchMyAPI = async () => {
-    const res = await axios(paymentData!.payment.qrUrl);
-    setImageSrc(res.data);
-  };
 
+  const { data: qrSrc, loading: qrSrcLoading } = useFetch(
+    paymentData?.payment.qrUrl as string //s3 url
+  );
   const paymentSuccess = (status: boolean): string => {
     if (status) {
       return "payment successful";
@@ -56,11 +53,48 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     }
   };
 
+  // const counter = useRef<number>(0);
+  const [counter, setCounter] = useState<number>(0);
+
+  const STARTING_MINUTES = 3;
+
+  const [seconds, setSeconds] = useState<number>(STARTING_MINUTES * 60);
+
+  //for display purpose
+  const timerMinutes = useMemo(() => {
+    return Math.floor(seconds / 60);
+  }, [seconds]);
+
+  //for display purpose
+  const timerSeconds = useMemo(() => {
+    const secondPosition = seconds % 60;
+    return secondPosition < 10 ? "0" + secondPosition : secondPosition;
+  }, [seconds]);
+  [];
+
+  const cartItemStatusUrl = `http://localhost:4000/api/payment/status/${id}`;
+
+  const { data: status, loading: statusLoading } = useFetch(cartItemStatusUrl);
+  console.log({ status });
+
   useEffect(() => {
-    if (!loading && paymentData) {
-      fetchMyAPI();
-    }
-  }, [paymentData?.payment.qrUrl]);
+    const intervalId = setInterval(() => {
+      //assign interval to a variable to clear it.
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+
+        //TODO call API
+        if (status === "all paid") {
+          // TODO change this ?
+          router.push("/order?status=PaymentPending"); //TODO push to success page
+        }
+      } else {
+        router.push("/order?status=PaymentPending");
+      }
+    }, 1000);
+
+    return () => clearInterval(intervalId); //This is important
+  }, [seconds]);
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
   if (loading) {
@@ -110,7 +144,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
 
           <Box width="80%" mx="auto" textAlign="center" my={5}>
             <Text>Scan the QR code</Text>
-            <Image src={imgSrc} alt="paymentqr" />
+            <Image src={qrSrc} alt="paymentqr" />
           </Box>
         </Wrapper>
 
@@ -143,6 +177,10 @@ const Payment: React.FC<PaymentProps> = ({}) => {
           </Button> */}
         </Flex>
       </Box>
+
+      <Heading>
+        {timerMinutes}: {timerSeconds}
+      </Heading>
 
       <SingleFileUpload
         params={id as string}

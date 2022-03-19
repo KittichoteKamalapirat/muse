@@ -70,9 +70,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     file: { path: "", name: "", size: 0, type: "" },
   });
   const [submitting, setSubmitting] = useState<boolean>(false);
-
-  console.log({ thumbnailFile });
-
   // Apollo Hooks
 
   // const [signS3] = useSignS3Mutation();
@@ -87,7 +84,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     }
 
     setThumbnailFile({ file: acceptedFiles[0] });
-    console.log(thumbnailFile.file);
 
     if (uploadSlip) {
       manuallyConfirmPayment({
@@ -102,14 +98,12 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     thumbnailFile: UploadedFileType,
     signedRequest: string
   ) => {
-    console.log("oh yeah");
-    console.log({ thumbnailFile });
     const thumbnailOptions = {
       headers: {
         "Content-Type": thumbnailFile.type,
       },
     };
-    console.log({ thumbnailOptions });
+
     await axios.put(
       signedRequest,
       thumbnailFile || autoThumbnailBlob,
@@ -142,7 +136,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
-      console.log(1);
       // S3 Video and images starts
       const response = await signSingleFileS3({
         variables: {
@@ -150,7 +143,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           filetype: thumbnailFile.file.type,
         },
       });
-      console.log(2);
       if (response.data?.signSingleFileS3) {
         const fileUrl = response.data.signSingleFileS3.fileUrl;
         const signedRequest = response.data.signSingleFileS3.signedRequest;
@@ -159,7 +151,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
 
         //have to check what operation it is
         if (uploadSlip && manuallyConfirmPayment) {
-          console.log("1111111");
           try {
             await uploadSlip({
               variables: {
@@ -191,7 +182,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           router.push("/account");
         }
 
-        console.log(3);
         setSubmitting(false);
         return;
       } else {
@@ -199,15 +189,12 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
       }
       // S3 end
     } catch (error) {
-      // console.log("errro here 2");
       console.error(error);
       return;
-      // console.log(error);
     }
   };
 
   useEffect(() => {
-    console.log({ currentUrl });
     setThumbnailPreview(currentUrl as string);
   }, [currentUrl]);
 
