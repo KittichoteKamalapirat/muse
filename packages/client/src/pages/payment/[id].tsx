@@ -1,63 +1,31 @@
-import { Button } from "@chakra-ui/button";
 import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
-import axios from "axios";
-import { DirectiveLocation } from "graphql";
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
+import { SingleFileUpload } from "../../components/SingleFileUpload";
+import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
+import { UnAuthorized } from "../../components/UnAuthorized";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {
-  useAddressQuery,
   useManuallyConfirmPaymentLazyQuery,
-  usePaymentLazyQuery,
   usePaymentQuery,
   useUploadSlipMutation,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
-import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
-import { isServer } from "../../util/isServer";
-import { SingleFileUpload } from "../../components/SingleFileUpload";
-import { UnAuthorized } from "../../components/UnAuthorized";
 import useFetch from "../../utils/useFetch";
 
 interface PaymentProps {}
 
+const STARTING_MINUTES = 3;
+
 const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();
   const { id } = router.query;
+  const cartItemStatusUrl = `http://localhost:4000/api/payment/status/${id}`;
 
   // native hooks
-
-  // apollo hooks
-  const [uploadSlip] = useUploadSlipMutation();
-  const [manuallyConfirmPayment, { data: isPaid, loading: isPaidLoading }] =
-    useManuallyConfirmPaymentLazyQuery();
-  const {
-    data: paymentData,
-    loading,
-    error,
-  } = usePaymentQuery({ variables: { id: parseInt(id as string) } });
-
-  //functions
-
-  const { data: qrSrc, loading: qrSrcLoading } = useFetch(
-    paymentData?.payment.qrUrl as string //s3 url
-  );
-  const paymentSuccess = (status: boolean): string => {
-    if (status) {
-      return "payment successful";
-    } else {
-      return "the payment failed";
-    }
-  };
-
-  // const counter = useRef<number>(0);
-  const [counter, setCounter] = useState<number>(0);
-
-  const STARTING_MINUTES = 3;
-
   const [seconds, setSeconds] = useState<number>(STARTING_MINUTES * 60);
 
   //for display purpose
@@ -72,32 +40,45 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   }, [seconds]);
   [];
 
-  const cartItemStatusUrl = `http://localhost:4000/api/payment/status/${id}`;
+  // apollo hooks
+  const [uploadSlip] = useUploadSlipMutation();
+  const [manuallyConfirmPayment, { data: isPaid, loading: isPaidLoading }] =
+    useManuallyConfirmPaymentLazyQuery();
+  const {
+    data: paymentData,
+    loading,
+    error,
+  } = usePaymentQuery({ variables: { id: parseInt(id as string) } });
 
-  const { data: status, loading: statusLoading } = useFetch(cartItemStatusUrl);
-  console.log({ status });
+  //functions
+  const { data: qrSrc, loading: qrSrcLoading } = useFetch(
+    paymentData?.payment.qrUrl as string //s3 url
+  );
+
+  // const { data: status, loading: statusLoading } = useFetch(cartItemStatusUrl);
+  const { data: paymentIsComplete, loading: paymentIsCompleteLoading } =
+    useFetch(cartItemStatusUrl);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       //assign interval to a variable to clear it.
       if (seconds > 0) {
         setSeconds(seconds - 1);
-
-        //TODO call API
-        if (status === "all paid") {
+        if (paymentIsComplete) {
           // TODO change this ?
           router.push("/order?status=PaymentPending"); //TODO push to success page
+          setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
         }
-      } else {
-        router.push("/order?status=PaymentPending");
       }
     }, 1000);
 
-    return () => clearInterval(intervalId); //This is important
+    return () => {
+      clearInterval(intervalId);
+    }; //This is important
   }, [seconds]);
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
-  if (loading) {
+  if (loading || paymentIsCompleteLoading || qrSrcLoading) {
     return (
       <Wrapper>
         <PaymentSkeleton />

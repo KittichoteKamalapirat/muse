@@ -4,7 +4,7 @@ export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -583,6 +583,7 @@ export type Query = {
   orderNotis: Array<CartItemNoti>;
   payment: Payment;
   paymentInfo?: Maybe<PaymentInfo>;
+  paymentIsComplete: Scalars['Boolean'];
   post?: Maybe<Post>;
   posts: PaginatedPosts;
   postsByCreator: Array<Post>;
@@ -633,6 +634,11 @@ export type QueryMealkitsArgs = {
 
 export type QueryPaymentArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryPaymentIsCompleteArgs = {
+  paymentId: Scalars['Int'];
 };
 
 
@@ -1165,6 +1171,13 @@ export type PaymentQueryVariables = Exact<{
 
 
 export type PaymentQuery = { __typename?: 'Query', payment: { __typename?: 'Payment', id: number, qrUrl: string, slipUrl?: Maybe<string>, amount: number } };
+
+export type PaymentIsCompleteQueryVariables = Exact<{
+  paymentId: Scalars['Int'];
+}>;
+
+
+export type PaymentIsCompleteQuery = { __typename?: 'Query', paymentIsComplete: boolean };
 
 export type PostQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -3152,6 +3165,39 @@ export function usePaymentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pa
 export type PaymentQueryHookResult = ReturnType<typeof usePaymentQuery>;
 export type PaymentLazyQueryHookResult = ReturnType<typeof usePaymentLazyQuery>;
 export type PaymentQueryResult = Apollo.QueryResult<PaymentQuery, PaymentQueryVariables>;
+export const PaymentIsCompleteDocument = gql`
+    query PaymentIsComplete($paymentId: Int!) {
+  paymentIsComplete(paymentId: $paymentId)
+}
+    `;
+
+/**
+ * __usePaymentIsCompleteQuery__
+ *
+ * To run a query within a React component, call `usePaymentIsCompleteQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePaymentIsCompleteQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePaymentIsCompleteQuery({
+ *   variables: {
+ *      paymentId: // value for 'paymentId'
+ *   },
+ * });
+ */
+export function usePaymentIsCompleteQuery(baseOptions: Apollo.QueryHookOptions<PaymentIsCompleteQuery, PaymentIsCompleteQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PaymentIsCompleteQuery, PaymentIsCompleteQueryVariables>(PaymentIsCompleteDocument, options);
+      }
+export function usePaymentIsCompleteLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PaymentIsCompleteQuery, PaymentIsCompleteQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PaymentIsCompleteQuery, PaymentIsCompleteQueryVariables>(PaymentIsCompleteDocument, options);
+        }
+export type PaymentIsCompleteQueryHookResult = ReturnType<typeof usePaymentIsCompleteQuery>;
+export type PaymentIsCompleteLazyQueryHookResult = ReturnType<typeof usePaymentIsCompleteLazyQuery>;
+export type PaymentIsCompleteQueryResult = Apollo.QueryResult<PaymentIsCompleteQuery, PaymentIsCompleteQueryVariables>;
 export const PostDocument = gql`
     query Post($id: Int!) {
   post(id: $id) {

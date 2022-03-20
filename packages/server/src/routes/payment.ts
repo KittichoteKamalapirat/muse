@@ -54,19 +54,15 @@ router.get("/status/:id", async (req, res) => {
   //order has paymentId
   //cartItem has order Id
   const { id: paymentId } = req.params;
-  console.log({ paymentId });
   const order = await Order.findOne({ where: { paymentId } });
-
   const cartItems = await CartItem.find({ where: { orderId: order?.id } });
-
   const paidItems = cartItems.filter((item) => {
     return item.status === CartItemStatus.ToDeliver;
   });
-
   if (paidItems.length === cartItems.length) {
-    res.send("all paid");
+    res.send(true);
   } else {
-    res.send("not all paid");
+    res.send(false);
   }
 });
 
