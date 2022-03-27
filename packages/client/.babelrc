@@ -1,4 +1,0 @@
-{
-  "presets": ["@babel/preset-react", "@babel/preset-typescript"] // otherwise, Support for the experimental syntax 'jsx' isn't currently enabled
-}
-//should I add
