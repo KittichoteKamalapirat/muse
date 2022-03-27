@@ -57,9 +57,20 @@ jobs:
       #     working_directory: packages/client
       #     command: |
       #       yarn ci:vercel
+      #       curl -X POSTT VERCEL_DEPLOY_HOOK_PROD
       #     filters:
       #       branches:
       #         only: master
+
+      - run:
+          name: "deploy a test-master branch to test.cookknow.com"
+          working_directory: packages/client
+          command: |
+            curl -X POST VERCEL_DEPLOY_HOOK_TEST
+          filters:
+            branches:
+              only: test-master
+
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:
