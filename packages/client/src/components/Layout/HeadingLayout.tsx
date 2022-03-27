@@ -38,7 +38,7 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
             icon={<ChevronLeftIcon />}
             onClick={() => {
               if (backUrl) {
-                return router.push(backUrl);
+                router.push(backUrl);
               }
               router.back();
             }}

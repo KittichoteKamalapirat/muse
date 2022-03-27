@@ -1,5 +1,6 @@
-FROM node:14.17.4
-# FROM --platform=linux/amd64 node:14.17.4
+# FROM node:14.17.4
+#if not specified, sometimes it kinda random
+FROM --platform=linux/amd64 node:14.17.4 
 
 
 # Create app directory
@@ -18,6 +19,8 @@ COPY yarn.lock ./
 RUN yarn install 
 
 COPY ./packages/server ./packages/server
+#if not copy -> TypeORMError: No connection options were found in any orm configuration files.
+COPY ./ormconfig.json ./ormconfig.json 
 COPY ./packages/server/.env.production ./packages/server/.env
 # ENV GENERATE_SOURCEMAP=false
 # ENV NODE_OPTIONS=--max-old-space-size=16384

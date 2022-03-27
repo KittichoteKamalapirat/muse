@@ -48,14 +48,18 @@ if (process.env.NODE_ENV) {
       dotenv.config({ path: `${__dirname}/../.env.dev` });
       break;
     default:
-      dotenv.config({ path: `${__dirname}/../.env.test` });
+      dotenv.config({ path: `${__dirname}/../.env` }); // default to .env for production in docker?
   }
 } else {
   dotenv.config();
 }
 
 export const startServer = async () => {
-  console.log("This is ", process.env.NODE_ENV, "environment.");
+  console.log("This is", process.env.NODE_ENV, "environment.");
+  console.log("CORS origin", process.env.CORS_ORIGIN);
+  console.log("db url", process.env.DATABASE_URL);
+  console.log("port", process.env.PORT);
+  console.log("redis url", process.env.REDIS_URL);
 
   const conn = await createTypeORMConn();
 
