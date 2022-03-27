@@ -57,7 +57,7 @@ jobs:
       #     working_directory: packages/client
       #     command: |
       #       yarn ci:vercel
-      #       curl -X POSTT VERCEL_DEPLOY_HOOK_PROD
+      #       curl -X POSTT $VERCEL_DEPLOY_HOOK_PROD
       #     filters:
       #       branches:
       #         only: master
@@ -66,7 +66,7 @@ jobs:
           name: "deploy a test-master branch to test.cookknow.com"
           working_directory: packages/client
           command: |
-            curl -X POST VERCEL_DEPLOY_HOOK_TEST
+            curl -X POST $VERCEL_DEPLOY_HOOK_TEST
           filters:
             branches:
               only: test-master
