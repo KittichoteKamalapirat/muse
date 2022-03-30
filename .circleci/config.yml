@@ -23,7 +23,7 @@ workflows:
     jobs:
       - config-splitting/setup-dynamic-config:
           force-all: << pipeline.parameters.force-all >>
-          base-revision: master
+          base-revision: test-master
           # if pitch is modified, the job for pitch will run
           # similarly, if vulcan is modified, the job for vulcan will run
           modules: |
