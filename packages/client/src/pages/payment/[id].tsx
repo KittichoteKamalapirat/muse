@@ -23,7 +23,7 @@ const STARTING_MINUTES = 3;
 const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();
   const { id } = router.query;
-  const cartItemStatusUrl = `http://localhost:4000/api/payment/status/${id}`;
+  const cartItemStatusUrl = `http://localhost:4000/api/payment/status/${id}`; //TODO
 
   // native hooks
   const [seconds, setSeconds] = useState<number>(STARTING_MINUTES * 60);

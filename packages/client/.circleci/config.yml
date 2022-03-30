@@ -32,6 +32,19 @@ jobs:
       #     working_directory: packages/client
       #     command: |
       #       yarn test
+
+      - run:
+          name: start server, start Next app, and run cypress
+          working_directory: /packages/server
+          command: |
+          
+#       run a server
+            tsc
+            yarn start:ci 
+            cd ../vulcan
+#       run a client and cypress            
+            yarn cp:run
+
       # name: "run integration test"
       # command: |
       # yarn cypress run --project ./spec
@@ -62,6 +75,7 @@ jobs:
       #       branches:
       #         only: master
 
+      # deploy test-master branch, VVERCEL_DEPLOY_HOOK_TEST is where the test.cookknow.com is
       - run:
           name: "deploy a test-master branch to test.cookknow.com"
           working_directory: packages/client

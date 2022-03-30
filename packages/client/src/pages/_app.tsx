@@ -4,6 +4,8 @@ import React from "react";
 import "../components/App.css";
 
 function MyApp({ Component, pageProps }: any) {
+  console.log("NEXT JS on", process.env.NODE_ENV, "environment");
+  console.log("API URL:", process.env.NEXT_PUBLIC_SERVER_URL);
   return (
     <ChakraProvider resetCSS theme={theme}>
       <ColorModeProvider
