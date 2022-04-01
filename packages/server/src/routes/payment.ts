@@ -52,6 +52,11 @@ router.post("/scb-confirm", async (req, res) => {
   }
 });
 
+//url: server.cookknow.com/api/payment/test
+router.post("/test", async (req, res) => {
+  console.log("test");
+});
+
 //for frontend to query with setInterval
 //url: server.cookknow.com/api/payment/cart-item-status/:id
 router.get("/status/:id", async (req, res) => {

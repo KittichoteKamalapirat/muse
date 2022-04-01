@@ -59,23 +59,23 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   const { data: paymentIsComplete, loading: paymentIsCompleteLoading } =
     useFetch(cartItemStatusUrl);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      //assign interval to a variable to clear it.
-      if (seconds > 0) {
-        setSeconds(seconds - 1);
-        if (paymentIsComplete) {
-          // TODO change this ?
-          router.push("/order?status=PaymentPending"); //TODO push to success page
-          setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
-        }
-      }
-    }, 1000000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     //assign interval to a variable to clear it.
+  //     if (seconds > 0) {
+  //       setSeconds(seconds - 1);
+  //       if (paymentIsComplete) {
+  //         // TODO change this ?
+  //         router.push("/order?status=PaymentPending"); //TODO push to success page
+  //         setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
+  //       }
+  //     }
+  //   }, 1000000);
 
-    return () => {
-      clearInterval(intervalId);
-    }; //This is important
-  }, [seconds]);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   }; //This is important
+  // }, [seconds]);
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
   if (loading || paymentIsCompleteLoading || qrSrcLoading) {
