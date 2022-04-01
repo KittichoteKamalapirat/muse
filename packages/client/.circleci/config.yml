@@ -36,13 +36,14 @@ jobs:
       - run:
           name: start server, start Next app, and run cypress
           working_directory: /packages/server
+          # run a server (build and run nodemon)
+          # run a client
+          # run cypress
           command: |
-          
-#       run a server (build and run nodemon)
             tsc
             yarn start:ci 
             cd ../client
-#       run a client and run cypress            
+
             yarn start:ci
             yarn cypress:run
 
