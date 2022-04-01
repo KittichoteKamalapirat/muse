@@ -55,9 +55,8 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     paymentData?.payment.qrUrl as string //s3 url
   );
 
-  // const { data: status, loading: statusLoading } = useFetch(cartItemStatusUrl);
-  const { data: paymentIsComplete, loading: paymentIsCompleteLoading } =
-    useFetch(cartItemStatusUrl);
+  // const { data: paymentIsComplete, loading: paymentIsCompleteLoading } =
+  //   useFetch(cartItemStatusUrl);
 
   // useEffect(() => {
   //   const intervalId = setInterval(() => {
@@ -78,7 +77,11 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   // }, [seconds]);
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
-  if (loading || paymentIsCompleteLoading || qrSrcLoading) {
+  if (
+    loading ||
+    // || paymentIsCompleteLoading
+    qrSrcLoading
+  ) {
     return (
       <Wrapper>
         <PaymentSkeleton />

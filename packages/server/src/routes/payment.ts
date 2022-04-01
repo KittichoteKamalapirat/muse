@@ -53,8 +53,9 @@ router.post("/scb-confirm", async (req, res) => {
 });
 
 //url: server.cookknow.com/api/payment/test
-router.post("/test", async (req, res) => {
-  console.log("test");
+router.get("/test", async (req, res) => {
+  console.log("Hello from server, api route");
+  res.send("Hello from server, api route");
 });
 
 //for frontend to query with setInterval
