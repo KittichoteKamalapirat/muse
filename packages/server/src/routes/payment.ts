@@ -14,6 +14,8 @@ router.post("/scb-confirm", async (req, res) => {
     console.log(req);
 
     const ref1 = parseInt(req.body.billPaymentRef1);
+    console.log("ref1");
+    console.log(ref1);
 
     // await CartItem.update(
     //   { orderId: ref1 },
@@ -38,14 +40,16 @@ router.post("/scb-confirm", async (req, res) => {
     //have to send back to SCB
 
     console.log("send back to SCB");
-
-    res.send({
+    const response = {
       resCode: "00",
       "resDesc ": "success",
-      transactionId: "xxx",
-      confirmId: "xxx",
-    });
+      transactionId: req.body.transactionId,
+      confirmId: "xxx", //TODO change later
+    };
 
+    console.log("response");
+    console.log(response);
+    res.send(response);
     res.end;
   } catch (error) {
     console.log(error);
