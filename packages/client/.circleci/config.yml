@@ -38,12 +38,13 @@ jobs:
           working_directory: /packages/server
           command: |
           
-#       run a server
+#       run a server (build and run nodemon)
             tsc
             yarn start:ci 
-            cd ../vulcan
-#       run a client and cypress            
-            yarn cp:run
+            cd ../client
+#       run a client and run cypress            
+            yarn start:ci
+            yarn cypress:run
 
       # name: "run integration test"
       # command: |
@@ -64,16 +65,6 @@ jobs:
           paths:
             - ./node_modules
             - ./.next/cache
-
-      # - run:
-      #     name: "deploy to vercel"
-      #     working_directory: packages/client
-      #     command: |
-      #       yarn ci:vercel
-      #       curl -X POSTT $VERCEL_DEPLOY_HOOK_PROD
-      #     filters:
-      #       branches:
-      #         only: master
 
       # deploy test-master branch, VVERCEL_DEPLOY_HOOK_TEST is where the test.cookknow.com is
       - run:

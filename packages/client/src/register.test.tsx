@@ -1,7 +1,7 @@
 import { cleanup, render, screen } from "@testing-library/react";
-import { Register } from "./register";
+import { Register } from "./pages/register";
 import { MockedProvider } from "@apollo/client/testing";
-import { PostsDocument } from "../generated/graphql";
+import { PostsDocument } from "./generated/graphql";
 
 describe("register", () => {
   afterEach(cleanup);

@@ -70,7 +70,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
           setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
         }
       }
-    }, 1000);
+    }, 1000000);
 
     return () => {
       clearInterval(intervalId);

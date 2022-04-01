@@ -20,7 +20,7 @@ import { Payment } from "../entities/Payment";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-import { createScbQr, scbToken } from "./payment";
+import { createScbQr } from "./payment";
 import axios from "axios";
 import { s3Bucket } from "../constants";
 import { User } from "../entities/User";
@@ -94,11 +94,7 @@ export class OrderResolver {
       },
     };
     // qr
-    const base64raw = await createScbQr(
-      grossOrder,
-      req.session.userId!,
-      order.id
-    );
+    const base64raw = await createScbQr(grossOrder, order.id);
     const base64Text = `data:image/png;base64, ${base64raw.data.qrImage}`;
     // await axios.put(signedRequest, image, options);
     await axios.put(signedRequest, base64Text, options);

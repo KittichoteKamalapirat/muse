@@ -1,7 +1,12 @@
 import fetch from "node-fetch";
 // import generatePayload from "promptpay-qr";
-import { BILLER_ID, SCB_API_KEY } from "../constants";
-import { SCB_API_SECRET } from "../constants";
+import {
+  BILLER_ID,
+  GENERATE_SCB_ACCESS_TOKEN_URL_UAT,
+  REQUEST_CREATE_SCB_QR30_URL_UAT,
+  SCB_API_KEY_UAT,
+} from "../constants";
+import { SCB_API_SECRET_UAT } from "../constants";
 import {
   Arg,
   Ctx,
@@ -122,27 +127,24 @@ class ConfirmationResponse {
   data: ConfirmData;
 }
 
-export const scbToken = async () => {
+export const getScbToken = async () => {
   try {
     const authentication_headers = {
       headers: {
         "Content-Type": "application/json",
-        resourceOwnerId: SCB_API_KEY,
-        requestUId: "later",
+        resourceOwnerId: SCB_API_KEY_UAT,
+        requestUId: "uniqueIdentifier",
         // "accept-language": "EN", //or "TH"
       },
       method: "POST",
       body: JSON.stringify({
-        applicationKey: SCB_API_KEY,
-        applicationSecret: SCB_API_SECRET,
-        // mode: "raw",
-        // raw: "",
+        applicationKey: SCB_API_KEY_UAT,
+        applicationSecret: SCB_API_SECRET_UAT,
       }),
     };
-    const response = await fetch(
-      "https://api-sandbox.partners.scb/partners/sandbox/v1/oauth/token",
-      { ...authentication_headers }
-    );
+    const response = await fetch(GENERATE_SCB_ACCESS_TOKEN_URL_UAT, {
+      ...authentication_headers,
+    });
     // const body = await response.text();
     const data: any = await response.json();
     const token = data.data.accessToken;
@@ -152,40 +154,51 @@ export const scbToken = async () => {
   }
 };
 
-export const createScbQr = async (
-  amount: number,
-  userId: string,
-  orderId: number
-) => {
+export const createScbQr = async (amount: number, orderId: number) => {
   try {
-    const token = await scbToken();
+    const token = await getScbToken();
     console.log({ token });
     const qr_headers = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "accept-language": "EN", //or "TH"
+        // authorization: `Bearer ${token}`,
         authorization: `Bearer ${token}`,
-        requestUId: "later",
-        resourceOwnerId: SCB_API_KEY,
+        requestUId: "uniqueIdentifier",
+        // resourceOwnerId: SCB_API_KEY,
+        resourceOwnerId: SCB_API_KEY_UAT,
       },
 
+      // comment out code before testing with scb
+      // body: JSON.stringify({ =>
+      //   qrType: "PP", //QR30
+      //   ppType: "BILLERID", //change later
+      //   ppId: BILLER_ID,
+      //   amount: amount,
+      //   ref1: orderId.toString(),
+      //   // ref1: "REFERENCE1",
+      //   // ref2: "REFERENCE2",
+      //   // ref2: orderId.toString(),
+      //   ref3: "SCB", // -> NEED UNTIL THIS
+      // }),
+
       body: JSON.stringify({
-        qrType: "PP", //QR30
+        qrType: "PP", //somehow meaning QR30
         ppType: "BILLERID", //change later
-        ppId: BILLER_ID,
+        ppId: "110330017933201", //Partners can get on merchant profile of their application.
         amount: amount,
         ref1: orderId.toString(),
-        // ref1: "REFERENCE1",
-        // ref2: "REFERENCE2",
-        // ref2: orderId.toString(),
-        ref3: "SCB", // -> NEED UNTIL THIS
+        ref2: "PLACEHOLDER", //ref2 is also required since I applied like to, number or UPPERCASE string less length <= 20
+        ref3: "CKN", // -> NEED UNTIL THIS
       }),
     };
-    const response = await fetch(
-      "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create",
-      { ...qr_headers }
-    );
+
+    console.log("qr headers");
+    console.log(qr_headers);
+    const response = await fetch(REQUEST_CREATE_SCB_QR30_URL_UAT, {
+      ...qr_headers,
+    });
     console.log({ response });
 
     const data: any = await response.json();
@@ -242,10 +255,10 @@ export class PaymentResolver {
     @Arg("sendingBank") sendingBank: string
   ): Promise<ConfirmationResponse | undefined> {
     try {
-      const token = await scbToken();
+      const token = await getScbToken();
       const requestOptions = {
         headers: {
-          resourceOwnerId: SCB_API_KEY,
+          resourceOwnerId: SCB_API_KEY_UAT,
           requestUId: "later",
           authorization: `Bearer ${token}`,
         },
