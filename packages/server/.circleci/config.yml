@@ -84,7 +84,7 @@ jobs:
       # run from root
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
-          command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:latest && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
+          command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
           filters:
             branches:
               only: master
