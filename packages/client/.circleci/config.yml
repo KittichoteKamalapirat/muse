@@ -40,10 +40,10 @@ jobs:
           # run a client
           # run cypress
           command: |
+            yarn global add typescript
             tsc
             yarn start:ci 
             cd ../client
-
             yarn start:ci
             yarn cypress:run
 

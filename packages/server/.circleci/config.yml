@@ -21,6 +21,46 @@ jobs:
 
     steps:
       - checkout
+      - run:
+          name: Install dependencies
+          # working_directory: packages/server
+          command: yarn install
+       - run:
+          name: compile typescript and start server
+          working_directory: packages/server
+          # run a server (build and run nodemon)
+          # run a client
+          # run cypress
+          command: |
+            yarn global add typescript
+            tsc
+
+        - run: 
+          name: run jest
+          command: yarn test
+
+
+  server-deploy-prod:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: cimg/postgres:14.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: chain123
+          POSTGRES_DB: cookknowdb_test
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    steps:
+      - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "yarn.lock"}}
@@ -79,9 +119,6 @@ jobs:
           name: Build docker image and push to docker hub
           # working_directory: packages/server
           command: yarn ci:docker
-          filters:
-            branches:
-              only: master
 
       # circleci_digital_ocean_cookknow private ssh key
       - add_ssh_keys:
@@ -92,9 +129,7 @@ jobs:
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
-          filters:
-            branches:
-              only: master
+          
 
       # - run:
       #     name: Login and push in Dokku
@@ -114,6 +149,14 @@ jobs:
 #     "ci:docker": "npm run docker:build && npm run docker:login && npm run docker:push"
 
 workflows:
+  version: 2
   server-workflow:
     jobs:
       - server-test
+      - server-deploy-prod
+        name: 🚀 Deploy to production!
+        filters:
+            branches:
+              only: master
+        
+
