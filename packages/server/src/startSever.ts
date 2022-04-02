@@ -42,10 +42,16 @@ import { S3Resolver } from "./utils/resolvers/s3";
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
     case "test":
-      dotenv.config({ path: `${__dirname}/../.env.test` });
+      dotenv.config({
+        path: `${__dirname}/../.env.test`,
+        allowEmptyValues: true,
+      });
       break;
     case "development":
-      dotenv.config({ path: `${__dirname}/../.env.dev` });
+      dotenv.config({
+        path: `${__dirname}/../.env.dev`,
+        allowEmptyValues: true,
+      });
       break;
     default:
       dotenv.config({ path: `${__dirname}/../.env` }); // default to .env for production in docker?
@@ -86,7 +92,12 @@ export const startServer = async () => {
   app.set("trust proxy", 1); //make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
     cors({
-      origin: [process.env.CORS_ORIGIN, "http://localhost:19006"], //localhost 3000 and mobile
+      origin: [
+        process.env.CORS_ORIGIN,
+        process.env.CORS_ORIGIN_PROD,
+        process.env.CORS_ORIGIN_TEST,
+        "http://localhost:19006",
+      ], //localhost 3000 and mobile
       credentials: true,
     })
   );
