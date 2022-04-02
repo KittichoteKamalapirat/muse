@@ -35,10 +35,9 @@ jobs:
           yarn global add typescript
           tsc
 
-      - run: 
+      - run:
         name: run jest
         command: yarn test
-
 
   server-deploy-prod:
     docker:
@@ -129,7 +128,6 @@ jobs:
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
-          
 
       # - run:
       #     name: Login and push in Dokku
@@ -153,10 +151,8 @@ workflows:
   server-workflow:
     jobs:
       - server-test
-      - server-deploy-prod
+      - server-deploy-prod:
         name: 🚀 Deploy to production!
         filters:
-            branches:
-              only: master
-        
-
+          branches:
+            only: master
