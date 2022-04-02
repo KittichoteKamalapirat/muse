@@ -25,19 +25,19 @@ jobs:
           name: Install dependencies
           # working_directory: packages/server
           command: yarn install
-       - run:
-          name: compile typescript and start server
-          working_directory: packages/server
-          # run a server (build and run nodemon)
-          # run a client
-          # run cypress
-          command: |
-            yarn global add typescript
-            tsc
+      - run:
+        name: compile typescript and start server
+        working_directory: packages/server
+        # run a server (build and run nodemon)
+        # run a client
+        # run cypress
+        command: |
+          yarn global add typescript
+          tsc
 
-        - run: 
-          name: run jest
-          command: yarn test
+      - run: 
+        name: run jest
+        command: yarn test
 
 
   server-deploy-prod:
