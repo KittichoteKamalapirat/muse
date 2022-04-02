@@ -152,12 +152,12 @@ workflows:
   server-workflow:
     jobs:
       - server-test:
-          name: Run jest test
+          name: 🧪 Run jest test
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
           requires:
-            - server-test
+            - 🧪 Run jest test
           filters:
             branches:
               only: master
