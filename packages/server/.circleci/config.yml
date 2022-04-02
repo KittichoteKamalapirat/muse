@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   server-test:
     docker:
@@ -151,11 +152,12 @@ workflows:
   server-workflow:
     jobs:
       - server-test:
-        name: Run jest test
+          name: Run jest test
+
       - server-deploy-prod:
-        name: 🚀 Deploy to production!
-        requires:
-          - server-test
-        filters:
-          branches:
-            only: master
+          name: 🚀 Deploy to production!
+          requires:
+            - server-test
+          filters:
+            branches:
+              only: master
