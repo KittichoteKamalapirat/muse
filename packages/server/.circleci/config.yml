@@ -150,7 +150,8 @@ workflows:
   version: 2
   server-workflow:
     jobs:
-      - server-test
+      - server-test:
+        name: Run jest test
       - server-deploy-prod:
         name: 🚀 Deploy to production!
         filters:
