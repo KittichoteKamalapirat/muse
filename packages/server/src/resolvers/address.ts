@@ -10,7 +10,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { Address } from "../entities/Address";
+import { Address } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 

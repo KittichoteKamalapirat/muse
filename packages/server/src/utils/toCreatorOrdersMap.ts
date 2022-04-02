@@ -1,7 +1,5 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { Address } from "../entities/Address";
-import { CartItem } from "../entities/CartItem";
-import { Tracking } from "../entities/Tracking";
+import { Address, CartItem, Tracking } from "../entities";
 
 //format = array by orderId
 //format = array of creator,avatar cartItems

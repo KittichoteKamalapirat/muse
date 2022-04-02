@@ -1,11 +1,6 @@
 import { Box, Text } from "@chakra-ui/layout";
 import React from "react";
-import {
-  CartItem,
-  MappedCreatorOrders,
-  Tracking,
-} from "../../generated/graphql";
-import { mappedCartItemsByOrderResult } from "../../util/toMyOrderByOrderIdMap";
+import { Tracking } from "../../generated/graphql";
 
 interface TrackingDetailProps {
   tracking: Partial<Tracking>;

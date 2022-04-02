@@ -1,9 +1,6 @@
 import { Router } from "express";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { CartItemNoti } from "../entities/CartItemNoti";
-import { Order } from "../entities/Order";
-import { Tracking } from "../entities/Tracking";
-
+import { CartItem, Order } from "../entities/";
+import { CartItemStatus } from "../entities/CartItem";
 const router = Router();
 
 //url: server.cookknow.com/api/payment/scb-confirm

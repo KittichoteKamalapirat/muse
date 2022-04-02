@@ -1,31 +1,29 @@
-import { User } from "../entities/User";
+import bcrypt from "bcrypt";
 import {
   Arg,
   Ctx,
-  Root,
   Field,
   FieldResolver,
+  InputType,
+  Int,
   Mutation,
   ObjectType,
   Query,
   Resolver,
+  Root,
   UseMiddleware,
-  InputType,
-  Int,
 } from "type-graphql";
-import { MyContext } from "../types";
-import { v4 } from "uuid";
 import { getConnection } from "typeorm";
-import bcrypt from "bcrypt";
-import { isAuth } from "../middlware/isAuth";
-import { Follow } from "../entities/Follow";
+import { v4 } from "uuid";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
-import { UsernamePasswordInput } from "./UsernamePasswordInput";
-import { validateRegister } from "../utils/validateRegister";
-import { sendEmail } from "../utils/sendEmail";
+import Follow from "../entities/Follow";
+import { Mealkit, User } from "../entities/";
+import { isAuth } from "../middlware/isAuth";
+import { MyContext } from "../types";
 import { FieldError } from "../utils/FieldError";
-import { Mealkit } from "../entities/Mealkit";
-import { truncate } from "fs";
+import { sendEmail } from "../utils/sendEmail";
+import { validateRegister } from "../utils/validateRegister";
+import { UsernamePasswordInput } from "./UsernamePasswordInput";
 
 // For User
 @ObjectType()

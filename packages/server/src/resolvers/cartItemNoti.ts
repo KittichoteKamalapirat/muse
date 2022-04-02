@@ -1,15 +1,6 @@
-import { Message } from "twilio/lib/twiml/MessagingResponse";
-import {
-  Ctx,
-  FieldResolver,
-  Mutation,
-  Query,
-  Resolver,
-  Root,
-  UseMiddleware,
-} from "type-graphql";
+import { Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItemNoti } from "../entities/CartItemNoti";
+import { CartItemNoti } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 

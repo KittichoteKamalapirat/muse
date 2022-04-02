@@ -9,8 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItem } from "./CartItem";
-import { Order } from "./Order";
+import { CartItem } from "./";
 
 // timlines => array of Timelin
 // timeline => aray of detailtimelindedetail
@@ -39,7 +38,7 @@ export class TimelineDetail {
 
 @ObjectType()
 @Entity()
-export class Tracking extends BaseEntity {
+class Tracking extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
@@ -214,3 +213,5 @@ export class Tracking extends BaseEntity {
 // },
 
 // }
+
+export default Tracking;

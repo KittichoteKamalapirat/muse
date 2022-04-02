@@ -4,7 +4,35 @@ version: 2.1
 
 # define the job to be used in the owrkflow
 jobs:
-  client-job1:
+  client-test:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          # working_directory: packages/client
+          command: yarn install
+
+      - run:
+          name: conpile typescript, start server, start Next app, and run cypress
+          working_directory: packages/server
+          # run a server (build and run nodemon)
+          # run a client
+          # run cypress
+          command: |
+            yarn global add typescript
+            tsc
+            yarn start:ci 
+            cd ../client
+            yarn start:ci
+            yarn cypress:run
+
+  client-deploy-prod:
     docker:
       - image: cimg/node:17.6.0
         auth:
@@ -32,20 +60,6 @@ jobs:
       #     working_directory: packages/client
       #     command: |
       #       yarn test
-
-      - run:
-          name: start server, start Next app, and run cypress
-          working_directory: packages/server
-          # run a server (build and run nodemon)
-          # run a client
-          # run cypress
-          command: |
-            yarn global add typescript
-            tsc
-            yarn start:ci 
-            cd ../client
-            yarn start:ci
-            yarn cypress:run
 
       # name: "run integration test"
       # command: |
@@ -81,5 +95,13 @@ jobs:
 workflows:
   client-workflow:
     jobs:
-      - client-job1
+      - client-test:
+          name: 🔬 Run jest and cypress
+      - client-deploy-prod:
+          name: 🌍 Deploy to production!
+          requires:
+            - 🔬 Run jest and cypress
+          filters:
+            branches:
+              only: master
 #test

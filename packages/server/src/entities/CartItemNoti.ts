@@ -9,11 +9,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItem } from "./CartItem";
+import { CartItem } from "./";
 
 @Entity()
 @ObjectType()
-export class CartItemNoti extends BaseEntity {
+class CartItemNoti extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
@@ -53,3 +53,5 @@ export class CartItemNoti extends BaseEntity {
   @Field()
   updatedAt: Date;
 }
+
+export default CartItemNoti;

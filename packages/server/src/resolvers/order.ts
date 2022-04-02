@@ -1,40 +1,32 @@
+import axios from "axios";
 import {
   Arg,
   Ctx,
   Field,
-  ID,
   InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   registerEnumType,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { getConnection, IsNull } from "typeorm";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { Mealkit } from "../entities/Mealkit";
-import { Order } from "../entities/Order";
-import { Payment } from "../entities/Payment";
+import { getConnection } from "typeorm";
+import { s3Bucket } from "../constants";
+import { CartItemStatus } from "../entities/CartItem";
+import { CartItemNoti, Order, Payment, CartItem } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-import { createScbQr } from "./payment";
-import axios from "axios";
-import { s3Bucket } from "../constants";
-import { User } from "../entities/User";
-import { Address } from "../entities/Address";
-import { Tracking } from "../entities/Tracking";
 import {
-  toCreatorOrdersMap,
   MappedCreatorOrders,
+  toCreatorOrdersMap,
 } from "../utils/toCreatorOrdersMap";
 import {
   CartItemsByOrderFormat,
   toUserOrdersMap,
 } from "../utils/toUserOrdersMap";
-import { CartItemNoti } from "../entities/CartItemNoti";
+import { createScbQr } from "./payment";
 
 //we need to make TypeGraphQL aware of the enums manually by calling the registerEnumType function and providing the enum name for GraphQL (accotding to Doc)
 

@@ -1,5 +1,3 @@
-import { isAuth } from "../middlware/isAuth";
-import { MyContext } from "../types";
 import {
   Arg,
   Ctx,
@@ -14,19 +12,12 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import moment from "moment";
-import { Post } from "../entities/Post";
 import { getConnection } from "typeorm";
-import { Upvote } from "../entities/Upvote";
-import { User } from "../entities/User";
-import {
-  AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY,
-  s3Bucket,
-  AWS_REGION,
-} from "../constants";
+import { s3Bucket } from "../constants";
+import { Mealkit, Post, Upvote, User } from "../entities";
+import { isAuth } from "../middlware/isAuth";
+import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-import { Mealkit } from "../entities/Mealkit";
 
 @InputType()
 export class signS3Params {

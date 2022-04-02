@@ -1,15 +1,12 @@
 import {
   Arg,
   Ctx,
-  FieldResolver,
   Mutation,
   Query,
   Resolver,
-  Root,
   UseMiddleware,
 } from "type-graphql";
-import { Follow } from "../entities/Follow";
-import { User } from "../entities/User";
+import { Follow, User } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 
@@ -60,7 +57,7 @@ export class FollowResolver {
 
       return true;
     } else {
-       Follow.delete({ userId: targetUserId, followerId: req.session.userId });
+      Follow.delete({ userId: targetUserId, followerId: req.session.userId });
       if (user) {
         await User.update(
           { id: targetUserId },

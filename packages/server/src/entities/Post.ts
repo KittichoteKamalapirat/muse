@@ -9,9 +9,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Mealkit } from "./Mealkit";
-import { Upvote } from "./Upvote";
-import { User } from "./User";
+import { Mealkit, Upvote, User } from "./";
 
 @ObjectType()
 export class Ingredient {
@@ -25,7 +23,7 @@ export class Ingredient {
 
 @ObjectType()
 @Entity()
-export class Post extends BaseEntity {
+class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -109,3 +107,5 @@ export class Post extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Post;

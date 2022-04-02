@@ -10,11 +10,7 @@ import {
   JoinColumn,
   OneToOne,
 } from "typeorm";
-import { CartItemNoti } from "./CartItemNoti";
-import { Mealkit } from "./Mealkit";
-import { Order } from "./Order";
-import { Tracking } from "./Tracking";
-import { User } from "./User";
+import { CartItemNoti, Mealkit, Order, Tracking, User } from "./";
 
 export enum CartItemStatus {
   UnOrdered = "UnOrdered", // user: to pay, creator: payment pending. User has made an order.
@@ -30,7 +26,7 @@ export enum CartItemStatus {
 
 @ObjectType()
 @Entity()
-export class CartItem extends BaseEntity {
+class CartItem extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -81,7 +77,7 @@ export class CartItem extends BaseEntity {
 
   //tracking
 
-  @Field({ nullable: true })
+  @Field(() => Tracking, { nullable: true })
   @ManyToOne(() => Tracking, (tracking) => tracking.cartItems)
   tracking: Tracking;
 
@@ -104,3 +100,5 @@ export class CartItem extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default CartItem;

@@ -1,12 +1,5 @@
+import { PubSub } from "graphql-subscriptions";
 import fetch from "node-fetch";
-// import generatePayload from "promptpay-qr";
-import {
-  BILLER_ID,
-  GENERATE_SCB_ACCESS_TOKEN_URL_UAT,
-  REQUEST_CREATE_SCB_QR30_URL_UAT,
-  SCB_API_KEY_UAT,
-} from "../constants";
-import { SCB_API_SECRET_UAT } from "../constants";
 import {
   Arg,
   Ctx,
@@ -16,19 +9,20 @@ import {
   ObjectType,
   Query,
   Resolver,
-  Subscription,
   UseMiddleware,
 } from "type-graphql";
+import { getConnection } from "typeorm";
+// import generatePayload from "promptpay-qr";
+import {
+  GENERATE_SCB_ACCESS_TOKEN_URL_UAT,
+  REQUEST_CREATE_SCB_QR30_URL_UAT,
+  SCB_API_KEY_UAT,
+  SCB_API_SECRET_UAT,
+} from "../constants";
+import { CartItemStatus } from "../entities/CartItem";
+import { Payment } from "../entities";
 import { isAuth } from "../middlware/isAuth";
-import { s3, s3Params } from "../utils/s3";
 import { MyContext } from "../types";
-import axios from "axios";
-import { Payment } from "../entities/Payment";
-import { PubSub } from "graphql-subscriptions";
-import { Connection, getConnection } from "typeorm";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { OrderStatus } from "aws-sdk/clients/outposts";
-import { Order } from "../entities/Order";
 
 export const pubsub = new PubSub();
 

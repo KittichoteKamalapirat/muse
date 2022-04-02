@@ -1,10 +1,8 @@
 import { Server } from "http";
 import { Connection } from "typeorm";
 import { v4 } from "uuid";
-
-import { User } from "../entities/User";
+import User from "../entities/User";
 import { startServer } from "../startSever";
-import { createTypeORMConn } from "../utils/createTypeORMConn";
 
 let expressServer: Server;
 let postgresDb: Connection;
@@ -14,6 +12,12 @@ beforeAll(async () => {
   const serverAndDb = await startServer();
   expressServer = serverAndDb.server;
   postgresDb = serverAndDb.connection;
+
+  console.log({ postgresDb });
+
+  postgresDb.options.entities?.forEach((item) => {
+    console.log({ item });
+  });
 });
 
 afterAll(async () => {

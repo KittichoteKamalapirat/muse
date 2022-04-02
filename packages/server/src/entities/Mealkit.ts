@@ -10,14 +10,11 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { CartItem } from "./CartItem";
-import { Post } from "./Post";
-import { Review } from "./Review";
-import { User } from "./User";
+import { CartItem, User, Post, Review } from "./";
 
 @ObjectType()
 @Entity()
-export class Mealkit extends BaseEntity {
+class Mealkit extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -99,3 +96,5 @@ export class Mealkit extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Mealkit;

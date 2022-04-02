@@ -38,6 +38,7 @@ jobs:
 
       - run:
           name: run jest
+          working_directory: packages/server
           command: yarn test
 
   server-deploy-prod:
@@ -152,12 +153,12 @@ workflows:
   server-workflow:
     jobs:
       - server-test:
-          name: 🧪 Run jest test
+          name: 🧪  Run jest test
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
           requires:
-            - 🧪 Run jest test
+            - 🧪  Run jest test
           filters:
             branches:
               only: master

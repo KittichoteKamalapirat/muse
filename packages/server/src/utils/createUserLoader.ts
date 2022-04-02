@@ -1,6 +1,6 @@
 import { checkForResolveTypeResolver } from "apollo-server-express";
 import DataLoader from "dataloader";
-import { User } from "../entities/User";
+import { User } from "../entities";
 
 // [1,3,5,7]
 //[{id: 1, username: "bob"},{},{}]

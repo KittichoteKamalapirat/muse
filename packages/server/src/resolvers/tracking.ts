@@ -5,14 +5,12 @@ import {
   InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
 } from "type-graphql";
 import { ETRACKINGS_API_KEY, ETRACKINGS_API_SECRET } from "../constants";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { Order } from "../entities/Order";
-import { Tracking } from "../entities/Tracking";
+import { CartItem, Tracking } from "../entities/";
+import { CartItemStatus } from "../entities/CartItem";
 
 // @ObjectType()
 // class Location {

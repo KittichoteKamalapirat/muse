@@ -10,19 +10,21 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { Address } from "./Address";
-import { CartItem } from "./CartItem";
-import { Follow } from "./Follow";
-import { Mealkit } from "./Mealkit";
-import { Order } from "./Order";
-import { PaymentInfo } from "./PaymentInfo";
-import { Post } from "./Post";
-import { Review } from "./Review";
-import { Upvote } from "./Upvote";
+import {
+  Address,
+  CartItem,
+  Follow,
+  Mealkit,
+  Order,
+  PaymentInfo,
+  Review,
+  Post,
+  Upvote,
+} from "./";
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
+class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Field()
   id!: string;
@@ -116,3 +118,5 @@ export class User extends BaseEntity {
   @Field()
   updatedAt: Date;
 }
+
+export default User;

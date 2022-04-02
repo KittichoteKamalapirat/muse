@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Tracking } from "../entities/Tracking";
+import { Tracking } from "../entities/";
 
 const router = Router();
 
