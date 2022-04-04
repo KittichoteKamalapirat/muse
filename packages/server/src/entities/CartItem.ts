@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItemNoti, Mealkit, Order, Tracking, User } from "./";
+import { CartItemNoti, Mealkit, Order, Tracking, User } from ".";
 
 export enum CartItemStatus {
   UnOrdered = "UnOrdered", // user: to pay, creator: payment pending. User has made an order.

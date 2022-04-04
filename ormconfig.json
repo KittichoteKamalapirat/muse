@@ -24,7 +24,7 @@
     "port": 5432,
     "entities": ["src/entities/*.ts"],
     "dropSchema": true,
-    "migrations": ["dist/migrations/*.js"],
+    "migrations": ["src/migrations/*.js"],
     "logging": false,
     "synchronize": true
   }
