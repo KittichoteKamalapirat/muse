@@ -19,6 +19,11 @@ jobs:
           POSTGRES_PASSWORD: chain123
           POSTGRES_DB: cookknowdb_dev
 
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
     working_directory: ~/repo
     steps:
       - checkout
