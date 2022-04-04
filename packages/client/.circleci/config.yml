@@ -38,7 +38,7 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: compile typescript, start server, start Next app, and run cypress
+          name: compile typescript, start server, start Next app for cypress
           working_directory: packages/server
           # run a server (build and run nodemon)
           # run a client
@@ -49,7 +49,11 @@ jobs:
             yarn start:ci 
             cd ../client
             yarn start:ci
-            yarn cypress:run
+
+      - run:
+          name: run cypress
+          working_directory: packages/client
+          command: yarn cypress:run
 
   client-deploy-prod:
     docker:
