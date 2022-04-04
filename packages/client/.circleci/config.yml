@@ -19,7 +19,12 @@ jobs:
           command: yarn install
 
       - run:
-          name: conpile typescript, start server, start Next app, and run cypress
+          name: Check-types
+          working_directory: packages/client
+          command: yarn check-types
+
+      - run:
+          name: compile typescript, start server, start Next app, and run cypress
           working_directory: packages/server
           # run a server (build and run nodemon)
           # run a client

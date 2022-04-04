@@ -1,14 +1,13 @@
 import { Field, Int, ObjectType } from "type-graphql";
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
   BaseEntity,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   ManyToOne,
-  JoinColumn,
   OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { CartItemNoti, Mealkit, Order, Tracking, User } from "./";
 
@@ -18,10 +17,10 @@ export enum CartItemStatus {
   ToDeliver = "ToDeliver", // user: to be delivered, creator: to deliver. User paid and waiting for the creator to deliver
   OnDelivery = "OnDelivery", // user and creator: the products are being delivered. waiting for the courrier to deliver
   Delivered = "Delivered", // user and creator: complete.
-  Received = "Received", //user confirmed
-  Complete = "Complete", //admin transfered money to seller
-  Cancelled = "Cancelled", //user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER
-  Refunded = "Refunded", //user: waiting for refund, creator: to refund
+  Received = "Received", // user confirmed
+  Complete = "Complete", // admin transfered money to seller
+  Cancelled = "Cancelled", // user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER
+  Refunded = "Refunded", // user: waiting for refund, creator: to refund
 }
 
 @ObjectType()
@@ -31,7 +30,7 @@ class CartItem extends BaseEntity {
   @Field()
   id!: number;
 
-  @Field((type) => Int)
+  @Field(() => Int)
   total(): number {
     return this.quantity * this.mealkit.price;
   }
@@ -47,14 +46,14 @@ class CartItem extends BaseEntity {
   userId: string;
 
   @Field(() => User, { nullable: true })
-  @ManyToOne((type) => User, (user) => user.cartItems)
+  @ManyToOne(() => User, (user) => user.cartItems)
   user: User;
 
   @Column({ default: CartItemStatus.UnOrdered })
   @Field()
   status: CartItemStatus;
 
-  //belongs to mealkit
+  // belongs to mealkit
   // one mealkit -> many cart
   // on cart one mealkit
 
@@ -63,20 +62,19 @@ class CartItem extends BaseEntity {
   mealkitId: number;
 
   @Field(() => Mealkit)
-  @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
+  @ManyToOne(() => Mealkit, (mealkit) => mealkit.cartItems)
   mealkit: Mealkit;
 
   // @Field(() => Order, { nullable: true })
-  @ManyToOne((type) => Order, (order) => order.cartItems)
+  @ManyToOne(() => Order, (order) => order.cartItems)
   order: Order;
 
-  //Order can have many cartItems
+  // Order can have many cartItems
   @Column({ nullable: true })
   @Field(() => Int)
   orderId: number;
 
-  //tracking
-
+  // tracking
   @Field(() => Tracking, { nullable: true })
   @ManyToOne(() => Tracking, (tracking) => tracking.cartItems)
   tracking: Tracking;
@@ -85,7 +83,7 @@ class CartItem extends BaseEntity {
   trackingId: number;
 
   @Field(() => CartItemNoti)
-  @OneToOne((type) => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
+  @OneToOne(() => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
   cartItemNoti: CartItemNoti;
 
   @Field()

@@ -30,8 +30,8 @@ import { S3Resolver } from "./utils/resolvers/s3";
 
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
-//determine which .env file to use
-//if production -> dockerfile copy and put in .env
+// determine which .env file to use
+// if production -> dockerfile copy and put in .env
 
 // if (process.env.NODE_ENV==="test") {
 //   dotenv.config({ path: `${__dirname}/../.env.${process.env.NODE_ENV}` });
@@ -89,7 +89,7 @@ export const startServer = async () => {
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
 
-  app.set("trust proxy", 1); //make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
+  app.set("trust proxy", 1); // make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
     cors({
       origin: [
@@ -97,7 +97,7 @@ export const startServer = async () => {
         process.env.CORS_ORIGIN_PROD,
         process.env.CORS_ORIGIN_TEST,
         "http://localhost:19006",
-      ], //localhost 3000 and mobile
+      ], // localhost 3000 and mobile
       credentials: true,
     })
   );
@@ -113,11 +113,11 @@ export const startServer = async () => {
         disableTouch: true,
       }),
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, //10 years
-        httpOnly: true, //so that Javascript's front end can't access cookie
-        sameSite: "lax", //csrf
-        secure: __prod__, //cookie onl works in https
-        domain: __prod__ ? ".cookknow.com" : undefined, //no need if in development
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+        httpOnly: true, // so that Javascript's front end can't access cookie
+        sameSite: "lax", // csrf
+        secure: __prod__, // cookie onl works in https
+        domain: __prod__ ? ".cookknow.com" : undefined, // no need if in development
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,
@@ -153,7 +153,7 @@ export const startServer = async () => {
       userLoader: createUserLoader(),
       // upvoteLoader: createUpvoteLoader(),
       upvoteLoader: upvoteLoader(),
-    }), //so that we can access session because session is stick with request
+    }), // so that we can access session because session is stick with request
   });
 
   // const apolloServer = new ApolloServer({
@@ -167,10 +167,10 @@ export const startServer = async () => {
   // console.log(process.memoryUsage());
 
   //   const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
-  const PORT = parseInt(process.env.PORT);
+  const PORT = parseInt(process.env.PORT, 10);
   const server = app.listen(PORT, () => {
     console.log(`server started on port ${PORT}`);
   });
 
-  return { server: server, connection: conn };
+  return { server, connection: conn };
 };

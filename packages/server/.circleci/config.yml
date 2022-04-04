@@ -26,6 +26,12 @@ jobs:
           name: Install dependencies
           # working_directory: packages/server
           command: yarn install
+
+      - run:
+          name: Check-types
+          working_directory: packages/server
+          command: yarn check-types
+
       - run:
           name: compile typescript and start server
           working_directory: packages/server

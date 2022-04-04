@@ -8,7 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./";
+import { User } from ".";
 
 @ObjectType()
 @Entity()

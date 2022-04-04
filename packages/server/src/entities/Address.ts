@@ -9,7 +9,7 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { User } from "./";
+import { User } from ".";
 
 @ObjectType()
 @Entity()
@@ -63,7 +63,7 @@ class Address extends BaseEntity {
   userId: string;
 
   @Field(() => User)
-  @OneToOne((type) => User, (user) => user.address)
+  @OneToOne(() => User, (user) => user.address)
   @JoinColumn()
   user: User;
 
