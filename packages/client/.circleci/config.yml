@@ -50,7 +50,7 @@ jobs:
           command: yarn start:ci
 
       - run:
-          name: run client
+          name: start NEXT js client
           working_directory: packages/client
           command: yarn start:ci
 
