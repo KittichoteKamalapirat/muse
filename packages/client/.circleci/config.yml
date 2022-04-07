@@ -1,6 +1,8 @@
 version: 2.1
 # orbs:
 # node: circleci/node@4.7
+orbs:
+  cypress: cypress-io/cypress@1
 
 # define the job to be used in the owrkflow
 jobs:
