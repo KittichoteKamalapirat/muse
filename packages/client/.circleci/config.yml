@@ -24,6 +24,10 @@ jobs:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
 
+      - image: cypress/base:14.16.0
+        environment:
+          TERM: xterm # this enables colors in the output
+
     working_directory: ~/repo
     steps:
       - checkout
