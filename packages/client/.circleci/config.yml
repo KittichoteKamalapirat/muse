@@ -38,22 +38,21 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: compile typescript
+          name: compile typescript (server)
           working_directory: packages/server
           command: |
             yarn global add typescript
             tsc
 
       - run:
-          name: start server, start Next app for cypress
+          name: start a server for cypress
           working_directory: packages/server
-          # run a server (build and run nodemon)
-          # run a client
-          # run cypress
-          command: |
-            yarn start:ci 
-            cd ../client
-            yarn start:ci
+          command: yarn start:ci
+
+      - run:
+          name: run client
+          working_directory: packages/client
+          command: yarn start:ci
 
       - run:
           name: run cypress
