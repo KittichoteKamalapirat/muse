@@ -65,12 +65,14 @@ jobs:
       - run:
           name: start NEXT js client
           working_directory: packages/client
-          command: yarn start:ci
+          command: |
+            yarn start3
+            yarn cypress:run
 
-      - run:
-          name: run cypress
-          working_directory: packages/client
-          command: yarn cypress:run
+      # - run:
+      #     name: run cypress
+      #     working_directory: packages/client
+      #     command: yarn cypress:run
 
   client-deploy-prod:
     docker:
