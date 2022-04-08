@@ -1,7 +1,6 @@
 {
   "baseUrl": "http://localhost:2999",
-  "projectId": "7s5okt",
-  "defaultCommandTimeout": 5000,
+  "defaultCommandTimeout": 8000,
   "viewportHeight": 1000,
   "viewportWidth": 1280,
   "retries": {
@@ -9,12 +8,7 @@
     "openMode": 1
   },
   "env": {
-    "apiUrl": "http://localhost:4000this doesn't really work",
-    "mobileViewportWidthBreakpoint": 414,
-    "coverage": false,
-    "codeCoverage": {
-      "url": "http://localhost:4000/__coverage__"
-    }
-  },
-  "experimentalStudio": true
+    "clientUrl": "http://localhost:3012",
+    "apiUrl": "http://localhost:4000this doesn't really work"
+  }
 }
