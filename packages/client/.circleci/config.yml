@@ -68,6 +68,11 @@ jobs:
           command: yarn start:ci
 
       - run:
+          name: wait for NEXT to start
+          working_directory: packages/client
+          command: yarn wait
+
+      - run:
           name: run cypress
           working_directory: packages/client
           command: yarn cypress:run
