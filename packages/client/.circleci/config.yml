@@ -66,8 +66,7 @@ jobs:
           name: start NEXT js client
           working_directory: packages/client
           command: |
-            yarn start3
-            yarn cypress:run
+            yarn start1
 
       # - run:
       #     name: run cypress
