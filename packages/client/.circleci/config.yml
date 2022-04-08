@@ -67,6 +67,7 @@ jobs:
           working_directory: packages/client
           command: |
             yarn start3
+            yarn cypress:run
 
       # - run:
       #     name: run cypress
