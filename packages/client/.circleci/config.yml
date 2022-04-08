@@ -16,9 +16,12 @@ jobs:
       #     PGHOST: 127.0.0.1
       #     PGUSER: root
 
-      - image: cypress/base:17.6.0
+      - image: cypress/base:17.8.0
         environment:
           TERM: xterm # this enables colors in the output
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
 
       - image: cimg/postgres:14.0
         auth:
