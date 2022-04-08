@@ -62,20 +62,15 @@ jobs:
           working_directory: packages/server
           command: yarn start:ci
 
-      # - run:
-      #     name: start NEXT js client
-      #     working_directory: packages/client
-      #     command: yarn start:ci
-
-      # - run:
-      #     name: wait for NEXT to start
-      #     working_directory: packages/client
-      #     command: yarn wait
-
       - run:
           name: start NEXT js client
           working_directory: packages/client
-          command: yarn start:ci:wait
+          command: yarn start:ci
+
+      - run:
+          name: wait for NEXT to start
+          working_directory: packages/client
+          command: yarn wait
 
       - run:
           name: run cypress
