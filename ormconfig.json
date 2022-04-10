@@ -22,10 +22,10 @@
     "type": "postgres",
     "host": "localhost",
     "port": 5432,
-    "entities": ["src/entities/*.ts"],
+    "entities": ["dist/entities/*.js"],
     "dropSchema": true,
     "migrations": ["src/migrations/*.js"],
-    "logging": false,
+    "logging": true,
     "synchronize": true
   }
 ]
