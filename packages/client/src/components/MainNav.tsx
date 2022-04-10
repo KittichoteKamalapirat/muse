@@ -119,7 +119,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       py={[null, null, 20]}
     >
       <NextLink href="/">
-        <Link style={{ textDecoration: "none" }} flex={1}>
+        <Link
+          style={{ textDecoration: "none" }}
+          flex={1}
+          aria-label="New Feed Button"
+        >
           <Flex
             flexDirection="column"
             alignItems="center"
@@ -141,7 +145,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
           pathname: "/like",
         }}
       >
-        <Link style={{ textDecoration: "none" }} flex={1}>
+        <Link
+          style={{ textDecoration: "none" }}
+          flex={1}
+          aria-label="Likes Button"
+        >
           <Flex
             flexDirection="column"
             alignItems="center"
@@ -160,7 +168,13 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       </NextLink>
       {data?.me?.isCreator && (
         <NextLink href="/myshop">
-          <Link as={Link} mr={2} style={{ textDecoration: "none" }} flex={1}>
+          <Link
+            as={Link}
+            mr={2}
+            style={{ textDecoration: "none" }}
+            flex={1}
+            aria-label="My Shop Button"
+          >
             <Flex
               flexDirection="column"
               alignItems="center"
@@ -184,7 +198,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
           pathname: "/notification",
         }}
       >
-        <Link style={{ textDecoration: "none" }} flex={1}>
+        <Link
+          style={{ textDecoration: "none" }}
+          flex={1}
+          aria-label="Notification Button"
+        >
           <Flex
             flexDirection="column"
             alignItems="center"
@@ -233,7 +251,11 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
           pathname: "/account",
         }}
       >
-        <Link style={{ textDecoration: "none" }} flex={1}>
+        <Link
+          style={{ textDecoration: "none" }}
+          flex={1}
+          aria-label="My Account Button"
+        >
           <Flex
             flexDirection="column"
             alignItems="center"

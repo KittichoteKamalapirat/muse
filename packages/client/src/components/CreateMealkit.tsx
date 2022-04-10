@@ -130,7 +130,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           onChange={(e) => setInput({ ...input, name: e.target.value })}
         />
         <InputGroup>
-          <InputLeftAddon children="Price" mt={2} />
+          <InputLeftAddon mt={2}>Price</InputLeftAddon>
           <InputField
             name="price"
             type="number"
@@ -139,7 +139,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             variant="flushed"
             onChange={(e) => setInput({ ...input, price: e.target.value })}
           />
-          <InputRightAddon children="THB" mt={2} />
+          <InputRightAddon mt={2}>THB</InputRightAddon>
         </InputGroup>
 
         {/* <Heading fontSize="md" whiteSpace="nowrap">
@@ -147,7 +147,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         </Heading> */}
         <Flex alignItems="center">
           <InputGroup>
-            <InputLeftAddon children="Portion for" mt={2} />
+            <InputLeftAddon mt={2}>Portion for</InputLeftAddon>
             {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
             <InputField
               name="portion"
@@ -158,7 +158,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
               onChange={(e) => setInput({ ...input, portion: e.target.value })}
             ></InputField>
 
-            <InputRightAddon children="people" mt={2} />
+            <InputRightAddon mt={2}>people</InputRightAddon>
           </InputGroup>
         </Flex>
         {/* <InputField
@@ -174,48 +174,54 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         <Box my={4}>
           {" "}
           <Heading fontSize="lg">Items include</Heading>
-          <CheckboxGroup
-            colorScheme="green"
-            // defaultValue={ingredientsField.map(
-            //   (ingredientWithUnit) => ingredientWithUnit.ingredient
-            // )}
-          >
-            {ingredientsField &&
-              ingredientsField.map((ingredientWitUnit, index) => (
-                <Stack key={index}>
-                  {" "}
-                  <Checkbox
-                    colorScheme="green"
-                    value={ingredientWitUnit.ingredient}
-                    onChange={(e) => {
-                      const index = input.items.indexOf(e.target.value);
+          {ingredientsField.length === 0 ||
+            (ingredientsField.length === 1 &&
+            ingredientsField[0].ingredient === "" ? (
+              <div>You have not added any ingredients</div>
+            ) : (
+              <CheckboxGroup
+                colorScheme="green"
+                // defaultValue={ingredientsField.map(
+                //   (ingredientWithUnit) => ingredientWithUnit.ingredient
+                // )}
+              >
+                {ingredientsField &&
+                  ingredientsField.map((ingredientWitUnit, index) => (
+                    <Stack key={index}>
+                      {" "}
+                      <Checkbox
+                        colorScheme="green"
+                        value={ingredientWitUnit.ingredient}
+                        onChange={(e) => {
+                          const index = input.items.indexOf(e.target.value);
 
-                      if (index === -1) {
-                        //not in the array yet
-                        if (input.items.length === 0) {
-                          setInput({
-                            ...input,
-                            items: [e.target.value],
-                          });
-                        } else {
-                          setInput({
-                            ...input,
-                            items: input.items.concat(e.target.value),
-                          });
-                        }
-                      } else {
-                        setInput({
-                          ...input,
-                          items: input.items.filter((_, i) => index !== i),
-                        });
-                      }
-                    }}
-                  >
-                    {ingredientWitUnit.ingredient}
-                  </Checkbox>
-                </Stack>
-              ))}
-          </CheckboxGroup>
+                          if (index === -1) {
+                            //not in the array yet
+                            if (input.items.length === 0) {
+                              setInput({
+                                ...input,
+                                items: [e.target.value],
+                              });
+                            } else {
+                              setInput({
+                                ...input,
+                                items: input.items.concat(e.target.value),
+                              });
+                            }
+                          } else {
+                            setInput({
+                              ...input,
+                              items: input.items.filter((_, i) => index !== i),
+                            });
+                          }
+                        }}
+                      >
+                        {ingredientWitUnit.ingredient}
+                      </Checkbox>
+                    </Stack>
+                  ))}
+              </CheckboxGroup>
+            ))}
         </Box>
       </Form>
 
