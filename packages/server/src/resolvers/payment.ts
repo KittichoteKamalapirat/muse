@@ -337,23 +337,23 @@ export class PaymentResolver {
     }
   }
 
-  //   @UseMiddleware(isAuth)
-  //   @Query(() => Boolean)
-  //   async paymentIsComplete(@Arg("paymentId", () => Int) paymentId: number) {
-  //     const order = await Order.findOne({ where: { paymentId } });
-  //     const cartItems = await CartItem.find({ where: { orderId: order?.id } });
-  //     const paidItems = cartItems.filter((item) => {
-  //       return item.status === CartItemStatus.ToDeliver;
-  //     });
-  //     if (paidItems.length === cartItems.length) {
-  //       console.log("true");
-  //       return true;
-  //     } else {
-  //       console.log("false");
-  //       return false;
-  //     }
-  //   }
-  // }
+    @UseMiddleware(isAuth)
+    @Query(() => Boolean)
+    async paymentIsComplete(@Arg("paymentId", () => Int) paymentId: number) {
+      const order = await Order.findOne({ where: { paymentId } });
+      const cartItems = await CartItem.find({ where: { orderId: order?.id } });
+      const paidItems = cartItems.filter((item) => {
+        return item.status === CartItemStatus.ToDeliver;
+      });
+      if (paidItems.length === cartItems.length) {
+        console.log("true");
+        return true;
+      } else {
+        console.log("false");
+        return false;
+      }
+    }
+  }
 
   // export async function generateQr() {
   //   const mobilenumber = "0961489046";
