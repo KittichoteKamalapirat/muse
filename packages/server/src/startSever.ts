@@ -57,6 +57,8 @@ if (process.env.NODE_ENV) {
 export const startServer = async () => {
   console.log("This is", process.env.NODE_ENV, "environment.");
   console.log("CORS origin", process.env.CORS_ORIGIN);
+  console.log("CORS origin production", process.env.CORS_ORIGIN_TEST);
+  console.log("CORS origin test", process.env.CORS_ORIGIN_TEST);
   console.log("db url", process.env.DATABASE_URL);
   console.log("port", process.env.PORT);
   console.log("redis url", process.env.REDIS_URL);
@@ -86,7 +88,12 @@ export const startServer = async () => {
   app.set("trust proxy", 1); //make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
     cors({
-      origin: [process.env.CORS_ORIGIN, "http://localhost:19006"], //localhost 3000 and mobile
+      origin: [
+        process.env.CORS_ORIGIN,
+        process.env.CORS_ORIGIN_PROD,
+        process.env.CORS_ORIGIN_TEST,
+        "http://localhost:19006",
+      ], //localhost 3000 and mobile
       credentials: true,
     })
   );
