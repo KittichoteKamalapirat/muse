@@ -42,16 +42,22 @@ import { S3Resolver } from "./utils/resolvers/s3";
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
     case "test":
-      dotenv.config({ path: `${__dirname}/../.env.test` });
+      dotenv.config({
+        path: `${__dirname}/../.env.test`,
+        allowEmptyValues: true,
+      });
       break;
     case "development":
-      dotenv.config({ path: `${__dirname}/../.env.dev` });
+      dotenv.config({
+        path: `${__dirname}/../.env.dev`,
+        allowEmptyValues: true,
+      });
       break;
     default:
-      dotenv.config({ path: `${__dirname}/../.env` }); // default to .env for production in docker?
+      dotenv.config({ path: `${__dirname}/../.env`, allowEmptyValues: true }); // default to .env for production in docker?
   }
 } else {
-  dotenv.config();
+  dotenv.config({ allowEmptyValues: true });
 }
 
 export const startServer = async () => {
