@@ -21,7 +21,7 @@ class Ingredient extends BaseEntity {
 
   @Column()
   @Field()
-  amount!: number;
+  amount!: string;
 
   @Column()
   @Field()

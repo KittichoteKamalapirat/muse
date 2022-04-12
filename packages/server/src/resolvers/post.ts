@@ -1,12 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
-  InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   Root,
@@ -15,77 +13,11 @@ import {
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
 import { Mealkit, Post, Upvote, User } from "../entities";
+import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
+import { PostInput } from "../entities/utils/InputTypes/PostInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-
-@InputType()
-export class signS3Params {
-  @Field()
-  name: string;
-  @Field()
-  type: string;
-}
-
-@InputType()
-export class IngredientInput {
-  @Field()
-  ingredient: string;
-  @Field()
-  amount: string;
-  @Field()
-  unit: string;
-}
-
-@InputType()
-class PostInput {
-  @Field()
-  title: string;
-  @Field()
-  text: string;
-  @Field(() => [String])
-  instruction: string[];
-  @Field()
-  cooktime: string;
-  @Field()
-  portion: number;
-  @Field(() => [String])
-  advice: string[];
-  @Field()
-  videoUrl: string;
-  @Field()
-  thumbnailUrl: string;
-  @Field(() => [IngredientInput])
-  ingredients: IngredientInput[];
-}
-
-@ObjectType()
-class PaginatedPosts {
-  @Field(() => [Post])
-  posts: Post[];
-  @Field()
-  hasMore: boolean;
-}
-
-@ObjectType()
-class PostSignedS3 {
-  @Field()
-  videoSignedRequest: string;
-  @Field()
-  thumbnailSignedRequest: string;
-  @Field()
-  videoUrl: string;
-  @Field()
-  thumbnailUrl: string;
-}
-
-@ObjectType()
-class SignedS3 {
-  @Field()
-  signedRequest: string;
-  @Field()
-  url: string;
-}
 
 @Resolver(Post)
 export class PostResolver {
@@ -132,7 +64,7 @@ export class PostResolver {
     const realLimitPlusOne = realLimit + 1;
     const replacements: any[] = [realLimitPlusOne];
     if (cursor) {
-      replacements.push(new Date(parseInt(cursor)));
+      replacements.push(new Date(parseInt(cursor, 10)));
     }
     const upvoted = await Upvote.find({
       where: { userId: req.session.userId },
@@ -140,6 +72,7 @@ export class PostResolver {
 
     const upvotedPostIds: number[] = [];
 
+    // eslint-disable-next-line no-shadow
     upvoted.forEach((upvoted) => {
       upvotedPostIds.push(upvoted.postId);
     });
@@ -168,15 +101,15 @@ export class PostResolver {
   // to provide the return type.
   // Since the method is async, the reflection metadata system shows the return type as a Promise,
   // so we have to add the decorator's parameter as returns => [Recipe] to declare it resolves to an array of Recipe object types.
-  @Mutation(() => Boolean) //return Boolean -> vote returns boolean vote is an argument for Mutation()?
-  @UseMiddleware(isAuth) //to protect the routh
+  @Mutation(() => Boolean) // return Boolean -> vote returns boolean vote is an argument for Mutation()?
+  @UseMiddleware(isAuth) // to protect the routh
   async vote(
     @Arg("postId", () => Int) postId: number,
     @Arg("value", () => Int) value: number,
     @Ctx() { req }: MyContext
   ) {
-    const { userId } = req.session; //userId = req.session.userId
-    const isUpvote = value !== 0; //happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
+    const { userId } = req.session; // userId = req.session.userId
+    const isUpvote = value !== 0; // happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
     const realValue = isUpvote ? 1 : -1;
 
     const upvoted = await Upvote.findOne({ where: { postId, userId } });
@@ -200,7 +133,7 @@ export class PostResolver {
         where id = $2;
         `,
           [realValue, postId]
-        ); //different 2 points, if upvoted, then points will be 1, downvoted, points will be -1
+        ); // different 2 points, if upvoted, then points will be 1, downvoted, points will be -1
       });
     } else if (!upvoted) {
       // has never voted before
@@ -229,17 +162,16 @@ export class PostResolver {
 
   @Query(() => PaginatedPosts)
   async posts(
-    @Arg("limit", () => Int) limit: number, //be defalt number -> Float in graphql
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null //when we sset something nullable, we also has to set the type String excplicitly
+    @Arg("limit", () => Int) limit: number, // be defalt number -> Float in graphql
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null // when we sset something nullable, we also has to set the type String excplicitly
   ): Promise<PaginatedPosts> {
     // return await Post.find(); //will use query builder instead when complex query
-    const realLimit = Math.min(50, limit); //if no limit specified, default is 50
+    const realLimit = Math.min(50, limit); // if no limit specified, default is 50
     const realLimitPlusOne = realLimit + 1;
     const replacements: any[] = [realLimitPlusOne];
 
-    let cursorIndex = 3;
     if (cursor) {
-      replacements.push(new Date(parseInt(cursor)));
+      replacements.push(new Date(parseInt(cursor, 10)));
       // cursorIndex = replacements.length;
     }
 
@@ -256,8 +188,9 @@ export class PostResolver {
 
     const slicedPosts = await posts
       .slice(0, realLimit)
-      .map(async (post: Post, index: number) => {
+      .map(async (post: Post) => {
         const mealkit = await Mealkit.find({ postId: post.id });
+        // eslint-disable-next-line no-param-reassign
         post.mealkits = mealkit;
         return post;
       });
@@ -282,11 +215,11 @@ export class PostResolver {
   }
 
   @Query(() => Post, { nullable: true })
-  //   the id after immediately after arg is for when we query in graphql
+  // the id after immediately after arg is for when we query in graphql
   // the id: number is for findOne(id)
   async post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    //be default id: number -> Float for graphql, we want int
-    return Post.findOne(id); //urql will write the join for us (thanks to what we define in Schema, many to one thingy)
+    // be default id: number -> Float for graphql, we want int
+    return Post.findOne(id); // urql will write the join for us (thanks to what we define in Schema, many to one thingy)
   }
 
   // craete a post
@@ -307,7 +240,7 @@ export class PostResolver {
 
   // update a post
   @Mutation(() => Post, { nullable: true })
-  @UseMiddleware(isAuth) //have to log in to update a post
+  @UseMiddleware(isAuth) // have to log in to update a post
   async updatePost(
     @Arg("input") input: PostInput,
     @Arg("id", () => Int) id: number,
@@ -322,7 +255,7 @@ export class PostResolver {
       .update(Post)
       .set(input)
       .where('id = :id and "creatorId" = :creatorId', {
-        id: id,
+        id,
         creatorId: req.session.userId,
       })
       .returning("*")
@@ -333,12 +266,12 @@ export class PostResolver {
   //   delete post
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isAuth) //firstly, only auth user
+  @UseMiddleware(isAuth) // firstly, only auth user
   async deletePost(
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    //only the owner can delete her post
+    // only the owner can delete her post
 
     // Not casecade way
     // const post = await Post.findOne(id)
@@ -352,7 +285,7 @@ export class PostResolver {
     // await Upvote.delete({postId: id})
     // await Post.delete({id: id})
 
-    await Post.delete({ id: id, creatorId: req.session.userId });
+    await Post.delete({ id, creatorId: req.session.userId });
     return true;
   }
 
