@@ -1,23 +1,23 @@
 describe("payment", () => {
-  it("user can make payment via QR code", () => {
+  it("creator can create a post", () => {
     // cy.visit(`${Cypress.env("clientUrl")}`);
     //visit the site
     // register
     // cy.get("a[]")
     //click the register button
 
-    const username = "luffy";
-    const email = "luffy@gmail.com";
-    const phonenumber = "0900000000";
-    const password = "3d2y";
+    // const username = "luffy";
+    // const email = "luffy@gmail.com";
+    // const phonenumber = "0900000000";
+    // const password = "3d2y";
 
-    //create a new account
-    cy.visit("/register");
-    cy.get('input[name="username"]').type(username);
-    cy.get('input[name="email"]').type(email);
-    cy.get('input[name="phonenumber"]').type(phonenumber);
-    cy.get('input[name="password"]').type(password);
-    cy.get('button[type="submit"]').click();
+    // //create a new account
+    // cy.visit("/register");
+    // cy.get('input[name="username"]').type(username);
+    // cy.get('input[name="email"]').type(email);
+    // cy.get('input[name="phonenumber"]').type(phonenumber);
+    // cy.get('input[name="password"]').type(password);
+    // cy.get('button[type="submit"]').click();
 
     // login;
     // cy.visit("/login");

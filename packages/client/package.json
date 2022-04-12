@@ -14,19 +14,10 @@
     "check-types": "tsc --noemit",
     "postinstall": "expo-yarn-workspaces postinstall",
     "ci:vercel": "vercel --prod --token $VERCEL_TOKEN_FOR_CIRCLECI",
-    "cp:open1": "start-server-and-test start-nextjs-for-testing 2999 cypress:open",
-    "cp:open2": "(yarn start-nextjs-for-testing&) & wait-on http://localhost:2999 & cypress:open",
-    "cp:run": "start-server-and-test start-nextjs-for-testing 2999 cypress:run",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
     "start-nextjs-for-testing": "NODE_ENV=development next dev -p 2999 ",
-    "start1": "(yarn start-nextjs-for-testing&)",
-    "start2": "(yarn start-nextjs-for-testing&) >/dev/null",
-    "start3": "(yarn start-nextjs-for-testing&) & wait-on http://localhost:2999 ",
-    "start3.1": "(yarn start-nextjs-for-testing&) & echo 'done'",
-    "start4": "(yarn start-nextjs-for-testing&) >/dev/null & wait-on http://localhost:2999 ",
-    "wait:hello": "wait-on http://localhost:2999 && echo 'hi'",
-    "wait": "wait-on http://localhost:2999"
+    "start:ci": "(yarn start-nextjs-for-testing&) & wait-on http://localhost:2999 "
   },
   "dependencies": {
     "@apollo/client": "^3.4.13",

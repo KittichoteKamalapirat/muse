@@ -11,6 +11,7 @@
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
     "build": "tsc",
     "watch": "tsc -w",
+    "lint": "eslint . --ext .ts,.tsx",
     "check-types": "tsc --noemit",
     "test-server": "NODE_ENV=test ts-node src/__test__/utils/setup.ts",
     "test": "NODE_ENV=test jest ",
