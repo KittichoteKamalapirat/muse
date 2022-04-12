@@ -16,23 +16,31 @@ export const TWILIO_AUTH_TOKEN = "a948e28bec1dfb222936838ccb1ca600";
 export const TWILIO_TEST_PHONE_NUMBER = "+12183573995";
 
 //SCB
+
+//Testing SCB according to DOCS
 export const SCB_API_KEY = "l7c8620ca31fc846768d57c2bc2fe01e1f";
 export const SCB_API_SECRET = "4fb2ce52351b4c22a0a08c9a820c0e78";
 export const BILLER_ID = "097741489371038";
-
-//Testing SCB according to DOCS
 export const GENERATE_SCB_ACCESS_TOKEN_URL_DOCS =
   "https://api-sandbox.partners.scb/partners/sandbox/v1/oauth/token";
 export const REQUEST_CREATE_SCB_QR30_URL_DOCS =
   "https://api-sandbox.partners.scb/partners/sandbox/v1/payment/qrcode/create";
 
-//Testing with SCB
+//Testing UAT with SCB
 export const SCB_API_KEY_UAT = "l7273cdc1f853b428eb9bfb2a71a61a98f";
 export const SCB_API_SECRET_UAT = "96f3218e0ccc409198306f64b0045c49";
 export const GENERATE_SCB_ACCESS_TOKEN_URL_UAT =
   "https://api-uat.partners.scb/partners/v1/oauth/token";
 export const REQUEST_CREATE_SCB_QR30_URL_UAT =
   "https://api-uat.partners.scb/partners/v1/payment/qrcode/create";
+
+//Testing Production with SCB
+export const SCB_API_KEY_PROD = "l7faf43b2f98b04a20939584092952b2a0";
+export const SCB_API_SECRET_PROD = "5ddfa9517e57442f9ef2e7e7adb24c61";
+export const GENERATE_SCB_ACCESS_TOKEN_URL_PROD =
+  "https://api.partners.scb/partners/v1/oauth/token";
+export const REQUEST_CREATE_SCB_QR30_URL_PROD =
+  "https://api.partners.scb/partners/v1/payment/qrcode/create";
 
 //Etrackings
 export const ETRACKINGS_API_KEY = "e9cc2b492e0030e6cdca5473bdcadd6f39655acc";

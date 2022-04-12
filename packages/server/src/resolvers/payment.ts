@@ -14,10 +14,10 @@ import {
 import { getConnection } from "typeorm";
 // import generatePayload from "promptpay-qr";
 import {
-  GENERATE_SCB_ACCESS_TOKEN_URL_UAT,
-  REQUEST_CREATE_SCB_QR30_URL_UAT,
-  SCB_API_KEY_UAT,
-  SCB_API_SECRET_UAT,
+  GENERATE_SCB_ACCESS_TOKEN_URL_PROD,
+  REQUEST_CREATE_SCB_QR30_URL_PROD,
+  SCB_API_KEY_PROD,
+  SCB_API_SECRET_PROD,
 } from "../constants";
 import { CartItem, CartItemStatus } from "../entities/CartItem";
 import { Order } from "../entities/Order";
@@ -127,17 +127,17 @@ export const getScbToken = async () => {
     const authentication_headers = {
       headers: {
         "Content-Type": "application/json",
-        resourceOwnerId: SCB_API_KEY_UAT,
+        resourceOwnerId: SCB_API_KEY_PROD,
         requestUId: "uniqueIdentifier",
         // "accept-language": "EN", //or "TH"
       },
       method: "POST",
       body: JSON.stringify({
-        applicationKey: SCB_API_KEY_UAT,
-        applicationSecret: SCB_API_SECRET_UAT,
+        applicationKey: SCB_API_KEY_PROD,
+        applicationSecret: SCB_API_SECRET_PROD,
       }),
     };
-    const response = await fetch(GENERATE_SCB_ACCESS_TOKEN_URL_UAT, {
+    const response = await fetch(GENERATE_SCB_ACCESS_TOKEN_URL_PROD, {
       ...authentication_headers,
     });
     // const body = await response.text();
@@ -162,7 +162,7 @@ export const createScbQr = async (amount: number, orderId: number) => {
         authorization: `Bearer ${token}`,
         requestUId: "uniqueIdentifier",
         // resourceOwnerId: SCB_API_KEY,
-        resourceOwnerId: SCB_API_KEY_UAT,
+        resourceOwnerId: SCB_API_KEY_PROD,
       },
 
       // comment out code before testing with scb
@@ -191,7 +191,7 @@ export const createScbQr = async (amount: number, orderId: number) => {
 
     console.log("qr headers");
     console.log(qr_headers);
-    const response = await fetch(REQUEST_CREATE_SCB_QR30_URL_UAT, {
+    const response = await fetch(REQUEST_CREATE_SCB_QR30_URL_PROD, {
       ...qr_headers,
     });
     console.log({ response });
@@ -253,18 +253,26 @@ export class PaymentResolver {
       const token = await getScbToken();
       const requestOptions = {
         headers: {
-          resourceOwnerId: SCB_API_KEY_UAT,
+          resourceOwnerId: SCB_API_KEY_PROD,
           requestUId: "later",
           authorization: `Bearer ${token}`,
         },
       };
       const ref = "202110172ueu2uNvKkMU5LJ";
 
+      // sand box
+      // const response = await fetch(
+      //   `https://api-sandbox.partners.scb/partners/sandbox/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}
+      //   `,
+      //   { ...requestOptions }
+      // );
+
+      // prod
       const response = await fetch(
-        `https://api-sandbox.partners.scb/partners/sandbox/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}
-        `,
+        `https://api.partners.scb/partners/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}`,
         { ...requestOptions }
       );
+
       if (response.status === 200) {
         console.log({ response });
         const data = (await response.json()) as ConfirmationResponse;
