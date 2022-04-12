@@ -67,12 +67,12 @@ jobs:
           working_directory: packages/client
           command: |
             yarn start3
-            yarn cypress:run
+          background: true
 
-      # - run:
-      #     name: run cypress
-      #     working_directory: packages/client
-      #     command: yarn cypress:run
+      - run:
+          name: run cypress
+          working_directory: packages/client
+          command: yarn cypress:run
 
   client-deploy-prod:
     docker:
