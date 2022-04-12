@@ -10,8 +10,6 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
-    semi: 0, // rails defaults
-    quotes: 0, // rails defaults
     "react/jsx-filename-extension": 0, // it's all js these days,
     "jsx-a11y/label-has-associated-control": 0,
     "jsx-a11y/control-has-associated-label": 0,
@@ -24,5 +22,7 @@ module.exports = {
     "import/no-unresolved": 0,
     "import/extensions": ["error", "ignorePackages", { "": "never" }],
     "jsx-newline": 0,
+    "no-shadow": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Order } from "./";
+import { Order } from ".";
 
 @ObjectType()
 @Entity()

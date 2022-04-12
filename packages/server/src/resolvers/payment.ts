@@ -1,26 +1,21 @@
+/* eslint-disable class-methods-use-this */
 import { PubSub } from "graphql-subscriptions";
 import fetch from "node-fetch";
 import {
   Arg,
   Ctx,
-  Field,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
 // import generatePayload from "promptpay-qr";
-import {
-  GENERATE_SCB_ACCESS_TOKEN_URL_UAT,
-  REQUEST_CREATE_SCB_QR30_URL_UAT,
-  SCB_API_KEY_UAT,
-  SCB_API_SECRET_UAT,
-} from "../constants";
 import { CartItemStatus } from "../entities/CartItem";
-import { Payment } from "../entities";
+import {} from "../entities/Order";
+import { Payment, Order, CartItem } from "../entities";
+import { ConfirmationResponse } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 
@@ -29,139 +24,47 @@ export const pubsub = new PubSub();
 // const qrcode = require('qrcode ')
 // const generatePaylload = require('promptpay-qr')
 
-@ObjectType()
-class Status {
-  @Field()
-  code: number;
-  @Field()
-  description: string;
-}
-
-@ObjectType()
-class QrData {
-  @Field()
-  qrRawData: string;
-  @Field()
-  qrImage: string;
-}
-
-@ObjectType()
-class qrOutput {
-  @Field(() => Status)
-  status: Status;
-  @Field(() => QrData)
-  data: QrData;
-}
-
-@ObjectType()
-class TypeAndValue {
-  @Field()
-  type: string;
-  @Field()
-  value: string;
-}
-
-@ObjectType()
-class Account {
-  @Field(() => Status)
-  status: Status;
-  @Field(() => QrData)
-  data: QrData;
-}
-
-@ObjectType()
-class Person {
-  @Field()
-  displayName: string;
-  @Field()
-  name: string;
-  @Field(() => TypeAndValue)
-  proxy: TypeAndValue;
-  @Field(() => TypeAndValue)
-  account: TypeAndValue;
-}
-//confirmation
-@ObjectType()
-class ConfirmData {
-  @Field()
-  transRef: string;
-  @Field()
-  sendingBank: string;
-  @Field()
-  receivingBank: string;
-  @Field()
-  transDate: string;
-  @Field()
-  transTime: string;
-  @Field(() => Person)
-  sender: Person;
-  @Field(() => Person)
-  receiver: Person;
-  @Field()
-  amount: string;
-  @Field()
-  paidLocalAmount: string;
-  @Field()
-  paidLocalCurrency: string;
-  @Field()
-  countryCode: string;
-  @Field()
-  ref1: string;
-  @Field()
-  ref2: string;
-  @Field()
-  ref3: string;
-}
-
-@ObjectType()
-class ConfirmationResponse {
-  @Field(() => Status)
-  status: Status;
-  @Field((type) => ConfirmData)
-  data: ConfirmData;
-}
-
 export const getScbToken = async () => {
   try {
-    const authentication_headers = {
+    const authenticationHeaders = {
       headers: {
         "Content-Type": "application/json",
-        resourceOwnerId: SCB_API_KEY_UAT,
+        resourceOwnerId: process.env.SCB_API_KEY,
         requestUId: "uniqueIdentifier",
         // "accept-language": "EN", //or "TH"
       },
       method: "POST",
       body: JSON.stringify({
-        applicationKey: SCB_API_KEY_UAT,
-        applicationSecret: SCB_API_SECRET_UAT,
+        applicationKey: process.env.SCB_API_KEY,
+        applicationSecret: process.env.SCB_API_SECRET,
       }),
     };
-    const response = await fetch(GENERATE_SCB_ACCESS_TOKEN_URL_UAT, {
-      ...authentication_headers,
+    const response = await fetch(process.env.GENERATE_SCB_ACCESS_TOKEN_URL, {
+      ...authenticationHeaders,
     });
     // const body = await response.text();
     const data: any = await response.json();
-    const token = data.data.accessToken;
+    const token: string = data.data.accessToken;
     return token;
   } catch (error) {
-    console.log(error);
+    return "";
   }
 };
 
 export const createScbQr = async (amount: number, orderId: number) => {
   try {
     const token = await getScbToken();
-    console.log({ token });
-    const qr_headers = {
+
+    const qrHeaders = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "accept-language": "EN", //or "TH"
+        "accept-language": "EN", // or "TH"
         // authorization: `Bearer ${token}`,
         authorization: `Bearer ${token}`,
         requestUId: "uniqueIdentifier",
         // resourceOwnerId: SCB_API_KEY,
-        resourceOwnerId: SCB_API_KEY_UAT,
+        resourceOwnerId: process.env.SCB_API_KEY,
       },
 
       // comment out code before testing with scb
@@ -178,28 +81,24 @@ export const createScbQr = async (amount: number, orderId: number) => {
       // }),
 
       body: JSON.stringify({
-        qrType: "PP", //somehow meaning QR30
-        ppType: "BILLERID", //change later
-        ppId: "110330017933201", //Partners can get on merchant profile of their application.
-        amount: amount,
+        qrType: "PP", // somehow meaning QR30
+        ppType: "BILLERID", // change later
+        ppId: "110330017933201", // Partners can get on merchant profile of their application.
+        amount,
         ref1: orderId.toString(),
-        ref2: "PLACEHOLDER", //ref2 is also required since I applied like to, number or UPPERCASE string less length <= 20
+        ref2: "PLACEHOLDER", // ref2 is also required since I applied like to, number or UPPERCASE string less length <= 20
         ref3: "CKN", // -> NEED UNTIL THIS
       }),
     };
 
-    console.log("qr headers");
-    console.log(qr_headers);
-    const response = await fetch(REQUEST_CREATE_SCB_QR30_URL_UAT, {
-      ...qr_headers,
+    const response = await fetch(process.env.REQUEST_CREATE_SCB_QR30_URL, {
+      ...qrHeaders,
     });
-    console.log({ response });
 
     const data: any = await response.json();
 
     return data;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
@@ -233,12 +132,11 @@ export class PaymentResolver {
 
       return payment[0];
     } catch (error) {
-      console.log(error);
       return undefined;
     }
   }
 
-  //check
+  // check
   // 1) the refs exists
   // 2) the sender and the receiver
   // 3) the amount = paidamount?
@@ -252,32 +150,34 @@ export class PaymentResolver {
       const token = await getScbToken();
       const requestOptions = {
         headers: {
-          resourceOwnerId: SCB_API_KEY_UAT,
+          resourceOwnerId: process.env.SCB_API_KEY,
           requestUId: "later",
           authorization: `Bearer ${token}`,
         },
       };
       const ref = "202110172ueu2uNvKkMU5LJ";
 
+      // sand box
+      // const response = await fetch(
+      //   `https://api-sandbox.partners.scb/partners/sandbox/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}
+      //   `,
+      //   { ...requestOptions }
+      // );
+
+      // prod
       const response = await fetch(
-        `https://api-sandbox.partners.scb/partners/sandbox/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}
-        `,
+        `https://api.partners.scb/partners/v1/payment/billpayment/transactions/${ref}?sendingBank=${sendingBank}`,
         { ...requestOptions }
       );
+
       if (response.status === 200) {
-        console.log({ response });
         const data = (await response.json()) as ConfirmationResponse;
         // const data = await response.text();
-        console.log({ data });
-        console.log(data.data.sender);
-        console.log(data.data.receiver);
         return data;
-      } else {
-        console.log("error");
-        throw Error;
       }
+
+      throw Error;
     } catch (error) {
-      console.log(error);
       return undefined;
     }
   }
@@ -288,7 +188,7 @@ export class PaymentResolver {
     @Arg("paymentId", () => Int) paymentId: number
   ): Promise<boolean | Error> {
     try {
-      //check whether all the cartitems associated to this paymentId (orderId) have the status ToDelivery or not
+      // check whether all the cartitems associated to this paymentId (orderId) have the status ToDelivery or not
       const statusArray: { status: CartItemStatus }[] = await getConnection()
         .query(`
       SELECT status
@@ -298,20 +198,18 @@ export class PaymentResolver {
       WHERE "order"."paymentId" = '${paymentId}';
     `);
 
-      const length = statusArray.length;
+      const { length } = statusArray;
 
       const paidItems = statusArray.filter(
-        (status) => status.status == CartItemStatus.ToDeliver
+        (status) => status.status === CartItemStatus.ToDeliver
       );
       const paidLength = paidItems.length;
 
       if (length === paidLength) {
         return true;
-      } else {
-        return false;
       }
+      return false;
     } catch (error) {
-      console.log(error);
       return new Error("Payment confirmation failed");
     }
   }
@@ -323,40 +221,34 @@ export class PaymentResolver {
     @Arg("slipUrl") slipUrl: string
   ) {
     try {
-      await Payment.update({ id: paymentId }, { slipUrl: slipUrl });
+      await Payment.update({ id: paymentId }, { slipUrl });
       return true;
     } catch (error) {
-      console.log(error);
       return false;
     }
   }
 
-  //   @UseMiddleware(isAuth)
-  //   @Query(() => Boolean)
-  //   async paymentIsComplete(@Arg("paymentId", () => Int) paymentId: number) {
-  //     const order = await Order.findOne({ where: { paymentId } });
-  //     const cartItems = await CartItem.find({ where: { orderId: order?.id } });
-  //     const paidItems = cartItems.filter((item) => {
-  //       return item.status === CartItemStatus.ToDeliver;
-  //     });
-  //     if (paidItems.length === cartItems.length) {
-  //       console.log("true");
-  //       return true;
-  //     } else {
-  //       console.log("false");
-  //       return false;
-  //     }
-  //   }
-  // }
-
-  // export async function generateQr() {
-  //   const mobilenumber = "0961489046";
-  //   const amount = 20; // THB;
-  //   const payload = generatePayload(mobilenumber, { amount });
-  //   console.log({ payload });
-  //   console.log(qrcode);
-  //   qrcode.toFile("./imageQR/result.png", payload, (err) => {
-  //     if (err) throw err;
-  //     console.log("complete");
-  //   });
+  @UseMiddleware(isAuth)
+  @Query(() => Boolean)
+  async paymentIsComplete(@Arg("paymentId", () => Int) paymentId: number) {
+    const order = await Order.findOne({ where: { paymentId } });
+    const cartItems = await CartItem.find({ where: { orderId: order?.id } });
+    const paidItems = cartItems.filter(
+      (item) => item.status === CartItemStatus.ToDeliver
+    );
+    if (paidItems.length === cartItems.length) {
+      return true;
+    }
+    return false;
+  }
 }
+
+// export async function generateQr() {
+//   const mobilenumber = "0961489046";
+//   const amount = 20; // THB;
+//   const payload = generatePayload(mobilenumber, { amount });
+//   qrcode.toFile("./imageQR/result.png", payload, (err) => {
+//     if (err) throw err;
+
+//   });
+// }

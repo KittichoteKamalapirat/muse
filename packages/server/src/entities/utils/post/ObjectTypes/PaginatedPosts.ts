@@ -1,5 +1,5 @@
 import { ObjectType, Field } from "type-graphql";
-import Post from "../../Post";
+import Post from "../../../Post";
 
 @ObjectType()
 class PaginatedPosts {

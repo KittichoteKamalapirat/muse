@@ -1,5 +1,5 @@
 import { InputType, Field } from "type-graphql";
-import { IngredientInput } from "..";
+import { IngredientInput } from "../..";
 
 @InputType()
 export class PostInput {
