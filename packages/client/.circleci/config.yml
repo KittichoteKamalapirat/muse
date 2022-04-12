@@ -75,7 +75,10 @@ jobs:
           command: yarn cypress:run
 
       - store_artifacts:
-          path: ~/repo/artifacts
+          path: ~/repo/artifacts/videos
+
+      - store_artifacts:
+          path: ~/repo/artifacts/screenshots
 
   client-deploy-prod:
     docker:
@@ -100,22 +103,6 @@ jobs:
           # working_directory: packages/client
           command: yarn install
 
-      # - run:
-      #     name: "run unit test"
-      #     working_directory: packages/client
-      #     command: |
-      #       yarn test
-
-      # name: "run integration test"
-      # command: |
-      # yarn cypress run --project ./spec
-
-      # save test results
-      # - store_artifacts:
-      # path: vulcan/spec/cypress/videos
-      # - store_artifacts:
-      # path: vulcan/spec/cypress/screenshots
-      # - run:
       - run:
           name: Build Next.JS App
           working_directory: packages/client
