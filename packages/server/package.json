@@ -21,7 +21,8 @@
     "start:cixx": "(NODE_ENV=development PORT=4000 node dist/index.js &) >/dev/null & wait-on http://localhost:4000",
     "start:ci": "(NODE_ENV=development node --trace-warnings dist/index.js&) >/dev/null ",
     "ci:test": "jest NODE_ENV=test jest --ci --runInBand --detectOpenHandles --forceExit",
-    "server-for-cypress": "NODE_ENV=test node dist/index.js"
+    "server-for-cypress": "NODE_ENV=test node dist/index.js",
+    "cypress:open": "NODE_ENV=test yarn cypress open --project ./src"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +40,7 @@
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^5.17.0",
     "@typescript-eslint/parser": "^5.17.0",
+    "cypress": "^9.5.4",
     "eslint": "^8.12.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
