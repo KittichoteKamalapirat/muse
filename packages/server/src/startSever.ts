@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";

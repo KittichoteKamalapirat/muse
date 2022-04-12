@@ -74,6 +74,9 @@ jobs:
           working_directory: packages/client
           command: yarn cypress:run
 
+      - store_artifacts:
+          path: ~/repo/artifacts
+
   client-deploy-prod:
     docker:
       - image: cimg/node:17.6.0
