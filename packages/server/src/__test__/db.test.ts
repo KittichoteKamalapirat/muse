@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { Server } from "http";
 import { Connection } from "typeorm";
 import { v4 } from "uuid";
@@ -21,8 +22,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await postgresDb.close; //error -> Jest did not exit one second after the test run has completed
-  await expressServer.close(); //close express ? close postgres
+  await postgresDb.close; // error -> Jest did not exit one second after the test run has completed
+  await expressServer.close(); // close express ? close postgres
 });
 
 describe("db tests", () => {
@@ -36,10 +37,7 @@ describe("db tests", () => {
       isCreator: false,
       avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
     };
-
     const user = User.create(data);
-    console.log(user);
-
     return user.save();
   });
 });
