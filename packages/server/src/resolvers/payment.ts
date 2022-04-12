@@ -13,12 +13,6 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 // import generatePayload from "promptpay-qr";
-import {
-  GENERATE_SCB_ACCESS_TOKEN_URL_PROD,
-  REQUEST_CREATE_SCB_QR30_URL_PROD,
-  SCB_API_KEY_PROD,
-  SCB_API_SECRET_PROD,
-} from "../constants";
 import { CartItem, CartItemStatus } from "../entities/CartItem";
 import { Order } from "../entities/Order";
 import { Payment } from "../entities/Payment";
@@ -127,17 +121,17 @@ export const getScbToken = async () => {
     const authentication_headers = {
       headers: {
         "Content-Type": "application/json",
-        resourceOwnerId: SCB_API_KEY_PROD,
+        resourceOwnerId: process.env.SCB_API_KEY,
         requestUId: "uniqueIdentifier",
         // "accept-language": "EN", //or "TH"
       },
       method: "POST",
       body: JSON.stringify({
-        applicationKey: SCB_API_KEY_PROD,
-        applicationSecret: SCB_API_SECRET_PROD,
+        applicationKey: process.env.SCB_API_KEY,
+        applicationSecret: process.env.SCB_API_SECRET,
       }),
     };
-    const response = await fetch(GENERATE_SCB_ACCESS_TOKEN_URL_PROD, {
+    const response = await fetch(process.env.GENERATE_SCB_ACCESS_TOKEN_URL, {
       ...authentication_headers,
     });
     // const body = await response.text();
@@ -162,7 +156,7 @@ export const createScbQr = async (amount: number, orderId: number) => {
         authorization: `Bearer ${token}`,
         requestUId: "uniqueIdentifier",
         // resourceOwnerId: SCB_API_KEY,
-        resourceOwnerId: SCB_API_KEY_PROD,
+        resourceOwnerId: process.env.SCB_API_KEY,
       },
 
       // comment out code before testing with scb
@@ -191,7 +185,7 @@ export const createScbQr = async (amount: number, orderId: number) => {
 
     console.log("qr headers");
     console.log(qr_headers);
-    const response = await fetch(REQUEST_CREATE_SCB_QR30_URL_PROD, {
+    const response = await fetch(process.env.REQUEST_CREATE_SCB_QR30_URL, {
       ...qr_headers,
     });
     console.log({ response });
@@ -253,7 +247,7 @@ export class PaymentResolver {
       const token = await getScbToken();
       const requestOptions = {
         headers: {
-          resourceOwnerId: SCB_API_KEY_PROD,
+          resourceOwnerId: process.env.SCB_API_KEY,
           requestUId: "later",
           authorization: `Bearer ${token}`,
         },
