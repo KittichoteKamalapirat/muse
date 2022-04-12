@@ -1,6 +1,6 @@
 import { MyContext } from "../types";
 import { MiddlewareFn } from "type-graphql";
-import { User } from "../entities/User";
+import { User } from "../entities";
 
 export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const userId = context.req.session.userId;

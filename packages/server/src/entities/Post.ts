@@ -9,23 +9,12 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { Mealkit } from "./Mealkit";
-import { Upvote } from "./Upvote";
-import { User } from "./User";
-
-@ObjectType()
-export class Ingredient {
-  @Field()
-  ingredient: string;
-  @Field()
-  amount: string;
-  @Field()
-  unit: string;
-}
+import { Mealkit, Upvote, User } from ".";
+import Ingredient from "./Ingredient";
 
 @ObjectType()
 @Entity()
-export class Post extends BaseEntity {
+class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -59,7 +48,7 @@ export class Post extends BaseEntity {
   points!: number;
 
   @Field(() => Int, { nullable: true })
-  voteStatus: number | null; //willl be 1 or -1, this is used to check the status of this post for a user
+  voteStatus: number | null; // willl be 1 or -1, this is used to check the status of this post for a user
 
   @Column({ nullable: true })
   @Field()
@@ -74,9 +63,9 @@ export class Post extends BaseEntity {
   // @Field()
   creatorId: string;
 
-  @Field(() => User) //need to have explicit type
-  @ManyToOne((type) => User, (user) => user.posts)
-  //user.posts have to be added in the User type
+  @Field(() => User) // need to have explicit type
+  @ManyToOne(() => User, (user) => user.posts)
+  // user.posts have to be added in the User type
   creator: User;
   // └the foreign Id will be creatorId
   // Many to one will create a foreign key, but we sitll ne to create the colum by ourself
@@ -86,7 +75,7 @@ export class Post extends BaseEntity {
   // Because, by using function syntax we solve the problem of circular dependencies (e.g. Post <--> User), so it was adopted as a convention.
   // You can use the shorthand syntax @Field(() => Rate) if you want to save some keystrokes but it might be less readable for others.
 
-  @OneToMany((type) => Upvote, (upvote) => upvote.post)
+  @OneToMany(() => Upvote, (upvote) => upvote.post)
   upvotes: Upvote[];
 
   @Field(() => [Ingredient], { nullable: true })
@@ -96,7 +85,7 @@ export class Post extends BaseEntity {
   // testJson: object[];
 
   @Field(() => [Mealkit], { nullable: true })
-  @OneToMany((type) => Mealkit, (mealkit) => mealkit.post, {
+  @OneToMany(() => Mealkit, (mealkit) => mealkit.post, {
     cascade: true,
   })
   mealkits: Mealkit[];
@@ -109,3 +98,5 @@ export class Post extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Post;

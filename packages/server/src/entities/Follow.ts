@@ -8,11 +8,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "./User";
+import { User } from ".";
 
 @ObjectType()
 @Entity()
-export class Follow extends BaseEntity {
+class Follow extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id: number;
@@ -45,3 +45,5 @@ export class Follow extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Follow;

@@ -11,10 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItem } from "./CartItem";
-import { Payment } from "./Payment";
-import { Tracking } from "./Tracking";
-import { User } from "./User";
+import { CartItem, Payment, User } from "./";
 
 @ObjectType()
 class CartItemsByCreator {
@@ -30,7 +27,7 @@ class CartItemsByCreator {
 
 @ObjectType()
 @Entity()
-export class Order extends BaseEntity {
+class Order extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
@@ -74,3 +71,5 @@ export class Order extends BaseEntity {
   @Field()
   updatedAt: Date;
 }
+
+export default Order;

@@ -13,9 +13,8 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { Mealkit } from "../entities/Mealkit";
-import { User } from "../entities/User";
+import { CartItem, Mealkit } from "../entities";
+import { CartItemStatus } from "../entities/CartItem";
 import { isAdmin } from "../middlware/isAdmin";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";

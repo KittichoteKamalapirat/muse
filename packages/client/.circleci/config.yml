@@ -4,7 +4,77 @@ version: 2.1
 
 # define the job to be used in the owrkflow
 jobs:
-  client-job1:
+  client-test:
+    docker:
+      # - image: cimg/node:17.6.0
+      #   auth:
+      #     username: $DOCKERHUB_USERNAME
+      #     password: $DOCKERHUB_PASSWORD
+      #   environment:
+      #     NODE_ENV: test
+      #     CYPRESS: 1
+      #     PGHOST: 127.0.0.1
+      #     PGUSER: root
+
+      - image: cypress/base:17.8.0
+        environment:
+          TERM: xterm # this enables colors in the output
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+      - image: cimg/postgres:14.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: chain123
+          POSTGRES_DB: cookknowdb_dev
+
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          # working_directory: packages/client
+          command: yarn install
+
+      - run:
+          name: Check-types
+          working_directory: packages/client
+          command: yarn check-types
+
+      - run:
+          name: compile typescript (server)
+          working_directory: packages/server
+          command: |
+            yarn global add typescript
+            tsc
+
+      - run:
+          name: start a server for cypress
+          working_directory: packages/server
+          command: yarn start:ci
+
+      - run:
+          name: start NEXT js client
+          working_directory: packages/client
+          command: |
+            yarn start:ci
+          background: true
+
+      - run:
+          name: run cypress
+          working_directory: packages/client
+          command: yarn cypress:run
+
+  client-deploy-prod:
     docker:
       - image: cimg/node:17.6.0
         auth:
@@ -32,20 +102,6 @@ jobs:
       #     working_directory: packages/client
       #     command: |
       #       yarn test
-
-      - run:
-          name: start server, start Next app, and run cypress
-          working_directory: packages/server
-          # run a server (build and run nodemon)
-          # run a client
-          # run cypress
-          command: |
-            tsc
-            yarn start:ci 
-            cd ../client
-
-            yarn start:ci
-            yarn cypress:run
 
       # name: "run integration test"
       # command: |
@@ -75,11 +131,19 @@ jobs:
             curl -X POST $VERCEL_DEPLOY_HOOK_TEST
           filters:
             branches:
-              only: test-master
+              only: test-master # TODO fix this
 
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:
     jobs:
-      - client-job1
+      - client-test:
+          name: 🔬 Run jest and cypress
+      - client-deploy-prod:
+          name: 🌍 Deploy to production!
+          requires:
+            - 🔬 Run jest and cypress
+          filters:
+            branches:
+              only: master
 #test

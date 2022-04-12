@@ -8,12 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Mealkit } from "./Mealkit";
-import { User } from "./User";
+import { Mealkit, User } from "./";
 
 @Entity()
 @ObjectType()
-export class Review extends BaseEntity {
+class Review extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
@@ -67,3 +66,5 @@ export class Review extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Review;

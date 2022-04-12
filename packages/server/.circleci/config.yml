@@ -1,6 +1,53 @@
 version: 2.1
+
 jobs:
   server-test:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: cimg/postgres:14.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: chain123
+          POSTGRES_DB: cookknowdb_test
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          # working_directory: packages/server
+          command: yarn install
+
+      - run:
+          name: Check-types
+          working_directory: packages/server
+          command: yarn check-types
+
+      - run:
+          name: compile typescript and start server
+          working_directory: packages/server
+          # run a server (build and run nodemon)
+          # run a client
+          # run cypress
+          command: |
+            yarn global add typescript
+            tsc
+
+      - run:
+          name: run jest
+          working_directory: packages/server
+          command: yarn test
+
+  server-deploy-prod:
     docker:
       - image: cimg/node:17.6.0
         auth:
@@ -52,9 +99,9 @@ jobs:
 
       # run on root
       # increase from version in apckage.json
-      - run:
-          name: Create a new version with lerna
-          command: yarn new-version
+      # - run:
+      #     name: Create a new version with lerna
+      #     command: yarn new-version
 
       # premium feature
       #default version is 17.09.0-ce which gives ERROR EPERM: operation not permitted
@@ -64,7 +111,14 @@ jobs:
 
       # priting all tags for debugging purpose
       - run: git tag
-      - run: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=2) | sed -n 2p`' >> $BASH_ENV
+
+      # the the second to last tag (use to compare with the current one)
+      # - run: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=2) | sed -n 2p`' >> $BASH_ENV
+
+      - run:
+          name: Get the latest tag and put in $VERSION
+          command: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1)`' >> $BASH_ENV
+
       - run: echo $VERSION
 
       # run from root
@@ -72,9 +126,6 @@ jobs:
           name: Build docker image and push to docker hub
           # working_directory: packages/server
           command: yarn ci:docker
-          filters:
-            branches:
-              only: master
 
       # circleci_digital_ocean_cookknow private ssh key
       - add_ssh_keys:
@@ -85,9 +136,6 @@ jobs:
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
-          filters:
-            branches:
-              only: master
 
       # - run:
       #     name: Login and push in Dokku
@@ -107,6 +155,16 @@ jobs:
 #     "ci:docker": "npm run docker:build && npm run docker:login && npm run docker:push"
 
 workflows:
+  version: 2
   server-workflow:
     jobs:
-      - server-test
+      - server-test:
+          name: 🧪  Run jest test
+
+      - server-deploy-prod:
+          name: 🚀 Deploy to production!
+          requires:
+            - 🧪  Run jest test
+          filters:
+            branches:
+              only: master

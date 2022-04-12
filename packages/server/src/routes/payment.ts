@@ -1,80 +1,69 @@
 import { Router } from "express";
-import { CartItem, CartItemStatus } from "../entities/CartItem";
-import { CartItemNoti } from "../entities/CartItemNoti";
-import { Order } from "../entities/Order";
-import { Tracking } from "../entities/Tracking";
+import { CartItem, Order, CartItemNoti } from "../entities";
+import { CartItemStatus } from "../entities/CartItem";
 
 const router = Router();
 
-//url: server.cookknow.com/api/payment/scb-confirm
+// url: server.cookknow.com/api/payment/scb-confirm
 router.post("/scb-confirm", async (req, res) => {
   try {
+    // eslint-disable-next-line no-console
     console.log("got response from SCB");
-    console.log("print req parameter");
-    console.log(req);
+    const ref1 = parseInt(req.body.billPaymentRef1, 10);
 
-    const ref1 = parseInt(req.body.billPaymentRef1);
-    console.log("ref1");
-    console.log(ref1);
+    await CartItem.update(
+      { orderId: ref1 },
+      { status: CartItemStatus.ToDeliver }
+    );
 
-    // await CartItem.update(
-    //   { orderId: ref1 },
-    //   { status: CartItemStatus.ToDeliver }
-    // );
+    const cartItems = await CartItem.find({
+      where: { orderId: ref1 },
+      relations: ["user", "mealkit"],
+    });
 
-    // const cartItems = await CartItem.find({
-    //   where: { orderId: ref1 },
-    //   relations: ["user", "mealkit"],
-    // });
+    cartItems.forEach(async (cartItem) => {
+      const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
+      await CartItemNoti.create({
+        read: false,
+        message,
+        cartItemId: cartItem.id,
+        creatorId: cartItem.mealkit.creatorId,
+      }).save();
+    });
 
-    // cartItems.forEach(async (cartItem) => {
-    //   const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
-    //   await CartItemNoti.create({
-    //     read: false,
-    //     message: message,
-    //     cartItemId: cartItem.id,
-    //     creatorId: cartItem.mealkit.creatorId,
-    //   }).save();
-    // });
+    // have to send back to SCB
 
-    //have to send back to SCB
-
-    console.log("send back to SCB");
     const response = {
       resCode: "00",
       "resDesc ": "success",
       transactionId: req.body.transactionId,
-      confirmId: "xxx", //TODO change later
+      confirmId: "xxx", // TODO change later
     };
 
-    console.log("response");
-    console.log(response);
     res.send(response);
-    res.end;
   } catch (error) {
-    console.log(error);
+    // todo
   }
 });
 
-//url: server.cookknow.com/api/payment/test
+// url: server.cookknow.com/api/payment/test
 router.get("/test", async (req, res) => {
-  console.log("Hello from server, api route");
   res.send("Hello from server, api route");
 });
 
-//for frontend to query with setInterval
-//url: server.cookknow.com/api/payment/cart-item-status/:id
+// for frontend to query with setInterval
+// url: server.cookknow.com/api/payment/cart-item-status/:id
 router.get("/status/:id", async (req, res) => {
-  //I have paymentId
-  //I need status but it is with cartItem
-  //order has paymentId
-  //cartItem has order Id
+  // I have paymentId
+  // I need status but it is with cartItem
+  // order has paymentId
+  // cartItem has order Id
   const { id: paymentId } = req.params;
   const order = await Order.findOne({ where: { paymentId } });
   const cartItems = await CartItem.find({ where: { orderId: order?.id } });
-  const paidItems = cartItems.filter((item) => {
-    return item.status === CartItemStatus.ToDeliver;
-  });
+  const paidItems = cartItems.filter(
+    (item) => item.status === CartItemStatus.ToDeliver
+  );
   if (paidItems.length === cartItems.length) {
     res.send(true);
   } else {

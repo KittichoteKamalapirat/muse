@@ -9,11 +9,11 @@ import {
   OneToOne,
   JoinColumn,
 } from "typeorm";
-import { User } from "./User";
+import { User } from ".";
 
 @ObjectType()
 @Entity()
-export class Address extends BaseEntity {
+class Address extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -63,7 +63,7 @@ export class Address extends BaseEntity {
   userId: string;
 
   @Field(() => User)
-  @OneToOne((type) => User, (user) => user.address)
+  @OneToOne(() => User, (user) => user.address)
   @JoinColumn()
   user: User;
 
@@ -79,3 +79,5 @@ export class Address extends BaseEntity {
   @Field()
   updatedAt: Date;
 }
+
+export default Address;

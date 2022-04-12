@@ -11,8 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { PaymentInfo } from "../entities/PaymentInfo";
-import { User } from "../entities/User";
+import { PaymentInfo, User } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { FieldError } from "../utils/FieldError";

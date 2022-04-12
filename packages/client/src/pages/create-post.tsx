@@ -1,15 +1,16 @@
+import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-
-import { Button, IconButton, Img } from "@chakra-ui/react";
-import { Formik, Form, useFormikContext, FormikProps } from "formik";
-import React, {
-  MutableRefObject,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Wrapper } from "../components/Wrapper";
+import { Button, IconButton } from "@chakra-ui/react";
+import axios from "axios";
+import { Form, Formik, FormikProps } from "formik";
+import { useRouter } from "next/router";
+import React, { RefObject, useEffect, useRef, useState } from "react";
+import { CreateMealkit } from "../components/CreateMealkit";
+import { CreatePostForm } from "../components/CreatePostForm";
+import { CreateRecipe } from "../components/CreateRecipe";
+import { CreateThumbnail } from "../components/CreateThumbnail";
+import { CreateVideo } from "../components/CreateVideo";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import {
   SignS3Params,
   useCreateMealkitMutation,
@@ -17,22 +18,19 @@ import {
   useSignMealkitS3Mutation,
   useSignS3Mutation,
 } from "../generated/graphql";
-import { useRouter } from "next/router";
-
-import { useIsAuth } from "../util/useIsAuth";
-import axios from "axios";
-import moment from "moment";
-import { withApollo } from "../util/withApollo";
-import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { CreateMealkit } from "../components/CreateMealkit";
-import { CreateRecipe } from "../components/CreateRecipe";
-import { CreatePostForm } from "../components/CreatePostForm";
-import { CreateVideo } from "../components/CreateVideo";
-import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import { CreateThumbnail } from "../components/CreateThumbnail";
-import { printSourceLocation } from "graphql";
-import { dataURItoBlob } from "../util/dataURItoBlob";
 import { uploadToS3 } from "../util/createPost/uploadToS3";
+import { dataURItoBlob } from "../util/dataURItoBlob";
+import { useIsAuth } from "../util/useIsAuth";
+import { withApollo } from "../util/withApollo";
+
+const postValues = {
+  title: "",
+  text: "",
+  portion: "",
+  cooktime: "",
+  advice: "",
+  videoUrl: "change this later",
+};
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
@@ -95,14 +93,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   });
 
   const [signMealkitS3] = useSignMealkitS3Mutation();
-  const postValues = {
-    title: "",
-    text: "",
-    portion: "",
-    cooktime: "",
-    advice: "",
-    videoUrl: "change this later",
-  };
 
   const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
     const reader = new FileReader();
@@ -529,8 +519,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       mealkitInput.name != "" &&
       mealkitInput.portion != "" &&
       mealkitInput.price != "" &&
-      mealkitInput.images.length > 0 &&
-      mealkitInput.items.length > 0
+      mealkitInput.images.length > 0
+      // mealkitInput.items.length > 0
     ) {
       mealkitSubmittable = true;
     }

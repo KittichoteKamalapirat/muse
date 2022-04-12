@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Order } from "./Order";
+import { Order } from ".";
 
 @ObjectType()
 @Entity()
-export class Payment extends BaseEntity {
+class Payment extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
@@ -40,3 +40,5 @@ export class Payment extends BaseEntity {
   @Field()
   updatedAt: Date;
 }
+
+export default Payment;

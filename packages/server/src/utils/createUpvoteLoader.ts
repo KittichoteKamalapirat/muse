@@ -1,5 +1,5 @@
 import DataLoader from "dataloader";
-import { Upvote } from "../entities/Upvote";
+import { Upvote } from "../entities";
 
 // keys (all the post in homepage)
 // [{ postId: 221, userId: 64 },

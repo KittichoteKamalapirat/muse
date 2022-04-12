@@ -4,14 +4,13 @@ import {
   BaseEntity,
   PrimaryGeneratedColumn,
   Column,
-  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
 
 @ObjectType()
 @Entity()
-export class Ingredient extends BaseEntity {
+class Ingredient extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id!: number;
@@ -22,7 +21,7 @@ export class Ingredient extends BaseEntity {
 
   @Column()
   @Field()
-  amount!: number;
+  amount!: string;
 
   @Column()
   @Field()
@@ -44,3 +43,5 @@ export class Ingredient extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Ingredient;

@@ -15,11 +15,10 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Mealkit } from "../entities/Mealkit";
+import { Mealkit } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-import { ReviewResolver } from "./review";
 
 @InputType()
 class MealkitInput {

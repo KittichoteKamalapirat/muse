@@ -23,9 +23,9 @@
     "host": "localhost",
     "port": 5432,
     "entities": ["dist/entities/*.js"],
-    "migrations": ["dist/migrations/*.js"],
-    "logging": false,
-    "synchronize": true,
-    "dropSchema": true
+    "dropSchema": true,
+    "migrations": ["src/migrations/*.js"],
+    "logging": true,
+    "synchronize": true
   }
 ]

@@ -2,19 +2,15 @@ import {
   Arg,
   Ctx,
   Field,
-  FieldResolver,
   InputType,
   Int,
   Mutation,
   Query,
   Resolver,
-  Root,
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItem } from "../entities/CartItem";
-import { Mealkit } from "../entities/Mealkit";
-import { Review } from "../entities/Review";
+import { CartItem, Mealkit, Review } from "../entities/";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 

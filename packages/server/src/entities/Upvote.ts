@@ -8,8 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from "./Post";
-import { User } from "./User";
+import { Post, User } from "./";
 
 // many to many
 // user <-> posts
@@ -18,7 +17,7 @@ import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Upvote extends BaseEntity {
+class Upvote extends BaseEntity {
   @Field()
   @Column({ type: "int" })
   value: number; //will be 1 or -1
@@ -49,3 +48,5 @@ export class Upvote extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
+
+export default Upvote;
