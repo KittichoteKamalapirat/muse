@@ -25,7 +25,7 @@
     "entities": ["dist/entities/*.js"],
     "dropSchema": true,
     "migrations": ["src/migrations/*.js"],
-    "logging": true,
+    "logging": false,
     "synchronize": true
   }
 ]
