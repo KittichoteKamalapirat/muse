@@ -11,7 +11,8 @@ export const adminData = (
     return {
       cartItemId: cartItem.id,
       status: cartItem.status,
-      bankAccount: cartItem.user?.paymentInfo?.bankAccount,
+      bankCode: cartItem.mealkit.creator.paymentInfo?.bankCode,
+      bankAccount: cartItem.mealkit.creator.paymentInfo?.bankAccount,
       amount: cartItem.total + cartItem.mealkit.deliveryFee,
     };
   });

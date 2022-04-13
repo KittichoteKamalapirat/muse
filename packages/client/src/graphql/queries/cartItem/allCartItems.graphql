@@ -26,6 +26,11 @@ query allCartItems {
       creator {
         username
         avatar
+        paymentInfo {
+          id
+          bankAccount
+          bankCode
+        }
       }
       postId
       post {

@@ -63,7 +63,13 @@ export const adminColumn = (completeCartItem: any) => {
       },
     },
     {
-      Header: "account",
+      Header: "creator bank",
+      accessor: "bankCode",
+      Filter: Box,
+      isNumeric: true,
+    },
+    {
+      Header: "account number",
       accessor: "bankAccount",
       Filter: Box,
       isNumeric: true,

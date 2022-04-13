@@ -1,12 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
-  InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   Root,
@@ -15,25 +13,10 @@ import {
 import { getConnection } from "typeorm";
 import { CartItem, Mealkit } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
+import { AddToCart, CartItemInput } from "../entities/utils";
 import { isAdmin } from "../middlware/isAdmin";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-
-@InputType()
-class CartItemInput {
-  @Field()
-  mealkitId: number;
-  @Field()
-  quantity: number;
-}
-
-@ObjectType()
-class AddToCart {
-  @Field()
-  cartItem: CartItem;
-  @Field()
-  newItem: boolean;
-}
 
 @Resolver(CartItem)
 export class CartItemResolver {
@@ -45,27 +28,28 @@ export class CartItemResolver {
     return total;
   }
 
-  //cart items which are not orders
+  // cart items which are not orders
   @Query(() => [CartItem])
   @UseMiddleware(isAuth)
   async cartItems(@Ctx() { req }: MyContext): Promise<CartItem[]> {
-    return await CartItem.find({
+    return CartItem.find({
       where: { userId: req.session.userId, orderId: null },
       relations: ["mealkit", "user", "mealkit.post", "mealkit.creator"],
     });
   }
 
-  //for admin
+  // for admin
   @Query(() => [CartItem])
   @UseMiddleware(isAdmin)
-  async allCartItems(@Ctx() { req }: MyContext): Promise<CartItem[]> {
-    return await CartItem.find({
+  async allCartItems(): Promise<CartItem[]> {
+    return CartItem.find({
       relations: [
         "mealkit",
         "user",
         "user.paymentInfo",
         "mealkit.post",
         "mealkit.creator",
+        "mealkit.creator.paymentInfo",
       ],
     });
   }
@@ -106,26 +90,25 @@ export class CartItemResolver {
       // }).save();
       // console.log({ cartItem: sameCartItem, newItem: false });
       return { cartItem: result.raw[0], newItem: false };
-    } else {
-      const newCartItem = await CartItem.create({
-        quantity: input.quantity,
-        userId: req.session.userId,
-        mealkitId: input.mealkitId,
-      }).save();
-
-      if (newCartItem) {
-        console.log({ newCartItem });
-        const mealkit = await Mealkit.findOne(input.mealkitId);
-        if (mealkit) {
-          newCartItem.mealkit = mealkit;
-          return { cartItem: newCartItem, newItem: true };
-        } else {
-          return new Error("Cannot find the following meal kit");
-        }
-      }
-      return undefined;
     }
+    const newCartItem = await CartItem.create({
+      quantity: input.quantity,
+      userId: req.session.userId,
+      mealkitId: input.mealkitId,
+    }).save();
+
+    if (newCartItem) {
+      console.log({ newCartItem });
+      const mealkit = await Mealkit.findOne(input.mealkitId);
+      if (mealkit) {
+        newCartItem.mealkit = mealkit;
+        return { cartItem: newCartItem, newItem: true };
+      }
+      return new Error("Cannot find the following meal kit");
+    }
+    return undefined;
   }
+
   @Mutation(() => CartItem)
   @UseMiddleware(isAuth)
   async updateCartItem(
@@ -137,9 +120,9 @@ export class CartItemResolver {
     const result = await getConnection()
       .createQueryBuilder()
       .update(CartItem)
-      .set({ quantity: quantity })
+      .set({ quantity })
       .where('id = :id and "userId" = :userId', {
-        id: id,
+        id,
         userId: req.session.userId,
       })
       .returning("*")
@@ -158,18 +141,15 @@ export class CartItemResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    await CartItem.delete({ id: id, userId: req.session.userId });
+    await CartItem.delete({ id, userId: req.session.userId });
     return true;
   }
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAdmin)
-  async completeCartItem(
-    @Arg("id", () => Int) id: number,
-    @Ctx() { req }: MyContext
-  ): Promise<boolean> {
+  async completeCartItem(@Arg("id", () => Int) id: number): Promise<boolean> {
     try {
-      await CartItem.update({ id: id }, { status: CartItemStatus.Complete });
+      await CartItem.update({ id }, { status: CartItemStatus.Complete });
       return true;
     } catch (error) {
       console.log(error);

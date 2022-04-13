@@ -177,8 +177,12 @@ export type Follow = {
 export type Ingredient = {
   __typename?: 'Ingredient';
   amount: Scalars['String'];
+  createdAt: Scalars['String'];
+  id: Scalars['Float'];
   ingredient: Scalars['String'];
+  postId: Scalars['Float'];
   unit: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type IngredientInput = {
@@ -1099,7 +1103,7 @@ export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Addr
 export type AllCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllCartItemsQuery = { __typename?: 'Query', allCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, status: string, user?: Maybe<{ __typename?: 'User', id: string, username: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, creatorId: string, postId: number, creator: { __typename?: 'User', username: string, avatar: string }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
+export type AllCartItemsQuery = { __typename?: 'Query', allCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, status: string, user?: Maybe<{ __typename?: 'User', id: string, username: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, creatorId: string, postId: number, creator: { __typename?: 'User', username: string, avatar: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
 
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2612,6 +2616,11 @@ export const AllCartItemsDocument = gql`
       creator {
         username
         avatar
+        paymentInfo {
+          id
+          bankAccount
+          bankCode
+        }
       }
       postId
       post {

@@ -6,19 +6,22 @@ export const useIsAdmin = () => {
   const { data, loading } = useMeQuery();
   const router = useRouter();
   useEffect(() => {
-    // if admin nothing happen
-    // if not, do this
     if (loading) {
       return;
     }
+
+    // case: not logged in
     if (!data?.me) {
-      // replace => can't go back to login page
       router.replace("login?next=" + router.pathname);
       return;
     }
+
+    // case: not admin
     if (!data?.me?.isAdmin) {
       router.replace("/");
       return;
     }
+
+    // case: admin, then do nothing
   }, [loading, data, router]);
 };

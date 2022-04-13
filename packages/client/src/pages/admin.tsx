@@ -49,6 +49,7 @@ const Admin: React.FC<AdminProps> = ({}) => {
     () => adminData(loading, cartItems),
     [loading, cartItems]
   );
+
   const columns = useMemo<Column[]>(() => adminColumn(completeCartItem), []);
 
   const {
@@ -98,10 +99,10 @@ const Admin: React.FC<AdminProps> = ({}) => {
         <Heading fontSize="2xl">Admin Dashboard</Heading>
         <Table {...getTableProps()}>
           <Thead>
-            {headerGroups.map((headerGroup) => (
-              <Tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column: any) => (
-                  <Th>
+            {headerGroups.map((headerGroup, index) => (
+              <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
+                {headerGroup.headers.map((column: any, index) => (
+                  <Th key={index}>
                     <Box
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       isNumeric={column.isNumeric}
@@ -127,14 +128,15 @@ const Admin: React.FC<AdminProps> = ({}) => {
             ))}
           </Thead>
           <Tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map((row, index) => {
               prepareRow(row);
               return (
-                <Tr {...row.getRowProps()}>
-                  {row.cells.map((cell: any) => (
+                <Tr {...row.getRowProps()} key={index}>
+                  {row.cells.map((cell: any, index) => (
                     <Td
                       {...cell.getCellProps()}
                       isNumeric={cell.column.isNumeric}
+                      key={index}
                     >
                       {cell.render("Cell")}
                     </Td>
