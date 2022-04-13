@@ -188,7 +188,7 @@ workflows:
       - server-deploy-prod:
           name: 🚀 Deploy to production!
           requires:
-            - 🧪  Run jest test
+            - 🧪  Run jest and cypress
           filters:
             branches:
               only: master
