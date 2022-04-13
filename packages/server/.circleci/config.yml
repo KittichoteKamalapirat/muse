@@ -37,16 +37,16 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: run jest
-          working_directory: packages/server
-          command: yarn test
-
-      - run:
           name: compile typescript
           working_directory: packages/server
           command: |
             yarn global add typescript
             tsc
+
+      - run:
+          name: run jest
+          working_directory: packages/server
+          command: yarn test
 
       - run:
           name: start a backend for cypress

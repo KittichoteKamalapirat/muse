@@ -6,19 +6,7 @@ version: 2.1
 jobs:
   client-test:
     docker:
-      # - image: cimg/node:17.6.0
-      #   auth:
-      #     username: $DOCKERHUB_USERNAME
-      #     password: $DOCKERHUB_PASSWORD
-      #   environment:
-      #     NODE_ENV: test
-      #     CYPRESS: 1
-      #     PGHOST: 127.0.0.1
-      #     PGUSER: root
-
       - image: cimg/node:17.6.0
-        environment:
-          TERM: xterm # this enables colors in the output
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -103,11 +91,11 @@ workflows:
   client-workflow:
     jobs:
       - client-test:
-          name: 🔬 Run jest and cypress
+          name: 🔬 Run jest
       - client-deploy-prod:
           name: 🌍 Deploy to production!
           requires:
-            - 🔬 Run jest and cypress
+            - 🔬 Run jest
           filters:
             branches:
               only: master
