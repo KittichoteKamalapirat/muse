@@ -11,26 +11,15 @@ const bcrypt = require("bcrypt");
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
   on("task", {
-    async log(message) {
+    async register() {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash("3d2y", salt);
 
-      console.log({ hash });
       typeorm
         .createConnection({
           name: "default",
           type: "postgres",
-          entities: [
-            // "dist/entities/*.js",
-            // "dist/entities/**/*.js",
-            // "src/entities/*.ts",
-            // eslint-disable-next-line global-require
-            "../dist/entities/*.js",
-            // "**/*.entity{.ts,.js}",
-            // "dist/**/*.entity{.ts,.js}",
-            // "dist/src/**/*.entity{.ts,.js}",
-            // "src/**/*.entity{.ts,.js}",
-          ],
+          entities: ["../dist/entities/*.js"],
           dropSchema: true,
           migrations: ["src/migrations/*.js"],
           logging: false,
@@ -38,8 +27,7 @@ module.exports = (on, config) => {
           // url: Cypress.env("dbUrl"),
           url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
         })
-        .then((connection) => {
-          console.log("4");
+        .then(async (connection) => {
           const uuid = uuidv4();
 
           const data = {
@@ -51,23 +39,11 @@ module.exports = (on, config) => {
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
           };
           const userRepository = connection.getRepository("User");
-          return userRepository
-            .save(data)
-            .then((savedPost) => {
-              console.log("Post has been saved: ", savedPost);
-              console.log("Now lets load all posts: ");
+          userRepository.save(data);
 
-              const allUsers = userRepository.find();
-              console.log({ allUsers });
-
-              return userRepository.find();
-            })
-            .then((allPosts) => {
-              console.log("All posts: ", allPosts);
-            });
+          await connection.close;
         });
 
-      console.log(message);
       return null;
     },
   });

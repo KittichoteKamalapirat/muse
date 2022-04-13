@@ -22,7 +22,8 @@
     "start:ci": "(NODE_ENV=development node --trace-warnings dist/index.js&) >/dev/null ",
     "ci:test": "jest NODE_ENV=test jest --ci --runInBand --detectOpenHandles --forceExit",
     "server-for-cypress": "NODE_ENV=test node dist/index.js",
-    "cypress:open": "NODE_ENV=test yarn cypress open --project ./src"
+    "cypress:open": "NODE_ENV=test yarn cypress open --project ./src",
+    "cypress:run": "NODE_ENV=test yarn cypress run --project ./src"
   },
   "keywords": [],
   "author": "",

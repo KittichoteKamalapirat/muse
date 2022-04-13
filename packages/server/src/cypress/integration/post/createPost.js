@@ -2,27 +2,6 @@
 
 describe("post", () => {
   it("creator can create a post", () => {
-    // cy.visit(`${Cypress.env("clientUrl")}`);
-    // visit the site
-    // register
-    // cy.get("a[]")
-    // click the register button
-
-    // const username = "luffy";
-    // const email = "luffy@gmail.com";
-    // const phonenumber = "0900000000";
-    // const password = "3d2y";
-
-    // //create a new account
-    // cy.visit("/register");
-    // cy.get('input[name="username"]').type(username);
-    // cy.get('input[name="email"]').type(email);
-    // cy.get('input[name="phonenumber"]').type(phonenumber);
-    // cy.get('input[name="password"]').type(password);
-    // cy.get('button[type="submit"]').click();
-
-    // go to account and become a creator
-
     cy.get('a[aria-label="My Account Button"]').click();
 
     cy.get('button:contains("Switch Account type")').click();
@@ -78,6 +57,8 @@ describe("post", () => {
     cy.get('input[name="portion"]').type(mealkitPortion);
 
     cy.get('button[type="submit"]').click();
+
+    cy.wait(60000);
 
     // check the post is created
     cy.contains(title).should("be.exist");

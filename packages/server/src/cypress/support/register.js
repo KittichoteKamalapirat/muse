@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
 it("register a user", () => {
-  cy.task("log", "This will be output to the terminal");
-  cy.wait(1000);
+  cy.task("register", "This will be output to the terminal");
+  cy.wait(1000); // wait awhile for the data to be saved to
 });

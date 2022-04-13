@@ -14,7 +14,7 @@ import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
 import { Mealkit, Post, Upvote, User } from "../entities";
 import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
-import { PostInput } from "../entities/utils/post/InputTypes/PostInput";
+import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
