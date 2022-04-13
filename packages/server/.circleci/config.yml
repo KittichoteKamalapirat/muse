@@ -65,7 +65,6 @@ jobs:
           working_directory: packages/server
           command: yarn cypress:run
 
-      # circle ci create artifacts at these path, so I just save have to upload them
       - store_artifacts:
           path: ~/project/packages/server/src/cypress/videos
 
