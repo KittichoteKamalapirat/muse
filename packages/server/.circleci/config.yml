@@ -66,7 +66,7 @@ jobs:
           command: yarn cypress:run
 
       - store_artifacts:
-          path: ~/project/packages/server/src/cypress/videos
+          path: /root/project/packages/server/src/cypress/videos
 
       - store_artifacts:
           path: ~/project/packages/server/src/cypress/screenshots
