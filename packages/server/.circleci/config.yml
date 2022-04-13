@@ -69,7 +69,7 @@ jobs:
           path: ~/repo/artifacts/videos
 
       - store_artifacts:
-          path: ~/repo/artifacts/screenshots
+          path: ~/project/packages/server/src/cypress/screenshots
 
   server-deploy-prod:
     docker:

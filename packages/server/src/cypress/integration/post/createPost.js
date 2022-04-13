@@ -2,14 +2,18 @@
 
 describe("post", () => {
   it("creator can create a post", () => {
-    cy.get('a[aria-label="My Account Button"]').click();
+    cy.get('a[aria-label="My Account Button"]').click({ force: true });
 
-    cy.get('button:contains("Switch Account type")').click();
-    cy.get('button:contains("Switch to Creator Account")').click();
+    cy.get('button:contains("Switch Account type")').click({ force: true });
+    cy.get('button:contains("Switch to Creator Account")').click({
+      force: true,
+    });
 
-    cy.get('a:contains("My shop")').click();
+    cy.get('a:contains("My shop")').click({ force: true });
 
-    cy.get('a:contains("Create new video with meal kit")').click();
+    cy.get('a:contains("Create new video with meal kit")').click({
+      force: true,
+    });
 
     // create a new product
 
@@ -29,7 +33,7 @@ describe("post", () => {
         mimeType: "img/png",
       });
 
-    cy.get('button:contains("Next")').click();
+    cy.get('button:contains("Next")').click({ force: true });
 
     // fill in details
     const title = "Marinara";
@@ -40,7 +44,7 @@ describe("post", () => {
     cy.get('textarea[name="text"]').type(text);
     cy.get('input[name="cooktime"]').type(cooktime);
     cy.get('input[name="portion"]').type(postPortion);
-    cy.get('button:contains("Next")').click();
+    cy.get('button:contains("Next")').click({ force: true });
 
     // fill in mealkit
     const mealkitName = "Marinara Mealkit";
@@ -56,7 +60,7 @@ describe("post", () => {
     cy.get('input[name="price"]').type(price);
     cy.get('input[name="portion"]').type(mealkitPortion);
 
-    cy.get('button[type="submit"]').click();
+    cy.get('button[type="submit"]').click({ force: true });
 
     cy.wait(60000);
 
