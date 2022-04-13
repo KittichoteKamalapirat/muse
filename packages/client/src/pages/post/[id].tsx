@@ -1,5 +1,5 @@
 import React from "react";
-import { useMeQuery } from "../../generated/graphql";
+import { Ingredient, useMeQuery } from "../../generated/graphql";
 
 import { Box, Heading, Text, Divider, Flex, Avatar } from "@chakra-ui/react";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
@@ -85,7 +85,9 @@ const Post = ({}) => {
               )}
 
               {!data.post.ingredients ? null : (
-                <IngredientList ingredients={data.post.ingredients} />
+                <IngredientList
+                  ingredients={data.post.ingredients as Ingredient[]}
+                />
               )}
 
               {!data.post.instruction ? null : (
