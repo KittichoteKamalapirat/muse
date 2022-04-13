@@ -7,15 +7,14 @@
     "dev": "next dev",
     "dev:test": "NODE_ENV=test next dev -p 2999 ",
     "build": "next build",
-    "test": "jest src/* --watch",
+    "test-comment": "jest src/* --watch",
+    "test": "jest ",
     "lint": "next lint",
     "start": "next start",
     "gen": "graphql-codegen --config codegen.yml",
     "check-types": "tsc --noemit",
     "postinstall": "expo-yarn-workspaces postinstall",
     "ci:vercel": "vercel --prod --token $VERCEL_TOKEN_FOR_CIRCLECI",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run",
     "start-nextjs-for-testing": "NODE_ENV=development next dev -p 2999 ",
     "start:ci": "(yarn start-nextjs-for-testing&) & wait-on http://localhost:2999 "
   },
@@ -50,6 +49,7 @@
     "urql": "^2.0.4"
   },
   "devDependencies": {
+    "@apollo/react-testing": "^4.0.0",
     "@babel/preset-react": "^7.16.7",
     "@graphql-codegen/cli": "2.1.1",
     "@graphql-codegen/typescript": "2.1.2",
@@ -59,6 +59,7 @@
     "@testing-library/cypress": "^8.0.2",
     "@testing-library/jest-dom": "^5.16.3",
     "@testing-library/react": "^12.1.3",
+    "@testing-library/react-hooks": "^8.0.0",
     "cypress": "^9.5.1",
     "cypress-file-upload": "^5.0.8",
     "eslint": "^8.12.0",
