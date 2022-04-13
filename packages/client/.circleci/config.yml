@@ -16,7 +16,7 @@ jobs:
       #     PGHOST: 127.0.0.1
       #     PGUSER: root
 
-      - image: cypress/base:17.8.0
+      - image: cimg/node:17.6.0
         environment:
           TERM: xterm # this enables colors in the output
         auth:
@@ -51,34 +51,9 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: compile typescript (server)
-          working_directory: packages/server
-          command: |
-            yarn global add typescript
-            tsc
-
-      - run:
-          name: start a server for cypress
-          working_directory: packages/server
-          command: yarn start:ci
-
-      - run:
-          name: start NEXT js client
+          name: run jest
           working_directory: packages/client
-          command: |
-            yarn start:ci
-          background: true
-
-      - run:
-          name: run cypress
-          working_directory: packages/client
-          command: yarn cypress:run
-
-      - store_artifacts:
-          path: ~/repo/artifacts/videos
-
-      - store_artifacts:
-          path: ~/repo/artifacts/screenshots
+          command: yarn test
 
   client-deploy-prod:
     docker:

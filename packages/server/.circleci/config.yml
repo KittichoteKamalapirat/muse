@@ -3,10 +3,13 @@ version: 2.1
 jobs:
   server-test:
     docker:
-      - image: cimg/node:17.6.0
+      - image: cypress/base:17.8.0
+        environment:
+          TERM: xterm # this enables colors in the output
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
+
       - image: cimg/postgres:14.0
         auth:
           username: $DOCKERHUB_USERNAME
@@ -15,6 +18,7 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: chain123
           POSTGRES_DB: cookknowdb_test
+
       - image: cimg/redis:6.2.6
         auth:
           username: $DOCKERHUB_USERNAME
@@ -33,19 +37,39 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: compile typescript and start server
+          name: run jest
           working_directory: packages/server
-          # run a server (build and run nodemon)
-          # run a client
-          # run cypress
+          command: yarn test
+
+      - run:
+          name: compile typescript
+          working_directory: packages/server
           command: |
             yarn global add typescript
             tsc
 
       - run:
-          name: run jest
+          name: start a backend for cypress
           working_directory: packages/server
-          command: yarn test
+          command: yarn start:ci
+
+      - run:
+          name: start NEXT js client
+          working_directory: packages/client
+          command: |
+            yarn start:ci
+          background: true
+
+      - run:
+          name: run cypress
+          working_directory: packages/client
+          command: yarn cypress:run
+
+      - store_artifacts:
+          path: ~/repo/artifacts/videos
+
+      - store_artifacts:
+          path: ~/repo/artifacts/screenshots
 
   server-deploy-prod:
     docker:
@@ -159,7 +183,7 @@ workflows:
   server-workflow:
     jobs:
       - server-test:
-          name: 🧪  Run jest test
+          name: 🧪  Run jest and cypress
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
