@@ -37,7 +37,7 @@ jobs:
           command: yarn check-types
 
       - run:
-          name: compile typescript
+          name: compile typescript (for starting a server and also for jest since it needs orm config)
           working_directory: packages/server
           command: |
             yarn global add typescript
