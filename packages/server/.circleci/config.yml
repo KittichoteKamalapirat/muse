@@ -67,10 +67,10 @@ jobs:
 
       # circle ci create artifacts at these path, so I just save have to upload them
       - store_artifacts:
-          path: project/packages/server/src/cypress/videos
+          path: ~/project/packages/server/src/cypress/videos
 
       - store_artifacts:
-          path: project/packages/server/src/cypress/screenshots
+          path: ~/project/packages/server/src/cypress/screenshots
 
   server-deploy-prod:
     docker:
