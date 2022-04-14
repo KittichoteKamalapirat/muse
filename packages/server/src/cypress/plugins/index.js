@@ -17,6 +17,7 @@ module.exports = (on, config) => {
 
       typeorm
         .createConnection({
+          // name: "cypress-connection",
           name: "default",
           type: "postgres",
           entities: ["../dist/entities/*.js"],
@@ -24,6 +25,7 @@ module.exports = (on, config) => {
           migrations: ["src/migrations/*.js"],
           logging: false,
           synchronize: true,
+          keepConnectionAlive: true,
           // url: Cypress.env("dbUrl"),
           url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
         })
@@ -42,7 +44,7 @@ module.exports = (on, config) => {
           userRepository
             .save(data)
             .then((savedPost) => {
-              console.log("Post has been saved: ", savedPost);
+              console.log("Post has been savedd: ", savedPost);
 
               const allUsers = userRepository.find();
               console.log({ allUsers });
