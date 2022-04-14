@@ -1,5 +1,5 @@
 import "./commands.js";
-import "./clearDb.js";
+import "./clearDbAndCreateAUserInDb.js";
 import "./login.js";
 
 // This example support/index.js is processed and
