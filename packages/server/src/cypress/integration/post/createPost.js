@@ -1,9 +1,17 @@
 /* eslint-disable no-undef */
 
+const usernameOrEmailOrPhonenumber = "luffy";
+const password = "3d2y";
+
 describe("post", () => {
   it("creator can create a post", () => {
+    // login a user and redirect to homepage
+    cy.login(usernameOrEmailOrPhonenumber, password);
+
+    // go to my account page
     cy.get('a[aria-label="My Account Button"]').click({ force: true });
 
+    // become a creator
     cy.get('button:contains("Switch Account type")').click({ force: true });
     cy.get('button:contains("Switch to Creator Account")').click({
       force: true,
@@ -64,12 +72,11 @@ describe("post", () => {
 
     cy.wait(60000);
 
-    // check the post is created
+    // check whether redirects to home page
+    cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
+
+    // check the post was created
     cy.contains(title).should("be.exist");
     cy.contains(mealkitName).should("be.exist");
-
-    // create an order
-
-    // make a payment
   });
 });

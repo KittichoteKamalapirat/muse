@@ -11,7 +11,7 @@ const bcrypt = require("bcrypt");
 // eslint-disable-next-line no-unused-vars
 module.exports = (on, config) => {
   on("task", {
-    async register() {
+    async createAUserInDb() {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash("3d2y", salt);
 
