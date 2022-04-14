@@ -1,13 +1,6 @@
 /* eslint-disable no-undef */
 
-const usernameOrEmailOrPhonenumber = "luffy";
-const password = "3d2y";
-
 describe("post", () => {
-  // afterEach(() => {
-  //   cy.task("clearDb");
-  // });
-
   it("creator can create a post", () => {
     // login a user and redirect to homepage
     // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);

@@ -1,58 +1,42 @@
-import React from "react";
-import { Layout } from "../../components/Layout/Layout";
-import NextLink from "next/link";
+import { gql, useApolloClient } from "@apollo/client";
+import { Center, Heading } from "@chakra-ui/layout";
 import {
+  Avatar,
   Box,
   Button,
   Divider,
   Flex,
-  IconButton,
-  Avatar,
-  Image,
   Link,
+  LinkBox,
+  LinkOverlay,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Text,
-  LinkBox,
-  LinkOverlay,
 } from "@chakra-ui/react";
-import { Center, Heading } from "@chakra-ui/layout";
-import { withApollo } from "../../util/withApollo";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { HeartIcon } from "../../components/Icons/HeartIcon";
+import { Layout } from "../../components/Layout/Layout";
+import { Loading } from "../../components/skeletons/Loading";
+import SvgAccountIcon from "../../components/svgComponents/AccountIcon";
+import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
+import SvgPinIcon from "../../components/svgComponents/PinIcon";
+import SvgRateIcon from "../../components/svgComponents/RateIcon";
+import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
+import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
+import { inActiveGray, primaryColor } from "../../components/Variables";
+import { Wrapper } from "../../components/Wrapper";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   CartItemStatus,
-  MeDocument,
-  MeQuery,
-  useAddressQuery,
   useLogoutMutation,
   useMeQuery,
   useSwitchAccountTypeMutation,
 } from "../../generated/graphql";
-import { useApolloClient, gql } from "@apollo/client";
-import { useRouter } from "next/router";
-import {
-  ChevronDownIcon,
-  InfoIcon,
-  SpinnerIcon,
-  StarIcon,
-} from "@chakra-ui/icons";
-import { AccountIcon } from "../../components/Icons/AccountIcon";
-import { HeartIcon } from "../../components/Icons/HeartIcon";
-import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
-import SvgToPay from "../../components/svgComponents/ToPay";
-import SvgToDeliver from "../../components/svgComponents/ToDeliver";
-import SvgToRate from "../../components/svgComponents/ToRate";
-import SvgOnDelivery from "../../components/svgComponents/OnDelivery";
-import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
-import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
-import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
-import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
-import SvgRateIcon from "../../components/svgComponents/RateIcon";
-import SvgAccountIcon from "../../components/svgComponents/AccountIcon";
-import SvgPinIcon from "../../components/svgComponents/PinIcon";
-import { Loading } from "../../components/skeletons/Loading";
+import { withApollo } from "../../util/withApollo";
 
 interface indexProps {}
 
