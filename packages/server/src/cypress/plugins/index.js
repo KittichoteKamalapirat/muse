@@ -17,8 +17,8 @@ module.exports = (on, config) => {
 
       typeorm
         .createConnection({
-          // name: "cypress-connection",
-          name: "default",
+          name: "cypress-connection",
+          // name: "default",
           type: "postgres",
           entities: ["../dist/entities/*.js"],
           dropSchema: true,
