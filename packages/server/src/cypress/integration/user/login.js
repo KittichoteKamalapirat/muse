@@ -3,6 +3,13 @@
 const usernameOrEmailOrPhonenumber = "luffy";
 const password = "3d2y";
 
-it("login a user", () => {
-  cy.login(usernameOrEmailOrPhonenumber, password);
+// afterEach(() => {
+//   cy.task("clearDb");
+// });
+
+describe("user", () => {
+  it("login a user", () => {
+    // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);
+    cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
+  });
 });

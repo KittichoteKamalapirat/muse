@@ -6,7 +6,7 @@ const password = "3d2y";
 const phonenumber = "0900000000";
 
 describe("user", () => {
-  it("can register a user", () => {
+  it.skip("can register a user", () => {
     // visit register page
     cy.visit("/register");
 

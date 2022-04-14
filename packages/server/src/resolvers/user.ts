@@ -378,7 +378,9 @@ export class UserResolver {
       };
     }
     req.session.userId = user.id;
-    console.log(req.session);
+
+    console.log("print userId session from login resolver");
+    console.log(req.session.userId);
     return { user: user };
   }
 
@@ -412,6 +414,8 @@ export class UserResolver {
     @Arg("becomeCreator") becomeCreator: boolean,
     @Ctx() { req, res }: MyContext
   ) {
+    console.log("switch account type");
+    console.log(req.session.userId);
     await User.update(
       { id: req.session.userId },
       {

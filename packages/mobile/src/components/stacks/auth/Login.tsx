@@ -1,12 +1,10 @@
-import React, { useContext, useState } from "react";
+import { useLoginMutation, useMeQuery } from "@cookknow/shared-package";
+import React, { useState } from "react";
 import { Button, Text, View } from "react-native";
 import { AuthNavProps } from "../../../utils/AuthParamList";
-import { AuthContext } from "../../AuthProvider";
 import { FormInput } from "../../atomic/atoms/FormInput";
 import { FormSubmit } from "../../atomic/atoms/FormSubmit";
 import { Center } from "../../Container/Center";
-import { useLoginMutation, useMeQuery } from "@cookknow/shared-package";
-import { shitColor } from "@cookknow/shared-package";
 export const Login = ({ navigation }: AuthNavProps<"Login">) => {
   //   const { login } = useContext(AuthContext);
   const [login] = useLoginMutation();

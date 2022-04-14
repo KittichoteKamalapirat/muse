@@ -1,16 +1,15 @@
 /* eslint-disable no-undef */
 
-import "@testing-library/cypress/add-commands"; // so we can use same command as in react-testing-library
-import "cypress-file-upload";
+// the cookie won't be preserved in the upcoming test without this
+Cypress.Cookies.defaults({
+  preserve: "qidRedis",
+});
 
-Cypress.Commands.add(
-  "createUserInDbAndLogin",
-  (usernameOrEmailOrPhonenumber, password) => {
-    // create a user in db first
-    cy.task("createAUserInDb");
-    cy.wait(1000);
+const usernameOrEmailOrPhonenumber = "luffy";
+const password = "3d2y";
 
-    // visit login [age]
+describe("user", () => {
+  it("login a user", () => {
     cy.visit("/login");
     cy.get('input[name="usernameOrEmailOrPhonenumber"]').type(
       usernameOrEmailOrPhonenumber,
@@ -25,5 +24,5 @@ Cypress.Commands.add(
 
     // assert the url
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
-  }
-);
+  });
+});

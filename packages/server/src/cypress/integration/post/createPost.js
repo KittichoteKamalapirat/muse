@@ -4,20 +4,23 @@ const usernameOrEmailOrPhonenumber = "luffy";
 const password = "3d2y";
 
 describe("post", () => {
+  // afterEach(() => {
+  //   cy.task("clearDb");
+  // });
+
   it("creator can create a post", () => {
     // login a user and redirect to homepage
-    cy.login(usernameOrEmailOrPhonenumber, password);
+    // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);
+    cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
 
     // go to my account page
-    cy.get('a[aria-label="My Account Button"]').click({ force: true });
+    cy.get('a[aria-label="My Account Button"]').click();
 
     // become a creator
-    cy.get('button:contains("Switch Account type")').click({ force: true });
-    cy.get('button:contains("Switch to Creator Account")').click({
-      force: true,
-    });
+    cy.get('button:contains("Switch Account type")').click();
+    cy.get('button:contains("Switch to Creator Account")').click();
 
-    cy.get('a:contains("My shop")').click({ force: true });
+    cy.get('a:contains("My shop")').click();
 
     cy.get('a:contains("Create new video with meal kit")').click({
       force: true,
@@ -70,7 +73,7 @@ describe("post", () => {
 
     cy.get('button[type="submit"]').click({ force: true });
 
-    cy.wait(60000);
+    cy.wait(30000);
 
     // check whether redirects to home page
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
