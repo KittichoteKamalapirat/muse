@@ -39,9 +39,21 @@ module.exports = (on, config) => {
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
           };
           const userRepository = connection.getRepository("User");
-          userRepository.save(data);
+          userRepository
+            .save(data)
+            .then((savedPost) => {
+              console.log("Post has been saved: ", savedPost);
 
-          await connection.close;
+              const allUsers = userRepository.find();
+              console.log({ allUsers });
+
+              return userRepository.find();
+            })
+            .then((allPosts) => {
+              console.log("All posts: ", allPosts);
+            });
+
+          await connection.close; // cypress wil throw error when rerun if connection is not close
         });
 
       return null;
