@@ -233,9 +233,16 @@ export class PostResolver {
   ): // @Arg("title") title: string,
   // @Arg("body", { nullable: true }) body: string,
   // @Arg("videoUrl") videoUrl: string
-  Promise<Post> {
+  Promise<Post | Error> {
     // 2 sql queries one to insert and one to select
-    return Post.create({ ...input, creatorId: req.session.userId }).save();
+    console.log(JSON.stringify(input));
+    console.log("userId: ", req.session.userId);
+    try {
+      return Post.create({ ...input, creatorId: req.session.userId }).save();
+    } catch (error) {
+      console.log(error);
+      throw new Error("cannot create a post");
+    }
   }
 
   // update a post

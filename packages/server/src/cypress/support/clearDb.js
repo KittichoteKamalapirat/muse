@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-beforeEach(() => {
+before(() => {
   //   cy.task("clearDb");
   cy.task("clearDbAndCreateAUserInDb");
 });

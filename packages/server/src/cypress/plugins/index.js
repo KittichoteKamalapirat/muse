@@ -50,22 +50,5 @@ module.exports = (on, config) => {
 
       return null;
     },
-    async clearDb() {
-      typeorm
-        .createConnection({
-          name: Math.random().toString(),
-          type: "postgres",
-          entities: ["../dist/entities/*.js"],
-          dropSchema: true,
-          migrations: ["src/migrations/*.js"],
-          logging: false,
-          synchronize: true,
-          url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
-        })
-        .then(async (connection) => {
-          await connection.close;
-        });
-      return null;
-    },
   });
 };
