@@ -53,6 +53,9 @@ module.exports = (on, config) => {
               console.log("All posts: ", allPosts);
             });
 
+          console.log({ connection });
+          console.log("url", connection.options.url);
+
           await connection.close; // cypress wil throw error when rerun if connection is not close
 
           console.log("connection closed");
