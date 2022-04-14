@@ -17,15 +17,13 @@ module.exports = (on, config) => {
 
       typeorm
         .createConnection({
-          name: "cypress-connection",
-          // name: "default",
+          name: Math.random().toString(),
           type: "postgres",
           entities: ["../dist/entities/*.js"],
           dropSchema: true,
           migrations: ["src/migrations/*.js"],
           logging: false,
           synchronize: true,
-          keepConnectionAlive: true,
           // url: Cypress.env("dbUrl"),
           url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
         })
@@ -56,6 +54,8 @@ module.exports = (on, config) => {
             });
 
           await connection.close; // cypress wil throw error when rerun if connection is not close
+
+          console.log("connection closed");
         });
 
       return null;
