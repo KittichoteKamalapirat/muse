@@ -52,6 +52,7 @@ jobs:
           name: start a backend for cypress
           working_directory: packages/server
           command: yarn start:ci
+          background: true
 
       - run:
           name: start NEXT js client
