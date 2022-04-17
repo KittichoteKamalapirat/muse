@@ -112,11 +112,12 @@ export class OrderResolver {
           relations: ["mealkit", "user"],
         });
 
+        // create notis for creators
         CartItemNoti.create({
           read: false,
           message: `You received an order for ${cartItem?.quantity} ${cartItem?.mealkit.name} from ${cartItem?.user.username}.`,
-          cartItemId: cartItemId,
-          creatorId: cartItem?.mealkit.creatorId,
+          cartItemId: cartItem.id,
+          userId: cartItem?.mealkit.creatorId,
         }).save();
       });
     } catch (error) {

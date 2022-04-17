@@ -1,21 +1,14 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Divider,
-  Text,
-  Flex,
-  Heading,
-  LinkBox,
-  LinkOverlay,
-  Link,
-} from "@chakra-ui/layout";
+import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import { Button, Image } from "@chakra-ui/react";
-import { Img } from "@chakra-ui/react";
-import React from "react";
-import { CartItemStatus, UserOrdersQuery } from "../../generated/graphql";
-import { primaryColor } from "../Variables";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import {
+  CartItemStatus,
+  useReceivedCartItemMutation,
+  UserOrdersQuery,
+} from "../../generated/graphql";
 interface NotPaymentPendingProps {
   userOrderData: UserOrdersQuery | undefined;
   cartItemStatus: CartItemStatus;
@@ -25,6 +18,14 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
   userOrderData,
   cartItemStatus,
 }) => {
+  const router = useRouter();
+  const [receivedCartItem, { data: itemReceived }] =
+    useReceivedCartItemMutation();
+
+  if (itemReceived?.receivedCartItem) {
+    router.push(`/order?status=${CartItemStatus.Received}`);
+  }
+
   return (
     <Box>
       {/* cartItems map */}
@@ -92,22 +93,32 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                           </Box>
                         </Flex>
 
-                        {cartItemStatus === CartItemStatus.Delivered &&
-                          (cartItem.isReviewed ? (
-                            <NextLink
-                              href={`/mealkit/[id]`}
-                              as={`/mealkit/${cartItem.mealkitId}`}
+                        {cartItemStatus === CartItemStatus.Delivered && (
+                          <NextLink
+                            href={`/mealkit/[id]`}
+                            as={`/mealkit/${cartItem.mealkitId}`}
+                            passHref
+                          >
+                            <Button
+                              my="10px"
+                              width="100%"
+                              onClick={() => {
+                                receivedCartItem({
+                                  variables: { id: cartItem.id },
+                                  update: (cache) =>
+                                    cache.evict({ fieldName: "userOrders:{}" }),
+                                });
+                              }}
                             >
-                              <Button
-                                variant="outline"
-                                as={Link}
-                                my="10px"
-                                width="100%"
-                              >
-                                Reviewed
-                              </Button>
-                            </NextLink>
-                          ) : (
+                              Received an item
+                            </Button>
+                          </NextLink>
+                        )}
+
+                        {/* received and not reviewed -> leave a review button */}
+                        {/* received and reviewed -> reviewed button */}
+                        {cartItemStatus === CartItemStatus.Received ? (
+                          !cartItem.isReviewed ? (
                             <NextLink
                               href={{
                                 pathname: "/review/create",
@@ -117,12 +128,23 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                                 },
                               }}
                               as={`/review/create`}
+                              passHref
                             >
                               <Button as={Link} my="10px" width="100%">
                                 Leave a Review
                               </Button>
                             </NextLink>
-                          ))}
+                          ) : (
+                            <Button
+                              variant="outline"
+                              as={Link}
+                              my="10px"
+                              width="100%"
+                            >
+                              Reviewed
+                            </Button>
+                          )
+                        ) : null}
                       </Box>
                     ))}
                   </Box>
@@ -141,6 +163,7 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                   <NextLink
                     href="/order/tracking/[id]"
                     as={`/order/tracking/${order.trackingId}`}
+                    passHref
                   >
                     <Button as={Link} my="10px" width="100%">
                       Tracking Info

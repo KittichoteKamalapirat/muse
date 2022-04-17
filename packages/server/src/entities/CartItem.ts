@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -83,8 +84,8 @@ class CartItem extends BaseEntity {
   trackingId: number;
 
   @Field(() => CartItemNoti)
-  @OneToOne(() => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
-  cartItemNoti: CartItemNoti;
+  @OneToMany(() => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
+  cartItemNotis: CartItemNoti[];
 
   @Field()
   @Column({ default: false })

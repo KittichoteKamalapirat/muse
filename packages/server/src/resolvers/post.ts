@@ -235,9 +235,8 @@ export class PostResolver {
   // @Arg("videoUrl") videoUrl: string
   Promise<Post | Error> {
     // 2 sql queries one to insert and one to select
-    console.log(JSON.stringify(input));
-    console.log("userId: ", req.session.userId);
     try {
+      console.log("userId: ", req.session.userId);
       return Post.create({ ...input, creatorId: req.session.userId }).save();
     } catch (error) {
       console.log(error);

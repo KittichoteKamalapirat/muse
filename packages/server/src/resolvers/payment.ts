@@ -83,11 +83,11 @@ export const createScbQr = async (amount: number, orderId: number) => {
       body: JSON.stringify({
         qrType: "PP", // somehow meaning QR30
         ppType: "BILLERID", // change later
-        ppId: "110330017933201", // Partners can get on merchant profile of their application.
+        ppId: process.env.SCB_API_BILLERID, // Partners can get on merchant profile of their application.
         amount,
         ref1: orderId.toString(),
         ref2: "PLACEHOLDER", // ref2 is also required since I applied like to, number or UPPERCASE string less length <= 20
-        ref3: "CKN", // -> NEED UNTIL THIS
+        ref3: process.env.SCB_API_REF3,
       }),
     };
 

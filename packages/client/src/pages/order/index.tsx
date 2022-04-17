@@ -15,6 +15,7 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper";
 import NextLink from "next/link";
 import {
+  CartItemStatus,
   useAddressQuery,
   useUserOrdersLazyQuery,
 } from "../../generated/graphql";
@@ -37,16 +38,6 @@ import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleto
 import { primaryColor } from "../../components/Variables";
 import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 
-export enum CartItemStatus {
-  PaymentPending = "PaymentPending",
-  ToDeliver = "ToDeliver",
-  OnDelivery = "OnDelivery",
-  Delivered = "Delivered",
-  Received = "Received",
-  Cancelled = "Cancelled",
-  Refunded = "Refunded",
-}
-
 interface OrderProps {}
 
 const Order: React.FC<OrderProps> = ({}) => {
@@ -55,8 +46,11 @@ const Order: React.FC<OrderProps> = ({}) => {
 
   //useState
   const [cartItemStatus, setCartItemStatus] = useState<CartItemStatus>(
-    CartItemStatus.PaymentPending
+    // CartItemStatus.PaymentPending
+    statusParam as CartItemStatus
   );
+
+  console.log({ statusParam });
   console.log({ cartItemStatus });
   const [mappedCartItems, setMappedCartItems] =
     useState<mappedCartItemsByCreatorResult[]>();
@@ -131,7 +125,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                     </h2>
                     <AccordionPanel pb={4}>
                       <AddressComponent address={address?.address} />
-                      <NextLink href="/account/address/edit">
+                      <NextLink href="/account/address/edit" passHref>
                         <Link>
                           <Button my="10px">Edit Address</Button>
                         </Link>
@@ -146,6 +140,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                 <NextLink
                   href="/account/address/create"
                   as="/account/address/create"
+                  passHref
                 >
                   <Button leftIcon={<AddIcon />}>Add address</Button>
                 </NextLink>
@@ -167,9 +162,9 @@ const Order: React.FC<OrderProps> = ({}) => {
             !userOrderLoading && (
               <Box>
                 {userOrderData?.userOrders.map((order, index) => (
-                  <Box mt={1} p={5} bgColor="white">
-                    {order.byCreator.map((byCreator) => (
-                      <Box bgColor="white">
+                  <Box mt={1} p={5} bgColor="white" key={index}>
+                    {order.byCreator.map((byCreator, subIndex) => (
+                      <Box bgColor="white" key={subIndex}>
                         <Flex alignItems="center">
                           {" "}
                           <Avatar
@@ -273,6 +268,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                     <NextLink
                       href="/payment/[id]"
                       as={`/payment/${order.paymentId}`}
+                      passHref
                     >
                       <Link>
                         <Button my="10px" width="100%">

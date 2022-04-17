@@ -1,0 +1,4 @@
+# Write your query or mutation here
+mutation adminCompleteCartItem($id: Int!) {
+  adminCompleteCartItem(id: $id)
+}

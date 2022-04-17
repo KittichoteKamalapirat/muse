@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-shadow */
+// bug with no-shadow for enum
 import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -5,35 +8,21 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItem } from "./";
+import { CartItem } from ".";
+import TimeLine from "./utils/tracking/ObjectType/Timeline";
 
 // timlines => array of Timelin
 // timeline => aray of detailtimelindedetail
 
-@ObjectType()
-export class TimeLine {
-  @Field()
-  date: string;
-  @Field(() => [TimelineDetail])
-  details: TimelineDetail[];
-}
-
-@ObjectType()
-export class TimelineDetail {
-  @Field()
-  dateTime: string;
-  @Field()
-  date: string;
-  @Field()
-  time: string;
-  @Field()
-  status: string;
-  @Field()
-  description: string;
+export enum ETrackingStatus {
+  ON_PICKED_UP = "ON_PICKED_UP",
+  ON_SHIPPING = "ON_SHIPPING",
+  ON_DELIVERED = "ON_DELIVERED",
+  ON_UNABLE_TO_SEND = "ON_UNABLE_TO_SEND",
+  ON_OTHER_STATUS = "ON_OTHER_STATUS",
 }
 
 @ObjectType()
@@ -47,18 +36,23 @@ class Tracking extends BaseEntity {
   @Field()
   @Column()
   trackingNo: string;
+
   @Field()
   @Column()
   courier: string;
+
   @Field()
   @Column()
   courierKey: string;
+
   @Field()
   @Column()
   color: string;
+
   @Field()
   @Column()
   status: string;
+
   @Field()
   @Column()
   currentStatus: string;
@@ -68,14 +62,14 @@ class Tracking extends BaseEntity {
   shareLink: string;
 
   @Field(() => [TimeLine])
-  @Column("jsonb", { nullable: true, array: false }) //has to be set to false according to https://stackoverflow.com/questions/59437390/typeorm-jsonb-array-column
+  @Column("jsonb", { nullable: true, array: false }) // has to be set to false according to https://stackoverflow.com/questions/59437390/typeorm-jsonb-array-column
   timelines: TimeLine[];
 
   @Field(() => [CartItem])
   @OneToMany(() => CartItem, (cartItems) => cartItems.tracking)
   cartItems: CartItem[];
 
-  //from ETrackings done
+  // from ETrackings done
   @Field(() => String)
   @CreateDateColumn()
   createdAt: Date;

@@ -1,15 +1,9 @@
-import {
-  MutationFunctionOptions,
-  DefaultContext,
-  ApolloCache,
-} from "@apollo/client";
-import { Box, Flex, Button, Text } from "@chakra-ui/react";
+import { ApolloCache } from "@apollo/client";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { gql } from "urql";
 import {
+  AdminCompleteCartItemMutation,
   CartItemStatus,
-  CompleteCartItemMutation,
-  Exact,
-  useCompleteCartItemMutation,
 } from "../../generated/graphql";
 import { SelectColumnFilter } from "../SelectColumnFilter";
 
@@ -38,7 +32,7 @@ export const adminColumn = (completeCartItem: any) => {
                     completeCartItem({
                       variables: { id: row.original.cartItemId },
                       update: (
-                        cache: ApolloCache<CompleteCartItemMutation>
+                        cache: ApolloCache<AdminCompleteCartItemMutation>
                       ) => {
                         cache.writeFragment({
                           id: "CartItem:" + row.original.cartItemId,

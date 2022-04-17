@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -34,15 +35,14 @@ class CartItemNoti extends BaseEntity {
 
   @Field()
   @Column()
-  creatorId: string;
+  userId: string; // could be for seller or buyer, so userId instead of  creatorId is preferred
 
   @Field()
   @Column()
   cartItemId: number;
 
   @Field(() => CartItem)
-  @OneToOne((type) => CartItem, (cartItem) => cartItem.cartItemNoti)
-  @JoinColumn()
+  @ManyToOne(() => CartItem, (cartItem) => cartItem.cartItemNotis)
   cartItem: CartItem;
 
   @CreateDateColumn()

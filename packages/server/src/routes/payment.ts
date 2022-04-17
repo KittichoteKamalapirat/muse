@@ -9,8 +9,10 @@ router.post("/scb-confirm", async (req, res) => {
   try {
     // eslint-disable-next-line no-console
     console.log("got response from SCB");
-    const ref1 = parseInt(req.body.billPaymentRef1, 10);
 
+    const ref1 = parseInt(req.body.billPaymentRef1, 10);
+    console.log(req.body);
+    console.log("ref1: ", ref1);
     await CartItem.update(
       { orderId: ref1 },
       { status: CartItemStatus.ToDeliver }
@@ -23,11 +25,13 @@ router.post("/scb-confirm", async (req, res) => {
 
     cartItems.forEach(async (cartItem) => {
       const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
+
+      // create notis for creators
       await CartItemNoti.create({
         read: false,
         message,
         cartItemId: cartItem.id,
-        creatorId: cartItem.mealkit.creatorId,
+        userId: cartItem.mealkit.creatorId,
       }).save();
     });
 

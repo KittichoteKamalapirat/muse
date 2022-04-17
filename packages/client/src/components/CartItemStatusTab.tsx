@@ -14,6 +14,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
   cartItemStatus,
   setCartItemStatus,
 }) => {
+  console.log({ cartItemStatus });
   return (
     <Flex
       width="100%"
@@ -71,11 +72,10 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         mx={1}
         onClick={() => {
           userOrders({ variables: { status: CartItemStatus.OnDelivery } });
-
           setCartItemStatus(CartItemStatus.OnDelivery);
         }}
       >
-        Shipping
+        On the way
       </Box>
 
       <Box
@@ -83,13 +83,62 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         textAlign="center"
         borderBottom={2}
         borderStyle="solid"
-        borderColor={cartItemStatus === "Delivered" ? primaryColor : "white"}
-        color={cartItemStatus === "Delivered" ? primaryColor : inActiveGray}
+        borderColor={
+          cartItemStatus === CartItemStatus.Delivered ? primaryColor : "white"
+        }
+        color={
+          cartItemStatus === CartItemStatus.Delivered
+            ? primaryColor
+            : inActiveGray
+        }
         mx={1}
         onClick={() => {
           userOrders({ variables: { status: CartItemStatus.Delivered } });
-
           setCartItemStatus(CartItemStatus.Delivered);
+        }}
+      >
+        Delivered
+      </Box>
+
+      <Box
+        flex={1}
+        textAlign="center"
+        borderBottom={2}
+        borderStyle="solid"
+        borderColor={
+          cartItemStatus === CartItemStatus.Received ? primaryColor : "white"
+        }
+        color={
+          cartItemStatus === CartItemStatus.Received
+            ? primaryColor
+            : inActiveGray
+        }
+        mx={1}
+        onClick={() => {
+          userOrders({ variables: { status: CartItemStatus.Received } });
+          setCartItemStatus(CartItemStatus.Received);
+        }}
+      >
+        Received
+      </Box>
+
+      <Box
+        flex={1}
+        textAlign="center"
+        borderBottom={2}
+        borderStyle="solid"
+        borderColor={
+          cartItemStatus === CartItemStatus.Complete ? primaryColor : "white"
+        }
+        color={
+          cartItemStatus === CartItemStatus.Complete
+            ? primaryColor
+            : inActiveGray
+        }
+        mx={1}
+        onClick={() => {
+          userOrders({ variables: { status: CartItemStatus.Complete } });
+          setCartItemStatus(CartItemStatus.Complete);
         }}
       >
         Complete

@@ -32,8 +32,8 @@ import { Layout } from "../components/Layout/Layout";
 import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import {
+  useAdminCompleteCartItemMutation,
   useAllCartItemsQuery,
-  useCompleteCartItemMutation,
 } from "../generated/graphql";
 import { useIsAdmin } from "../util/useIsAdmin";
 import { withApollo } from "../util/withApollo";
@@ -43,7 +43,7 @@ interface AdminProps {}
 const Admin: React.FC<AdminProps> = ({}) => {
   useIsAdmin();
   const { data: cartItems, loading, error } = useAllCartItemsQuery();
-  const [completeCartItem] = useCompleteCartItemMutation();
+  const [completeCartItem] = useAdminCompleteCartItemMutation();
 
   const data = useMemo<any>(
     () => adminData(loading, cartItems),

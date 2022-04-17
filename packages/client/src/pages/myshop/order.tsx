@@ -11,23 +11,16 @@ import { TrackingDetail } from "../../components/Icons/TrackingDetail";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import NextLink from "next/link";
-import { useCreatorOrdersLazyQuery } from "../../generated/graphql";
+import {
+  CartItemStatus,
+  useCreatorOrdersLazyQuery,
+} from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 
 //format
 // by orderId
 // then by creator inside
-
-export enum CartItemStatus {
-  PaymentPending = "PaymentPending",
-  ToDeliver = "ToDeliver",
-  OnDelivery = "OnDelivery",
-  Delivered = "Delivered",
-  Received = "Received",
-  Cancelled = "Cancelled",
-  Refunded = "Refunded",
-}
 
 interface OrderProps {}
 

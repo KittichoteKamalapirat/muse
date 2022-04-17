@@ -41,8 +41,8 @@ module.exports = (on, config) => {
           const userRepository = connection.getRepository("User");
           userRepository
             .save(data)
-            .then((savedPost) => {
-              console.log("Post has been saved: ", savedPost);
+            .then((savedUser) => {
+              console.log("Post has been saved: ", savedUser);
 
               const allUsers = userRepository.find();
               console.log({ allUsers });

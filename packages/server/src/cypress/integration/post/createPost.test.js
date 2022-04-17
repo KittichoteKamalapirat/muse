@@ -20,7 +20,6 @@ describe("post", () => {
     });
 
     // create a new product
-
     cy.get("input").click({ force: true });
 
     // upload a video

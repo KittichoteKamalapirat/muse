@@ -8,6 +8,6 @@
   },
   "env": {
     "clientUrl": "http://localhost:2999",
-    "apiUrl": "http://localhost:4000this doesn't really work"
+    "apiUrl": "http://localhost:3999"
   }
 }

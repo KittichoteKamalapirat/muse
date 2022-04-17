@@ -146,8 +146,23 @@ export class CartItemResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async receivedCartItem(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<boolean> {
+    await CartItem.update(
+      { id, userId: req.session.userId },
+      { status: CartItemStatus.Received }
+    );
+    return true;
+  }
+
+  @Mutation(() => Boolean)
   @UseMiddleware(isAdmin)
-  async completeCartItem(@Arg("id", () => Int) id: number): Promise<boolean> {
+  async adminCompleteCartItem(
+    @Arg("id", () => Int) id: number
+  ): Promise<boolean> {
     try {
       await CartItem.update({ id }, { status: CartItemStatus.Complete });
       return true;

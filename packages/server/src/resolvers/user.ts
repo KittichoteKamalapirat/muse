@@ -329,8 +329,6 @@ export class UserResolver {
     // 2) all numbers -> phonenumber
     // 3) else -> username
 
-    console.log("login from server");
-
     // check if starts with  +66 and length = 12
     if (/^[\+66\d+]{12}$/.test(usernameOrEmailOrPhonenumber)) {
       usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.slice(3);
@@ -351,7 +349,6 @@ export class UserResolver {
       user = await User.findOne({ username: usernameOrEmailOrPhonenumber });
     }
 
-    console.log({ user });
     if (!user) {
       console.log("Cannot find a user");
       return {

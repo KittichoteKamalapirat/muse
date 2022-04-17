@@ -54,7 +54,7 @@ export type AddressInput = {
 
 export type CartItem = {
   __typename?: 'CartItem';
-  cartItemNoti: CartItemNoti;
+  cartItemNotis: CartItemNoti;
   createdAt: Scalars['String'];
   fieldTotal: Scalars['Int'];
   id: Scalars['Float'];
@@ -81,11 +81,11 @@ export type CartItemNoti = {
   cartItem: CartItem;
   cartItemId: Scalars['Float'];
   createdAt: Scalars['DateTime'];
-  creatorId: Scalars['String'];
   id: Scalars['Float'];
   message: Scalars['String'];
   read: Scalars['Boolean'];
   updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
 };
 
 export enum CartItemStatus {
@@ -233,8 +233,8 @@ export type MealkitInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  adminCompleteCartItem: Scalars['Boolean'];
   changePassword: UserResponse;
-  completeCartItem: Scalars['Boolean'];
   createAddress: Address;
   createCartItem: AddToCart;
   createMealkit: Mealkit;
@@ -253,6 +253,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   readOrderNotis: Scalars['Boolean'];
+  receivedCartItem: Scalars['Boolean'];
   register: UserResponse;
   signAvatarS3: SignedS3;
   signMealkitS3: Array<SignedS3Result>;
@@ -273,14 +274,14 @@ export type Mutation = {
 };
 
 
-export type MutationChangePasswordArgs = {
-  newPassword: Scalars['String'];
-  token: Scalars['String'];
+export type MutationAdminCompleteCartItemArgs = {
+  id: Scalars['Int'];
 };
 
 
-export type MutationCompleteCartItemArgs = {
-  id: Scalars['Int'];
+export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String'];
+  token: Scalars['String'];
 };
 
 
@@ -368,6 +369,11 @@ export type MutationForgotPasswordArgs = {
 export type MutationLoginArgs = {
   password: Scalars['String'];
   usernameOrEmailOrPhonenumber: Scalars['String'];
+};
+
+
+export type MutationReceivedCartItemArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -837,12 +843,19 @@ export type RegularUserFragment = { __typename?: 'User', id: string, username: s
 
 export type RegularUserResponseFragment = { __typename?: 'UserResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, phonenumber: string, avatar: string, isCreator: boolean, about?: Maybe<string>, followerNum: number, isAdmin: boolean, userReview: { __typename?: 'UserReview', reviewScore: number, reviewCounter: number } }> };
 
-export type CompleteCartItemMutationVariables = Exact<{
+export type AdminCompleteCartItemMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type CompleteCartItemMutation = { __typename?: 'Mutation', completeCartItem: boolean };
+export type AdminCompleteCartItemMutation = { __typename?: 'Mutation', adminCompleteCartItem: boolean };
+
+export type ReceivedCartItemMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type ReceivedCartItemMutation = { __typename?: 'Mutation', receivedCartItem: boolean };
 
 export type ChangePasswordMutationVariables = Exact<{
   token: Scalars['String'];
@@ -1288,37 +1301,68 @@ export const RegularUserResponseFragmentDoc = gql`
 }
     ${RegularErrorFragmentDoc}
 ${RegularUserFragmentDoc}`;
-export const CompleteCartItemDocument = gql`
-    mutation completeCartItem($id: Int!) {
-  completeCartItem(id: $id)
+export const AdminCompleteCartItemDocument = gql`
+    mutation adminCompleteCartItem($id: Int!) {
+  adminCompleteCartItem(id: $id)
 }
     `;
-export type CompleteCartItemMutationFn = Apollo.MutationFunction<CompleteCartItemMutation, CompleteCartItemMutationVariables>;
+export type AdminCompleteCartItemMutationFn = Apollo.MutationFunction<AdminCompleteCartItemMutation, AdminCompleteCartItemMutationVariables>;
 
 /**
- * __useCompleteCartItemMutation__
+ * __useAdminCompleteCartItemMutation__
  *
- * To run a mutation, you first call `useCompleteCartItemMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCompleteCartItemMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAdminCompleteCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminCompleteCartItemMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [completeCartItemMutation, { data, loading, error }] = useCompleteCartItemMutation({
+ * const [adminCompleteCartItemMutation, { data, loading, error }] = useAdminCompleteCartItemMutation({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useCompleteCartItemMutation(baseOptions?: Apollo.MutationHookOptions<CompleteCartItemMutation, CompleteCartItemMutationVariables>) {
+export function useAdminCompleteCartItemMutation(baseOptions?: Apollo.MutationHookOptions<AdminCompleteCartItemMutation, AdminCompleteCartItemMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CompleteCartItemMutation, CompleteCartItemMutationVariables>(CompleteCartItemDocument, options);
+        return Apollo.useMutation<AdminCompleteCartItemMutation, AdminCompleteCartItemMutationVariables>(AdminCompleteCartItemDocument, options);
       }
-export type CompleteCartItemMutationHookResult = ReturnType<typeof useCompleteCartItemMutation>;
-export type CompleteCartItemMutationResult = Apollo.MutationResult<CompleteCartItemMutation>;
-export type CompleteCartItemMutationOptions = Apollo.BaseMutationOptions<CompleteCartItemMutation, CompleteCartItemMutationVariables>;
+export type AdminCompleteCartItemMutationHookResult = ReturnType<typeof useAdminCompleteCartItemMutation>;
+export type AdminCompleteCartItemMutationResult = Apollo.MutationResult<AdminCompleteCartItemMutation>;
+export type AdminCompleteCartItemMutationOptions = Apollo.BaseMutationOptions<AdminCompleteCartItemMutation, AdminCompleteCartItemMutationVariables>;
+export const ReceivedCartItemDocument = gql`
+    mutation receivedCartItem($id: Int!) {
+  receivedCartItem(id: $id)
+}
+    `;
+export type ReceivedCartItemMutationFn = Apollo.MutationFunction<ReceivedCartItemMutation, ReceivedCartItemMutationVariables>;
+
+/**
+ * __useReceivedCartItemMutation__
+ *
+ * To run a mutation, you first call `useReceivedCartItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useReceivedCartItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [receivedCartItemMutation, { data, loading, error }] = useReceivedCartItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useReceivedCartItemMutation(baseOptions?: Apollo.MutationHookOptions<ReceivedCartItemMutation, ReceivedCartItemMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ReceivedCartItemMutation, ReceivedCartItemMutationVariables>(ReceivedCartItemDocument, options);
+      }
+export type ReceivedCartItemMutationHookResult = ReturnType<typeof useReceivedCartItemMutation>;
+export type ReceivedCartItemMutationResult = Apollo.MutationResult<ReceivedCartItemMutation>;
+export type ReceivedCartItemMutationOptions = Apollo.BaseMutationOptions<ReceivedCartItemMutation, ReceivedCartItemMutationVariables>;
 export const ChangePasswordDocument = gql`
     mutation ChangePassword($token: String!, $newPassword: String!) {
   changePassword(token: $token, newPassword: $newPassword) {

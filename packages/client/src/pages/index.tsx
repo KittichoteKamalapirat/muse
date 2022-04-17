@@ -79,6 +79,7 @@ const Index = () => {
                       pathname: "/user/[id]", //has to be id -> not userId. I think it has to match the file
                       query: { id: post.creator.id },
                     }}
+                    passHref
                   >
                     <LinkOverlay>
                       <Flex alignItems="center">
@@ -114,13 +115,14 @@ const Index = () => {
                     <UpvoteSection post={post} />
                   </Flex>
 
-                  <LinkBox>
+                  <LinkBox _hover={{ cursor: "pointer" }}>
                     <Box mx={2}>
                       <NextLink
                         href={{
                           pathname: "/post/[id]",
                           query: { id: post.id },
                         }}
+                        passHref
                       >
                         <LinkOverlay>
                           <Heading fontSize="xl">{post.title}</Heading>

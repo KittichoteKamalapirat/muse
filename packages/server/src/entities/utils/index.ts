@@ -21,3 +21,6 @@ export { default as Status } from "./payment/ObjectType/Status";
 export { default as AddToCart } from "./cartItem/ObjectType/AddToCart";
 
 export { default as CartItemInput } from "./cartItem/InputType/CartItemInput";
+
+// tracking
+export { default as TrackingInput } from "./tracking/InputType/TrackingInput";
