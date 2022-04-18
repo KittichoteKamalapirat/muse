@@ -9,7 +9,6 @@ router.post("/scb-confirm", async (req, res) => {
   try {
     // eslint-disable-next-line no-console
     console.log("got response from SCB");
-
     const ref1 = parseInt(req.body.billPaymentRef1, 10);
     console.log(req.body);
     console.log("ref1: ", ref1);
