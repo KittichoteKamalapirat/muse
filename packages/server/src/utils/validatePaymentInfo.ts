@@ -1,4 +1,4 @@
-import { PaymentInfoInput } from "../resolvers/paymentInfo";
+import { PaymentInfoInput } from "../entities/utils";
 
 export const validatePaymentInfo = (input: PaymentInfoInput) => {
   if (input.bankAccount.length <= 9) {
