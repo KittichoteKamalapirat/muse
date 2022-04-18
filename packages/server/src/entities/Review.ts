@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Mealkit, User } from "./";
+import { Mealkit, User } from ".";
 
 @Entity()
 @ObjectType()

@@ -1,8 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
-  InputType,
   Int,
   Mutation,
   Query,
@@ -10,39 +9,10 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { Address } from "../entities/";
+import { Address } from "../entities";
+import { AddressInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-
-@InputType()
-class AddressInput {
-  @Field()
-  name: string;
-  @Field()
-  phonenumber: string;
-  @Field()
-  line1: string;
-  @Field()
-  line2: string;
-  @Field()
-  subdistrict: string;
-  @Field()
-  district: string;
-  @Field()
-  province: string;
-  @Field()
-  country: string;
-  @Field()
-  postcode: string;
-}
-
-@InputType()
-class ProfileInput {
-  @Field()
-  address: AddressInput;
-  @Field()
-  avatarUrl: string;
-}
 
 @Resolver()
 export class AddressResolver {
@@ -50,6 +20,7 @@ export class AddressResolver {
   address(@Ctx() { req }: MyContext): Promise<Address | undefined> {
     return Address.findOne({ userId: req.session.userId });
   }
+
   @Mutation(() => Address)
   @UseMiddleware(isAuth)
   async createAddress(
@@ -60,7 +31,7 @@ export class AddressResolver {
   }
 
   @Mutation(() => Address, { nullable: true })
-  @UseMiddleware(isAuth) //have to log in to update a post
+  @UseMiddleware(isAuth) // have to log in to update a post
   async updateAddress(
     @Arg("id", () => Int) id: number,
     @Arg("input") input: AddressInput,
@@ -81,7 +52,7 @@ export class AddressResolver {
         postcode: input.postcode,
       })
       .where('id = :id and "userId" = :userId', {
-        id: id,
+        id,
         userId: req.session.userId,
       })
       .returning("*")
@@ -95,7 +66,7 @@ export class AddressResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    await Address.delete({ id: id, userId: req.session.userId });
+    await Address.delete({ id, userId: req.session.userId });
     return true;
   }
 }

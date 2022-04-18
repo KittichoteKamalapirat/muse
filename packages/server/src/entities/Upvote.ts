@@ -8,7 +8,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post, User } from "./";
+import { Post, User } from ".";
 
 // many to many
 // user <-> posts
@@ -20,13 +20,13 @@ import { Post, User } from "./";
 class Upvote extends BaseEntity {
   @Field()
   @Column({ type: "int" })
-  value: number; //will be 1 or -1
+  value: number; // will be 1 or -1
 
   @Field()
   @PrimaryColumn()
   userId: string;
 
-  @Field(() => User) //have to be explicit
+  @Field(() => User) // have to be explicit
   @ManyToOne(() => User, (user) => user.upvotes)
   user: User;
 

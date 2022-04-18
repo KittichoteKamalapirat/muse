@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+/* eslint-disable class-methods-use-this */
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class createNewPost1649608243051 implements MigrationInterface {

@@ -125,9 +125,7 @@ export class TrackingResolver {
       const trackingData = data.data;
       console.log("tracking Data");
       console.log(trackingData);
-      trackingData.timelines.map((timeline: any) => {
-        console.log(timeline);
-      });
+      trackingData.timelines.map((timeline: any) => console.log(timeline));
 
       // Order.update({ id: input.orderId }, { status: OrderStatus.OnDelivery });
 

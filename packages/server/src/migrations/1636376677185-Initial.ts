@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable class-methods-use-this */
+
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class Initial1636376677185 implements MigrationInterface {

@@ -1,13 +1,11 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
   Float,
-  InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   Root,
@@ -15,40 +13,11 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Mealkit } from "../entities/";
+import { Mealkit } from "../entities";
+import { MealkitInput, SignedS3Result, SignS3Params } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import { s3, s3Params } from "../utils/s3";
-
-@InputType()
-class MealkitInput {
-  @Field()
-  name: string;
-  @Field(() => [String])
-  items: string[];
-  @Field(() => [String])
-  images: string[];
-  @Field()
-  price: number;
-  @Field()
-  portion: number;
-}
-
-@InputType()
-export class signS3Params {
-  @Field()
-  name: string;
-  @Field()
-  type: string;
-}
-
-@ObjectType()
-class signedS3Result {
-  @Field()
-  signedRequest: string;
-  @Field()
-  url: string;
-}
 
 @Resolver(Mealkit)
 export class MealkitResolver {
@@ -110,14 +79,14 @@ export class MealkitResolver {
     console.log(input);
     const mealkit = await Mealkit.create({
       ...input,
-      postId: postId,
+      postId,
       creatorId: req.session.userId,
     }).save();
     return mealkit;
   }
 
   @Mutation(() => Mealkit, { nullable: true })
-  @UseMiddleware(isAuth) //have to log in to update a Mealkit
+  @UseMiddleware(isAuth) // have to log in to update a Mealkit
   async updateMealkit(
     @Arg("input") input: MealkitInput,
     @Arg("id", () => Int) id: number,
@@ -128,7 +97,7 @@ export class MealkitResolver {
       .update(Mealkit)
       .set(input)
       .where('id = :id and "creatorId" = :creatorId', {
-        id: id,
+        id,
         creatorId: req.session.userId,
       })
       .returning("*")
@@ -152,11 +121,11 @@ export class MealkitResolver {
   // in my database -> just need the string of URLs -> GraphQL (No need to loop)
   // SignMealkit -> need multiple,front end gives me [{"name": "xxx", "type"" video/mp4"},{"name": "xxx", "type"" video/mp4"},{"name": "xxx", "type"" video/mp4"}]
   // give back ["signedRequest": "xxx", "url": "yyy","signedRequest": "xxx", "url": "yyy","signedRequest": "xxx", "url": "yyy"]
-  @Mutation(() => [signedS3Result])
+  @Mutation(() => [SignedS3Result])
   async signMealkitS3(
-    @Arg("input", () => [signS3Params]) input: signS3Params[]
-  ): Promise<signedS3Result[]> {
-    let results: signedS3Result[] = [];
+    @Arg("input", () => [SignS3Params]) input: SignS3Params[]
+  ): Promise<SignedS3Result[]> {
+    const results: SignedS3Result[] = [];
     input.forEach(async (file) => {
       const s3MealkitParams = s3Params(file.name, file.type);
       const signedRequest = await s3.getSignedUrl("putObject", s3MealkitParams);

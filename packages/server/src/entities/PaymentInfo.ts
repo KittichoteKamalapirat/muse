@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from "./";
+import { User } from ".";
 
 @ObjectType()
 @Entity()
@@ -26,7 +26,7 @@ class PaymentInfo extends BaseEntity {
   bankCode: string;
 
   @Field(() => User)
-  @OneToOne((type) => User, (user) => user.paymentInfo)
+  @OneToOne(() => User, (user) => user.paymentInfo)
   user: User;
 
   @Field(() => String)

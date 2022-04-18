@@ -17,13 +17,11 @@ export const s3Params = (
   key: string,
   contentType: string
   // ContentEncoding?: string
-) => {
-  return {
-    Bucket: s3Bucket,
-    Key: key,
-    Expires: 60, //how to we have to send the request after we create the url (seconds)
-    ContentType: contentType,
-    // ContentEncoding: "base64",
-    // ACL: "public-read", //this thing cause error somehow !!!!!
-  };
-};
+) => ({
+  Bucket: s3Bucket,
+  Key: key,
+  Expires: 60, // how to we have to send the request after we create the url (seconds)
+  ContentType: contentType,
+  // ContentEncoding: "base64",
+  // ACL: "public-read", //this thing cause error somehow !!!!!
+});

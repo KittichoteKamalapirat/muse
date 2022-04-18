@@ -1,37 +1,9 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { Address, CartItem, Tracking } from "../entities";
+import { CartItem } from "../entities";
+import { MappedCreatorOrders } from "./ObjectType";
 
-//format = array by orderId
-//format = array of creator,avatar cartItems
-//this page is for users! not creators
-
-// export type MappedCreatorOrders = {
-//   orderId: number;
-//   username: string;
-//   avatar: string;
-//   cartItems: CartItem[];
-//   address: Address;
-//   deliveryFee: number;
-//   tracking: Tracking;
-// };
-
-@ObjectType()
-export class MappedCreatorOrders {
-  @Field({ nullable: true })
-  orderId: number;
-  @Field()
-  username: string;
-  @Field()
-  avatar: string;
-  @Field(() => [CartItem])
-  cartItems: CartItem[];
-  @Field(() => Address)
-  address: Address;
-  @Field(() => Int)
-  deliveryFee: number;
-  @Field(() => Tracking, { nullable: true })
-  tracking: Tracking;
-}
+// format = array by orderId
+// format = array of creator,avatar cartItems
+// this page is for users! not creators
 
 const reformat = (item: CartItem): MappedCreatorOrders => {
   const cartItemByOrder = {
@@ -52,21 +24,21 @@ const reformat = (item: CartItem): MappedCreatorOrders => {
 export const toCreatorOrdersMap = (cartItems: CartItem[]) => {
   const mappedArray: MappedCreatorOrders[] = [];
 
-  cartItems.map((item, index) => {
+  cartItems.forEach((item) => {
     if (mappedArray.length > 0) {
       const repeatedIndex = mappedArray
         .map((obj) => obj.orderId)
         .indexOf(item.orderId);
 
       if (repeatedIndex > -1) {
-        //same orderId
+        // same orderId
         mappedArray[repeatedIndex].cartItems.push(item);
 
-        //deadling with delivery Fee
+        // deadling with delivery Fee
 
         const currentDeliveryFee = mappedArray[repeatedIndex].deliveryFee;
         const newDeliveryFee = item.mealkit?.deliveryFee!;
-        //get the delivery fee from the mealkit with the highest delivery fee
+        // get the delivery fee from the mealkit with the highest delivery fee
         if (currentDeliveryFee < newDeliveryFee) {
           mappedArray[repeatedIndex].deliveryFee = newDeliveryFee;
         }

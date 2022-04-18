@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
@@ -6,7 +7,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { Follow, User } from "../entities/";
+import { Follow, User } from "../entities";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 
@@ -16,7 +17,7 @@ export class FollowResolver {
   @Query(() => [Follow])
   async followers(@Arg("userId") userId: string) {
     const followers = await Follow.find({
-      where: { userId: userId },
+      where: { userId },
       relations: ["user", "follower"],
     });
     return followers;
@@ -50,23 +51,22 @@ export class FollowResolver {
         await User.update(
           { id: targetUserId },
           {
-            followerNum: user?.followerNum + 1,
+            followerNum: user.followerNum + 1,
           }
         );
       }
 
       return true;
-    } else {
-      Follow.delete({ userId: targetUserId, followerId: req.session.userId });
-      if (user) {
-        await User.update(
-          { id: targetUserId },
-          {
-            followerNum: user?.followerNum - 1,
-          }
-        );
-      }
-      return true;
     }
+    Follow.delete({ userId: targetUserId, followerId: req.session.userId });
+    if (user) {
+      await User.update(
+        { id: targetUserId },
+        {
+          followerNum: user.followerNum - 1,
+        }
+      );
+    }
+    return true;
   }
 }

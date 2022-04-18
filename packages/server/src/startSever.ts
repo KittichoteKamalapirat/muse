@@ -8,7 +8,7 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
-import { COOKIE_NAME, __prod__ } from "./constants";
+import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { CartItemResolver } from "./resolvers/cartItem";
 import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
@@ -119,8 +119,8 @@ export const startServer = async () => {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
         httpOnly: true, // so that Javascript's front end can't access cookie
         sameSite: "lax", // csrf
-        secure: __prod__, // cookie onl works in https
-        domain: __prod__ ? ".cookknow.com" : undefined, // no need if in development
+        secure: IS_PROD, // cookie onl works in https
+        domain: IS_PROD ? ".cookknow.com" : undefined, // no need if in development
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,

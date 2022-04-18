@@ -1,8 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
-  InputType,
   Int,
   Mutation,
   Query,
@@ -10,21 +9,10 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItem, Mealkit, Review } from "../entities/";
+import { CartItem, Mealkit, Review } from "../entities";
+import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-
-@InputType()
-class ReviewInput {
-  @Field(() => Int)
-  score: number;
-
-  @Field()
-  title: string;
-
-  @Field()
-  text: string;
-}
 
 @Resolver(Review)
 export class ReviewResolver {
@@ -38,12 +26,12 @@ export class ReviewResolver {
     @Ctx() { req }: MyContext
   ): Promise<Review | Error> {
     try {
-      //User can only review one mealkit one time? Or
+      // User can only review one mealkit one time? Or
       const existingReview = await Review.find({
         where: {
-          mealkitId: mealkitId,
+          mealkitId,
           userId: req.session.userId,
-          cartItemId: cartItemId,
+          cartItemId,
         },
       });
       console.log(existingReview);
@@ -51,11 +39,11 @@ export class ReviewResolver {
         return new Error("You have already reviewed this product");
       }
 
-      //input has to be within 1-5
+      // input has to be within 1-5
       if (input.score > 5 || input.score < 1) {
         return new Error("Invalid score input");
       }
-      //Really creating a review
+      // Really creating a review
 
       await CartItem.update({ id: cartItemId }, { isReviewed: true });
       const mealkit = await Mealkit.findOne({ id: mealkitId });
@@ -76,8 +64,8 @@ export class ReviewResolver {
         title: input.title,
         text: input.text,
         userId: req.session.userId,
-        mealkitId: mealkitId,
-        cartItemId: cartItemId,
+        mealkitId,
+        cartItemId,
       }).save();
 
       return review;
@@ -111,7 +99,7 @@ export class ReviewResolver {
     @Ctx() { req }: MyContext
   ): Promise<Review | Error> {
     try {
-      //input has to be within 1-5
+      // input has to be within 1-5
       if (input.score > 5 || input.score < 1) {
         // return new Error("Invalid score input");
         return new Error("Invalid score input");
@@ -122,8 +110,8 @@ export class ReviewResolver {
         .update(Review)
         .set(input)
         .where('mealkitId = :mealkitId and "userId" = :userId', {
-          mealkitId: mealkitId,
-          cartItemId: cartItemId,
+          mealkitId,
+          cartItemId,
           userId: req.session.userId,
         })
         .returning("*")
@@ -134,9 +122,8 @@ export class ReviewResolver {
         Mealkit.update(
           { id: mealkitId },
           {
-            //same review counter
-            reviewsSum:
-              mealkit.reviewsSum + input.score - currentReview?.score!,
+            // same review counter
+            reviewsSum: mealkit.reviewsSum + input.score - currentReview!.score, // TODO would this give bug?
           }
         );
       } else {
@@ -158,10 +145,10 @@ export class ReviewResolver {
     @Ctx() { req }: MyContext
   ): Promise<boolean | Error> {
     try {
-      //won't do anything if wrong mealkitId or userId
+      // won't do anything if wrong mealkitId or userId
       //   Have to update 3 tabvles which are the review it self, the cartItem, and the mealkit
 
-      //update score on Mealkit
+      // update score on Mealkit
       const currentReview = await Review.findOne({ cartItemId: 2 });
       const mealkit = await Mealkit.findOne({ id: mealkitId });
 
@@ -187,14 +174,13 @@ export class ReviewResolver {
         await Mealkit.update(
           { id: mealkitId },
           {
-            reviewsCounter: mealkit?.reviewsCounter! - 1,
-            reviewsSum: mealkit?.reviewsSum! - currentReview?.score!,
+            reviewsCounter: mealkit.reviewsCounter! - 1,
+            reviewsSum: mealkit.reviewsSum! - currentReview!.score, // TODO would this give bug?
           }
         );
         return true;
-      } else {
-        return new Error("Cannot find the mealkit");
       }
+      return new Error("Cannot find the mealkit");
     } catch (error) {
       console.log(error);
       return new Error("Cannot delete this review");

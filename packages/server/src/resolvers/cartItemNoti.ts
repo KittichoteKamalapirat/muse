@@ -1,6 +1,7 @@
+/* eslint-disable class-methods-use-this */
 import { Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItemNoti } from "../entities/";
+import { CartItemNoti } from "../entities";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 
@@ -9,16 +10,6 @@ export class CartItemNotiResolver {
   @UseMiddleware(isAuth)
   @Query(() => [CartItemNoti])
   async orderNotis(@Ctx() { req }: MyContext): Promise<CartItemNoti[] | Error> {
-    //     const notis: CartItemNoti[] = await getConnection().query(`
-
-    //     SELECT noti.id, noti.read, noti.message,noti."cartItemId"  FROM cart_item_noti as noti
-    //     LEFT JOIN cart_item
-    //     ON noti."cartItemId" = cart_item.id
-    //     LEFT JOIN mealkit
-    //     ON cart_item."mealkitId" = mealkit.id
-    //     WHERE mealkit."creatorId" = '${req.session.userId}';
-
-    // `);
     try {
       const notis = CartItemNoti.find({
         where: { creatorId: req.session.userId },

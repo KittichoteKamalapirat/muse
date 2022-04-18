@@ -1,13 +1,11 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable class-methods-use-this */
 import bcrypt from "bcrypt";
 import {
   Arg,
   Ctx,
-  Field,
   FieldResolver,
-  InputType,
-  Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   Root,
@@ -15,44 +13,15 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
-import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, __prod__ } from "../constants";
+import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, IS_PROD } from "../constants";
+import { Mealkit, User } from "../entities";
 import Follow from "../entities/Follow";
-import { Mealkit, User } from "../entities/";
+import { UserInput, UserResponse, UserReview } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import { FieldError } from "../utils/FieldError";
 import { sendEmail } from "../utils/sendEmail";
 import { validateRegister } from "../utils/validateRegister";
 import { UsernamePasswordInput } from "./UsernamePasswordInput";
-
-// For User
-@ObjectType()
-class UserResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-  @Field(() => User, { nullable: true })
-  user?: User;
-}
-
-@ObjectType()
-class UserReview {
-  @Field(() => Int)
-  reviewScore: number;
-  @Field(() => Int)
-  reviewCounter: number;
-}
-
-@InputType()
-class UserInput {
-  @Field()
-  username: string;
-  @Field()
-  email: string;
-  @Field()
-  phonenumber: string;
-  @Field()
-  about?: string;
-}
 
 // Resolver starts
 @Resolver(User)
@@ -90,7 +59,7 @@ export class UserResolver {
       return {
         errors: [
           {
-            field: "newPassword", //match the frontend Field
+            field: "newPassword", // match the frontend Field
             message: "Length must be greater than 2",
           },
         ],
@@ -133,7 +102,7 @@ export class UserResolver {
         password: await bcrypt.hash(newPassword, salt),
       }
     );
-    redis.del(key); //so that token can be used once
+    redis.del(key); // so that token can be used once
     //  log in user after change password
     req.session.userId = user.id;
 
@@ -158,7 +127,7 @@ export class UserResolver {
       user.id,
       "ex",
       1000 * 60 * 60 * 24 * 3
-    ); //3days
+    ); // 3days
 
     await sendEmail(
       email,
@@ -173,15 +142,13 @@ export class UserResolver {
       const mealkits = await Mealkit.find({ where: { creatorId: user.id } });
       let sum: number = 0;
       let counter: number = 0;
-      mealkits.map((mealkit) => {
-        sum = sum + mealkit.reviewsSum;
-        counter = counter + mealkit.reviewsCounter;
+      mealkits.forEach((mealkit) => {
+        sum += mealkit.reviewsSum;
+        counter += mealkit.reviewsCounter;
       });
 
       const avg = sum / counter || counter;
-      console.log({ sum });
-      console.log({ counter });
-      console.log({ avg });
+
       return { reviewCounter: counter, reviewScore: avg };
     } catch (error) {
       console.log(error);
@@ -201,7 +168,7 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
-    //Destructure the parameter array to req
+    // Destructure the parameter array to req
     if (!req.session.userId) {
       return null;
     }
@@ -209,6 +176,7 @@ export class UserResolver {
     // no need to await, why?
     return User.findOne(req.session.userId);
   }
+
   @Mutation(() => UserResponse)
   async register(
     @Arg("data") data: UsernamePasswordInput,
@@ -216,7 +184,7 @@ export class UserResolver {
   ): Promise<UserResponse> {
     const errors = validateRegister(data);
     if (errors) {
-      //if no error, return null as defined
+      // if no error, return null as defined
       return { errors };
     }
 
@@ -230,9 +198,9 @@ export class UserResolver {
     //   password: hash,
     // });
 
-    let phonenumber = data.phonenumber;
+    let { phonenumber } = data;
 
-    if (/^[\+66\d+]{12}$/.test(phonenumber)) {
+    if (/^[+66\d+]{12}$/.test(phonenumber)) {
       phonenumber = phonenumber.slice(3);
     } else if (/^[0\d+]{10}$/.test(phonenumber)) {
       phonenumber = phonenumber.substring(1);
@@ -250,21 +218,21 @@ export class UserResolver {
             id: uuid,
             username: data.username,
             email: data.email,
-            phonenumber: phonenumber,
+            phonenumber,
             password: hash,
             isCreator: data.isCreator,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
           },
         ])
-        .returning("*") //RETURNING is sql statement
+        .returning("*") // RETURNING is sql statement
         .execute();
 
       // This query builder is an alternative of the .create.save
-      user = result.raw[0];
+      [user] = result.raw; // zeroth index
     } catch (error) {
       console.log("err", error);
       if (error.detail.includes("username")) {
-        //|| error.detail.includes("already exists"))
+        // || error.detail.includes("already exists"))
         return {
           errors: [
             {
@@ -273,7 +241,8 @@ export class UserResolver {
             },
           ],
         };
-      } else if (error.detail.includes("email")) {
+      }
+      if (error.detail.includes("email")) {
         return {
           errors: [
             {
@@ -282,7 +251,8 @@ export class UserResolver {
             },
           ],
         };
-      } else if (error.detail.includes("phonenumber")) {
+      }
+      if (error.detail.includes("phonenumber")) {
         return {
           errors: [
             {
@@ -297,7 +267,7 @@ export class UserResolver {
     // set a cookie on the user
     req.session.userId = user.id;
 
-    return { user: user };
+    return { user };
   }
 
   @UseMiddleware(isAuth)
@@ -323,14 +293,14 @@ export class UserResolver {
     // @Arg("data") data: UsernamePasswordInput,
     @Arg("usernameOrEmailOrPhonenumber") usernameOrEmailOrPhonenumber: string,
     @Arg("password") password: string,
-    @Ctx() { req, res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     // 1) includes @ -> email
     // 2) all numbers -> phonenumber
     // 3) else -> username
 
     // check if starts with  +66 and length = 12
-    if (/^[\+66\d+]{12}$/.test(usernameOrEmailOrPhonenumber)) {
+    if (/^[+66\d+]{12}$/.test(usernameOrEmailOrPhonenumber)) {
       usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.slice(3);
     } // check if starts with  0 and length = 10
     else if (/^[0\d+]{10}$/.test(usernameOrEmailOrPhonenumber)) {
@@ -378,25 +348,25 @@ export class UserResolver {
 
     console.log("print userId session from login resolver");
     console.log(req.session.userId);
-    return { user: user };
+    return { user };
   }
 
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
     return new Promise((resolve) => {
-      //remove the session in redis`
+      // remove the session in redis`
       req.session.destroy((err) => {
         res.clearCookie(COOKIE_NAME, {
           // maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
           httpOnly: true,
           sameSite: "lax",
-          secure: __prod__,
+          secure: IS_PROD,
         });
         if (err) {
           // console.log(err);
           resolve(false);
           return;
-          //return so it doesn't go on
+          // return so it doesn't go on
         }
         // console.log(res.cookie);
         console.log("logged out");
@@ -409,7 +379,7 @@ export class UserResolver {
   @Mutation(() => Boolean)
   async switchAccountType(
     @Arg("becomeCreator") becomeCreator: boolean,
-    @Ctx() { req, res }: MyContext
+    @Ctx() { req }: MyContext
   ) {
     console.log("switch account type");
     console.log(req.session.userId);

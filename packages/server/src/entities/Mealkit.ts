@@ -10,7 +10,7 @@ import {
   ManyToOne,
   OneToMany,
 } from "typeorm";
-import { CartItem, User, Post, Review } from "./";
+import { CartItem, User, Post, Review } from ".";
 
 @ObjectType()
 @Entity()
@@ -44,8 +44,8 @@ class Mealkit extends BaseEntity {
   @Field()
   postId: number;
 
-  @Field(() => Post, { nullable: true }) //need to have explicit type
-  @ManyToOne((type) => Post, (post) => post.mealkits, {
+  @Field(() => Post, { nullable: true }) // need to have explicit type
+  @ManyToOne(() => Post, (post) => post.mealkits, {
     onDelete: "CASCADE",
   })
   post: Post;
@@ -54,9 +54,9 @@ class Mealkit extends BaseEntity {
   @Field()
   creatorId: string;
 
-  @Field(() => User) //need to have explicit type
-  @ManyToOne((type) => User, (user) => user.mealkits)
-  //user.posts have to be added in the User type
+  @Field(() => User) // need to have explicit type
+  @ManyToOne(() => User, (user) => user.mealkits)
+  // user.posts have to be added in the User type
   creator: User;
 
   // owner side
@@ -65,7 +65,7 @@ class Mealkit extends BaseEntity {
   // @JoinColumn()
   // cartItem: CartItem;
 
-  @OneToMany((type) => CartItem, (cartItem) => cartItem.mealkit)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.mealkit)
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
 
@@ -86,7 +86,7 @@ class Mealkit extends BaseEntity {
   @Field(() => Int)
   reviewsCounter: number;
 
-  //Date
+  // Date
 
   @Field(() => String)
   @CreateDateColumn()

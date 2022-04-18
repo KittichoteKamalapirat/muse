@@ -11,19 +11,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { CartItem, Payment, User } from "./";
-
-@ObjectType()
-class CartItemsByCreator {
-  @Field()
-  creatorId: string;
-
-  @Field()
-  deliveryFee: number;
-
-  @Field()
-  mealkitsFee: number;
-}
+import { CartItem, Payment, User } from ".";
+import { CartItemsByCreator } from "./utils";
 
 @ObjectType()
 @Entity()
@@ -32,7 +21,7 @@ class Order extends BaseEntity {
   @Field()
   id: number;
 
-  @Column() //type: int?
+  @Column() // type: int?
   @Field()
   grossOrder: number;
 
@@ -40,26 +29,26 @@ class Order extends BaseEntity {
   @Field(() => [CartItemsByCreator], { nullable: true })
   cartItemsByCreator: CartItemsByCreator[];
 
-  //One order can have many cartitems
+  // One order can have many cartitems
   @Field(() => [CartItem])
-  @OneToMany((type) => CartItem, (cartItem) => cartItem.order)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.order)
   cartItems: CartItem[];
 
-  //Many order belongs to one userId
-  @Column({ nullable: true }) //type: int?
+  // Many order belongs to one userId
+  @Column({ nullable: true }) // type: int?
   @Field()
   userId: string;
 
-  @ManyToOne((type) => User, (user) => user.orders)
+  @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
   // One order has one payment
   @Field(() => Payment, { nullable: true })
-  @OneToOne((type) => Payment, (payment) => payment.order) //create paymentId
+  @OneToOne(() => Payment, (payment) => payment.order) // create paymentId
   @JoinColumn()
   payment: Payment;
 
-  @Column({ nullable: true }) //type: int?
+  @Column({ nullable: true }) // type: int?
   @Field()
   paymentId: number;
 

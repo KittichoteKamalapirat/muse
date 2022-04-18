@@ -1,37 +1,19 @@
+/* eslint-disable class-methods-use-this */
 import {
   Arg,
   Ctx,
-  Field,
-  InputType,
   Int,
   Mutation,
-  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { PaymentInfo, User } from "../entities/";
+import { PaymentInfo, User } from "../entities";
+import { PaymentInfoInput, PaymentInfoResponse } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import { FieldError } from "../utils/FieldError";
 import { validatePaymentInfo } from "../utils/validatePaymentInfo";
-
-@InputType()
-export class PaymentInfoInput {
-  @Field()
-  bankAccount: string;
-  @Field()
-  bankCode: string;
-}
-
-@ObjectType()
-class PaymentInfoResponse {
-  @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
-  @Field(() => PaymentInfo, { nullable: true })
-  paymentInfo?: PaymentInfo;
-}
 
 @Resolver()
 export class PaymentInfoResolver {
@@ -51,21 +33,21 @@ export class PaymentInfoResolver {
     @Arg("input") input: PaymentInfoInput
   ): Promise<PaymentInfoResponse> {
     const errors = validatePaymentInfo(input);
-    if (errors) return { errors: errors };
+    if (errors) return { errors };
 
     const paymentInfo = await PaymentInfo.create({
       ...input,
       userId: req.session.userId,
     }).save();
-    //have to update user as well
+    // have to update user as well
 
     await User.update(
       { id: req.session.userId },
       {
-        paymentInfo: paymentInfo,
+        paymentInfo,
       }
     );
-    return { paymentInfo: paymentInfo };
+    return { paymentInfo };
   }
 
   @Mutation(() => PaymentInfoResponse, { nullable: true })
@@ -76,14 +58,14 @@ export class PaymentInfoResolver {
     @Arg("input") input: PaymentInfoInput
   ): Promise<PaymentInfoResponse> {
     const errors = validatePaymentInfo(input);
-    if (errors) return { errors: errors };
+    if (errors) return { errors };
 
     const result = await getConnection()
       .createQueryBuilder()
       .update(PaymentInfo)
       .set(input)
       .where('id = :id and "userId" = :userId', {
-        id: id,
+        id,
         userId: req.session.userId,
       })
       .returning("*")
@@ -97,7 +79,7 @@ export class PaymentInfoResolver {
     @Ctx() { req }: MyContext,
     @Arg("id", () => Int) id: number
   ) {
-    await PaymentInfo.delete({ id: id, userId: req.session.userId });
+    await PaymentInfo.delete({ id, userId: req.session.userId });
     return true;
   }
 }

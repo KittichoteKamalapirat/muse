@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -6,7 +7,6 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";

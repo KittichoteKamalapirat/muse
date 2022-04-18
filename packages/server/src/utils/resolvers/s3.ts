@@ -1,15 +1,8 @@
-import moment from "moment";
-import { Arg, Field, Mutation, ObjectType, Resolver } from "type-graphql";
+/* eslint-disable class-methods-use-this */
+import { Arg, Mutation, Resolver } from "type-graphql";
 import { s3Bucket } from "../../constants";
-import { s3Params, s3 } from "../s3";
-
-@ObjectType()
-class SingleFileSignedS3 {
-  @Field()
-  signedRequest: string;
-  @Field()
-  fileUrl: string;
-}
+import { SingleFileSignedS3 } from "../../entities/utils";
+import { s3, s3Params } from "../s3";
 
 @Resolver()
 export class S3Resolver {
