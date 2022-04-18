@@ -24,6 +24,9 @@ export { default as CartItemInput } from "./cartItem/InputType/CartItemInput";
 // tracking
 export { default as TrackingInput } from "./tracking/InputType/TrackingInput";
 
+export { default as Timeline } from "./tracking/ObjectType/Timeline";
+export { default as TimelineDetail } from "./tracking/ObjectType/TimelineDetail";
+
 // user
 export { default as UserReview } from "./user/ObjectType/UserReview";
 export { default as UserResponse } from "./user/ObjectType/UserResponse";

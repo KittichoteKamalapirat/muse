@@ -1,5 +1,5 @@
 import { ObjectType, Field } from "type-graphql";
-import TimelineDetail from "./TimelineDetail";
+import { TimelineDetail } from "../..";
 
 @ObjectType()
 class TimeLine {

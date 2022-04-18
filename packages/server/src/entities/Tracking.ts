@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { CartItem } from ".";
-import TimeLine from "./utils/tracking/ObjectType/Timeline";
+import { Timeline } from "./utils";
 
 // timlines => array of Timelin
 // timeline => aray of detailtimelindedetail
@@ -61,9 +61,9 @@ class Tracking extends BaseEntity {
   @Column()
   shareLink: string;
 
-  @Field(() => [TimeLine])
+  @Field(() => [Timeline])
   @Column("jsonb", { nullable: true, array: false }) // has to be set to false according to https://stackoverflow.com/questions/59437390/typeorm-jsonb-array-column
-  timelines: TimeLine[];
+  timelines: Timeline[];
 
   @Field(() => [CartItem])
   @OneToMany(() => CartItem, (cartItems) => cartItems.tracking)
