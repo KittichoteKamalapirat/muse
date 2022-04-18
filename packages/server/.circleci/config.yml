@@ -108,7 +108,7 @@ jobs:
           command: sudo apt install openssh-server
       - run:
           name: Add dokku as know host so not prompted for trust (this one  for some reasons take some time)
-          command: ssh-keyscan 128.199.205.119 >> ~/.ssh/known_hosts
+          command: ssh-keyscan 139.59.110.114 >> ~/.ssh/known_hosts
 
       - save_cache:
           key: v1-dependencies-{{ checksum "yarn.lock"}}
