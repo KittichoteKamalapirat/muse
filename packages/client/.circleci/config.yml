@@ -117,7 +117,7 @@ jobs:
           name: "deploy a master branch to cookknow.com"
           working_directory: packages/client
           command: |
-            curl -X POST $VERCEL_DEPLOY_HOOK
+            curl -X POST $VERCEL_DEPLOY_HOOK_PROD
           filters:
             branches:
               only: master
