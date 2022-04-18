@@ -715,8 +715,19 @@ export type ReviewInput = {
   title: Scalars['String'];
 };
 
+export type SignS3Params = {
+  name: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type SignedS3 = {
   __typename?: 'SignedS3';
+  signedRequest: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type SignedS3Result = {
+  __typename?: 'SignedS3Result';
   signedRequest: Scalars['String'];
   url: Scalars['String'];
 };
@@ -733,8 +744,8 @@ export type Status = {
   description: Scalars['String'];
 };
 
-export type TimeLine = {
-  __typename?: 'TimeLine';
+export type Timeline = {
+  __typename?: 'Timeline';
   date: Scalars['String'];
   details: Array<TimelineDetail>;
 };
@@ -759,7 +770,7 @@ export type Tracking = {
   id: Scalars['Float'];
   shareLink: Scalars['String'];
   status: Scalars['String'];
-  timelines: Array<TimeLine>;
+  timelines: Array<Timeline>;
   trackingNo: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -822,17 +833,6 @@ export type UsernamePasswordInput = {
   password?: Maybe<Scalars['String']>;
   phonenumber: Scalars['String'];
   username: Scalars['String'];
-};
-
-export type SignS3Params = {
-  name: Scalars['String'];
-  type: Scalars['String'];
-};
-
-export type SignedS3Result = {
-  __typename?: 'signedS3Result';
-  signedRequest: Scalars['String'];
-  url: Scalars['String'];
 };
 
 export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
@@ -1027,7 +1027,7 @@ export type SignMealkitS3MutationVariables = Exact<{
 }>;
 
 
-export type SignMealkitS3Mutation = { __typename?: 'Mutation', signMealkitS3: Array<{ __typename?: 'signedS3Result', signedRequest: string, url: string }> };
+export type SignMealkitS3Mutation = { __typename?: 'Mutation', signMealkitS3: Array<{ __typename?: 'SignedS3Result', signedRequest: string, url: string }> };
 
 export type SignS3MutationVariables = Exact<{
   videoname: Scalars['String'];
@@ -1180,7 +1180,7 @@ export type TrackingQueryVariables = Exact<{
 }>;
 
 
-export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'TimeLine', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
+export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
 
 export type PaymentQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2186,7 +2186,7 @@ export type SignSingleFileS3MutationHookResult = ReturnType<typeof useSignSingle
 export type SignSingleFileS3MutationResult = Apollo.MutationResult<SignSingleFileS3Mutation>;
 export type SignSingleFileS3MutationOptions = Apollo.BaseMutationOptions<SignSingleFileS3Mutation, SignSingleFileS3MutationVariables>;
 export const SignMealkitS3Document = gql`
-    mutation signMealkitS3($input: [signS3Params!]!) {
+    mutation signMealkitS3($input: [SignS3Params!]!) {
   signMealkitS3(input: $input) {
     signedRequest
     url

@@ -2,7 +2,7 @@ import { ObjectType, Field } from "type-graphql";
 import { TimelineDetail } from "../..";
 
 @ObjectType()
-class TimeLine {
+class Timeline {
   @Field()
   date: string;
 
@@ -10,4 +10,4 @@ class TimeLine {
   details: TimelineDetail[];
 }
 
-export default TimeLine;
+export default Timeline;

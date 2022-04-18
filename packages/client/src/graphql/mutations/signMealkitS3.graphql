@@ -1,4 +1,4 @@
-mutation signMealkitS3($input: [signS3Params!]!) {
+mutation signMealkitS3($input: [SignS3Params!]!) {
   signMealkitS3(input: $input) {
     signedRequest
     url
