@@ -91,15 +91,17 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     }
 
     setCartItemsByCreatorInput(inputArray);
-    console.log({ cartItemsByCreatorInput });
-    console.log({ inputArray });
   }, [mappedCartItems]);
 
   const noAddress = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
-        <NextLink href="/account/address/create" as="/account/address/create">
+        <NextLink
+          href="/account/address/create"
+          as="/account/address/create"
+          passHref
+        >
           <Button leftIcon={<AddIcon />}>Add address</Button>
         </NextLink>
       </Flex>

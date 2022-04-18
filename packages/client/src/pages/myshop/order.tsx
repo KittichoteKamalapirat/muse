@@ -43,7 +43,7 @@ const Order: React.FC<OrderProps> = ({}) => {
     setCartItemStatus(
       CartItemStatus[statusParam as keyof typeof CartItemStatus]
     );
-  }, [statusParam]);
+  }, [statusParam, creatorOrders]);
 
   if (loading) {
     return (
@@ -160,8 +160,8 @@ const Order: React.FC<OrderProps> = ({}) => {
       ) : (
         <Box bgColor="gray.200">
           {creatorOrdersData.creatorOrders.map((orderItem, index) => (
-            <Box bgColor="white">
-              <Flex key={index} m="10px">
+            <Box bgColor="white" key={index}>
+              <Flex m="10px">
                 <Box>
                   {orderItem.cartItems.map((cartItem, subindex) => (
                     <Box key={subindex} my="6px">
@@ -255,13 +255,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                           ),
                         },
                       }}
-
-                      // <NextLink
-                      // href={{
-                      //   pathname: "/order/create-tracking",
-                      //   query: { orderId: orderItem.orderId },
-                      // }}
-                      //  as={`/create-tracking`}
+                      passHref
                     >
                       <Link>
                         <Button my="10px">

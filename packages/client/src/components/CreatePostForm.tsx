@@ -1,15 +1,9 @@
-import {
-  ArrowUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
-import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
-import Dropzone from "react-dropzone";
+import { InputGroup, InputRightAddon } from "@chakra-ui/input";
+import { Box, Divider, Flex, Heading } from "@chakra-ui/layout";
+import { Select } from "@chakra-ui/react";
 import React from "react";
 import { InputField } from "./InputField";
-import { IconButton, Select } from "@chakra-ui/react";
 
 interface CreatePostFormProps {
   videoPreview: string;
@@ -26,14 +20,6 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
 }) => {
   return (
     <Box mt={4}>
-      {/* {!videoPreview ? null : (
-        <Box>
-          <video controls width="50%">
-            <source src={videoPreview} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </Box>
-      )} */}
       <Flex justifyContent="center">
         {!thumbnailPreview ? null : (
           <Box flex={1} m={1}>
@@ -87,7 +73,6 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
           </Heading>
 
           <InputGroup size="sm" ml={2}>
-            {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
             <InputField
               name="portion"
               placeholder="2"
@@ -95,16 +80,11 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
               variant="flushed"
             />
 
-            <InputRightAddon children="people" mt={2} />
-            {/* <InputRightAddon
-              children={parseInt(portion) > 1 ? "people" : "person"}
-              mt={2}
-            /> */}
+            <InputRightAddon mt={2}>people</InputRightAddon>
           </InputGroup>
         </Flex>
         <Divider my={2} />
         <Box>
-          {/* <Heading fontSize="md">ข้อแนะนำ</Heading> */}
           <Heading fontSize="md">Tip/Advice</Heading>
           <InputField
             textarea={true}

@@ -1,32 +1,21 @@
 import { ApolloCache } from "@apollo/client";
 import { Avatar } from "@chakra-ui/avatar";
-import { Img } from "@chakra-ui/image";
 import {
   Box,
-  Divider,
   Flex,
   Heading,
   LinkBox,
   LinkOverlay,
   Text,
 } from "@chakra-ui/layout";
-import { dataURItoBlob } from "dropzone";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { gql } from "urql";
 import { Layout } from "../components/Layout/Layout";
-import {
-  activeColor,
-  inactiveColor,
-  primaryColor,
-} from "../components/Variables";
+import { primaryColor } from "../components/Variables";
 import { Wrapper } from "../components/Wrapper";
 import {
   CartItemNoti,
-  CartItemStatus,
-  OrderNotisDocument,
   ReadOrderNotisMutation,
-  ToggleFollowMutation,
   useMeQuery,
   useOrderNotisQuery,
   useReadOrderNotisMutation,
@@ -42,10 +31,7 @@ export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
       orderNotis(existingNotis = []) {
         console.log({ existingNotis });
         return existingNotis.map((noti: CartItemNoti) => {
-          // console.log({ ...noti, read: true });
           return { read: true }; //somehow this works
-          // return { ...noti, read: true };
-          // return "x";
         });
       },
     },
@@ -72,7 +58,7 @@ const Notification: React.FC<NotificationProps> = ({}) => {
         update: (cache) => updateAfterRead(cache),
       });
     }, 1000);
-  }, []);
+  }, [readOrderNotis]);
 
   if (meLoading || orderNotiLoading) {
     return <Text>Loading</Text>;
@@ -90,10 +76,9 @@ const Notification: React.FC<NotificationProps> = ({}) => {
           <Box mt={5}>
             {" "}
             <Heading fontSize="lg">Order Updates</Heading>
-            {orderNoti?.orderNotis.map((noti, index) => (
-              <LinkBox>
+            {orderNoti?.orderNotis.map((noti) => (
+              <LinkBox key={noti.id}>
                 <Flex
-                  key={index}
                   mt={2}
                   borderRight={noti.read ? "null" : "4px"}
                   borderColor={primaryColor}

@@ -55,7 +55,6 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
               setErrors(errorMap);
             }
           } else if (response.data?.changePassword.user) {
-            // work we get the user!
             router.push("/");
           }
         }}
@@ -76,7 +75,7 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
                 <Box color="red" mr={2}>
                   {tokenError}
                 </Box>
-                <NextLink href="/forgot-password">
+                <NextLink href="/forgot-password" passHref>
                   <Link>Get another one</Link>
                 </NextLink>
               </Flex>

@@ -39,11 +39,9 @@ const Cart: React.FC<cartProps> = ({}) => {
     if (cartItems) {
       const mappedArray: mappedCartItemsByCreatorResult[] =
         toCartItemsByCreatorMap(cartItems?.cartItems as CartItem[]);
-      console.log({ mappedArray });
       setMappedCartItems(mappedArray);
-      console.log({ mappedCartItems });
     }
-  }, [cartItems]);
+  }, [cartItems, mappedCartItems]);
 
   //run everytime when re-render
   useEffect(() => {
@@ -183,7 +181,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                   </Flex>
 
                   <Button p={3} color="white" width="100%">
-                    <NextLink href={{ pathname: "/checkout" }}>
+                    <NextLink href={{ pathname: "/checkout" }} passHref>
                       <Link>Checkout</Link>
                     </NextLink>
                   </Button>

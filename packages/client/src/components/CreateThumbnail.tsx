@@ -1,21 +1,7 @@
-import {
-  ArrowUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PlusSquareIcon,
-} from "@chakra-ui/icons";
-import {
-  Box,
-  Flex,
-  Text,
-  Image,
-  IconButton,
-  Button,
-  Img,
-} from "@chakra-ui/react";
-import Dropzone from "react-dropzone";
+import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, IconButton, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import router from "next/router";
+import Dropzone from "react-dropzone";
 
 interface CreateThumbnailProps {
   videoPreview: any;
@@ -48,11 +34,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
       {!thumbnailPreview ? (
         !videoPreview ? null : (
           <Flex justifyContent="center">
-            {/* <video width="90%" controls>
-              <source src={videoPreview} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video> */}
-            <Image src={autoThumbnailUrl} />
+            <Image src={autoThumbnailUrl} alt="auto-thumbnail-url" />
           </Flex>
         )
       ) : (
@@ -133,14 +115,6 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
         <Button variant="transparent" color="brand" onClick={() => nextStep()}>
           Next
         </Button>
-        {/* <IconButton
-          aria-label="Search database"
-          icon={<ChevronRightIcon />}
-          onClick={() => nextStep()}
-          fontSize="x-large"
-          color="dark.200"
-          variant="none"
-        /> */}
       </Flex>
     </Box>
   );

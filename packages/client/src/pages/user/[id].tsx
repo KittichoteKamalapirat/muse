@@ -1,25 +1,21 @@
-import { StarIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import React from "react";
 import { FollowSection } from "../../components/FollowSection";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
-import { inActiveGray, primaryColor } from "../../components/Variables";
+import { ReviewStars } from "../../components/ReviewStars";
 import { Wrapper } from "../../components/Wrapper";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   useFollowersQuery,
-  useMeQuery,
   usePostsByCreatorQuery,
   User,
-  useToggleFollowMutation,
   useUserQuery,
 } from "../../generated/graphql";
 import { useGetUserId } from "../../util/useGetUserId";
 import { withApollo } from "../../util/withApollo";
-import { ReviewStars } from "../../components/ReviewStars";
-import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 
 interface PublicProfileProps {}
 
@@ -72,6 +68,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
                 borderStyle="solid"
                 borderColor="red.400"
                 src={userData?.user?.avatar}
+                alt="avatar"
               />
             </Box>
 
@@ -98,7 +95,6 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
           </Flex>
 
           <Box flex={1} ml={2}>
-            {/* <Heading fontSize="md">{userData?.user?.username}</Heading> */}
             <Text>{userData?.user?.about}</Text>
           </Box>
           <Box>
@@ -112,7 +108,6 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
           <Box mt={4}>
             <Heading fontSize="xl">Menu</Heading>
             {!posts ? (
-              // <Box>hi</Box>
               <Box>This user has no posts.</Box>
             ) : (
               <Box>

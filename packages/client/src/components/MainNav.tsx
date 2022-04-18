@@ -77,12 +77,12 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
 
     currentUser = (
       <>
-        <NextLink href="/login">
+        <NextLink href="/login" passHref>
           <Link color="white" mr={2}>
             Login
           </Link>
         </NextLink>
-        <NextLink href="/register">
+        <NextLink href="/register" passHref>
           <Link color="white">Register</Link>
         </NextLink>
       </>
@@ -118,7 +118,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       borderRightWidth="1px"
       py={[null, null, 20]}
     >
-      <NextLink href="/">
+      <NextLink href="/" passHref>
         <Link
           style={{ textDecoration: "none" }}
           flex={1}
@@ -144,6 +144,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
         href={{
           pathname: "/like",
         }}
+        passHref
       >
         <Link
           style={{ textDecoration: "none" }}
@@ -167,7 +168,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
         </Link>
       </NextLink>
       {data?.me?.isCreator && (
-        <NextLink href="/myshop">
+        <NextLink href="/myshop" passHref>
           <Link
             as={Link}
             mr={2}
@@ -197,6 +198,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
         href={{
           pathname: "/notification",
         }}
+        passHref
       >
         <Link
           style={{ textDecoration: "none" }}
@@ -250,6 +252,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
         href={{
           pathname: "/account",
         }}
+        passHref
       >
         <Link
           style={{ textDecoration: "none" }}

@@ -53,7 +53,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
           <Box my={4}>
             <Text fontWeight="bold">Detail</Text>
             {trackingData?.tracking.timelines.map((byDate, index) => (
-              <Box my={2}>
+              <Box my={2} key={index}>
                 <Box>
                   {byDate.details.map((detail, subindex) => (
                     <Flex
@@ -61,6 +61,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
                       fontWeight={
                         index === 0 && subindex == 0 ? "bold" : "none"
                       }
+                      key={subindex}
                     >
                       <Text mr={2}>{detail.time}</Text>
                       <Text>{detail.description.substr(5)}</Text>
@@ -78,8 +79,8 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
 
           <Box>
             <Heading fontSize="md">Products</Heading>
-            {trackingData?.tracking.cartItems.map((cartItem) => (
-              <Flex alignItems="center" m={1}>
+            {trackingData?.tracking.cartItems.map((cartItem, index) => (
+              <Flex alignItems="center" m={1} key={index}>
                 <Img
                   src={
                     cartItem.mealkit?.images ? cartItem.mealkit?.images[0] : ""

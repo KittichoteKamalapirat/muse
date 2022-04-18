@@ -68,15 +68,15 @@ const Account: React.FC<indexProps> = ({}) => {
         <Box textAlign="center">
           <Text>You are not signed in</Text>
           <Text>Please </Text>
-          <NextLink href="/login">
+          <NextLink href="/login" passHref>
             <Link fontWeight="700" color="red.400">
               Login
             </Link>
           </NextLink>
         </Box>
         <Box textAlign="center" mt={5}>
-          Don't have an account?{" "}
-          <NextLink href="/register">
+          Don&apos;t have an account?{" "}
+          <NextLink href="/register" passHref>
             <Link fontWeight="700" color="red.400">
               Register
             </Link>
@@ -119,6 +119,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 pathname: "/order",
                 query: { status: CartItemStatus.PaymentPending },
               }}
+              passHref
             >
               <Link textAlign="center" flex={1}>
                 <Center>
@@ -134,6 +135,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 pathname: "/order",
                 query: { status: CartItemStatus.ToDeliver },
               }}
+              passHref
             >
               <Link textAlign="center" flex={1}>
                 <Center>
@@ -149,6 +151,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 pathname: "/order",
                 query: { status: CartItemStatus.OnDelivery },
               }}
+              passHref
             >
               <Link textAlign="center" flex={1}>
                 <Center>
@@ -163,6 +166,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 pathname: "/order",
                 query: { status: CartItemStatus.PaymentPending },
               }}
+              passHref
             >
               <Link textAlign="center" flex={1}>
                 <Center>
@@ -181,6 +185,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 pathname: "/order",
                 query: { status: CartItemStatus.Cancelled },
               }}
+              passHref
             >
               <Link>
                 <Text>Purchase history</Text>
@@ -204,7 +209,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 rounded="md"
               >
                 <SvgAccountIcon />
-                <NextLink href="/account/info/" as="/account/info">
+                <NextLink href="/account/info/" as="/account/info" passHref>
                   <LinkOverlay>
                     <Text fontSize="md">My profile</Text>
                   </LinkOverlay>
@@ -222,7 +227,11 @@ const Account: React.FC<indexProps> = ({}) => {
                 rounded="md"
               >
                 <SvgPinIcon />
-                <NextLink href="/account/address/" as="/account/address">
+                <NextLink
+                  href="/account/address/"
+                  as="/account/address"
+                  passHref
+                >
                   <LinkOverlay>
                     <Text fontSize="md">My profile</Text>
                   </LinkOverlay>
@@ -240,7 +249,7 @@ const Account: React.FC<indexProps> = ({}) => {
                 rounded="md"
               >
                 <HeartIcon />
-                <NextLink href="/like" as="/like">
+                <NextLink href="/like" as="/like" passHref>
                   <LinkOverlay>
                     <Text fontSize="md">My profile</Text>
                   </LinkOverlay>

@@ -75,7 +75,7 @@ export const Login: React.FC<{}> = ({}) => {
                   />
                 </Box>
                 <Flex>
-                  <NextLink href="/forgot-password">
+                  <NextLink href="/forgot-password" passHref>
                     <Link ml={"auto"} fontSize="sm" textDecoration="underline">
                       Forgot password
                     </Link>
@@ -83,8 +83,8 @@ export const Login: React.FC<{}> = ({}) => {
                 </Flex>
 
                 <Box textAlign="center" mt={5}>
-                  Don't have an account?{" "}
-                  <NextLink href="/register">
+                  Don&apos;t have an account?{" "}
+                  <NextLink href="/register" passHref>
                     <Link fontWeight="700" color="red.400">
                       Register
                     </Link>

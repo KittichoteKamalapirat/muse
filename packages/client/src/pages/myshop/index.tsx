@@ -92,6 +92,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   pathname: "/myshop/order",
                   query: { status: CartItemStatus.ToDeliver },
                 }}
+                passHref
               >
                 <Link textAlign="center" flex={1}>
                   <Center>
@@ -107,6 +108,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   pathname: "/myshop/order",
                   query: { status: CartItemStatus.OnDelivery },
                 }}
+                passHref
               >
                 <Link textAlign="center" flex={1}>
                   <Center>
@@ -122,6 +124,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   pathname: "/myshop/order",
                   query: { status: CartItemStatus.Delivered },
                 }}
+                passHref
               >
                 <Link textAlign="center" flex={1}>
                   <Center>
@@ -137,6 +140,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   pathname: "/myshop/order",
                   query: { status: CartItemStatus.PaymentPending },
                 }}
+                passHref
               >
                 <Link textAlign="center" flex={1}>
                   <Center>
@@ -155,6 +159,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   pathname: "/myshop/order",
                   query: { status: CartItemStatus.Delivered },
                 }}
+                passHref
               >
                 <Link>
                   <Text>Order history </Text>
@@ -181,7 +186,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               >
                 <SvgVideoIcon fontSize="1.5rem" />
 
-                <NextLink href="/myshop/posts/" as="/myshop/posts/">
+                <NextLink href="/myshop/posts/" as="/myshop/posts/" passHref>
                   <Link mt={2}>Posts</Link>
                 </NextLink>
               </Flex>
@@ -215,7 +220,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                   >
                     <SmallAddIcon color="white" />
                   </Button>
-                  <NextLink href="/create-post">
+                  <NextLink href="/create-post" passHref>
                     <LinkOverlay>Create new video with meal kit</LinkOverlay>
                   </NextLink>
                   <Divider mt={2} />
@@ -232,7 +237,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 padding-top="100%"
                 boxShadow="lg"
               >
-                <NextLink href="/create-post">
+                <NextLink href="/create-post" passHref>
                   <Text as={Link}>
                     <SmallAddIcon color="white" fontSize="2rem" />
                   </Text>
@@ -260,7 +265,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               >
                 <SvgCardIcon fontSize="1.5rem" />
 
-                <NextLink href="/myshop/payment-info">
+                <NextLink href="/myshop/payment-info" passHref>
                   <Link mt={2}>Payment Info</Link>
                 </NextLink>
               </Flex>

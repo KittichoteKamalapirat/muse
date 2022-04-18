@@ -19,7 +19,7 @@ export const WelcomeNav: React.FC<WelcomeNavProps> = ({ children }) => {
           color="gray.700"
           maxWidth="1000px"
         >
-          <NextLink href="/">
+          <NextLink href="/" passHref>
             <Link
               style={{ textDecoration: "none" }}
               // textDecoration="none"

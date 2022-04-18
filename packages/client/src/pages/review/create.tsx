@@ -1,19 +1,17 @@
 import { StarIcon } from "@chakra-ui/icons";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
-import { Box, Center, Button, Avatar, Img } from "@chakra-ui/react";
-import { Formik, Form, Field } from "formik";
+import { Avatar, Box, Button, Center, Img, useToast } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { InputField } from "../../components/InputField";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { MainNav } from "../../components/MainNav";
 import {
   useCreateReviewMutation,
   useMealkitLazyQuery,
 } from "../../generated/graphql";
-import { courierList } from "../../util/constants/courierList";
 import { withApollo } from "../../util/withApollo";
-import { useToast } from "@chakra-ui/react";
 
 interface WriteReviewProps {}
 
@@ -30,8 +28,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
   const toast = useToast();
 
   const [createReview] = useCreateReviewMutation();
-  console.log({ mealkitId });
-  console.log({ mealkitData });
 
   useEffect(() => {
     if (mealkitId) {
@@ -41,7 +37,7 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
         },
       });
     }
-  }, [mealkitId]);
+  }, [mealkitId, mealkit]);
 
   if (mealkitLoading) {
     return <Text>loading</Text>;
@@ -97,16 +93,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
           }}
           onSubmit={async (values, { setErrors }) => {
             try {
-              console.log(typeof values.score);
-              console.log(values.score);
-              console.log(typeof values.title);
-              console.log(values.title);
-              console.log(typeof values.text);
-              console.log(values.text);
-              console.log(typeof mealkitId);
-              console.log(mealkitId);
-              console.log(typeof cartItemId);
-              console.log(cartItemId);
               const response = await createReview({
                 variables: {
                   input: {
@@ -118,7 +104,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
                   cartItemId: parseInt(cartItemId as string),
                 },
               });
-              console.log("pass");
 
               toast({
                 title: "Review received!.",
@@ -139,7 +124,7 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
                 {[...Array(5)].map((star, i) => {
                   const ratingValue = i + 1;
                   return (
-                    <label>
+                    <label key={ratingValue}>
                       <Field
                         type="radio"
                         name="score"
@@ -148,11 +133,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
                       />
                       <StarIcon
                         fontSize="3rem"
-                        // color={
-                        //   ratingValue <= (hover || values.score)
-                        //     ? "orange"
-                        //     : "gray.200"
-                        // }
                         color={
                           hover && ratingValue <= hover
                             ? "orange.200"
@@ -169,16 +149,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
                 })}
               </Center>
 
-              {/* <Box>
-                <Text fontWeight="bold">Score</Text>
-                <InputField
-                  name="score"
-                  placeholder="score"
-                  type="number"
-                  min={0}
-                  max={5}
-                />
-              </Box> */}
               <Box>
                 <Text fontWeight="bold">Title</Text>
                 <InputField name="title" placeholder="title" />

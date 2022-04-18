@@ -1,23 +1,9 @@
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
-import {
-  Box,
-  Button,
-  Link,
-  Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
-} from "@chakra-ui/react";
-
-import { Divider, Flex, Text } from "@chakra-ui/layout";
-import React, { LegacyRef } from "react";
+import { Flex, Text } from "@chakra-ui/layout";
+import { Link } from "@chakra-ui/react";
 import NextLink from "next/link";
+import React from "react";
 import { primaryColor } from "./Variables";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface NavNoDrawerProps {}
 
@@ -33,19 +19,18 @@ export const NavNoDrawer: React.FC<NavNoDrawerProps> = ({}) => {
         my={2}
         alignItems="center"
       >
-        <NextLink href="/creator">
+        <NextLink href="/creator" passHref>
           <Link mx={5}>
             {" "}
             <Text whiteSpace="nowrap"> Creator Center</Text>{" "}
           </Link>
         </NextLink>
-        <NextLink href="/login">
+        <NextLink href="/login" passHref>
           <Link mx={5}> Log in</Link>
         </NextLink>
 
-        <NextLink href="/register">
+        <NextLink href="/register" passHref>
           <Link mx={5} fontWeight="bold" color={primaryColor}>
-            {" "}
             Sign up
           </Link>
         </NextLink>

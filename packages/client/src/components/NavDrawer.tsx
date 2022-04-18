@@ -1,24 +1,19 @@
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Input } from "@chakra-ui/input";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import { Divider, Flex, Text } from "@chakra-ui/layout";
 import {
   Box,
-  Button,
-  Link,
   Drawer,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  DrawerHeader,
   DrawerBody,
-  DrawerFooter,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Link,
 } from "@chakra-ui/react";
-
-import { Divider, Flex, Text } from "@chakra-ui/layout";
-import React, { LegacyRef } from "react";
-import SvgHamburger from "./svgComponents/Hamburger";
 import NextLink from "next/link";
+import React from "react";
 import { primaryColor } from "./Variables";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface NavDrawerProps {}
 
@@ -50,13 +45,13 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({}) => {
                 justifyContent="space-between"
                 my={2}
               >
-                <NextLink href="/login">
+                <NextLink href="/login" passHref>
                   <Link> Sign in</Link>
                 </NextLink>
 
                 <Text color="gray.400">or</Text>
 
-                <NextLink href="/register">
+                <NextLink href="/register" passHref>
                   <Link color={primaryColor}> Sign up</Link>
                 </NextLink>
               </Flex>
@@ -64,21 +59,16 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({}) => {
               <Divider mb={2} />
 
               <Box my={2}>
-                <NextLink href="/">
+                <NextLink href="/" passHref>
                   <Link> Home</Link>
                 </NextLink>
               </Box>
 
               <Box my={2}>
-                <NextLink href="/creator">
+                <NextLink href="/creator" passHref>
                   <Link> Seller Center</Link>
                 </NextLink>
               </Box>
-              {/* <Box my={2}>
-                <NextLink href="/about">
-                  <Link> About</Link>
-                </NextLink>
-              </Box> */}
             </Flex>
           </DrawerBody>
         </DrawerContent>

@@ -24,13 +24,13 @@ export const TopNav: React.FC<TopNavProps> = ({}) => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <NextLink href="/">
+        <NextLink href="/" passHref>
           <Link mx={2} fontSize="sm" style={{ textDecoration: "none" }}>
             <Heading fontSize="sm">Cookknow</Heading>
           </Link>
         </NextLink>
 
-        <NextLink href="/cart">
+        <NextLink href="/cart" passHref>
           <Link mx={2} fontSize="sm">
             <BasketIcon />
           </Link>

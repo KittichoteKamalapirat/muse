@@ -1,16 +1,15 @@
-import React from "react";
-import { Formik, Form } from "formik";
 import { Box, Button, Heading, Link } from "@chakra-ui/react";
-import { Wrapper } from "../components/Wrapper";
+import { Form, Formik } from "formik";
+import { useRouter } from "next/dist/client/router";
+import NextLink from "next/link";
+import React from "react";
 import { InputField } from "../components/InputField";
+import { WelcomeNav } from "../components/WelcomeNav";
+import { Wrapper } from "../components/Wrapper";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
-import { useRouter } from "next/dist/client/router";
 import { withApollo } from "../util/withApollo";
-import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import { WelcomeNav } from "../components/WelcomeNav";
-import NextLink from "next/link";
-import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 
 interface registerProps {}
 
@@ -112,7 +111,7 @@ export const Register: React.FC<registerProps> = ({}) => {
 
                 <Box textAlign="center" mt={5}>
                   Already have an account?{" "}
-                  <NextLink href="/login">
+                  <NextLink href="/login" passHref>
                     <Link fontWeight="700" color="red.400">
                       Log in
                     </Link>

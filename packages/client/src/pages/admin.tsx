@@ -50,7 +50,10 @@ const Admin: React.FC<AdminProps> = ({}) => {
     [loading, cartItems]
   );
 
-  const columns = useMemo<Column[]>(() => adminColumn(completeCartItem), []);
+  const columns = useMemo<Column[]>(
+    () => adminColumn(completeCartItem),
+    [completeCartItem]
+  );
 
   const {
     getTableProps,

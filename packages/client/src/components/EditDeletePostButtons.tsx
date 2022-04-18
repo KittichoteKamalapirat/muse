@@ -1,23 +1,15 @@
-import {
-  EditIcon,
-  DeleteIcon,
-  AddIcon,
-  ExternalLinkIcon,
-  HamburgerIcon,
-  RepeatIcon,
-} from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
-  IconButton,
+  Button,
   Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-  Button,
 } from "@chakra-ui/react";
-import React from "react";
 import NextLink from "next/link";
+import React from "react";
 import { useDeletePostMutation } from "../generated/graphql";
 
 interface EditDeletePostButtonsProps {
@@ -36,7 +28,7 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
           ...
         </MenuButton>
         <MenuList bgColor="white">
-          <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`}>
+          <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`} passHref>
             <MenuItem icon={<EditIcon />} as={Link}>
               {/* <Button as={Link} aria-label="Edit post" bgColor="white"> */}
               Edit Post
@@ -57,23 +49,6 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
           >
             Delete post
           </MenuItem>
-
-          {/* <Button
-              aria-label="Delete post"
-              // icon={<DeleteIcon />}
-              bgColor="white"
-              onClick={() =>
-                deletePost({
-                  variables: { id },
-                  update: (cache) => {
-                    cache.evict({ id: "Post:" + id }); //Post: 60
-                  },
-                })
-              }
-            >
-              {" "}
-              Delete post
-            </Button> */}
         </MenuList>
       </Menu>
     </Box>

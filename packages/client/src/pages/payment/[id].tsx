@@ -74,7 +74,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     return () => {
       clearInterval(intervalId);
     }; //This is important
-  }, [seconds]);
+  }, [seconds, paymentIsComplete, router]);
 
   //has to be here condition would change the order of useEffect!!!!!!!!!
   if (

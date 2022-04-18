@@ -1,64 +1,24 @@
-import { Box, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
-// import { Image } from "@chakra-ui/image";
-// import Image from "next/image";
-import {
-  Img,
-  Link,
-  Image,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Center,
-  Avatar,
-  useMediaQuery,
-} from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
-import React from "react";
-import { HomeIcon } from "./Icons/HomeIcon";
-import { primaryColor, inActiveGray } from "./Variables";
-import { Wrapper } from "./Wrapper";
+import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Avatar, Center, Img, Link, useMediaQuery } from "@chakra-ui/react";
 import NextLink from "next/link";
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  DeleteIcon,
-  EditIcon,
-} from "@chakra-ui/icons";
+import React from "react";
+import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
+import { Footer } from "./Footer";
+import { Slider } from "./Slider";
+import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
 import SvgWhy3 from "./svgComponents/Why3";
 import SvgWhy4 from "./svgComponents/Why4";
-import {
-  PaginatedPosts,
-  Post,
-  PostSnippetFragment,
-} from "../generated/graphql";
-import SvgThflag from "./svgComponents/Thflag";
-import mealkitImg from "./Assets/mealkit.png";
 import { WelcomeNav } from "./WelcomeNav";
-import { Footer } from "./Footer";
-import { Slider } from "./Slider";
-import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
-import SvgSdg12 from "./svgComponents/Sdg12";
+import { Wrapper } from "./Wrapper";
 
 interface WelcomeProps {}
 
 export const Welcome: React.FC<WelcomeProps> = ({}) => {
   const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
-
-  // const myLoader = ({ src, width, quality }) => {
-  //   return `https://cookknow.com/${src}?w=${width}&q=${quality || 75}`;
-  // };
-
-  // const Feature = ({ title, desc, ...rest }) => {
-  //   return (
-  //     <Box p={5} shadow="md" borderWidth="1px" {...rest}>
-  //       <Heading fontSize="xl">{title}</Heading>
-  //       <Text mt={4}>{desc}</Text>
-  //     </Box>
-  //   );
-  // };
 
   return (
     <>
@@ -80,20 +40,11 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               <Heading color="brand">
                 The Meal Kit {isLargerThan30Em ? null : <br />} Marketplace
               </Heading>
-              <Box
-                // flexDirection={["column", "row"]}
-                mt={4}
-                fontSize="xl"
-              >
-                {/* <Text>With the right ingredient</Text> */}
-                {/* <Text>With the right recipe</Text> */}
-
-                {/* <Text>Cooking</Text> */}
-
+              <Box mt={4} fontSize="xl">
                 <Text>มีวัตถุดิบ มีคลิปสอน </Text>
                 <Text> พร้อมทำอาหาร</Text>
               </Box>
-              <NextLink href="/register">
+              <NextLink href="/register" passHref>
                 <Link>
                   <Button
                     rightIcon={<ChevronRightIcon />}
@@ -203,12 +154,12 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
           <Wrapper>
             <Heading fontSize="xl">
               {/* ใครๆก็สามารถสมัครเพื่อขายสินค้ากับแพลตฟอร์มของเราได้ */}
-              Anyone can be recipe's creators
+              Anyone can be recipe&apos;s creators
             </Heading>
 
             <Text mt={2}>
-              Join our creators' program and learn how to create a meal kit for
-              your recipe
+              Join our creators&apos; program and learn how to create a meal kit
+              for your recipe
             </Text>
 
             <NextLink
@@ -216,6 +167,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 pathname: "/creator",
                 // query: { isCreator: true },
               }}
+              passHref
             >
               <Link>
                 <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
@@ -229,7 +181,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
         {/* client's voice */}
         <Box mt="40px" mb="80px">
           <Heading fontSize="2xl" mb={4} textAlign="center">
-            Customer's Voice
+            Customer&apos;s Voice
           </Heading>
 
           <Wrapper>
@@ -242,11 +194,11 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             </Center>
 
             <Text fontStyle="italic" color="gray.600">
-              "The ingredients were fresh and came in ready-to-use portions.
-              It's super convenient when I'm too lazy to think of a recipe and
-              have to go shop for them.
+              &quot;The ingredients were fresh and came in ready-to-use
+              portions. It&apos;s super convenient when I&apos;m too lazy to
+              think of a recipe and have to go shop for them.
               <Text fontWeight="600" as="mark">
-                Would definitely recommend!"
+                Would definitely recommend!&quot;
               </Text>
             </Text>
           </Wrapper>
@@ -254,7 +206,6 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
         </Box>
 
         {/* /no food waste */}
-
         <Box py="20px" bgColor="gray.50">
           <Wrapper>
             <Flex direction={["column", "row"]} textAlign="center">

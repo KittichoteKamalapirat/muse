@@ -24,8 +24,8 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
   const [deletePaymentInfo] = useDeletePaymentInfoMutation();
   const noInfo = (
     <Box mt={2}>
-      <Text>Tou don't have payment info yet</Text>
-      <NextLink href="/myshop/payment-info/create">
+      <Text>Tou don&apos;t have payment info yet</Text>
+      <NextLink href="/myshop/payment-info/create" passHref>
         <Link>Add</Link>
       </NextLink>
       <Divider mt={2} />
@@ -58,7 +58,7 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
                   ...
                 </MenuButton>
                 <MenuList bgColor="white">
-                  <NextLink href="/myshop/payment-info/edit">
+                  <NextLink href="/myshop/payment-info/edit" passHref>
                     <MenuItem icon={<EditIcon />} as={Link}>
                       Update the account
                     </MenuItem>

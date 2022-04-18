@@ -1,22 +1,14 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Image,
-  Link,
-  Text,
-  Skeleton,
-} from "@chakra-ui/react";
-import React from "react";
-import { Layout } from "../components/Layout/Layout";
-import { Wrapper } from "../components/Wrapper";
-import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
-import { withApollo } from "../util/withApollo";
+import { Box, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
+import { Layout } from "../components/Layout/Layout";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
-import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Loading } from "../components/skeletons/Loading";
+import { Wrapper } from "../components/Wrapper";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
+import { withApollo } from "../util/withApollo";
 
 interface likeProps {}
 
@@ -59,6 +51,7 @@ const Like: React.FC = ({}) => {
               pathname: "/post/[id]",
               query: { id: post.id },
             }}
+            passHref
           >
             <Link>
               <Flex my={1}>

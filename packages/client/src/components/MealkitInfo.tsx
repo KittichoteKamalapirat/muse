@@ -1,24 +1,21 @@
+import { gql } from "@apollo/client";
+import { Button } from "@chakra-ui/button";
+import { AddIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import React, { useEffect, useState } from "react";
+import { Avatar, Img, useToast } from "@chakra-ui/react";
+import NextLink from "next/link";
+import router from "next/router";
+import React, { useState } from "react";
 import {
-  Mealkit,
-  useCartItemsQuery,
   useCreateCartItemMutation,
   useMealkitsQuery,
 } from "../generated/graphql";
-import { gql } from "@apollo/client";
-import { Wrapper } from "./Wrapper";
-import NextLink from "next/link";
-import { Button } from "@chakra-ui/button";
-import { AddIcon, CheckCircleIcon, CheckIcon } from "@chakra-ui/icons";
-import router from "next/router";
-import { useToast, Avatar, Img } from "@chakra-ui/react";
-import { ReviewStars } from "./ReviewStars";
-import { Reviews } from "./Reviews";
-import { Layout } from "./Layout/Layout";
 import { FooterLayout } from "./Layout/FooterLayout";
-import { ContentWrapper } from "./Wrapper/ContentWrapper";
+import { Layout } from "./Layout/Layout";
+import { Reviews } from "./Reviews";
+import { ReviewStars } from "./ReviewStars";
 import { Loading } from "./skeletons/Loading";
+import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -51,7 +48,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
           <Text>ไม่มีชุดทำอาหาร</Text>
-          <NextLink href="/" as="/">
+          <NextLink href="/" as="/" passHref>
             <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
           </NextLink>
         </Box>

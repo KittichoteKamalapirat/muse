@@ -1,26 +1,7 @@
 import { Button } from "@chakra-ui/button";
-import { Image, Img } from "@chakra-ui/image";
-import {
-  Box,
-  Flex,
-  Heading,
-  Link,
-  LinkBox,
-  LinkOverlay,
-  Text,
-} from "@chakra-ui/layout";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../components/Wrapper";
-import NextLink from "next/link";
-import {
-  CartItemStatus,
-  useAddressQuery,
-  useUserOrdersLazyQuery,
-} from "../../generated/graphql";
-import { withApollo } from "../../util/withApollo";
-import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
+import { Image } from "@chakra-ui/image";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import {
   Accordion,
   AccordionButton,
@@ -30,13 +11,23 @@ import {
   Avatar,
   Divider,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 import { AddressComponent } from "../../components/Icons/AddressComponent";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
-
-import { mappedCartItemsByCreatorResult } from "../../util/toCartItemsByCreatorMap";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import { primaryColor } from "../../components/Variables";
-import { CartItemStatusTab } from "../../components/CartItemStatusTab";
+import { Wrapper } from "../../components/Wrapper";
+import {
+  CartItemStatus,
+  useAddressQuery,
+  useUserOrdersLazyQuery,
+} from "../../generated/graphql";
+import { mappedCartItemsByCreatorResult } from "../../util/toCartItemsByCreatorMap";
+import { withApollo } from "../../util/withApollo";
 
 interface OrderProps {}
 
@@ -81,7 +72,7 @@ const Order: React.FC<OrderProps> = ({}) => {
     setCartItemStatus(
       CartItemStatus[statusParam as keyof typeof CartItemStatus]
     );
-  }, [statusParam]);
+  }, [statusParam, userOrders]);
 
   if (userOrderLoading || addressLoading) {
     return (

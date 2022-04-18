@@ -64,7 +64,7 @@ const Info: React.FC<infoProps> = ({}) => {
           <Divider mt={2} />
 
           <Flex justifyContent="center" mt={4}>
-            <NextLink href="/account/info/update">
+            <NextLink href="/account/info/update" passHref>
               <Link style={{ textDecoration: "none" }}>
                 <Button mx="auto">Edit account info</Button>
               </Link>

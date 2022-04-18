@@ -57,7 +57,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
               You have not created any posts yet!{" "}
             </Heading>
             <Button>
-              <NextLink href="/create-post">
+              <NextLink href="/create-post" passHref>
                 <Text as={Link}>
                   {/* <SmallAddIcon />  */}
                   Create a new post with Meal kit

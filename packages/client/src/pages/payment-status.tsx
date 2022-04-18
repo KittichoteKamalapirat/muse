@@ -1,15 +1,13 @@
+import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
-import { withApollo } from "../util/withApollo";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import NextLink from "next/link";
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { CartItemStatus } from "../generated/graphql";
-import { Button } from "@chakra-ui/button";
-import SvgSuccess from "../components/svgComponents/Success";
-import SvgFail from "../components/svgComponents/Fail";
 import { MainNav } from "../components/MainNav";
+import SvgFail from "../components/svgComponents/Fail";
+import SvgSuccess from "../components/svgComponents/Success";
+import { CartItemStatus } from "../generated/graphql";
+import { withApollo } from "../util/withApollo";
 
 interface PaymentStatusProps {}
 
@@ -35,6 +33,7 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({}) => {
               pathname: "/order",
               query: { status: CartItemStatus.ToDeliver },
             }}
+            passHref
           >
             <Link d="inline" color="brand" fontWeight="bold">
               HERE
@@ -66,7 +65,7 @@ const PaymentStatus: React.FC<PaymentStatusProps> = ({}) => {
         <Text d="inline">
           If you are certain that you have completed the payment, please contact
         </Text>{" "}
-        <NextLink href="/customer-support">
+        <NextLink href="/customer-support" passHref>
           <Link d="inline" color="brand" fontWeight="bold">
             HERE
           </Link>

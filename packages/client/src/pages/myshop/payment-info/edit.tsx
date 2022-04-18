@@ -1,13 +1,11 @@
-import { Text, Button } from "@chakra-ui/react";
-import { Formik, Form, Field } from "formik";
+import { Button, Text } from "@chakra-ui/react";
+import { Field, Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { InputField } from "../../../components/InputField";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper";
 import {
-  PaymentInfoQuery,
-  PaymentInfoDocument,
   usePaymentInfoQuery,
   useUpdatePaymentInfoMutation,
 } from "../../../generated/graphql";
@@ -65,12 +63,11 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
               {/* <Select placeholder="Select option"> */}
               <Field as="select" name="bankCode">
                 {banksArray.map((bank) => (
-                  <option value={bank.bankCode}>
+                  <option value={bank.bankCode} key={bank.bankCode}>
                     {bank.bank} ({bank.bankCode}){" "}
                   </option>
                 ))}
               </Field>
-              {/* </Select> */}
 
               <InputField
                 name="bankAccount"

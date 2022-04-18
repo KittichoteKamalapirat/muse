@@ -540,7 +540,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     } else {
       setSubmittable(false);
     }
-  }, [postValues, mealkitInput]);
+  }, [mealkitInput]);
   return (
     <Box>
       <Box m="1rem">

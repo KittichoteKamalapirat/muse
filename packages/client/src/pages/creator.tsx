@@ -51,6 +51,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
                 pathname: "/register",
                 query: { isCreator: true },
               }}
+              passHref
             >
               <Link>
                 <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
