@@ -3,7 +3,7 @@ import CartItem from "../../../CartItem";
 
 @ObjectType()
 class AddToCart {
-  @Field()
+  @Field(() => CartItem)
   cartItem: CartItem;
 
   @Field()
