@@ -43,6 +43,43 @@ jobs:
           working_directory: packages/client
           command: yarn test
 
+  client-deploy-test:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock"}}
+            - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: yarn install
+
+      - run:
+          name: Build Next.JS App
+          working_directory: packages/client
+          command: yarn build
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+            - ./.next/cache
+
+      - run:
+          name: "deploy a test-master branch to test.cookknow.com"
+          working_directory: packages/client
+          command: |
+            curl -X POST $VERCEL_DEPLOY_HOOK_TEST
+          filters:
+            branches:
+              only: test-master
+
   client-deploy-prod:
     docker:
       - image: cimg/node:17.6.0
@@ -76,15 +113,14 @@ jobs:
             - ./node_modules
             - ./.next/cache
 
-      # deploy test-master branch, VVERCEL_DEPLOY_HOOK_TEST is where the test.cookknow.com is
       - run:
-          name: "deploy a test-master branch to test.cookknow.com"
+          name: "deploy a master branch to cookknow.com"
           working_directory: packages/client
           command: |
-            curl -X POST $VERCEL_DEPLOY_HOOK_TEST
+            curl -X POST $VERCEL_DEPLOY_HOOK
           filters:
             branches:
-              only: test-master # TODO fix this
+              only: master
 
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
@@ -92,6 +128,15 @@ workflows:
     jobs:
       - client-test:
           name: 🔬 Run jest
+
+      - client-deploy-test:
+          name: 🌍 Deploy to test
+          requires:
+            - 🔬 Run jest
+          filters:
+            branches:
+              only: test-master
+
       - client-deploy-prod:
           name: 🌍 Deploy to production!
           requires:

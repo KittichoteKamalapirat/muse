@@ -28,7 +28,6 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          # working_directory: packages/server
           command: yarn install
 
       - run:
@@ -71,6 +70,82 @@ jobs:
 
       - store_artifacts:
           path: ~/project/packages/server/src/cypress/screenshots
+
+  server-deploy-test:
+    docker:
+      - image: cimg/node:17.6.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+      - image: cimg/postgres:14.0
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: chain123
+          POSTGRES_DB: cookknowdb_test
+      - image: cimg/redis:6.2.6
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock"}}
+            - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: yarn install
+
+      - run:
+          name: update ubuntu
+          command: sudo apt update
+      - run:
+          name: Install SSH so I can run ssh-keyscan to add droplet to known hosts
+          command: sudo apt install openssh-server
+      - run:
+          name: Add dokku as know host so not prompted for trust (this one  for some reasons take some time)
+          command: ssh-keyscan 128.199.205.119 >> ~/.ssh/known_hosts
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "yarn.lock"}}
+          paths:
+            - ./node_modules
+
+      - run: git config --global user.email $GITHUB_EMAIL
+      - run: git config --global user.name $GITHUB_USER
+
+      - setup_remote_docker:
+          version: 19.03.13
+          docker_layer_caching: true
+
+      - run: git tag
+
+      - run:
+          name: Get the latest tag and put in $VERSION
+          command: echo 'export VERSION=`git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1)`' >> $BASH_ENV
+
+      - run: echo $VERSION
+
+      # this part differs from deploy prod
+      - run:
+          name: Build docker image and push to docker hub
+          command: |
+            docker build -t kittishane/cookknow-test:$VERSION .
+            docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+            docker push kittishane/cookknow-test:$VERSION
+
+      - add_ssh_keys:
+          fingerprints:
+            - "8f:6b:c1:a9:7c:d6:e6:cc:e7:c7:61:07:f9:30:35:93"
+
+      # this part differs from deploy prod
+      - run:
+          name: ssh into dokku, pull from hub, tag, and deploy
+          command: ssh root@139.59.110.114 " docker pull kittishane/cookknow-test:$VERSION && docker tag kittishane/cookknow-test:$VERSION dokku/test-api:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
 
   server-deploy-prod:
     docker:
@@ -162,29 +237,20 @@ jobs:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
 
-      # - run:
-      #     name: Login and push in Dokku
-      #     command: yarn ci:dokku
-  # server-deploy:
-
-# like docker build
-# - run:
-# name: "Install Docker client"
-# command: |
-# # do  docker thingy here
-# - run: yarn build
-
-#  "docker:build": "docker build -t benawad/example:latest .",
-#     "docker:login": "docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD",
-#     "docker:push": "docker push benawad/example:latest",
-#     "ci:docker": "npm run docker:build && npm run docker:login && npm run docker:push"
-
 workflows:
   version: 2
   server-workflow:
     jobs:
       - server-test:
           name: 🧪  Run jest and cypress
+
+      - server-deploy-test:
+          name: 🚀 Deploy to test.cookknow
+          requires:
+            - 🧪  Run jest and cypress
+          filters:
+            branches:
+              only: test-master
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
