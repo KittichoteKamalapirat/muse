@@ -47,20 +47,14 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
               },
             });
 
+            // push to tracking page even when found or not found (but the content in the page will be different)
+            // if found -> show the info
+            // if not found -> let user knows, maybe it's not added to the system OR wrong number
             router.push(`/order/tracking/${response.data?.createTracking.id}`);
-            // add error handler later
-            // if (response.data?.createTracking) {
-            //     // instead of setErrors({username: "error message"}) we do
-            //     setErrors(toErrorMap(response.data.register.errors));
-            //   } else if (response.data?.register.user) {
-            //     // work we get the user!
-            //     router.push("/");
-            //   }
           }}
         >
           {({ isSubmitting }) => (
             <Form>
-              {" "}
               <Box my={2}>
                 <Text fontWeight="bold">Courier</Text>
 
@@ -77,9 +71,12 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
                 <InputField name="trackingNo" placeholder="Tracking Number" />
               </Box>
               <Center>
-                {" "}
-                <Button mt={4} type="submit" isLoading={isSubmitting}>
-                  {" "}
+                <Button
+                  mt={4}
+                  type="submit"
+                  isLoading={isSubmitting}
+                  color="white"
+                >
                   Update tracking
                 </Button>
               </Center>

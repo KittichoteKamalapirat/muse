@@ -768,6 +768,7 @@ export type Tracking = {
   createdAt: Scalars['String'];
   currentStatus: Scalars['String'];
   id: Scalars['Float'];
+  isFound: Scalars['Boolean'];
   shareLink: Scalars['String'];
   status: Scalars['String'];
   timelines: Array<Timeline>;
@@ -1180,7 +1181,7 @@ export type TrackingQueryVariables = Exact<{
 }>;
 
 
-export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
+export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, isFound: boolean, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
 
 export type PaymentQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -3128,6 +3129,7 @@ export const TrackingDocument = gql`
     query tracking($id: Int!) {
   tracking(id: $id) {
     trackingNo
+    isFound
     courier
     courierKey
     status

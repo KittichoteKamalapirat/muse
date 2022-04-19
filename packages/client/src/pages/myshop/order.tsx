@@ -224,7 +224,7 @@ const Order: React.FC<OrderProps> = ({}) => {
               </Flex>
 
               {cartItemStatus !== CartItemStatus.ToDeliver ? null : (
-                <Box bgColor="brand">
+                <Box>
                   <Box p="10px">
                     <Flex alignItems="center">
                       <Avatar
@@ -258,7 +258,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                       passHref
                     >
                       <Link>
-                        <Button my="10px">
+                        <Button my="10px" color="white">
                           Deliver to {orderItem.username}
                         </Button>
                       </Link>

@@ -156,45 +156,6 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
         )}
 
         <Divider />
-        {/* <Heading>Checkout</Heading> */}
-        {/* 
-      {!cartItems ? (
-        <Text>You don't have any items yet</Text>
-      ) : (
-        <Box>
-          {cartItems.cartItems.map((item) => (
-            <Flex textAlign="center">
-              <Box flex={1} m={1}>
-                {!item.mealkit?.images ? null : (
-                  <Image
-                    src={item.mealkit?.images[0]}
-                    alt="image"
-                    fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                  />
-                )}
-              </Box>
-
-              <Box flex={3} m={1} textAlign="left">
-                <Heading size="md">{item.mealkit?.name}</Heading>
-
-                <Box flex={1} m={1}>
-                  <Text>฿{item.mealkit?.price}</Text>
-                </Box>
-
-                <Text color="gray.700" fontSize="md" fontWeight="normal">
-                  quantity: {item.quantity}
-                </Text>
-
-                <Heading size="lg">Add Delivery fee and update total</Heading>
-
-                <Box flex={1} m={1}>
-                  <Text>Total: {item.total}</Text>
-                </Box>
-              </Box>
-            </Flex>
-          ))}
-        </Box>
-      )} */}
 
         {cartItems?.cartItems.length === 0 ? (
           <Text>Your cart is empty</Text>
@@ -367,9 +328,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
               p={3}
               color="white"
               width="100%"
+              disabled={!address}
             >
               Make a payment
             </Button>
+            {!address && (
+              <Text align={"center"} color="red.200">
+                Please add your address
+              </Text>
+            )}
           </Box>
         </Box>
 

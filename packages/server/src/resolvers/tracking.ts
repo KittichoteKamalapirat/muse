@@ -59,35 +59,6 @@ export class TrackingResolver {
     @Arg("id", () => Int) id: number
   ): Promise<Tracking | undefined | Error> {
     try {
-      // 1. Track my order (Order.userId = req.session.userId AND OrderStatus OnDe;lover )
-
-      //   const courierOptions = getTrackingOptions(trackingNo,courier);
-      //   const courrierResponse = await fetch(
-      //     "https://fast.etrackings.com/api/v3/couriers/detect",
-      //     { ...courierOptions }
-      //   );
-
-      //   if (courrierResponse.status !== 200) {
-      //     return new Error("cannot fetch courier the data");
-      //   }
-      //   const courierData = await courrierResponse.json();
-      //   console.log("courierData");
-      //   console.log(courierData);
-
-      //   const options = getTrackingOptions(trackingNo, courier);
-
-      //   const response = await fetch(
-      //     "https://fast.etrackings.com/api/v3/tracks/find",
-      //     { ...options }
-      //   );
-      //   console.log({ response });
-
-      //   if (response.status !== 200) {
-      //     return new Error("cannot fetch the data");
-      //   }
-      //   const data: any = await response.json();
-
-      //   console.log("data");
       const tracking = await Tracking.findOne({
         where: { id },
         relations: ["cartItems", "cartItems.mealkit"],
@@ -110,27 +81,38 @@ export class TrackingResolver {
     // 1. look for the tracking by the number
     // 2. if there traking exists and valid (check amount of something) - . not sure tho wto check
     // 3. update the order status and create tracking
-    console.log({ input });
+
     try {
+      console.log({ input });
       const options = getTrackingOptions(input.trackingNo, input.courier);
       const response = await fetch(
         "https://fast.etrackings.com/api/v3/tracks/find",
         { ...options }
       );
 
+      // if not found, create blank tracking and don't update cartItemStatus
       if (response.status !== 200) {
-        return new Error("cannot fetch the data");
+        const tracking = await Tracking.create({
+          trackingNo: input.trackingNo,
+          isFound: false,
+        }).save();
+
+        input.cartItemIds.forEach(async (id) => {
+          await CartItem.update(
+            { id },
+            { trackingId: tracking.id, status: CartItemStatus.ToDeliver } // didn't update to OnDelivery yet since not found
+          );
+        });
+
+        return tracking;
       }
+
       const data: any = await response.json();
       const trackingData = data.data;
-      console.log("tracking Data");
-      console.log(trackingData);
-      trackingData.timelines.map((timeline: any) => console.log(timeline));
-
-      // Order.update({ id: input.orderId }, { status: OrderStatus.OnDelivery });
 
       const tracking = await Tracking.create({
         trackingNo: trackingData.trackingNo,
+        isFound: true,
         courier: trackingData.courier,
         courierKey: trackingData.courierKey,
         shareLink: trackingData.shareLink,
@@ -147,7 +129,6 @@ export class TrackingResolver {
         );
       });
 
-      // CartItem.update({ id: input.cartItemId }, { status: CartItemStatus.OnDelivery });
       return tracking;
     } catch (error) {
       console.log(error.message);

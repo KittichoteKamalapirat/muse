@@ -35,33 +35,39 @@ class Tracking extends BaseEntity {
   // from the api
   @Field()
   @Column()
-  trackingNo: string;
+  trackingNo?: string;
 
-  @Field()
-  @Column()
+  // whether it is found or not
+  // not found means 1) wrong, or 2) not added into the system yet by courier
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  isFound: boolean;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   courier: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   courierKey: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   color: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   status: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   currentStatus: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   shareLink: string;
 
-  @Field(() => [Timeline])
+  @Field(() => [Timeline], { nullable: true })
   @Column("jsonb", { nullable: true, array: false }) // has to be set to false according to https://stackoverflow.com/questions/59437390/typeorm-jsonb-array-column
   timelines: Timeline[];
 
