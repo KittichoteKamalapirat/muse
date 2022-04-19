@@ -21,7 +21,7 @@ class Post extends BaseEntity {
 
   @Column({ nullable: true })
   @Field()
-  titlexx!: string;
+  title!: string;
 
   @Column({ nullable: true })
   @Field()

@@ -12,7 +12,7 @@ export class CartItemNotiResolver {
   async orderNotis(@Ctx() { req }: MyContext): Promise<CartItemNoti[] | Error> {
     try {
       const notis = CartItemNoti.find({
-        where: { creatorId: req.session.userId },
+        where: { userId: req.session.userId },
         relations: [
           "cartItem",
           "cartItem.user",
@@ -36,7 +36,7 @@ export class CartItemNotiResolver {
         .createQueryBuilder()
         .update(CartItemNoti)
         .set({ read: true })
-        .where('"creatorId" = :creatorId', { creatorId: req.session.userId })
+        .where('"userId" = :userId', { userId: req.session.userId })
         .execute();
       return true;
     } catch (error) {
