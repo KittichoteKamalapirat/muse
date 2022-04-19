@@ -106,6 +106,8 @@ jobs:
       - run:
           name: Install SSH so I can run ssh-keyscan to add droplet to known hosts
           command: sudo apt install openssh-server
+
+      # this part differs from deploy prod
       - run:
           name: Add dokku as know host so not prompted for trust (this one  for some reasons take some time)
           command: ssh-keyscan 139.59.110.114 >> ~/.ssh/known_hosts
@@ -138,6 +140,7 @@ jobs:
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
             docker push kittishane/cookknow-test:$VERSION
 
+      # this part differs from deploy prod
       - add_ssh_keys:
           fingerprints:
             - "8f:6b:c1:a9:7c:d6:e6:cc:e7:c7:61:07:f9:30:35:93"

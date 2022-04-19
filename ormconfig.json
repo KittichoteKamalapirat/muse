@@ -5,7 +5,7 @@
     "entities": ["dist/entities/*.js"],
     "migrations": ["dist/migrations/*.js"],
     "logging": true,
-    "synchronize": true
+    "synchronize": false
   },
   {
     "name": "development",
@@ -27,5 +27,24 @@
     "migrations": ["src/migrations/*.js"],
     "logging": false,
     "synchronize": true
+  },
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
+    "username": "postgres",
+    "password": "chain123",
+    "database": "cookknowdb_dev",
+    "port": 5432,
+    "entities": ["src/entities/**/*{.js,.ts}"],
+    "migrations": ["src/migrations/**/*{.js,.ts}"],
+    "subscribers": ["src/subscriber/**/*{.js,.ts}"],
+    "logging": true,
+    "synchronize": false,
+    "cli": {
+      "entitiesDir": "src/entities",
+      "migrationDir": "src/migrations",
+      "subscribersDir": "src/subscriber"
+    }
   }
 ]
