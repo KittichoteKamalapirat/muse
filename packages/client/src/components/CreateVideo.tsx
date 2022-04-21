@@ -66,6 +66,9 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         });
 
       // setVideoUrl(data.url);
+      setTimeout(() => {
+        handleMetadata();
+      }, 5000);
     }
   }, [videoFile.file]);
 
