@@ -406,9 +406,9 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                   <Box display={step === 1 ? "block" : "none"}>
                     <HeadingLayout heading="New Video">
                       <CreateVideo
-                        // videoFile={videoFile}
-                        // videoPreviewHandler={videoPreviewHandler}
-                        // videoPreview={videoPreview}
+                        // videoFile={videoFile} no need videofile for SAVING TO S3 HERE, be in child component
+                        videoPreviewHandler={videoPreviewHandler}
+                        videoPreview={videoPreview}
                         nextStep={nextStep}
                         handleMetadata={handleMetadata}
                         autoThumbnailUrl={autoThumbnailUrl}

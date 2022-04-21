@@ -12,8 +12,9 @@ const signUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/s3/sign`;
 
 interface CreateVideoProps {
   // videoFile: any;
-  // videoPreview: any;
+  videoPreview: any;
   autoThumbnailUrl: string;
+  videoPreviewHandler: (e: React.FormEvent<HTMLDivElement>) => void;
   nextStep: Function;
   handleMetadata: Function;
 }
@@ -24,9 +25,10 @@ interface FileMetadata {
 }
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
-  // videoPreview,
+  videoPreview,
   nextStep,
   handleMetadata,
+  videoPreviewHandler,
   autoThumbnailUrl,
 }) => {
   const [videoFile, setVideoFile] = useState({ file: null } as any);
@@ -91,7 +93,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
               <div
                 {...getRootProps({
                   onChange: (event) => {
-                    // videoPreviewHandler(event);
+                    videoPreviewHandler(event);
                   },
                 })}
               >
@@ -127,7 +129,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                             handleMetadata();
                           }, 500);
                         }}
-                        src={videoUrl}
+                        src={videoPreview}
                       />
                     </Box>
                     <Flex
