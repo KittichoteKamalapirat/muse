@@ -6,31 +6,17 @@ import React from "react";
 import { InputField } from "./InputField";
 
 interface CreatePostFormProps {
-  videoPreview: string;
-  thumbnailPreview: string;
   nextStep: Function;
   prevstep: Function;
 }
 
 export const CreatePostForm: React.FC<CreatePostFormProps> = ({
-  videoPreview,
-  thumbnailPreview,
   nextStep,
   prevstep,
 }) => {
   return (
     <Box mt={4}>
       <Flex justifyContent="center">
-        {!thumbnailPreview ? null : (
-          <Box flex={1} m={1}>
-            <Image
-              src={thumbnailPreview}
-              alt="image"
-              fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-            />
-          </Box>
-        )}
-
         <Box flex={2}>
           {" "}
           <Heading fontSize="md">Menu</Heading>

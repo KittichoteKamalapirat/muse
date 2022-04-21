@@ -8,9 +8,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
 } from "typeorm";
-import { Mealkit, Upvote, User } from ".";
-import Ingredient from "./Ingredient";
+import { Mealkit, Upvote, User, Ingredient, Video, Image } from ".";
 
 @ObjectType()
 @Entity()
@@ -89,6 +89,18 @@ class Post extends BaseEntity {
     cascade: true,
   })
   mealkits: Mealkit[];
+
+  @Field(() => Video)
+  @OneToOne(() => Video, (video) => video.post, {
+    cascade: true,
+  })
+  video: Video;
+
+  @Field(() => Image)
+  @OneToOne(() => Image, (image) => image.post, {
+    cascade: true,
+  })
+  image: Image;
 
   @Field(() => String)
   @CreateDateColumn()

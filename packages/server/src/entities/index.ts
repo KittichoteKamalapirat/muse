@@ -12,3 +12,5 @@ export { default as PaymentInfo } from "./PaymentInfo";
 export { default as Tracking } from "./Tracking";
 export { default as Upvote } from "./Upvote";
 export { default as Review } from "./Review";
+export { default as Video } from "./Video";
+export { default as Image } from "./Image";

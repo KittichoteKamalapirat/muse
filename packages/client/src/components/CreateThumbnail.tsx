@@ -1,13 +1,10 @@
 import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, IconButton, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import Dropzone from "react-dropzone";
 
 interface CreateThumbnailProps {
   videoPreview: any;
-  thumbnailPreview: any;
-  handleOnDropThumbnail: Function;
-  thumbnailPreviewHandler: Function;
   prevStep: Function;
   nextStep: Function;
   autoThumbnailUrl: string;
@@ -15,28 +12,51 @@ interface CreateThumbnailProps {
 
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
   videoPreview,
-  thumbnailPreview,
-  handleOnDropThumbnail,
-  thumbnailPreviewHandler,
   prevStep,
   nextStep,
   autoThumbnailUrl,
 }) => {
   console.log({ autoThumbnailUrl });
+
+  const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
+
+  const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
+
+  const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+    setThumbnailFile({ file: acceptedFiles[0] });
+  };
+
+  const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
+    const reader = new FileReader();
+    if (reader.error) {
+      console.log(reader.error.message);
+    }
+    reader.onload = () => {
+      if (reader.readyState === 2) {
+        setThumbnailPreview(reader.result);
+      }
+    };
+
+    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
+  };
+
   if (videoPreview) {
     // console.log(videoPreview);
     // const objectURL = URL.createObjectURL(videoPreview);
     // console.log(objectURL);/
   }
 
+  console.log({ thumbnailPreview });
+
   return (
     <Box>
-      {!thumbnailPreview ? (
-        !videoPreview ? null : (
-          <Flex justifyContent="center">
-            <Image src={autoThumbnailUrl} alt="auto-thumbnail-url" />
-          </Flex>
-        )
+      {thumbnailPreview === "" ? (
+        <Flex justifyContent="center">
+          <Image src={autoThumbnailUrl} alt="auto-thumbnail-url" />
+        </Flex>
       ) : (
         <Flex justifyContent="center">
           {/* <AspectRatio ratio={1}> */}
@@ -49,6 +69,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           {/* </AspectRatio> */}
         </Flex>
       )}
+
       <Dropzone
         onDrop={(acceptedFiles: any, rejectedFiles: any) =>
           handleOnDropThumbnail(acceptedFiles, rejectedFiles)

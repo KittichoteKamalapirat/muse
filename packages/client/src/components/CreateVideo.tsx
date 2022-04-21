@@ -5,36 +5,69 @@ import Dropzone from "react-dropzone";
 import { EditIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { Button, Image, Img } from "@chakra-ui/react";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
+import { useCreateVideoMutation, VideoInput } from "../generated/graphql";
+import axios from "axios";
+
+const signUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/s3/sign`;
 
 interface CreateVideoProps {
-  videoPreview: any;
+  // videoFile: any;
+  // videoPreview: any;
   autoThumbnailUrl: string;
-  handleOnDropVideo: Function;
-
-  videoPreviewHandler: Function;
   nextStep: Function;
   handleMetadata: Function;
 }
 
+interface FileMetadata {
+  name: string;
+  fileType: string;
+}
+
 export const CreateVideo: React.FC<CreateVideoProps> = ({
-  videoPreview,
-  handleOnDropVideo,
-  videoPreviewHandler,
+  // videoPreview,
   nextStep,
   handleMetadata,
   autoThumbnailUrl,
 }) => {
-  // const handleMetadata = () => {
-  //   const canvas = document.createElement("canvas");
-  //   const video = document.getElementById("preview") as HTMLVideoElement;
-  //   canvas.width = video!.videoWidth;
-  //   canvas.height = video!.videoHeight;
-  //   const ctx = canvas.getContext("2d")!;
-  //   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  //   console.log("7");
-  //   const dataUrl = canvas.toDataURL();
-  //   setUrl(dataUrl);
-  // };
+  const [videoFile, setVideoFile] = useState({ file: null } as any);
+  const [videoUrl, setVideoUrl] = useState<string>("");
+
+  const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+    setTimeout(() => {}, 1000);
+
+    setVideoFile({ file: acceptedFiles[0] });
+  };
+
+  useEffect(() => {
+    if (videoFile.file) {
+      const input: FileMetadata = {
+        name: videoFile.file.name,
+        fileType: videoFile.file.type,
+      };
+
+      // sign
+      axios
+        .post("http://localhost:4000/api/s3/sign", input)
+        .then((response) => {
+          const options = {
+            headers: {
+              "Content-Type": videoFile.file.type,
+            },
+          };
+
+          // save to s3
+          axios.put(response.data.sign, videoFile.file, options);
+
+          nextStep();
+          setVideoUrl(response.data.url);
+        });
+
+      // setVideoUrl(data.url);
+    }
+  }, [videoFile.file]);
 
   return (
     <Box>
@@ -51,17 +84,17 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
       >
         {({ getRootProps, getInputProps }) => (
           <Box mt={2}>
-            {/* <Box mb={2}>Video</Box> */}
             <Box cursor="pointer" padding={4}>
               <div
                 {...getRootProps({
                   onChange: (event) => {
-                    videoPreviewHandler(event);
+                    // videoPreviewHandler(event);
                   },
                 })}
               >
                 <input {...getInputProps()} />
-                {!videoPreview ? (
+
+                {!videoUrl ? (
                   <Flex
                     direction="column"
                     p="2rem"
@@ -82,17 +115,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                 ) : (
                   <Box>
                     <Box justifyContent="center" alignItems="end">
-                      {/* <video
-                        controls
-                        width="90%"
-                        id="preview"
-                        onLoadedMetadata={() => {
-                          handleMetadata();
-                        }}
-                        // handleMetadata() }
-                        src={videoPreview}
-                      /> */}
-
                       <video
                         controls
                         width="90%"
@@ -102,7 +124,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                             handleMetadata();
                           }, 500);
                         }}
-                        src={videoPreview}
+                        src={videoUrl}
                       />
                     </Box>
                     <Flex
@@ -117,16 +139,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
 
                     {/* <EditIcon m={2} /> */}
 
-                    <Flex justifyContent="right">
-                      {/* <IconButton
-                        aria-label="Search database"
-                        icon={<ChevronRightIcon />}
-                        onClick={() => nextStep()}
-                        fontSize="x-large"
-                        color="dark.200"
-                        variant="none"
-                      /> */}
-                    </Flex>
+                    <Flex justifyContent="right"></Flex>
                   </Box>
                 )}
               </div>
@@ -134,6 +147,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
           </Box>
         )}
       </Dropzone>
+
       <Flex justifyContent="right">
         <Button
           variant="transparent"

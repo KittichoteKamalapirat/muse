@@ -13,6 +13,7 @@ import { AddressResolver } from "./resolvers/address";
 import { CartItemResolver } from "./resolvers/cartItem";
 import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
 import { FollowResolver } from "./resolvers/follow";
+import { ImageResolver } from "./resolvers/image";
 import { MealkitResolver } from "./resolvers/mealkit";
 import { OrderResolver } from "./resolvers/order";
 import { PaymentResolver } from "./resolvers/payment";
@@ -21,8 +22,10 @@ import { PostResolver } from "./resolvers/post";
 import { ReviewResolver } from "./resolvers/review";
 import { TrackingResolver } from "./resolvers/tracking";
 import { UserResolver } from "./resolvers/user";
+import { VideoResolver } from "./resolvers/video";
 import paymentRouter from "./routes/payment";
 import trackingRouter from "./routes/tracking";
+import s3Router from "./routes/s3";
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
@@ -107,6 +110,7 @@ export const startServer = async () => {
 
   app.use("/api/payment", paymentRouter);
   app.use("/api/tracking", trackingRouter);
+  app.use("/api/s3", s3Router);
 
   app.use(
     session({
@@ -143,6 +147,9 @@ export const startServer = async () => {
       TrackingResolver,
       S3Resolver,
       ReviewResolver,
+      PostResolver,
+      VideoResolver,
+      ImageResolver,
     ],
     validate: false,
   });

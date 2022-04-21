@@ -24,5 +24,6 @@ module.exports = {
     "jsx-newline": 0,
     "no-shadow": "warn",
     "@typescript-eslint/no-explicit-any": "off",
+    "max-classes-per-file": ["error", 3],
   },
 };

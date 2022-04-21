@@ -7,11 +7,11 @@ describe("post", () => {
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
 
     // go to my account page
-    cy.get('a[aria-label="My Account Button"]').click();
+    // cy.get('a[aria-label="My Account Button"]').click();
 
     // become a creator
-    cy.get('button:contains("Switch Account type")').click();
-    cy.get('button:contains("Switch to Creator Account")').click();
+    // cy.get('button:contains("Switch Account type")').click();
+    // cy.get('button:contains("Switch to Creator Account")').click();
 
     cy.get('a:contains("My shop")').click();
 

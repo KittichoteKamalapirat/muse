@@ -174,6 +174,18 @@ export type Follow = {
   userId: Scalars['String'];
 };
 
+export type Image = {
+  __typename?: 'Image';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  post: Post;
+  postId: Scalars['String'];
+  uid: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
+};
+
 export type Ingredient = {
   __typename?: 'Ingredient';
   amount: Scalars['String'];
@@ -243,6 +255,7 @@ export type Mutation = {
   createPost: Post;
   createReview: Review;
   createTracking: Tracking;
+  createVideo: Video;
   deleteAddress: Scalars['Boolean'];
   deleteCartItem: Scalars['Boolean'];
   deleteMealkit: Scalars['Boolean'];
@@ -327,6 +340,11 @@ export type MutationCreateReviewArgs = {
 
 export type MutationCreateTrackingArgs = {
   input: TrackingInput;
+};
+
+
+export type MutationCreateVideoArgs = {
+  input: VideoInput;
 };
 
 
@@ -543,6 +561,7 @@ export type Post = {
   creator: User;
   creatorId: Scalars['String'];
   id: Scalars['Float'];
+  image: Image;
   ingredients?: Maybe<Array<Ingredient>>;
   instruction?: Maybe<Array<Scalars['String']>>;
   mealkits?: Maybe<Array<Mealkit>>;
@@ -553,6 +572,7 @@ export type Post = {
   thumbnailUrl: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
+  video: Video;
   videoUrl: Scalars['String'];
   voteStatus?: Maybe<Scalars['Int']>;
 };
@@ -602,6 +622,7 @@ export type Query = {
   user: User;
   userOrders: Array<CartItemsByOrderFormat>;
   users: Array<User>;
+  video: Video;
   votedPosts: PaginatedPosts;
 };
 
@@ -688,6 +709,11 @@ export type QueryUserOrdersArgs = {
 };
 
 
+export type QueryVideoArgs = {
+  postId: Scalars['Int'];
+};
+
+
 export type QueryVotedPostsArgs = {
   cursor?: Maybe<Scalars['String']>;
   limit: Scalars['Int'];
@@ -762,16 +788,16 @@ export type TimelineDetail = {
 export type Tracking = {
   __typename?: 'Tracking';
   cartItems: Array<CartItem>;
-  color: Scalars['String'];
-  courier: Scalars['String'];
-  courierKey: Scalars['String'];
+  color?: Maybe<Scalars['String']>;
+  courier?: Maybe<Scalars['String']>;
+  courierKey?: Maybe<Scalars['String']>;
   createdAt: Scalars['String'];
-  currentStatus: Scalars['String'];
+  currentStatus?: Maybe<Scalars['String']>;
   id: Scalars['Float'];
-  isFound: Scalars['Boolean'];
-  shareLink: Scalars['String'];
-  status: Scalars['String'];
-  timelines: Array<Timeline>;
+  isFound?: Maybe<Scalars['Boolean']>;
+  shareLink?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  timelines?: Maybe<Array<Timeline>>;
   trackingNo: Scalars['String'];
   updatedAt: Scalars['String'];
 };
@@ -834,6 +860,25 @@ export type UsernamePasswordInput = {
   password?: Maybe<Scalars['String']>;
   phonenumber: Scalars['String'];
   username: Scalars['String'];
+};
+
+export type Video = {
+  __typename?: 'Video';
+  createdAt: Scalars['DateTime'];
+  fileType: Scalars['String'];
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  post: Post;
+  postId?: Maybe<Scalars['String']>;
+  uid: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
+};
+
+export type VideoInput = {
+  content: Scalars['String'];
+  fileType: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
@@ -1101,6 +1146,13 @@ export type UpdateAvatarMutationVariables = Exact<{
 
 export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: boolean };
 
+export type CreateVideoMutationVariables = Exact<{
+  input: VideoInput;
+}>;
+
+
+export type CreateVideoMutation = { __typename?: 'Mutation', createVideo: { __typename?: 'Video', id: number, name: string, url: string, fileType: string } };
+
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
   postId: Scalars['Int'];
@@ -1162,7 +1214,7 @@ export type CreatorOrdersQueryVariables = Exact<{
 }>;
 
 
-export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus: string }> }> };
+export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus?: Maybe<string> }> }> };
 
 export type ManuallyConfirmPaymentQueryVariables = Exact<{
   paymentId: Scalars['Int'];
@@ -1181,7 +1233,7 @@ export type TrackingQueryVariables = Exact<{
 }>;
 
 
-export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, isFound: boolean, courier: string, courierKey: string, status: string, color: string, currentStatus: string, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines: Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }> } };
+export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, isFound?: Maybe<boolean>, courier?: Maybe<string>, courierKey?: Maybe<string>, status?: Maybe<string>, color?: Maybe<string>, currentStatus?: Maybe<string>, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines?: Maybe<Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }>> } };
 
 export type PaymentQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2556,6 +2608,42 @@ export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
 export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
 export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
+export const CreateVideoDocument = gql`
+    mutation createVideo($input: VideoInput!) {
+  createVideo(input: $input) {
+    id
+    name
+    url
+    fileType
+  }
+}
+    `;
+export type CreateVideoMutationFn = Apollo.MutationFunction<CreateVideoMutation, CreateVideoMutationVariables>;
+
+/**
+ * __useCreateVideoMutation__
+ *
+ * To run a mutation, you first call `useCreateVideoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVideoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVideoMutation, { data, loading, error }] = useCreateVideoMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateVideoMutation(baseOptions?: Apollo.MutationHookOptions<CreateVideoMutation, CreateVideoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateVideoMutation, CreateVideoMutationVariables>(CreateVideoDocument, options);
+      }
+export type CreateVideoMutationHookResult = ReturnType<typeof useCreateVideoMutation>;
+export type CreateVideoMutationResult = Apollo.MutationResult<CreateVideoMutation>;
+export type CreateVideoMutationOptions = Apollo.BaseMutationOptions<CreateVideoMutation, CreateVideoMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: Int!, $postId: Int!) {
   vote(value: $value, postId: $postId)

@@ -39,7 +39,7 @@ module.exports = (on, config) => {
           email: "luffy@gmail.com",
           phonenumber: "0900000000",
           password: hash,
-          isCreator: false,
+          isCreator: true,
           avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
         };
         const userRepository = connection.getRepository("User");

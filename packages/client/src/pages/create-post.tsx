@@ -15,8 +15,10 @@ import {
   SignS3Params,
   useCreateMealkitMutation,
   useCreatePostMutation,
+  useCreateVideoMutation,
   useSignMealkitS3Mutation,
   useSignS3Mutation,
+  VideoInput,
 } from "../generated/graphql";
 import { uploadToS3 } from "../util/createPost/uploadToS3";
 import { dataURItoBlob } from "../util/dataURItoBlob";
@@ -35,48 +37,25 @@ const postValues = {
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
   const router = useRouter();
-  //router import for below, not for useIsAuth
 
   //useState Hooks
   const [step, setStep] = useState(1);
+
   const [submittable, setSubmittable] = useState<boolean>(false);
+
+  const [submitting, setSubmitting] = useState<boolean>(false);
+
   const nextStep = () => {
     setStep(step + 1);
   };
+
   const prevStep = () => {
     setStep(step - 1);
   };
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [autoThumbnailUrl, setAutoThumbnailUrl] = useState<string>("");
-  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
-  const [videoFile, setVideoFile] = useState({ file: null } as any);
-
-  const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   //custom hooks
-
   const [signS3] = useSignS3Mutation();
   const [createPost] = useCreatePostMutation();
-  const [videoPreview, setVideoPreview] = useState("" as any);
-  const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
-
-  const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
-    if (rejectedFiles.length > 0) {
-      return alert(rejectedFiles[0].errors[0].message);
-    }
-    setVideoFile({ file: acceptedFiles[0] });
-    setTimeout(() => {
-      setStep(2);
-    }, 1000);
-    //  redirect to the next page after metadata is load (is set to 500 ms)
-  };
-
-  const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
-    if (rejectedFiles.length > 0) {
-      return alert(rejectedFiles[0].errors[0].message);
-    }
-    setThumbnailFile({ file: acceptedFiles[0] });
-  };
 
   // Mealkit Handler and variables
   // need signedrequest and video/image file
@@ -84,6 +63,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   // 2) upload to S3 with (axios) using signedRequest and file
 
   const [createMealkit] = useCreateMealkitMutation();
+
   const [mealkitInput, setMealkitInput] = useState({
     name: "",
     price: "",
@@ -94,8 +74,31 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const [signMealkitS3] = useSignMealkitS3Mutation();
 
+  // section1 starts: for uploading a video
+  const [videoFile, setVideoFile] = useState({ file: null } as any);
+  const [autoThumbnailUrl, setAutoThumbnailUrl] = useState<string>("");
+  const [videoPreview, setVideoPreview] = useState("" as any);
+  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
+
+  const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
+    console.log("handleOnDropVideo!");
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+
+    setVideoFile({ file: acceptedFiles[0] });
+
+    setTimeout(() => {
+      setStep(2);
+    }, 1000);
+
+    //  redirect to the next page after metadata is load (is set to 500 ms)
+  };
+
   const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
+    console.log("videoPreviewHandler!");
     const reader = new FileReader();
+
     if (reader.error) {
       console.log(reader.error.message);
     }
@@ -105,22 +108,44 @@ const CreatePost: React.FC<{}> = ({ children }) => {
         setVideoPreview(reader.result);
       }
     };
-
     reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
   };
 
-  const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-    const reader = new FileReader();
-    if (reader.error) {
-      console.log(reader.error.message);
-    }
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setThumbnailPreview(reader.result);
-      }
-    };
+  // automatically create image from video upload
+  const handleMetadata = () => {
+    const canvas = document.createElement("canvas");
+    const video = document.getElementById("preview") as HTMLVideoElement;
+    canvas.width = video!.videoWidth;
+    canvas.height = video!.videoHeight;
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
+    const dataUrl = canvas.toDataURL();
+    setAutoThumbnailUrl(dataUrl);
+
+    const blobData = dataURItoBlob(dataUrl);
+    setAutoThumbnailBlob(blobData);
+    // const params = {Key: "file_name", ContentType: "image/jpeg", Body: blobData};
+    // bucket.upload(params, function (err, data) {});
+
+    // setStep(2); //redirect if there is data
+  };
+
+  // section1 ends: for uploading a video
+
+  // section2 starts: for uploading thumbnail
+
+  // section2 ends: for uploading thumbnail
+
+  // section3 starts: for post details (which includes recipe)
+  const handleChangeInput = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const values: any = [...ingredientsField];
+
+    values[index][event.target.name] = event.target.value;
+    setIngredientsField(values);
   };
 
   // ingredient zone start
@@ -134,9 +159,54 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const [instructionField, setInstructionField] = useState([""]);
 
-  // mealkit zone
+  const handleInstructionChangeInput = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const values: any = [...instructionField];
+
+    values[index] = event.target.value;
+    setInstructionField(values);
+  };
+
+  const handleAddField = (index: any) => {
+    const values = [...ingredientsField];
+    values.splice(index + 1, 0, {
+      ingredient: "",
+      amount: "",
+      unit: "",
+    });
+    setIngredientsField(values);
+  };
+
+  const handleAddInstructionField = (index: any) => {
+    const values = [...instructionField];
+    values.splice(index + 1, 0, "");
+    setInstructionField(values);
+  };
+
+  const handleRemoveField = (index: any) => {
+    const values = [...ingredientsField];
+    if (values.length > 1) {
+      values.splice(index, 1);
+      setIngredientsField(values);
+    }
+  };
+
+  const handleRemoveInstructionField = (index: any) => {
+    const values = [...instructionField];
+    if (values.length > 1) {
+      values.splice(index, 1);
+      setInstructionField(values);
+    }
+  };
+
+  // section3 ends: for post details (which includes recipe)
+
+  // section4 starts: mealkit zone
 
   const [mealkitFiles, setMealkitFiles] = useState<any>([]);
+
   const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
@@ -195,124 +265,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     });
   };
 
-  const handleChangeInput = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const values: any = [...ingredientsField];
-
-    values[index][event.target.name] = event.target.value;
-    setIngredientsField(values);
-  };
-
-  const handleInstructionChangeInput = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const values: any = [...instructionField];
-
-    values[index] = event.target.value;
-    setInstructionField(values);
-  };
-
-  const handleAddField = (index: any) => {
-    const values = [...ingredientsField];
-    values.splice(index + 1, 0, {
-      ingredient: "",
-      amount: "",
-      unit: "",
-    });
-    setIngredientsField(values);
-  };
-
-  const handleAddInstructionField = (index: any) => {
-    const values = [...instructionField];
-    values.splice(index + 1, 0, "");
-    setInstructionField(values);
-  };
-
-  const handleRemoveField = (index: any) => {
-    const values = [...ingredientsField];
-    if (values.length > 1) {
-      values.splice(index, 1);
-      setIngredientsField(values);
-    }
-  };
-
-  const handleRemoveInstructionField = (index: any) => {
-    const values = [...instructionField];
-    if (values.length > 1) {
-      values.splice(index, 1);
-      setInstructionField(values);
-    }
-  };
-
-  // automatically create image from video upload
-
-  const handleMetadata = () => {
-    const canvas = document.createElement("canvas");
-    const video = document.getElementById("preview") as HTMLVideoElement;
-    canvas.width = video!.videoWidth;
-    canvas.height = video!.videoHeight;
-    const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const dataUrl = canvas.toDataURL();
-    setAutoThumbnailUrl(dataUrl);
-
-    const blobData = dataURItoBlob(dataUrl);
-    setAutoThumbnailBlob(blobData);
-    // const params = {Key: "file_name", ContentType: "image/jpeg", Body: blobData};
-    // bucket.upload(params, function (err, data) {});
-
-    // setStep(2); //redirect if there is data
-  };
+  // section4 ends: mealkit zone
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
-      // S3 Video and images starts
-
-      if (thumbnailFile.file) {
-        console.log("null but true");
-      }
-
-      const response = await signS3({
-        variables: {
-          videoname: videoFile.file.name,
-          thumbnailname: !thumbnailFile.file
-            ? mealkitInput.name
-            : thumbnailFile.file.name,
-          videoFiletype: videoFile.file.type,
-          thumbnailFiletype: !thumbnailFile.file
-            ? "image/png"
-            : thumbnailFile.file.type,
-        },
-        // filename: formatFilename(file.name),
-      });
-
-      let videoUrl = "";
-      let videoSignedRequest = "";
-      let thumbnailUrl = "";
-      let thumbnailSignedRequest = "";
-
-      if (response.data) {
-        // const { signedRequest, url } = response.data.signS3;
-        videoUrl = response.data.signS3!.videoUrl;
-        thumbnailUrl = response.data.signS3!.thumbnailUrl;
-        videoSignedRequest = response.data.signS3!.videoSignedRequest;
-        thumbnailSignedRequest = response.data.signS3!.thumbnailSignedRequest;
-
-        await uploadToS3(
-          videoFile.file,
-          thumbnailFile.file,
-          videoSignedRequest,
-          thumbnailSignedRequest,
-          autoThumbnailBlob
-        );
-      }
-      // S3 end
-
       // S3 mealkit starts
       let input: SignS3Params[] = [];
 
@@ -349,12 +306,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           input: {
             title: values.title,
             text: values.text,
-            videoUrl: videoUrl,
             instruction: instructionField,
             cooktime: values.cooktime,
             portion: values.portion,
             advice: [values.advice],
-            thumbnailUrl: thumbnailUrl,
             ingredients: ingredientsField,
           },
         },
@@ -391,114 +346,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setSubmitting(false);
   };
 
-  let render: any;
-  switch (step) {
-    case 1:
-      render = (
-        <HeadingLayout heading="New Video">
-          <CreateVideo
-            handleOnDropVideo={(acceptedFiles: any, rejectedFiles: any) =>
-              handleOnDropVideo(acceptedFiles, rejectedFiles)
-            }
-            videoPreviewHandler={videoPreviewHandler}
-            videoPreview={videoPreview}
-            nextStep={nextStep}
-            handleMetadata={handleMetadata}
-            autoThumbnailUrl={autoThumbnailUrl}
-          />
-        </HeadingLayout>
-      );
-      break;
-
-    case 2:
-      render = (
-        <HeadingLayout back={false} heading="Cover Photo">
-          <CreateThumbnail
-            videoPreview={videoPreview}
-            thumbnailPreview={thumbnailPreview}
-            thumbnailPreviewHandler={(e: React.FormEvent<HTMLDivElement>) =>
-              thumbnailPreviewHandler(e)
-            }
-            handleOnDropThumbnail={(acceptedFiles: any, rejectedFiles: any) =>
-              handleOnDropThumbnail(acceptedFiles, rejectedFiles)
-            }
-            prevStep={prevStep}
-            nextStep={nextStep}
-            autoThumbnailUrl={autoThumbnailUrl}
-          ></CreateThumbnail>
-        </HeadingLayout>
-      );
-      break;
-
-    case 3:
-      render = (
-        <HeadingLayout back={false} heading="Add Post Detail">
-          <Box>
-            <CreatePostForm
-              videoPreview={videoPreview}
-              thumbnailPreview={thumbnailPreview}
-              nextStep={nextStep}
-              prevstep={prevStep}
-            />
-            <CreateRecipe
-              ingredientsField={ingredientsField}
-              instructionField={instructionField}
-              handleChangeInput={handleChangeInput}
-              handleAddField={handleAddField}
-              handleRemoveField={handleRemoveField}
-              handleInstructionChangeInput={handleInstructionChangeInput}
-              handleAddInstructionField={handleAddInstructionField}
-              handleRemoveInstructionField={handleRemoveInstructionField}
-            />
-
-            <Flex justifyContent="space-between" alignItems="center" mt={5}>
-              <IconButton
-                aria-label="Search database"
-                icon={<ChevronLeftIcon />}
-                onClick={() => prevStep()}
-                fontSize="x-large"
-                color="dark.200"
-                variant="transparent"
-              />
-
-              <Button
-                variant="transparent"
-                color="brand"
-                onClick={() => nextStep()}
-              >
-                Next
-              </Button>
-            </Flex>
-          </Box>
-        </HeadingLayout>
-      );
-
-      break;
-    case 4:
-      render = (
-        <HeadingLayout heading="Add a mealkit">
-          <CreateMealkit
-            ingredientsField={ingredientsField}
-            input={mealkitInput}
-            setInput={setMealkitInput}
-            nextStep={nextStep}
-            prevStep={prevStep}
-            mealkitFilesPreview={mealkitFilesPreview}
-            mealkitFilesPreviewHandler={mealkitFilesPreviewHandler}
-            handleOnDropMealkitFiles={(
-              acceptedFiles: any,
-              rejectedFiles: any
-            ) => {
-              handleOnDropMealkitFiles(acceptedFiles, rejectedFiles);
-            }}
-          />
-        </HeadingLayout>
-      );
-      break;
-    default:
-      render = <Text>step default {step}</Text>;
-  }
-
   // const formRef = useRef() as MutableRefObject<HTMLInputElement>;
   const formRef = useRef() as RefObject<
     FormikProps<{
@@ -529,8 +376,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       formRef.current?.values.title != "" &&
       formRef.current?.values.text != "" &&
       formRef.current?.values.cooktime != "" &&
-      formRef.current?.values.portion != "" &&
-      formRef.current?.values.videoUrl != ""
+      formRef.current?.values.portion != ""
     ) {
       postSubmittable = true;
     }
@@ -556,7 +402,105 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           {({ isSubmitting }) => (
             <Box>
               <Form>
-                {render}
+                {
+                  <Box display={step === 1 ? "block" : "none"}>
+                    <HeadingLayout heading="New Video">
+                      <CreateVideo
+                        // videoFile={videoFile}
+                        // videoPreviewHandler={videoPreviewHandler}
+                        // videoPreview={videoPreview}
+                        nextStep={nextStep}
+                        handleMetadata={handleMetadata}
+                        autoThumbnailUrl={autoThumbnailUrl}
+                      />
+                    </HeadingLayout>
+                  </Box>
+                }
+                {
+                  <Box display={step === 2 ? "block" : "none"}>
+                    <HeadingLayout back={false} heading="Cover Photo">
+                      <CreateThumbnail
+                        videoPreview={videoPreview}
+                        prevStep={prevStep}
+                        nextStep={nextStep}
+                        autoThumbnailUrl={autoThumbnailUrl}
+                      ></CreateThumbnail>
+                    </HeadingLayout>
+                  </Box>
+                }
+                {
+                  <Box display={step === 3 ? "block" : "none"}>
+                    <HeadingLayout back={false} heading="Add Post Detail">
+                      <Box>
+                        <CreatePostForm
+                          nextStep={nextStep}
+                          prevstep={prevStep}
+                        />
+                        <CreateRecipe
+                          ingredientsField={ingredientsField}
+                          instructionField={instructionField}
+                          handleChangeInput={handleChangeInput}
+                          handleAddField={handleAddField}
+                          handleRemoveField={handleRemoveField}
+                          handleInstructionChangeInput={
+                            handleInstructionChangeInput
+                          }
+                          handleAddInstructionField={handleAddInstructionField}
+                          handleRemoveInstructionField={
+                            handleRemoveInstructionField
+                          }
+                        />
+
+                        <Flex
+                          justifyContent="space-between"
+                          alignItems="center"
+                          mt={5}
+                        >
+                          <IconButton
+                            aria-label="Search database"
+                            icon={<ChevronLeftIcon />}
+                            onClick={() => prevStep()}
+                            fontSize="x-large"
+                            color="dark.200"
+                            variant="transparent"
+                          />
+
+                          <Button
+                            variant="transparent"
+                            color="brand"
+                            onClick={() => nextStep()}
+                          >
+                            Next
+                          </Button>
+                        </Flex>
+                      </Box>
+                    </HeadingLayout>
+                  </Box>
+                }
+                {
+                  <Box display={step === 4 ? "block" : "none"}>
+                    <HeadingLayout heading="Add a mealkit">
+                      <CreateMealkit
+                        ingredientsField={ingredientsField}
+                        input={mealkitInput}
+                        setInput={setMealkitInput}
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                        mealkitFilesPreview={mealkitFilesPreview}
+                        mealkitFilesPreviewHandler={mealkitFilesPreviewHandler}
+                        handleOnDropMealkitFiles={(
+                          acceptedFiles: any,
+                          rejectedFiles: any
+                        ) => {
+                          handleOnDropMealkitFiles(
+                            acceptedFiles,
+                            rejectedFiles
+                          );
+                        }}
+                      />
+                    </HeadingLayout>
+                  </Box>
+                }
 
                 {step !== 4 ? null : (
                   <Flex
