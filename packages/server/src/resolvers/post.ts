@@ -13,7 +13,15 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Image, Mealkit, Post, Upvote, User, Video } from "../entities";
+import {
+  Image,
+  Mealkit,
+  MealkitFile,
+  Post,
+  Upvote,
+  User,
+  Video,
+} from "../entities";
 import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
 import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
@@ -191,11 +199,16 @@ export class PostResolver {
     const slicedPosts = await posts
       .slice(0, realLimit)
       .map(async (post: Post) => {
-        const mealkit = await Mealkit.find({ postId: post.id });
+        const mealkits = await Mealkit.find({
+          where: { postId: post.id },
+          relations: ["mealkitFiles"],
+        });
+
         const video = await Video.findOne({ postId: post.id });
         const image = await Image.findOne({ postId: post.id });
 
-        post.mealkits = mealkit;
+        post.mealkits = mealkits;
+
         post.video = video as Video;
         post.image = image as Image;
         return post;

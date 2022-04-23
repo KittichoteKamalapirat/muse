@@ -138,7 +138,7 @@ const Index = () => {
                       {post.mealkits?.map((mealkit) => (
                         <Flex key={mealkit.id}>
                           <Img
-                            src={mealkit.images![0]}
+                            src={mealkit.mealkitFiles[0].url}
                             width="25%"
                             borderRadius={5}
                           />

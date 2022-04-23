@@ -111,7 +111,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                         onLoadedMetadata={() => {
                           setTimeout(() => {
                             handleMetadata();
-                            nextStep();
+                            // nextStep();
                           }, 1000); // 10 doesn't work
                         }}
                         src={videoS3UrlAndID.url}

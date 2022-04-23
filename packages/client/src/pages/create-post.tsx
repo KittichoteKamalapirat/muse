@@ -17,7 +17,8 @@ import {
 } from "../generated/graphql";
 import UrlResolver from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
-import { FileMetadata } from "../types/utils/FileInput";
+import { FileMetadata } from "../types/utils/FileMetadata";
+
 import { ResourceType } from "../types/utils/ResourceType";
 import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";
@@ -81,7 +82,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   // automatically create image from video upload
 
   // save autoThumbnail to s3
-  const handleMetadata = () => {
+  const handleMetadata = async () => {
     // used in CreateVideo but state to update is here
     const canvas = document.createElement("canvas");
     const video = document.getElementById("preview") as HTMLVideoElement;
@@ -104,16 +105,32 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       resourceType: ResourceType.POST,
     };
 
-    axios.post(urlResolver.signS3(), input).then((response) => {
-      const options = getRESTOptions(fileData.type);
+    // axios.post(urlResolver.signS3(), input).then((response) => {
+    //   const options = getRESTOptions(fileData.type);
 
-      // save to s3
-      axios.put(response.data.sign, fileData, options);
+    //   // save to s3
+    //   axios.put(response.data.sign, fileData, options);
+
+    //   // TODO
+    //   setAutoThumbnailS3UrlAndId({
+    //     id: response.data.id,
+    //     url: response.data.url,
+    //   });
+    //   nextStep();
+    // });
+
+    const options = getRESTOptions(fileData.type);
+    const response = await axios.post(urlResolver.signS3(), input);
+    const response2 = await axios.put(response.data.sign, fileData, options);
+
+    // todo add loading indicator
+    if (response2) {
+      // -> this one kinda works!, video loaded first!
       setAutoThumbnailS3UrlAndId({
         id: response.data.id,
         url: response.data.url,
       });
-    });
+    }
   };
 
   console.log({ autoThumbnailS3UrlAndId });
@@ -297,6 +314,13 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       setSubmittable(false);
     }
   }, [mealkitInput]);
+
+  // handle autothumbnail show, don't go to next step to fast
+  useEffect(() => {
+    if (autoThumbnailS3UrlAndId) {
+      nextStep();
+    }
+  }, [autoThumbnailS3UrlAndId?.url]);
   return (
     <Box>
       <Box m="1rem">

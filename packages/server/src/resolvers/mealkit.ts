@@ -13,7 +13,7 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Mealkit, MealkitFile } from "../entities";
+import { Image, Mealkit, MealkitFile } from "../entities";
 import { MealkitInput, SignedS3Result, SignS3Params } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -83,9 +83,20 @@ export class MealkitResolver {
       creatorId: req.session.userId,
     }).save();
 
-    fileIds.forEach(async (id) =>
-      MealkitFile.update({ id }, { mealkitId: mealkit.id })
-    );
+    if (fileIds.length > 0) {
+      fileIds.forEach(async (id) =>
+        MealkitFile.update({ id }, { mealkitId: mealkit.id })
+      );
+    } else {
+      // use post thumbnail instead
+      const image = await Image.findOne({ postId });
+      MealkitFile.create({
+        name: image?.name,
+        fileType: image?.fileType,
+        url: image?.url,
+        mealkitId: mealkit.id,
+      }).save();
+    }
 
     return mealkit;
   }
