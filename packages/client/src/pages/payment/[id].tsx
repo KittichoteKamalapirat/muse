@@ -9,21 +9,25 @@ import { UnAuthorized } from "../../components/UnAuthorized";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper";
 import {
+  CartItemStatus,
   useManuallyConfirmPaymentLazyQuery,
   usePaymentQuery,
   useUploadSlipMutation,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 import useFetch from "../../util/useFetch";
+import UrlResolver from "../../lib/UrlResolver";
 
 interface PaymentProps {}
 
 const STARTING_MINUTES = 3;
 
+const urlResolver = new UrlResolver();
+
 const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();
   const { id } = router.query;
-  const cartItemStatusUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/payment/status/${id}`;
+  const cartItemStatusUrl = urlResolver.paymentStatusAPI(id as string);
 
   // native hooks
   const [seconds, setSeconds] = useState<number>(STARTING_MINUTES * 60);
@@ -65,7 +69,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
         setSeconds(seconds - 1);
         if (paymentIsComplete) {
           // TODO change this ?
-          router.push("/order?status=PaymentPending"); //TODO push to success page
+          router.push(urlResolver.orderTab(CartItemStatus.PaymentPending)); //TODO push to success page
           setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
         }
       }
@@ -155,10 +159,6 @@ const Payment: React.FC<PaymentProps> = ({}) => {
               {paymentData?.payment.amount}
             </Heading>
           </Box>
-
-          {/* <Button width="100%" bgColor={primaryColor} color="white">
-            Upload slip
-          </Button> */}
         </Flex>
       </Box>
 

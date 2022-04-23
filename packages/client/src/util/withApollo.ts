@@ -3,10 +3,14 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createWithApollo } from "./createWithApollo";
 import { PaginatedPosts } from "../generated/graphql";
 import { NextPageContext } from "next";
+import UrlResolver from "../lib/UrlResolver";
+
+const urlResolver = new UrlResolver();
+
 const createClient = (ctx: NextPageContext) =>
   new ApolloClient({
     // uri: "http://localhost:4000/graphql",
-    uri: `${process.env.NEXT_PUBLIC_SERVER_URL}/graphql`,
+    uri: urlResolver.graphql(),
     credentials: "include",
     headers: {
       cookie:
