@@ -1,5 +1,5 @@
 export interface FileMetadata {
-  name: string;
-  fileType: string;
-  resourceType: string;
+  url: string;
+  id: number;
+  fileType?: string;
 }

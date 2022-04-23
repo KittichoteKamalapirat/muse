@@ -4,8 +4,14 @@ query votedPosts($limit: Int!, $cursor: String) {
       id
       title
       textSnippet
-      videoUrl
-      thumbnailUrl
+      # 	video{
+      #   id
+      #   url
+      # }
+      # image{
+      #   id
+      #   url
+      # }
     }
     hasMore
   }

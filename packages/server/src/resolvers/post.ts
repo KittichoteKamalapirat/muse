@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable class-methods-use-this */
 import {
   Arg,
@@ -92,6 +93,7 @@ export class PostResolver {
       replacements
     );
     const slicedPosts = posts.slice(0, realLimit);
+    console.log({ posts });
     return {
       posts: slicedPosts,
       hasMore: posts.length === realLimitPlusOne,
@@ -190,8 +192,12 @@ export class PostResolver {
       .slice(0, realLimit)
       .map(async (post: Post) => {
         const mealkit = await Mealkit.find({ postId: post.id });
-        // eslint-disable-next-line no-param-reassign
+        const video = await Video.findOne({ postId: post.id });
+        const image = await Image.findOne({ postId: post.id });
+
         post.mealkits = mealkit;
+        post.video = video as Video;
+        post.image = image as Image;
         return post;
       });
 
@@ -218,8 +224,12 @@ export class PostResolver {
   // the id after immediately after arg is for when we query in graphql
   // the id: number is for findOne(id)
   async post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
-    // be default id: number -> Float for graphql, we want int
-    return Post.findOne(id); // urql will write the join for us (thanks to what we define in Schema, many to one thingy)
+    const post = await Post.findOne({
+      where: { id },
+      relations: ["video", "image"], // for some reasons, no need to spicify creator
+    });
+
+    return post;
   }
 
   // craete a post

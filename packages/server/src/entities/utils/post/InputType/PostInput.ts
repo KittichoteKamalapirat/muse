@@ -21,12 +21,6 @@ export class PostInput {
   @Field(() => [String])
   advice: string[];
 
-  @Field()
-  videoUrl: string;
-
-  @Field()
-  thumbnailUrl: string;
-
   @Field(() => [IngredientInput])
   ingredients: IngredientInput[];
 }

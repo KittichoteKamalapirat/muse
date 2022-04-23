@@ -5,8 +5,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import UrlResolver from "../lib/UrlResolver";
+import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
@@ -14,8 +15,8 @@ import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 interface CreateVideoProps {
   nextStep: Function;
   handleMetadata: Function;
-  videoS3UrlAndID: FileUrlAndID | null;
-  setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileUrlAndID | null>>;
+  videoS3UrlAndID: FileMetadata | null;
+  setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileMetadata | null>>;
 }
 
 const urlResolver = new UrlResolver();
@@ -40,7 +41,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
 
   useEffect(() => {
     if (videoFile.file) {
-      const input: FileMetadata = {
+      const input: FileInput = {
         name: videoFile.file.name,
         fileType: videoFile.file.type,
         resourceType: ResourceType.POST,

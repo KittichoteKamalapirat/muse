@@ -1,3 +1,3 @@
-import { startServer } from "../../startSever";
+import { startServer } from "../../startServer";
 
 startServer().then(() => process.exit());

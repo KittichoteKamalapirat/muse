@@ -56,10 +56,6 @@ class Post extends BaseEntity {
 
   @Column()
   @Field()
-  videoUrl!: string;
-
-  @Column()
-  @Field()
   // @Field()
   creatorId: string;
 

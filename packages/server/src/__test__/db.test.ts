@@ -3,7 +3,7 @@ import { Server } from "http";
 import { Connection } from "typeorm";
 import { v4 } from "uuid";
 import User from "../entities/User";
-import { startServer } from "../startSever";
+import { startServer } from "../startServer";
 
 let expressServer: Server;
 let postgresDb: Connection;

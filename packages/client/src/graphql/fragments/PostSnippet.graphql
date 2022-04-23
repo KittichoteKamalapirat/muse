@@ -2,8 +2,6 @@ fragment PostSnippet on Post {
   id
   title
   textSnippet
-  videoUrl
-  thumbnailUrl
   createdAt
   updatedAt
   points
@@ -17,10 +15,17 @@ fragment PostSnippet on Post {
     reviewAvg
     reviewsCounter
   }
-
   creator {
     id
     username
     avatar
+  }
+  video {
+    id
+    url
+  }
+  image {
+    id
+    url
   }
 }

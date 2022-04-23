@@ -14,7 +14,7 @@ import {
   useUploadSlipMutation,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
-import useFetch from "../../utils/useFetch";
+import useFetch from "../../util/useFetch";
 
 interface PaymentProps {}
 

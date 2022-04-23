@@ -1,21 +1,30 @@
 import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, IconButton, Image, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Image,
+  Img,
+  Text,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import UrlResolver from "../lib/UrlResolver";
+import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 
 interface CreateThumbnailProps {
   prevStep: Function;
   nextStep: Function;
-  autoThumbnailS3UrlAndId: FileUrlAndID | null;
-  thumbnailS3UrlAndID: FileUrlAndID | null;
+  autoThumbnailS3UrlAndId: FileMetadata | null;
+  thumbnailS3UrlAndID: FileMetadata | null;
   setThumbnailS3UrlAndID: React.Dispatch<
-    React.SetStateAction<FileUrlAndID | null>
+    React.SetStateAction<FileMetadata | null>
   >;
 }
 
@@ -39,7 +48,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
 
   useEffect(() => {
     if (thumbnailFile.file) {
-      const input: FileMetadata = {
+      const input: FileInput = {
         name: thumbnailFile.file.name,
         fileType: thumbnailFile.file.type,
         resourceType: ResourceType.POST,
@@ -67,7 +76,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
     <Box>
       {thumbnailS3UrlAndID === null ? (
         <Flex justifyContent="center">
-          <Image src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
+          <Img src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
         </Flex>
       ) : (
         <Flex justifyContent="center">
@@ -78,7 +87,6 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
             boxSize="90%"
             fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
           />
-          {/* </AspectRatio> */}
         </Flex>
       )}
 

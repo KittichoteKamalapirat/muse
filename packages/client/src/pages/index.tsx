@@ -107,8 +107,8 @@ const Index = () => {
                 <Box flex={1}>
                   <video
                     controls
-                    src={post.videoUrl}
-                    poster={post.thumbnailUrl}
+                    src={post.video.url}
+                    poster={post.image.url}
                   />
 
                   <Flex justifyContent="space-between">

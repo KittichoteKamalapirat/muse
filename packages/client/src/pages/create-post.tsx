@@ -16,8 +16,8 @@ import {
   useCreatePostMutation,
 } from "../generated/graphql";
 import UrlResolver from "../lib/UrlResolver";
-import { FileMetadata } from "../types/utils/FileMetadata";
-import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+import { FileInput } from "../types/utils/FileInput";
+import { FileMetadata } from "../types/utils/FileInput";
 import { ResourceType } from "../types/utils/ResourceType";
 import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";
@@ -54,16 +54,16 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setStep(step - 1);
   };
 
-  //custom hooks
+  //graphql hooks
   const [createPost] = useCreatePostMutation();
+  const [createMealkit] = useCreateMealkitMutation();
 
   // Mealkit Handler and variables
   // need signedrequest and video/image file
   // 1) method = signMealkitS3, input = name and type, return = signedRequest and Url where = (in onSubmit)
   // 2) upload to S3 with (axios) using signedRequest and file
 
-  const [createMealkit] = useCreateMealkitMutation();
-
+  // local state
   const [mealkitInput, setMealkitInput] = useState({
     name: "",
     price: "",
@@ -74,12 +74,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   // section1 starts: for uploading a video
   const [autoThumbnailS3UrlAndId, setAutoThumbnailS3UrlAndId] =
-    useState<FileUrlAndID | null>(null);
+    useState<FileMetadata | null>(null);
 
   const [autoThumbnailFile, setAutoThumbnailFile] = useState<any>(null);
 
-  console.log({ autoThumbnailS3UrlAndId });
-  console.log({ autoThumbnailFile });
   // automatically create image from video upload
 
   // save autoThumbnail to s3
@@ -100,7 +98,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setAutoThumbnailFile(fileData);
 
     // sign and save
-    const input: FileMetadata = {
+    const input: FileInput = {
       name: fileData.name,
       fileType: fileData.type,
       resourceType: ResourceType.POST,
@@ -109,8 +107,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     axios.post(urlResolver.signS3(), input).then((response) => {
       const options = getRESTOptions(fileData.type);
 
-      console.log("signnn");
-      console.log(response.data.sign);
       // save to s3
       axios.put(response.data.sign, fileData, options);
       setAutoThumbnailS3UrlAndId({
@@ -120,18 +116,20 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     });
   };
 
+  console.log({ autoThumbnailS3UrlAndId });
+
   // section1 ends: for uploading a video
-  const [videoS3UrlAndID, setVideoS3UrlAndID] = useState<FileUrlAndID | null>(
+  const [videoS3UrlAndID, setVideoS3UrlAndID] = useState<FileMetadata | null>(
     null
   ); //is what saved to our db
   // section2 starts: for uploading thumbnail
   const [thumbnailS3UrlAndID, setThumbnailS3UrlAndID] =
-    useState<FileUrlAndID | null>(null);
+    useState<FileMetadata | null>(null);
 
   // section2 ends: for uploading thumbnail
 
   // section3 starts: for post details (which includes recipe)
-  const [mealkitS3UrlAndIds, setMealkitS3UrlAndIds] = useState<FileUrlAndID[]>(
+  const [mealkitS3UrlAndIds, setMealkitS3UrlAndIds] = useState<FileMetadata[]>(
     []
   );
   const handleChangeInput = (
@@ -216,8 +214,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             portion: values.portion,
             advice: [values.advice],
             ingredients: ingredientsField,
-            videoUrl: "xx", // TODO
-            thumbnailUrl: "xxx", // TODO s
           },
           videoId: videoS3UrlAndID?.id as number,
           // if no thumbnail -> use the auto Thumbnail url instead

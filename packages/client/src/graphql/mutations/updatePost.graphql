@@ -3,7 +3,14 @@ mutation UpdatePost($id: Int!, $input: PostInput!) {
     id
     title
     textSnippet
-    videoUrl
+    # video{
+    #   id
+    #   url
+    # }
+    # image{
+    #   id
+    #   url
+    # }
     ingredients {
       ingredient
       amount

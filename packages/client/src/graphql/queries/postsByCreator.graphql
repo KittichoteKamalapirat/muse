@@ -3,7 +3,14 @@ query postsByCreator($userId: String!) {
     id
     title
     text
-    thumbnailUrl
     points
+    # video{
+    #   id
+    #   url
+    # }
+    # image{
+    #   id
+    #   url
+    # }
   }
 }

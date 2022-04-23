@@ -16,8 +16,9 @@ import { Form } from "formik";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import UrlResolver from "../lib/UrlResolver";
+import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import { InputField } from "./InputField";
@@ -39,8 +40,8 @@ interface CreateMealkitProps {
   setInput: Function;
   nextStep: Function;
   prevStep: Function;
-  mealkitS3UrlAndIds: FileUrlAndID[];
-  setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileUrlAndID[]>>;
+  mealkitS3UrlAndIds: FileMetadata[];
+  setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;
 }
 
 const urlResolver = new UrlResolver();
@@ -71,12 +72,12 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   useEffect(() => {
     if (mealkitFiles.length > 0) {
       console.log("1");
-      const urlAndIds: FileUrlAndID[] = [];
+      const fileMetadatas: FileMetadata[] = [];
 
       mealkitFiles.forEach((file: any, index: number) => {
         console.log("2");
         // sign
-        const input: FileMetadata = {
+        const input: FileInput = {
           name: file.name,
           fileType: file.type,
           resourceType: ResourceType.MEALKIT,
@@ -90,10 +91,14 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           // save to s3
           axios.put(response.data.sign, file, options);
           console.log("4");
-          urlAndIds.push({ url: response.data.url, id: response.data.id });
+          fileMetadatas.push({
+            url: response.data.url,
+            id: response.data.id,
+            fileType: file.type,
+          });
           console.log("5");
           if (index === mealkitFiles.length - 1) {
-            setMealkitS3UrlAndIds(urlAndIds);
+            setMealkitS3UrlAndIds(fileMetadatas);
           }
         });
       });
@@ -107,7 +112,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           {/* if there is file preview */}{" "}
           {mealkitS3UrlAndIds.map((s3UrlAndId, index: number) => (
             <Box key={index} mx={2}>
-              {s3UrlAndId.url.slice(0, 10).includes("video") ? (
+              {s3UrlAndId.fileType?.includes("video") ? (
                 <video controls width="50%">
                   <source src={s3UrlAndId.url} type="video/mp4" />
                   Your browser does not support the video tag.

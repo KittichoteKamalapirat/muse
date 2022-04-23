@@ -7,8 +7,6 @@ query Post($id: Int!) {
     cooktime
     portion
     advice
-    videoUrl
-    thumbnailUrl
     createdAt
     updatedAt
     points
@@ -23,5 +21,13 @@ query Post($id: Int!) {
       username
       avatar
     }
+    # video{
+    #   id
+    #   url
+    # }
+    # image{
+    #   id
+    #   url
+    # }
   }
 }

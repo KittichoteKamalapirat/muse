@@ -6,7 +6,7 @@ import { signSingleFileS3 } from "../utils/resolvers/s3";
 
 const router = Router();
 
-interface FileMetadata {
+interface FileInput {
   name: string;
   fileType: string;
   resourceType: string;
@@ -21,7 +21,7 @@ enum ResourceTypeWithFile {
 // url: server.cookknow.com/api/s3/sign
 router.post("/sign-and-save", async (req, res) => {
   try {
-    const { name, fileType, resourceType }: FileMetadata = req.body;
+    const { name, fileType, resourceType }: FileInput = req.body;
 
     // 1) sign to s3
     const { signedRequest, fileUrl } = await signSingleFileS3(name, fileType);
@@ -78,6 +78,7 @@ router.post("/sign-and-save", async (req, res) => {
           id: file.id,
           sign: signedRequest,
           url: file.url,
+          fileType,
         };
 
         res.json(returnedValue);
