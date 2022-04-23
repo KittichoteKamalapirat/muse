@@ -1,25 +1,33 @@
 import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Button, Flex, IconButton, Image, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
+import UrlResolver from "../lib/UrlResolver";
+import { FileMetadata } from "../types/utils/FileMetadata";
+import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+import { ResourceType } from "../types/utils/ResourceType";
+import getRESTOptions from "../util/getRESTOptions";
 
 interface CreateThumbnailProps {
-  videoPreview: any;
   prevStep: Function;
   nextStep: Function;
-  autoThumbnailUrl: string;
+  autoThumbnailS3UrlAndId: FileUrlAndID | null;
+  thumbnailS3UrlAndID: FileUrlAndID | null;
+  setThumbnailS3UrlAndID: React.Dispatch<
+    React.SetStateAction<FileUrlAndID | null>
+  >;
 }
 
+const urlResolver = new UrlResolver();
+
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
-  videoPreview,
   prevStep,
   nextStep,
-  autoThumbnailUrl,
+  autoThumbnailS3UrlAndId,
+  thumbnailS3UrlAndID,
+  setThumbnailS3UrlAndID,
 }) => {
-  console.log({ autoThumbnailUrl });
-
-  const [thumbnailPreview, setThumbnailPreview] = useState("" as any);
-
   const [thumbnailFile, setThumbnailFile] = useState({ file: null } as any);
 
   const handleOnDropThumbnail = (acceptedFiles: any, rejectedFiles: any) => {
@@ -29,39 +37,43 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
     setThumbnailFile({ file: acceptedFiles[0] });
   };
 
-  const thumbnailPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-    const reader = new FileReader();
-    if (reader.error) {
-      console.log(reader.error.message);
+  useEffect(() => {
+    if (thumbnailFile.file) {
+      const input: FileMetadata = {
+        name: thumbnailFile.file.name,
+        fileType: thumbnailFile.file.type,
+        resourceType: ResourceType.POST,
+      };
+
+      // sign
+      axios.post(urlResolver.signS3(), input).then((response) => {
+        const options = getRESTOptions(thumbnailFile.file.type);
+
+        // save to s3
+        axios.put(response.data.sign, thumbnailFile.file, options);
+        setThumbnailS3UrlAndID({
+          url: response.data.url,
+          id: response.data.id,
+        });
+      });
     }
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setThumbnailPreview(reader.result);
-      }
-    };
+  }, [thumbnailFile.file]);
 
-    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
-  };
-
-  if (videoPreview) {
-    // console.log(videoPreview);
-    // const objectURL = URL.createObjectURL(videoPreview);
-    // console.log(objectURL);/
-  }
-
-  console.log({ thumbnailPreview });
+  console.log({ thumbnailS3UrlAndID });
+  console.log(urlResolver.signS3());
+  console.log(urlResolver.index());
 
   return (
     <Box>
-      {thumbnailPreview === "" ? (
+      {thumbnailS3UrlAndID === null ? (
         <Flex justifyContent="center">
-          <Image src={autoThumbnailUrl} alt="auto-thumbnail-url" />
+          <Image src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
         </Flex>
       ) : (
         <Flex justifyContent="center">
           {/* <AspectRatio ratio={1}> */}
           <Image
-            src={thumbnailPreview}
+            src={thumbnailS3UrlAndID.url}
             alt="image"
             boxSize="90%"
             fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
@@ -87,22 +99,18 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
               // borderColor="gray.200"
               padding={4}
             >
-              <Box
-                {...getRootProps({
-                  onChange: (e) => thumbnailPreviewHandler(e),
-                })}
-              >
+              <Box {...getRootProps()}>
                 <input {...getInputProps()} />
 
                 <Flex
                   direction="row"
                   alignItems="center"
                   justifyContent="center"
-                  border={!thumbnailPreview ? "1px" : undefined}
+                  border={!thumbnailS3UrlAndID ? "1px" : undefined}
                   borderColor="gray.400"
                   borderStyle="dashed"
                 >
-                  {!thumbnailPreview ? (
+                  {!thumbnailS3UrlAndID ? (
                     <PlusSquareIcon mr={2} />
                   ) : (
                     <Image
@@ -110,7 +118,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
                       borderColor="black"
                       mr={2}
                       borderRadius="20%"
-                      src={thumbnailPreview}
+                      src={thumbnailS3UrlAndID.url}
                       alt="image"
                       boxSize="2rem"
                       fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"

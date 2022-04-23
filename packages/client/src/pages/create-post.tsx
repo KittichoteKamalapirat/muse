@@ -12,16 +12,15 @@ import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import {
-  SignS3Params,
   useCreateMealkitMutation,
   useCreatePostMutation,
-  useCreateVideoMutation,
-  useSignMealkitS3Mutation,
-  useSignS3Mutation,
-  VideoInput,
 } from "../generated/graphql";
-import { uploadToS3 } from "../util/createPost/uploadToS3";
-import { dataURItoBlob } from "../util/dataURItoBlob";
+import UrlResolver from "../lib/UrlResolver";
+import { FileMetadata } from "../types/utils/FileMetadata";
+import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+import { ResourceType } from "../types/utils/ResourceType";
+import { dataURItoFile } from "../util/dataURItoFile";
+import getRESTOptions from "../util/getRESTOptions";
 import { useIsAuth } from "../util/useIsAuth";
 import { withApollo } from "../util/withApollo";
 
@@ -33,6 +32,8 @@ const postValues = {
   advice: "",
   videoUrl: "change this later",
 };
+
+const urlResolver = new UrlResolver();
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
@@ -54,7 +55,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   //custom hooks
-  const [signS3] = useSignS3Mutation();
   const [createPost] = useCreatePostMutation();
 
   // Mealkit Handler and variables
@@ -72,47 +72,19 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     images: [""],
   });
 
-  const [signMealkitS3] = useSignMealkitS3Mutation();
-
   // section1 starts: for uploading a video
-  const [videoFile, setVideoFile] = useState({ file: null } as any);
-  const [autoThumbnailUrl, setAutoThumbnailUrl] = useState<string>("");
-  const [videoPreview, setVideoPreview] = useState("" as any);
-  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
+  const [autoThumbnailS3UrlAndId, setAutoThumbnailS3UrlAndId] =
+    useState<FileUrlAndID | null>(null);
 
-  const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
-    console.log("handleOnDropVideo!");
-    if (rejectedFiles.length > 0) {
-      return alert(rejectedFiles[0].errors[0].message);
-    }
+  const [autoThumbnailFile, setAutoThumbnailFile] = useState<any>(null);
 
-    setVideoFile({ file: acceptedFiles[0] });
-
-    setTimeout(() => {
-      setStep(2);
-    }, 1000);
-
-    //  redirect to the next page after metadata is load (is set to 500 ms)
-  };
-
-  // const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-  //   console.log("videoPreviewHandler!");
-  //   const reader = new FileReader();
-
-  //   if (reader.error) {
-  //     console.log(reader.error.message);
-  //   }
-
-  //   reader.onload = () => {
-  //     if (reader.readyState === 2) {
-  //       setVideoPreview(reader.result);
-  //     }
-  //   };
-  //   reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
-  // };
-
+  console.log({ autoThumbnailS3UrlAndId });
+  console.log({ autoThumbnailFile });
   // automatically create image from video upload
+
+  // save autoThumbnail to s3
   const handleMetadata = () => {
+    // used in CreateVideo but state to update is here
     const canvas = document.createElement("canvas");
     const video = document.getElementById("preview") as HTMLVideoElement;
     canvas.width = video!.videoWidth;
@@ -121,23 +93,47 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const dataUrl = canvas.toDataURL();
-    setAutoThumbnailUrl(dataUrl);
+    const fileName = dataUrl.substring(dataUrl.lastIndexOf("/") + 1);
 
-    const blobData = dataURItoBlob(dataUrl);
-    setAutoThumbnailBlob(blobData);
-    // const params = {Key: "file_name", ContentType: "image/jpeg", Body: blobData};
-    // bucket.upload(params, function (err, data) {});
+    const fileData = dataURItoFile(dataUrl, fileName);
 
-    // setStep(2); //redirect if there is data
+    setAutoThumbnailFile(fileData);
+
+    // sign and save
+    const input: FileMetadata = {
+      name: fileData.name,
+      fileType: fileData.type,
+      resourceType: ResourceType.POST,
+    };
+
+    axios.post(urlResolver.signS3(), input).then((response) => {
+      const options = getRESTOptions(fileData.type);
+
+      console.log("signnn");
+      console.log(response.data.sign);
+      // save to s3
+      axios.put(response.data.sign, fileData, options);
+      setAutoThumbnailS3UrlAndId({
+        id: response.data.id,
+        url: response.data.url,
+      });
+    });
   };
 
   // section1 ends: for uploading a video
-
+  const [videoS3UrlAndID, setVideoS3UrlAndID] = useState<FileUrlAndID | null>(
+    null
+  ); //is what saved to our db
   // section2 starts: for uploading thumbnail
+  const [thumbnailS3UrlAndID, setThumbnailS3UrlAndID] =
+    useState<FileUrlAndID | null>(null);
 
   // section2 ends: for uploading thumbnail
 
   // section3 starts: for post details (which includes recipe)
+  const [mealkitS3UrlAndIds, setMealkitS3UrlAndIds] = useState<FileUrlAndID[]>(
+    []
+  );
   const handleChangeInput = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>
@@ -205,102 +201,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   // section4 starts: mealkit zone
 
-  const [mealkitFiles, setMealkitFiles] = useState<any>([]);
-
-  const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
-    if (rejectedFiles.length > 0) {
-      return alert(rejectedFiles[0].errors[0].message);
-    }
-    let files: any = [];
-
-    setMealkitFiles(acceptedFiles);
-  };
-
-  // I need an array of files and and signedRequest
-  const uploadMealkitToS3 = async (
-    inputObjectsArray: {
-      file: any;
-      signedRequest: string;
-    }[]
-  ) => {
-    inputObjectsArray.forEach(async (input, index) => {
-      const options = {
-        headers: {
-          "Content-Type": input.file.type,
-        },
-      };
-
-      await axios.put(input.signedRequest, input.file, options);
-    });
-  };
-
-  const [mealkitFilesPreview, setMealkitFilesPreview] = useState([] as any[]);
-
-  const mealkitFilesPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-    const files: any[] = (e.target as HTMLInputElement).files as any;
-    let counter = 0;
-    let previews: any[] = [];
-
-    Object.keys(files).forEach((_, index) => {
-      const file: any = files[index];
-      const reader = new FileReader();
-
-      reader.onload = (e) => {
-        if (reader.readyState === 2) {
-          previews.push(reader.result);
-
-          counter = counter + 1;
-
-          if (counter === files.length) {
-            setMealkitFilesPreview(previews);
-          }
-        }
-      };
-
-      reader.readAsDataURL(file); //get a file object
-
-      if (reader.error) {
-        console.log(reader.error.message);
-      }
-    });
-  };
-
   // section4 ends: mealkit zone
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
-      // S3 mealkit starts
-      let input: SignS3Params[] = [];
-
-      mealkitFiles.forEach((file: any) =>
-        input.push({ name: file.name, type: file.type })
-      );
-      const results = await signMealkitS3({ variables: { input } });
-
-      const resultsArray = results.data?.signMealkitS3;
-
-      let urlArray: string[] = [];
-      if (resultsArray) {
-        for (let i = 0; i < resultsArray?.length; i++) {
-          urlArray.push(resultsArray[i].url);
-        }
-      }
-
-      let fileAndSignedRequestObjectArray: {
-        file: any;
-        signedRequest: string;
-      }[] = [];
-      resultsArray?.forEach((urlAndSignedRequestObject, index) => {
-        const file = mealkitFiles[index];
-        const signedRequest = urlAndSignedRequestObject.signedRequest;
-        const object = { file, signedRequest };
-
-        fileAndSignedRequestObjectArray.push(object);
-      });
-      await uploadMealkitToS3(fileAndSignedRequestObjectArray);
-
-      const cooktime = values.cooktime;
       const { data, errors } = await createPost({
         variables: {
           input: {
@@ -311,7 +216,14 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             portion: values.portion,
             advice: [values.advice],
             ingredients: ingredientsField,
+            videoUrl: "xx", // TODO
+            thumbnailUrl: "xxx", // TODO s
           },
+          videoId: videoS3UrlAndID?.id as number,
+          // if no thumbnail -> use the auto Thumbnail url instead
+          imageId: thumbnailS3UrlAndID
+            ? (thumbnailS3UrlAndID?.id as number)
+            : (autoThumbnailS3UrlAndId?.id as number),
         },
 
         update: (cache) => {
@@ -320,7 +232,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       });
 
       const postId = data?.createPost.id;
-      if (postId && urlArray.length > 0) {
+
+      if (postId) {
         const price = parseInt(mealkitInput.price);
         const portion = parseInt(mealkitInput.portion);
         const { data: mealkitResult, errors: mealkitErrors } =
@@ -331,9 +244,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 price: price,
                 portion: portion,
                 items: mealkitInput.items,
-                images: urlArray,
+                images: [],
               },
-              postId: postId, //not this one
+              postId: postId,
+              fileIds: mealkitS3UrlAndIds.map((item) => item.id),
             },
           });
         if (!errors && !mealkitErrors) {
@@ -406,12 +320,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                   <Box display={step === 1 ? "block" : "none"}>
                     <HeadingLayout heading="New Video">
                       <CreateVideo
-                        // videoFile={videoFile} no need videofile for SAVING TO S3 HERE, be in child component
-                        // videoPreviewHandler={videoPreviewHandler}
-                        // videoPreview={videoPreview}
                         nextStep={nextStep}
                         handleMetadata={handleMetadata}
-                        // autoThumbnailUrl={autoThumbnailUrl}
+                        videoS3UrlAndID={videoS3UrlAndID}
+                        setVideoS3UrlAndID={setVideoS3UrlAndID}
                       />
                     </HeadingLayout>
                   </Box>
@@ -420,10 +332,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                   <Box display={step === 2 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Cover Photo">
                       <CreateThumbnail
-                        videoPreview={videoPreview}
                         prevStep={prevStep}
                         nextStep={nextStep}
-                        autoThumbnailUrl={autoThumbnailUrl}
+                        autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
+                        thumbnailS3UrlAndID={thumbnailS3UrlAndID}
+                        setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
                       ></CreateThumbnail>
                     </HeadingLayout>
                   </Box>
@@ -486,17 +399,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         setInput={setMealkitInput}
                         nextStep={nextStep}
                         prevStep={prevStep}
-                        mealkitFilesPreview={mealkitFilesPreview}
-                        mealkitFilesPreviewHandler={mealkitFilesPreviewHandler}
-                        handleOnDropMealkitFiles={(
-                          acceptedFiles: any,
-                          rejectedFiles: any
-                        ) => {
-                          handleOnDropMealkitFiles(
-                            acceptedFiles,
-                            rejectedFiles
-                          );
-                        }}
+                        mealkitS3UrlAndIds={mealkitS3UrlAndIds}
+                        setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
                       />
                     </HeadingLayout>
                   </Box>

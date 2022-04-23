@@ -1,10 +1,9 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  Generated,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -19,22 +18,26 @@ class Image extends BaseEntity {
   @Field()
   id: number;
 
-  @Column()
-  @Generated("uuid")
-  @Field()
-  uid: string;
+  // @Column()
+  // @Generated("uuid")
+  // @Field()
+  // uid: string;
 
   @Column()
   @Field()
   name: string;
 
+  @Column({ nullable: true })
+  @Field()
+  fileType: string;
+
   @Column()
   @Field()
   url: string;
 
-  @Column()
-  @Field(() => String)
-  postId: string;
+  @Column({ nullable: true })
+  @Field(() => Int)
+  postId: number;
 
   @Field(() => Post)
   @OneToOne(() => Post, (post) => post.image)

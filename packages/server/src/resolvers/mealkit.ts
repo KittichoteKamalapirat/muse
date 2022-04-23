@@ -13,7 +13,7 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Mealkit } from "../entities";
+import { Mealkit, MealkitFile } from "../entities";
 import { MealkitInput, SignedS3Result, SignS3Params } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -74,14 +74,19 @@ export class MealkitResolver {
   async createMealkit(
     @Arg("input") input: MealkitInput,
     @Arg("postId", () => Int) postId: number,
+    @Arg("fileIds", () => [Int]) fileIds: number[],
     @Ctx() { req }: MyContext
   ): Promise<Mealkit> {
-    console.log(input);
     const mealkit = await Mealkit.create({
       ...input,
       postId,
       creatorId: req.session.userId,
     }).save();
+
+    fileIds.forEach(async (id) =>
+      MealkitFile.update({ id }, { mealkitId: mealkit.id })
+    );
+
     return mealkit;
   }
 

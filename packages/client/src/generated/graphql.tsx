@@ -177,11 +177,11 @@ export type Follow = {
 export type Image = {
   __typename?: 'Image';
   createdAt: Scalars['DateTime'];
+  fileType: Scalars['String'];
   id: Scalars['Float'];
   name: Scalars['String'];
   post: Post;
-  postId: Scalars['String'];
-  uid: Scalars['String'];
+  postId: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
 };
@@ -223,6 +223,7 @@ export type Mealkit = {
   id: Scalars['Float'];
   images?: Maybe<Array<Scalars['String']>>;
   items?: Maybe<Array<Scalars['String']>>;
+  mealkitFiles: Array<MealkitFile>;
   name: Scalars['String'];
   portion: Scalars['Float'];
   post?: Maybe<Post>;
@@ -233,6 +234,18 @@ export type Mealkit = {
   reviewsCounter: Scalars['Int'];
   reviewsSum: Scalars['Int'];
   updatedAt: Scalars['String'];
+};
+
+export type MealkitFile = {
+  __typename?: 'MealkitFile';
+  createdAt: Scalars['DateTime'];
+  fileType: Scalars['String'];
+  id: Scalars['Float'];
+  mealkit: Mealkit;
+  mealkitId?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
 };
 
 export type MealkitInput = {
@@ -255,7 +268,6 @@ export type Mutation = {
   createPost: Post;
   createReview: Review;
   createTracking: Tracking;
-  createVideo: Video;
   deleteAddress: Scalars['Boolean'];
   deleteCartItem: Scalars['Boolean'];
   deleteMealkit: Scalars['Boolean'];
@@ -309,6 +321,7 @@ export type MutationCreateCartItemArgs = {
 
 
 export type MutationCreateMealkitArgs = {
+  fileIds: Array<Scalars['Int']>;
   input: MealkitInput;
   postId: Scalars['Int'];
 };
@@ -327,7 +340,9 @@ export type MutationCreatePaymentInfoArgs = {
 
 
 export type MutationCreatePostArgs = {
+  imageId: Scalars['Int'];
   input: PostInput;
+  videoId: Scalars['Int'];
 };
 
 
@@ -340,11 +355,6 @@ export type MutationCreateReviewArgs = {
 
 export type MutationCreateTrackingArgs = {
   input: TrackingInput;
-};
-
-
-export type MutationCreateVideoArgs = {
-  input: VideoInput;
 };
 
 
@@ -869,16 +879,9 @@ export type Video = {
   id: Scalars['Float'];
   name: Scalars['String'];
   post: Post;
-  postId?: Maybe<Scalars['String']>;
-  uid: Scalars['String'];
+  postId?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
-};
-
-export type VideoInput = {
-  content: Scalars['String'];
-  fileType: Scalars['String'];
-  name: Scalars['String'];
 };
 
 export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, videoUrl: string, thumbnailUrl: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } };
@@ -928,6 +931,7 @@ export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem: 
 export type CreateMealkitMutationVariables = Exact<{
   input: MealkitInput;
   postId: Scalars['Int'];
+  fileIds: Array<Scalars['Int']> | Scalars['Int'];
 }>;
 
 
@@ -944,6 +948,8 @@ export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __ty
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
+  videoId: Scalars['Int'];
+  imageId: Scalars['Int'];
 }>;
 
 
@@ -1145,13 +1151,6 @@ export type UpdateAvatarMutationVariables = Exact<{
 
 
 export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: boolean };
-
-export type CreateVideoMutationVariables = Exact<{
-  input: VideoInput;
-}>;
-
-
-export type CreateVideoMutation = { __typename?: 'Mutation', createVideo: { __typename?: 'Video', id: number, name: string, url: string, fileType: string } };
 
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
@@ -1532,8 +1531,8 @@ export type CreateCartItemMutationHookResult = ReturnType<typeof useCreateCartIt
 export type CreateCartItemMutationResult = Apollo.MutationResult<CreateCartItemMutation>;
 export type CreateCartItemMutationOptions = Apollo.BaseMutationOptions<CreateCartItemMutation, CreateCartItemMutationVariables>;
 export const CreateMealkitDocument = gql`
-    mutation createMealkit($input: MealkitInput!, $postId: Int!) {
-  createMealkit(input: $input, postId: $postId) {
+    mutation createMealkit($input: MealkitInput!, $postId: Int!, $fileIds: [Int!]!) {
+  createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
     name
     items
     images
@@ -1560,6 +1559,7 @@ export type CreateMealkitMutationFn = Apollo.MutationFunction<CreateMealkitMutat
  *   variables: {
  *      input: // value for 'input'
  *      postId: // value for 'postId'
+ *      fileIds: // value for 'fileIds'
  *   },
  * });
  */
@@ -1617,8 +1617,8 @@ export type CreateOrderMutationHookResult = ReturnType<typeof useCreateOrderMuta
 export type CreateOrderMutationResult = Apollo.MutationResult<CreateOrderMutation>;
 export type CreateOrderMutationOptions = Apollo.BaseMutationOptions<CreateOrderMutation, CreateOrderMutationVariables>;
 export const CreatePostDocument = gql`
-    mutation createPost($input: PostInput!) {
-  createPost(input: $input) {
+    mutation createPost($input: PostInput!, $videoId: Int!, $imageId: Int!) {
+  createPost(input: $input, videoId: $videoId, imageId: $imageId) {
     id
     title
     text
@@ -1650,6 +1650,8 @@ export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, C
  * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
  *   variables: {
  *      input: // value for 'input'
+ *      videoId: // value for 'videoId'
+ *      imageId: // value for 'imageId'
  *   },
  * });
  */
@@ -2608,42 +2610,6 @@ export function useUpdateAvatarMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateAvatarMutationHookResult = ReturnType<typeof useUpdateAvatarMutation>;
 export type UpdateAvatarMutationResult = Apollo.MutationResult<UpdateAvatarMutation>;
 export type UpdateAvatarMutationOptions = Apollo.BaseMutationOptions<UpdateAvatarMutation, UpdateAvatarMutationVariables>;
-export const CreateVideoDocument = gql`
-    mutation createVideo($input: VideoInput!) {
-  createVideo(input: $input) {
-    id
-    name
-    url
-    fileType
-  }
-}
-    `;
-export type CreateVideoMutationFn = Apollo.MutationFunction<CreateVideoMutation, CreateVideoMutationVariables>;
-
-/**
- * __useCreateVideoMutation__
- *
- * To run a mutation, you first call `useCreateVideoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateVideoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createVideoMutation, { data, loading, error }] = useCreateVideoMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateVideoMutation(baseOptions?: Apollo.MutationHookOptions<CreateVideoMutation, CreateVideoMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateVideoMutation, CreateVideoMutationVariables>(CreateVideoDocument, options);
-      }
-export type CreateVideoMutationHookResult = ReturnType<typeof useCreateVideoMutation>;
-export type CreateVideoMutationResult = Apollo.MutationResult<CreateVideoMutation>;
-export type CreateVideoMutationOptions = Apollo.BaseMutationOptions<CreateVideoMutation, CreateVideoMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: Int!, $postId: Int!) {
   vote(value: $value, postId: $postId)

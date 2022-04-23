@@ -1,5 +1,5 @@
-mutation createPost($input: PostInput!) {
-  createPost(input: $input) {
+mutation createPost($input: PostInput!, $videoId: Int!, $imageId: Int!) {
+  createPost(input: $input, videoId: $videoId, imageId: $imageId) {
     id
     title
     text

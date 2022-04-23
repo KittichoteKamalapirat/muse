@@ -1,30 +1,27 @@
-import {
-  ArrowUpIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "@chakra-ui/icons";
+import { ArrowUpIcon, ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import {
   Box,
-  Button,
+  Checkbox,
+  CheckboxGroup,
   Flex,
   Heading,
   IconButton,
-  Text,
   Image,
-  AspectRatio,
-  Img,
-  Checkbox,
   Stack,
-  CheckboxGroup,
+  Text,
 } from "@chakra-ui/react";
-import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
-import { FieldArray, Form } from "formik";
-import React, { useState } from "react";
-import { MealkitInput, useCreateMealkitMutation } from "../generated/graphql";
-import { InputField } from "./InputField";
+import axios from "axios";
+import { Form } from "formik";
+import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
+import UrlResolver from "../lib/UrlResolver";
+import { FileMetadata } from "../types/utils/FileMetadata";
+import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+import { ResourceType } from "../types/utils/ResourceType";
+import getRESTOptions from "../util/getRESTOptions";
+import { InputField } from "./InputField";
 import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
-import { HeadingLayout } from "./Layout/HeadingLayout";
 
 interface CreateMealkitProps {
   ingredientsField: {
@@ -42,42 +39,106 @@ interface CreateMealkitProps {
   setInput: Function;
   nextStep: Function;
   prevStep: Function;
-  handleOnDropMealkitFiles: Function;
-  mealkitFilesPreview: any;
-  mealkitFilesPreviewHandler: Function;
+  mealkitS3UrlAndIds: FileUrlAndID[];
+  setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileUrlAndID[]>>;
 }
+
+const urlResolver = new UrlResolver();
 
 export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   ingredientsField,
   input,
   setInput,
   prevStep,
-  handleOnDropMealkitFiles,
-  mealkitFilesPreview,
-  mealkitFilesPreviewHandler,
+  mealkitS3UrlAndIds,
+  setMealkitS3UrlAndIds,
 }) => {
+  const [mealkitFiles, setMealkitFiles] = useState<any>([]);
+
+  console.log({ mealkitFiles });
+  console.log({ mealkitS3UrlAndIds });
+
+  const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
+    if (rejectedFiles.length > 0) {
+      return alert(rejectedFiles[0].errors[0].message);
+    }
+
+    setMealkitFiles(acceptedFiles);
+  };
+
+  // I need an array of files and and signedRequest
+
+  useEffect(() => {
+    if (mealkitFiles.length > 0) {
+      console.log("1");
+      const urlAndIds: FileUrlAndID[] = [];
+
+      mealkitFiles.forEach((file: any, index: number) => {
+        console.log("2");
+        // sign
+        const input: FileMetadata = {
+          name: file.name,
+          fileType: file.type,
+          resourceType: ResourceType.MEALKIT,
+        };
+
+        axios.post(urlResolver.signS3(), input).then((response) => {
+          console.log("3");
+          console.log({ response });
+          const options = getRESTOptions(file.type);
+
+          // save to s3
+          axios.put(response.data.sign, file, options);
+          console.log("4");
+          urlAndIds.push({ url: response.data.url, id: response.data.id });
+          console.log("5");
+          if (index === mealkitFiles.length - 1) {
+            setMealkitS3UrlAndIds(urlAndIds);
+          }
+        });
+      });
+    }
+  }, [mealkitFiles.length]);
+
   return (
     <Box>
-      {mealkitFilesPreview.length === 0 ? (
-        // if not file preview
-        <Dropzone
-          onDrop={(acceptedFiles, rejectedFiles) =>
-            handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
-          }
-          multiple={true}
-          accept={["image/*", "video/*"]}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <Box>
-              <Box
-                {...getRootProps({
-                  onChange: (event) => {
-                    mealkitFilesPreviewHandler(event);
-                  },
-                })}
-              >
-                <input {...getInputProps()} />
+      {mealkitS3UrlAndIds.length === 0 ? null : (
+        <Flex overflowX="scroll">
+          {/* if there is file preview */}{" "}
+          {mealkitS3UrlAndIds.map((s3UrlAndId, index: number) => (
+            <Box key={index} mx={2}>
+              {s3UrlAndId.url.slice(0, 10).includes("video") ? (
+                <video controls width="50%">
+                  <source src={s3UrlAndId.url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              ) : (
+                <Image
+                  src={s3UrlAndId.url}
+                  alt="meal kit image"
+                  height="200px"
+                  // vh="80%"
+                  borderRadius={10}
+                />
+              )}
+            </Box>
+          ))}
+        </Flex>
+      )}
 
+      <Dropzone
+        onDrop={(acceptedFiles, rejectedFiles) =>
+          handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
+        }
+        multiple={true}
+        accept={["image/*", "video/*"]}
+      >
+        {({ getRootProps, getInputProps }) => (
+          <Box>
+            <Box {...getRootProps({})}>
+              <input {...getInputProps()} />
+
+              {mealkitS3UrlAndIds.length === 0 ? (
                 <Flex
                   direction="column"
                   alignItems="center"
@@ -92,33 +153,25 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                     Drag and drop a video here, or click to select the file
                   </Text>
                 </Flex>
-              </Box>
-            </Box>
-          )}
-        </Dropzone>
-      ) : (
-        <Flex overflowX="scroll">
-          {/* if there is file preview */}{" "}
-          {mealkitFilesPreview.map((filePreview: any, index: number) => (
-            <Box key={index} mx={2}>
-              {filePreview.slice(0, 10).includes("video") ? (
-                <video controls width="50%">
-                  <source src={filePreview} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
               ) : (
-                <Image
-                  src={filePreview}
-                  alt="meal kit image"
-                  height="200px"
-                  // vh="80%"
-                  borderRadius={10}
-                />
+                <Flex
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="center"
+                  borderColor="gray.400"
+                  border="1px"
+                  borderStyle="dashed"
+                  my={4}
+                >
+                  <PlusSquareIcon mr={2} />
+
+                  <Text textAlign="center">Replce files</Text>
+                </Flex>
               )}
             </Box>
-          ))}
-        </Flex>
-      )}
+          </Box>
+        )}
+      </Dropzone>
 
       <Form>
         {/* <Heading>Create a mealkit</Heading> */}

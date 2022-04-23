@@ -12,7 +12,7 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Mealkit, Post, Upvote, User } from "../entities";
+import { Image, Mealkit, Post, Upvote, User, Video } from "../entities";
 import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
 import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
@@ -225,19 +225,26 @@ export class PostResolver {
   // craete a post
   @Mutation(() => Post)
   @UseMiddleware(isAuth)
-  //   the id after immediately after arg is for when we query in graphql
-  // the id: number is for findOne(id)
   async createPost(
     @Arg("input") input: PostInput,
+    @Arg("videoId", () => Int) videoId: number,
+    @Arg("imageId", () => Int) imageId: number,
     @Ctx() { req }: MyContext
   ): // @Arg("title") title: string,
   // @Arg("body", { nullable: true }) body: string,
   // @Arg("videoUrl") videoUrl: string
   Promise<Post | Error> {
+    console.log("hi");
     // 2 sql queries one to insert and one to select
     try {
-      console.log("userId: ", req.session.userId);
-      return Post.create({ ...input, creatorId: req.session.userId }).save();
+      // TODO create transaction
+      const post = await Post.create({
+        ...input,
+        creatorId: req.session.userId,
+      }).save();
+      await Video.update({ id: videoId }, { postId: post.id });
+      await Image.update({ id: imageId }, { postId: post.id });
+      return post;
     } catch (error) {
       console.log(error);
       throw new Error("cannot create a post");

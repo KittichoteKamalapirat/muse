@@ -11,6 +11,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { CartItem, User, Post, Review } from ".";
+import MealkitFile from "./MealkitFile";
 
 @ObjectType()
 @Entity()
@@ -73,7 +74,10 @@ class Mealkit extends BaseEntity {
   @Field()
   deliveryFee: number;
 
-  // relationship with reviews
+  @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit)
+  @Field(() => [MealkitFile])
+  mealkitFiles: MealkitFile[];
+
   @OneToMany(() => Review, (reviews) => reviews.mealkit)
   @Field(() => [Review])
   reviews: Review[];

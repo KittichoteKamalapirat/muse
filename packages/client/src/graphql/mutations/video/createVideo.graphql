@@ -1,8 +1,0 @@
-mutation createVideo($input: VideoInput!) {
-  createVideo(input: $input) {
-    id
-    name
-    url
-    fileType
-  }
-}

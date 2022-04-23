@@ -1,5 +1,9 @@
-mutation createMealkit($input: MealkitInput!, $postId: Int!) {
-  createMealkit(input: $input, postId: $postId) {
+mutation createMealkit(
+  $input: MealkitInput!
+  $postId: Int!
+  $fileIds: [Int!]!
+) {
+  createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
     name
     items
     images

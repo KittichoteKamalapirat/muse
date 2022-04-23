@@ -1,34 +1,27 @@
-import { Field, Int, ObjectType } from "type-graphql";
+import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post } from ".";
+import Mealkit from "./Mealkit";
 
 @ObjectType()
 @Entity()
-class Video extends BaseEntity {
+class MealkitFile extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
   id: number;
-
-  // @Column()
-  // @Generated("uuid")
-  // @Field()
-  // uid: string;
 
   @Column()
   @Field()
   name: string;
 
-  // TODO actually can't be null, remove this later but neware of error
-  @Column({ nullable: true })
+  @Column()
   @Field()
   fileType: string;
 
@@ -39,13 +32,14 @@ class Video extends BaseEntity {
   // for some reasons, no need to specify nullable for column
   // this can be null because video can be created before post
   @Column({ nullable: true })
-  @Field(() => Int, { nullable: true })
-  postId: number;
+  @Field({ nullable: true })
+  mealkitId: number;
 
-  @Field(() => Post)
-  @OneToOne(() => Post, (post) => post.video, { nullable: true })
-  @JoinColumn()
-  post: Post;
+  @Field(() => Mealkit)
+  @ManyToOne(() => Mealkit, (mealkit) => mealkit.mealkitFiles, {
+    nullable: true,
+  })
+  mealkit: Mealkit;
 
   @CreateDateColumn()
   @Field()
@@ -56,4 +50,4 @@ class Video extends BaseEntity {
   updatedAt: Date;
 }
 
-export default Video;
+export default MealkitFile;

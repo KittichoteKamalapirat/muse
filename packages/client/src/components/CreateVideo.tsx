@@ -1,68 +1,59 @@
-import React, { useEffect, useState } from "react";
+import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import Dropzone from "react-dropzone";
-
-import { EditIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Button, Image, Img } from "@chakra-ui/react";
-import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
-import { useCreateVideoMutation, VideoInput } from "../generated/graphql";
+import { Button } from "@chakra-ui/react";
 import axios from "axios";
-
-const signUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/s3/sign`;
+import React, { useEffect, useState } from "react";
+import Dropzone from "react-dropzone";
+import UrlResolver from "../lib/UrlResolver";
+import { FileMetadata } from "../types/utils/FileMetadata";
+import { FileUrlAndID } from "../types/utils/FileUrlAndID";
+import { ResourceType } from "../types/utils/ResourceType";
+import getRESTOptions from "../util/getRESTOptions";
+import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
-  // videoFile: any;
-  // autoThumbnailUrl: string;
-  // videoPreviewHandler: (e: React.FormEvent<HTMLDivElement>) => void;
   nextStep: Function;
   handleMetadata: Function;
+  videoS3UrlAndID: FileUrlAndID | null;
+  setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileUrlAndID | null>>;
 }
 
-interface FileMetadata {
-  name: string;
-  fileType: string;
-}
+const urlResolver = new UrlResolver();
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
   nextStep,
   handleMetadata,
-  // videoPreviewHandler,
-  // autoThumbnailUrl,
+  videoS3UrlAndID,
+  setVideoS3UrlAndID,
 }) => {
   const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
-  const [videoUrl, setVideoUrl] = useState<string>(""); //is what saved to our db
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
-    setTimeout(() => {}, 1000);
 
     setVideoFile({ file: acceptedFiles[0] });
   };
+
+  console.log({ videoS3UrlAndID });
 
   useEffect(() => {
     if (videoFile.file) {
       const input: FileMetadata = {
         name: videoFile.file.name,
         fileType: videoFile.file.type,
+        resourceType: ResourceType.POST,
       };
 
       // sign
-      axios
-        .post("http://localhost:4000/api/s3/sign", input)
-        .then((response) => {
-          const options = {
-            headers: {
-              "Content-Type": videoFile.file.type,
-            },
-          };
+      axios.post(urlResolver.signS3(), input).then((response) => {
+        const options = getRESTOptions(videoFile.file.type);
 
-          // save to s3
-          axios.put(response.data.sign, videoFile.file, options);
-
-          setVideoUrl(response.data.url);
-        });
+        // save to s3
+        axios.put(response.data.sign, videoFile.file, options);
+        setVideoS3UrlAndID({ url: response.data.url, id: response.data.id });
+      });
 
       // the process should be something like this
       // 1) sec 0.0 video is dropped
@@ -72,9 +63,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
       // important point is that 3 happens before 4
       // also video can't be url, has t be videoPreview (actual data))
       //
-      setTimeout(() => {
-        nextStep();
-      }, 2000); // wait for the video to be in the canvas first
     }
   }, [videoFile.file]);
 
@@ -86,24 +74,15 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         }
         // maxSize={1000 * 1}
         multiple={false}
-        // accept= {['image/*', 'video/*']}
         accept="video/*"
-
-        // accept="video/mp4"
       >
         {({ getRootProps, getInputProps }) => (
           <Box mt={2}>
             <Box cursor="pointer" padding={4}>
-              <div
-                {...getRootProps({
-                  // onChange: (event) => {
-                  //   videoPreviewHandler(event);
-                  // },
-                })}
-              >
+              <div {...getRootProps({})}>
                 <input {...getInputProps()} />
 
-                {!videoUrl ? (
+                {!videoS3UrlAndID ? (
                   <Flex
                     direction="column"
                     p="2rem"
@@ -112,7 +91,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                     borderColor="gray.400"
                     borderStyle="dashed"
                   >
-                    {/* <ArrowUpIcon mt="3rem" /> */}
                     <UploadVideoIcon />
                     <Heading fontSize="xl" textAlign="center">
                       Select a video
@@ -135,7 +113,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                             nextStep();
                           }, 1000); // 10 doesn't work
                         }}
-                        src={videoUrl}
+                        src={videoS3UrlAndID.url}
                       />
                     </Box>
                     <Flex
@@ -147,8 +125,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                       <PlusSquareIcon mr={2} />
                       <Text textAlign="center">Change a video</Text>
                     </Flex>
-
-                    {/* <EditIcon m={2} /> */}
 
                     <Flex justifyContent="right"></Flex>
                   </Box>
