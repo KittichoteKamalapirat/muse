@@ -95,21 +95,21 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     //  redirect to the next page after metadata is load (is set to 500 ms)
   };
 
-  const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
-    console.log("videoPreviewHandler!");
-    const reader = new FileReader();
+  // const videoPreviewHandler = (e: React.FormEvent<HTMLDivElement>) => {
+  //   console.log("videoPreviewHandler!");
+  //   const reader = new FileReader();
 
-    if (reader.error) {
-      console.log(reader.error.message);
-    }
+  //   if (reader.error) {
+  //     console.log(reader.error.message);
+  //   }
 
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setVideoPreview(reader.result);
-      }
-    };
-    reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
-  };
+  //   reader.onload = () => {
+  //     if (reader.readyState === 2) {
+  //       setVideoPreview(reader.result);
+  //     }
+  //   };
+  //   reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
+  // };
 
   // automatically create image from video upload
   const handleMetadata = () => {
@@ -407,11 +407,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                     <HeadingLayout heading="New Video">
                       <CreateVideo
                         // videoFile={videoFile} no need videofile for SAVING TO S3 HERE, be in child component
-                        videoPreviewHandler={videoPreviewHandler}
-                        videoPreview={videoPreview}
+                        // videoPreviewHandler={videoPreviewHandler}
+                        // videoPreview={videoPreview}
                         nextStep={nextStep}
                         handleMetadata={handleMetadata}
-                        autoThumbnailUrl={autoThumbnailUrl}
+                        // autoThumbnailUrl={autoThumbnailUrl}
                       />
                     </HeadingLayout>
                   </Box>

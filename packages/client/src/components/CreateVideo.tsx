@@ -12,9 +12,8 @@ const signUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}/api/s3/sign`;
 
 interface CreateVideoProps {
   // videoFile: any;
-  videoPreview: any;
-  autoThumbnailUrl: string;
-  videoPreviewHandler: (e: React.FormEvent<HTMLDivElement>) => void;
+  // autoThumbnailUrl: string;
+  // videoPreviewHandler: (e: React.FormEvent<HTMLDivElement>) => void;
   nextStep: Function;
   handleMetadata: Function;
 }
@@ -25,14 +24,13 @@ interface FileMetadata {
 }
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
-  videoPreview,
   nextStep,
   handleMetadata,
-  videoPreviewHandler,
-  autoThumbnailUrl,
+  // videoPreviewHandler,
+  // autoThumbnailUrl,
 }) => {
-  const [videoFile, setVideoFile] = useState({ file: null } as any);
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
+  const [videoUrl, setVideoUrl] = useState<string>(""); //is what saved to our db
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
     if (rejectedFiles.length > 0) {
@@ -63,14 +61,20 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
           // save to s3
           axios.put(response.data.sign, videoFile.file, options);
 
-          nextStep();
           setVideoUrl(response.data.url);
         });
 
-      // setVideoUrl(data.url);
+      // the process should be something like this
+      // 1) sec 0.0 video is dropped
+      // 2) sec 0.1 video is shown on the canvas
+      // 3) sec 0.5: setMetadata is called, get the video canvas, so the setThumbnail is called
+      // 4) sec 1: go to next page  (if go to next page too fast, handlemetadata is called, but it can't find the video)
+      // important point is that 3 happens before 4
+      // also video can't be url, has t be videoPreview (actual data))
+      //
       setTimeout(() => {
-        handleMetadata();
-      }, 5000);
+        nextStep();
+      }, 2000); // wait for the video to be in the canvas first
     }
   }, [videoFile.file]);
 
@@ -92,9 +96,9 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
             <Box cursor="pointer" padding={4}>
               <div
                 {...getRootProps({
-                  onChange: (event) => {
-                    videoPreviewHandler(event);
-                  },
+                  // onChange: (event) => {
+                  //   videoPreviewHandler(event);
+                  // },
                 })}
               >
                 <input {...getInputProps()} />
@@ -124,12 +128,14 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                         controls
                         width="90%"
                         id="preview"
+                        crossOrigin="anonymous"
                         onLoadedMetadata={() => {
                           setTimeout(() => {
                             handleMetadata();
-                          }, 500);
+                            nextStep();
+                          }, 1000); // 10 doesn't work
                         }}
-                        src={videoPreview}
+                        src={videoUrl}
                       />
                     </Box>
                     <Flex
