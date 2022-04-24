@@ -56,9 +56,6 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 }) => {
   const [mealkitFiles, setMealkitFiles] = useState<any>([]);
 
-  console.log({ mealkitFiles });
-  console.log({ mealkitS3UrlAndIds });
-
   const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
@@ -71,11 +68,9 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
   useEffect(() => {
     if (mealkitFiles.length > 0) {
-      console.log("1");
       const fileMetadatas: FileMetadata[] = [];
 
       mealkitFiles.forEach((file: any, index: number) => {
-        console.log("2");
         // sign
         const input: FileInput = {
           name: file.name,
@@ -84,19 +79,17 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         };
 
         axios.post(urlResolver.signS3(), input).then((response) => {
-          console.log("3");
-          console.log({ response });
           const options = getRESTOptions(file.type);
 
           // save to s3
           axios.put(response.data.sign, file, options);
-          console.log("4");
+
           fileMetadatas.push({
             url: response.data.url,
             id: response.data.id,
             fileType: file.type,
           });
-          console.log("5");
+
           if (index === mealkitFiles.length - 1) {
             setMealkitS3UrlAndIds(fileMetadatas);
           }

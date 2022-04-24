@@ -11,6 +11,7 @@ import { CreateRecipe } from "../components/CreateRecipe";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
+import { Loading } from "../components/skeletons/Loading";
 import {
   useCreateMealkitMutation,
   useCreatePostMutation,
@@ -46,6 +47,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [submittable, setSubmittable] = useState<boolean>(false);
 
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] =
+    useState<boolean>(false);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -83,6 +86,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   // save autoThumbnail to s3
   const handleMetadata = async () => {
+    setIsGeneratingThumbnail(true);
     // used in CreateVideo but state to update is here
     const canvas = document.createElement("canvas");
     const video = document.getElementById("preview") as HTMLVideoElement;
@@ -92,8 +96,16 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const dataUrl = canvas.toDataURL();
-    const fileName = dataUrl.substring(dataUrl.lastIndexOf("/") + 1);
 
+    console.log("previous file name");
+    console.log(dataUrl.substring(dataUrl.lastIndexOf("/") + 1));
+
+    const fileName = dataUrl
+      .substring(dataUrl.lastIndexOf("/") + 1)
+      // remove all special characters
+      .replace(/[^a-zA-Z ]/g, ""); // = in file name seems to cause error?
+
+    console.log({ fileName });
     const fileData = dataURItoFile(dataUrl, fileName);
 
     setAutoThumbnailFile(fileData);
@@ -120,20 +132,26 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     // });
 
     const options = getRESTOptions(fileData.type);
+    console.log({ options });
+    console.log({ input });
     const response = await axios.post(urlResolver.signS3(), input);
+
+    console.log({ response });
     const response2 = await axios.put(response.data.sign, fileData, options);
+    console.log({ response2 });
 
     // todo add loading indicator
+    // wait for file to be uploaded
     if (response2) {
+      console.log("got response 2");
       // -> this one kinda works!, video loaded first!
       setAutoThumbnailS3UrlAndId({
         id: response.data.id,
         url: response.data.url,
       });
+      setIsGeneratingThumbnail(false);
     }
   };
-
-  console.log({ autoThumbnailS3UrlAndId });
 
   // section1 ends: for uploading a video
   const [videoS3UrlAndID, setVideoS3UrlAndID] = useState<FileMetadata | null>(
@@ -344,8 +362,12 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         handleMetadata={handleMetadata}
                         videoS3UrlAndID={videoS3UrlAndID}
                         setVideoS3UrlAndID={setVideoS3UrlAndID}
+                        isGeneratingThumbnail={isGeneratingThumbnail}
                       />
                     </HeadingLayout>
+                    {isGeneratingThumbnail && (
+                      <Loading text="generating thumbnail" overlay={true} />
+                    )}
                   </Box>
                 }
                 {

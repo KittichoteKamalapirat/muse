@@ -17,6 +17,7 @@ interface CreateVideoProps {
   handleMetadata: Function;
   videoS3UrlAndID: FileMetadata | null;
   setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileMetadata | null>>;
+  isGeneratingThumbnail: boolean;
 }
 
 const urlResolver = new UrlResolver();
@@ -26,7 +27,9 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
   handleMetadata,
   videoS3UrlAndID,
   setVideoS3UrlAndID,
+  isGeneratingThumbnail,
 }) => {
+  console.log({ isGeneratingThumbnail });
   const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
@@ -36,8 +39,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
 
     setVideoFile({ file: acceptedFiles[0] });
   };
-
-  console.log({ videoS3UrlAndID });
 
   useEffect(() => {
     if (videoFile.file) {
@@ -136,16 +137,19 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         )}
       </Dropzone>
 
-      <Flex justifyContent="right">
-        <Button
-          variant="transparent"
-          color="brand"
-          mt="5rem"
-          onClick={() => nextStep()}
-        >
-          Next
-        </Button>
-      </Flex>
+      {/* hide if no s3 or is creating auto thumbnail */}
+      {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
+        <Flex justifyContent="right">
+          <Button
+            variant="transparent"
+            color="brand"
+            mt="5rem"
+            onClick={() => nextStep()}
+          >
+            Next
+          </Button>
+        </Flex>
+      )}
     </Box>
   );
 };

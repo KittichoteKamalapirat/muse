@@ -68,10 +68,6 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
     }
   }, [thumbnailFile.file]);
 
-  console.log({ thumbnailS3UrlAndID });
-  console.log(urlResolver.signS3());
-  console.log(urlResolver.index());
-
   return (
     <Box>
       {thumbnailS3UrlAndID === null ? (
