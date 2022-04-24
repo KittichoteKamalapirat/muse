@@ -29,7 +29,6 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
   setVideoS3UrlAndID,
   isGeneratingThumbnail,
 }) => {
-  console.log({ isGeneratingThumbnail });
   const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {

@@ -97,15 +97,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     const dataUrl = canvas.toDataURL();
 
-    console.log("previous file name");
-    console.log(dataUrl.substring(dataUrl.lastIndexOf("/") + 1));
-
     const fileName = dataUrl
       .substring(dataUrl.lastIndexOf("/") + 1)
       // remove all special characters
       .replace(/[^a-zA-Z ]/g, ""); // = in file name seems to cause error?
 
-    console.log({ fileName });
     const fileData = dataURItoFile(dataUrl, fileName);
 
     setAutoThumbnailFile(fileData);
