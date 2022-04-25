@@ -95,7 +95,7 @@ export class OrderResolver {
 
         const cartItem = await CartItem.findOne({
           where: { id: cartItemId },
-          relations: ["mealkit", "user"],
+          relations: ["mealkit", "mealkit.mealkitFiles", "user"],
         });
 
         if (cartItem) {
@@ -134,6 +134,7 @@ export class OrderResolver {
         "user.address",
         "mealkit",
         "mealkit.creator",
+        "mealkit.mealkitFiles",
         "tracking",
       ],
     });
@@ -160,6 +161,7 @@ export class OrderResolver {
         "user.address",
         "mealkit",
         "mealkit.creator",
+        "mealkit.mealkitFiles",
         "tracking",
       ],
     });

@@ -56,11 +56,7 @@ const Like: React.FC = ({}) => {
             <Link>
               <Flex my={1}>
                 <Box flex={1} m={1}>
-                  <Image
-                    src={post.thumbnailUrl}
-                    alt="image"
-                    borderRadius="10%"
-                  />
+                  <Image src={post.image.url} alt="image" borderRadius="10%" />
                 </Box>
                 <Box flex={2} m={1}>
                   <Heading fontSize="xl">{post.title}</Heading>

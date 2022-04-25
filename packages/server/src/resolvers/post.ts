@@ -13,8 +13,8 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import { Image, Mealkit, Post, Upvote, User, Video } from "../entities";
-import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
+import { Image, Post, Upvote, User, Video } from "../entities";
+import { PaginatedPosts, SignedS3 } from "../entities/utils";
 import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -64,37 +64,16 @@ export class PostResolver {
   ): Promise<PaginatedPosts> {
     const realLimit = Math.min(50, limit);
     const realLimitPlusOne = realLimit + 1;
-    const replacements: any[] = [realLimitPlusOne];
-    if (cursor) {
-      replacements.push(new Date(parseInt(cursor, 10)));
-    }
-    const upvoted = await Upvote.find({
+
+    const upvotes = await Upvote.find({
       where: { userId: req.session.userId },
     });
 
-    const upvotedPostIds: number[] = [];
+    const upvotedPostIds: number[] = upvotes.map((u) => u.postId);
 
-    // eslint-disable-next-line no-shadow
-    upvoted.forEach((upvoted) => {
-      upvotedPostIds.push(upvoted.postId);
-    });
-    const posts = await getConnection().query(
-      `
-      select p.*
-      from post p
-      ${
-        cursor
-          ? `where (p."createdAt" < $2) AND (p.id IN (${upvotedPostIds}))`
-          : ""
-      }
-
-      order by p."createdAt" DESC 
-      limit $1
-      `,
-      replacements
-    );
+    const posts = await getPosts(cursor, realLimitPlusOne, upvotedPostIds);
     const slicedPosts = posts.slice(0, realLimit);
-    console.log({ posts });
+
     return {
       posts: slicedPosts,
       hasMore: posts.length === realLimitPlusOne,
@@ -171,7 +150,7 @@ export class PostResolver {
     const realLimit = Math.min(50, limit); // if no limit specified, default is 50
     const realLimitPlusOne = realLimit + 1;
 
-    const posts = await getPosts(cursor, realLimitPlusOne);
+    const posts = await getPosts(cursor, realLimitPlusOne, null);
 
     const slicedPosts = await posts.slice(0, realLimit);
 
@@ -189,7 +168,10 @@ export class PostResolver {
   async postsByCreator(
     @Arg("userId") userId: string
   ): Promise<Post[] | undefined> {
-    const posts = await Post.find({ where: { creatorId: userId } });
+    const posts = await Post.find({
+      where: { creatorId: userId },
+      relations: ["mealkits", "mealkits.mealkitFiles", "video", "image"],
+    });
     return posts;
   }
 
@@ -283,35 +265,6 @@ export class PostResolver {
 
     await Post.delete({ id, creatorId: req.session.userId });
     return true;
-  }
-
-  @Mutation(() => PostSignedS3)
-  async signS3(
-    @Arg("videoname") videoname: string,
-    @Arg("thumbnailname") thumbnailname: string,
-    @Arg("videoFiletype") videoFiletype: string,
-    @Arg("thumbnailFiletype") thumbnailFiletype: string
-  ): Promise<PostSignedS3> {
-    const s3VideoParams = s3Params(videoname, videoFiletype);
-    const s3ThumbnailParams = s3Params(thumbnailname, thumbnailFiletype);
-
-    const videoSignedRequest = await s3.getSignedUrl(
-      "putObject",
-      s3VideoParams
-    );
-    const thumbnailSignedRequest = await s3.getSignedUrl(
-      "putObject",
-      s3ThumbnailParams
-    );
-
-    const videoUrl = `https://${s3Bucket}.s3.amazonaws.com/${videoname}`;
-    const thumbnailUrl = `https://${s3Bucket}.s3.amazonaws.com/${thumbnailname}`;
-    return {
-      videoSignedRequest,
-      thumbnailSignedRequest,
-      videoUrl,
-      thumbnailUrl,
-    };
   }
 
   @Mutation(() => SignedS3)

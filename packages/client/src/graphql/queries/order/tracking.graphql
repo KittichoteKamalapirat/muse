@@ -9,8 +9,7 @@ query tracking($id: Int!) {
     currentStatus
     cartItems {
       mealkit {
-        name
-        images
+        ...MealkitSnippet
       }
     }
     timelines {

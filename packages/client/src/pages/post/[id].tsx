@@ -65,8 +65,8 @@ const Post = ({}) => {
             </Flex>
             <video
               controls
-              src={data?.post.videoUrl}
-              poster={data?.post.thumbnailUrl}
+              src={data?.post.video.url}
+              poster={data?.post.image.url}
             />
 
             <ContentWrapper>

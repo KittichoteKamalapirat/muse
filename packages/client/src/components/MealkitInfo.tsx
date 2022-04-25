@@ -30,6 +30,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
     variables: { postId: postId },
   });
 
+  console.log({ mealkits });
+
   if (loading) {
     return (
       <Layout>
@@ -57,9 +59,9 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
           {mealkits.mealkits.map((mealkit, index) => (
             <Box key={index}>
               <Box overflowX="auto" width="90%" margin="auto">
-                {mealkit.images?.map((url, index) => (
+                {mealkit.mealkitFiles.map((file, index) => (
                   <Center key={index} m={1} minW="150px">
-                    <Img src={url} alt="image" borderRadius="10%" />
+                    <Img src={file.url} alt="image" borderRadius="10%" />
                   </Center>
                 ))}
               </Box>
@@ -114,7 +116,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       my={2}
                     >
                       <Flex alignItems="center">
-                        <Avatar src={mealkit.images![0]} size="sm" />
+                        <Avatar src={mealkit.thumbnail.url} size="sm" />
                         <Heading fontSize="lg" ml={2}>
                           {" "}
                           {mealkit.name}{" "}

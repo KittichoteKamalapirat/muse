@@ -35,18 +35,21 @@ export class MealkitResolver {
     return mealkit.reviewsSum / mealkit.reviewsCounter;
   }
 
+  @FieldResolver(() => MealkitFile)
+  thumbnail(@Root() mealkit: Mealkit): MealkitFile {
+    return mealkit.mealkitFiles.find((file) =>
+      file.fileType.includes("image")
+    ) as MealkitFile;
+  }
+
   @Query(() => [Mealkit], { nullable: true })
   async mealkits(
     @Arg("postId", () => Int) postId: number
   ): Promise<Mealkit[] | undefined> {
-    // const mealkit = await Mealkit.find({ postId });
-
-    const mealkit = await Mealkit.find({
+    return Mealkit.find({
       where: { postId },
-      relations: ["creator"],
+      relations: ["creator", "mealkitFiles"],
     });
-
-    return mealkit;
   }
 
   @Query(() => Mealkit, { nullable: true })

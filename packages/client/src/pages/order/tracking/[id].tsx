@@ -96,11 +96,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
                 {trackingData?.tracking.cartItems.map((cartItem, index) => (
                   <Flex alignItems="center" m={1} key={index}>
                     <Img
-                      src={
-                        cartItem.mealkit?.images
-                          ? cartItem.mealkit?.images[0]
-                          : ""
-                      }
+                      src={cartItem.mealkit.thumbnail.url}
                       flex={1}
                       width="10%"
                       mr={2}

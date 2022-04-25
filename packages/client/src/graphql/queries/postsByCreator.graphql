@@ -5,13 +5,13 @@ query postsByCreator($userId: String!) {
     text
     points
     isPublished
-    # video{
-    #   id
-    #   url
-    # }
-    # image{
-    #   id
-    #   url
-    # }
+    video {
+      id
+      url
+    }
+    image {
+      id
+      url
+    }
   }
 }

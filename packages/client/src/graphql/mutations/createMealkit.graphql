@@ -6,7 +6,6 @@ mutation createMealkit(
   createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
     name
     items
-    images
     price
     portion
     id

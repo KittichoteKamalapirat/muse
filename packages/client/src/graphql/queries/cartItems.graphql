@@ -10,21 +10,7 @@ query cartItems {
       avatar
     }
     mealkit {
-      name
-      images
-      price
-      portion
-      creatorId
-      deliveryFee
-      creator {
-        username
-        avatar
-      }
-      postId
-      post {
-        id
-        title
-      }
+      ...MealkitSnippet
     }
   }
 }

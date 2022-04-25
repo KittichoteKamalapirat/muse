@@ -166,15 +166,13 @@ const Order: React.FC<OrderProps> = ({}) => {
                   {orderItem.cartItems.map((cartItem, subindex) => (
                     <Box key={subindex} my="6px">
                       <Flex>
-                        {!cartItem.mealkit?.images ? null : (
-                          <Box flex={1}>
-                            <Image
-                              src={cartItem.mealkit.images[0]}
-                              alt="image"
-                              fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                            />
-                          </Box>
-                        )}
+                        <Box flex={1}>
+                          <Image
+                            src={cartItem.mealkit.thumbnail.url}
+                            alt="image"
+                            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                          />
+                        </Box>
 
                         <Box flex={3} m={1} textAlign="left">
                           <Heading size="md">{cartItem.mealkit?.name}</Heading>

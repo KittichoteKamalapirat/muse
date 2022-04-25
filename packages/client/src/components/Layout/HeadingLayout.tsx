@@ -18,7 +18,6 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
   mt,
 }) => {
   const router = useRouter();
-
   return (
     <>
       <Box
@@ -39,8 +38,9 @@ export const HeadingLayout: React.FC<HeadingLayoutProps> = ({
             onClick={() => {
               if (backUrl) {
                 router.push(backUrl);
+              } else {
+                router.back();
               }
-              router.back();
             }}
             position="fixed"
             fontSize="x-large"

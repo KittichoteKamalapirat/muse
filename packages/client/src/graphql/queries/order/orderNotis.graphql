@@ -13,8 +13,7 @@ query orderNotis {
         username
       }
       mealkit {
-        name
-        images
+        ...MealkitSnippet
       }
     }
   }

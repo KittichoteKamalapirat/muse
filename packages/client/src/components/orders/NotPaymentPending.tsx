@@ -51,10 +51,10 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                     {byCreator.cartItems.map((cartItem, subindex) => (
                       <Box key={subindex} my="6px">
                         <Flex>
-                          {!cartItem.mealkit?.images ? null : (
+                          {!cartItem.mealkit?.thumbnail ? null : (
                             <Box flex={1}>
                               <Image
-                                src={cartItem.mealkit.images[0]}
+                                src={cartItem.mealkit.thumbnail.url}
                                 alt="image"
                                 fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
                               />

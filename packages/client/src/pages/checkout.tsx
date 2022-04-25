@@ -1,28 +1,26 @@
+import { Button } from "@chakra-ui/button";
+import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
+import NextLink from "next/link";
+import router from "next/router";
 import React, { useEffect, useState } from "react";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
+import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
 import { Wrapper } from "../components/Wrapper";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import {
   CartItem,
   useAddressQuery,
   useCartItemsQuery,
   useCreateOrderMutation,
 } from "../generated/graphql";
-import { withApollo } from "../util/withApollo";
-import NextLink from "next/link";
-import router, { useRouter } from "next/router";
-import { Button, IconButton } from "@chakra-ui/button";
-import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { Table, Tr, Th, Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
-
 import {
   mappedCartItemsByCreatorResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
-import { primaryColor } from "../components/Variables";
-import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
-import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { withApollo } from "../util/withApollo";
 
 interface checkoutProps {}
 
@@ -33,6 +31,9 @@ interface CartItemsByCreatorInput {
 }
 
 const Checkout: React.FC<checkoutProps> = ({}) => {
+  const [gross, setGross] = useState(0);
+  console.log({ gross });
+
   // use update
   const { data: cartItems, loading, error } = useCartItemsQuery();
   const { data: address, loading: addressLoading } = useAddressQuery();
@@ -49,8 +50,6 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
   const [createOrder, { data: orderData, loading: orderLoading }] =
     useCreateOrderMutation();
 
-  const [gross, setGross] = useState(0);
-
   // map the cartItems into byCreator
   useEffect(() => {
     if (cartItems) {
@@ -59,10 +58,10 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       console.log({ mappedArray });
       setMappedCartItems(mappedArray);
 
-      let gross: number = 0;
-      mappedArray.map((byCreator) => {
-        gross = gross + byCreator.totalByCreator + byCreator.deliveryFee;
-      });
+      let gross: number = mappedArray.reduce(
+        (acc, obj) => acc + obj.totalByCreator + obj.deliveryFee,
+        0
+      );
       setGross(gross);
     }
   }, [cartItems]);
@@ -188,15 +187,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                         <LinkBox>
                           <Flex>
                             {/* show one image if there is */}
-                            {!cartItem.mealkit?.images ? null : (
-                              <Box flex={1} m={1}>
-                                <Image
-                                  src={cartItem.mealkit?.images[0]}
-                                  alt="image"
-                                  fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                                />
-                              </Box>
-                            )}
+
+                            <Box flex={1} m={1}>
+                              <Image
+                                src={cartItem.mealkit.thumbnail.url}
+                                alt="image"
+                                fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                              />
+                            </Box>
+
                             <Box flex={2}>
                               <LinkOverlay
                                 href={`/post/${cartItem.mealkit?.postId}`}

@@ -17,15 +17,7 @@ query creatorOrders($status: CartItemStatus!) {
         }
       }
       mealkit {
-        id
-        name
-        price
-        images
-        creatorId
-        creator {
-          username
-          avatar
-        }
+        ...MealkitSnippet
       }
       mealkitId
     }

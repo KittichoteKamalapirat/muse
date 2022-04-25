@@ -34,7 +34,13 @@ export class CartItemResolver {
   async cartItems(@Ctx() { req }: MyContext): Promise<CartItem[]> {
     return CartItem.find({
       where: { userId: req.session.userId, orderId: null },
-      relations: ["mealkit", "user", "mealkit.post", "mealkit.creator"],
+      relations: [
+        "mealkit",
+        "user",
+        "mealkit.post",
+        "mealkit.creator",
+        "mealkit.mealkitFiles",
+      ],
     });
   }
 
@@ -49,6 +55,7 @@ export class CartItemResolver {
         "user.paymentInfo",
         "mealkit.post",
         "mealkit.creator",
+        "mealkit.mealkitFiles",
         "mealkit.creator.paymentInfo",
       ],
     });

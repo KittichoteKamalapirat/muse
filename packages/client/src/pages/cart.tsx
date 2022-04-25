@@ -108,15 +108,15 @@ const Cart: React.FC<cartProps> = ({}) => {
                           <Box>
                             <Flex>
                               {/* show one image if there is */}
-                              {!cartItem.mealkit?.images ? null : (
-                                <Box flex={1} m={1}>
-                                  <Image
-                                    src={cartItem.mealkit?.images[0]}
-                                    alt="image"
-                                    fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                                  />
-                                </Box>
-                              )}
+
+                              <Box flex={1} m={1}>
+                                <Image
+                                  src={cartItem.mealkit.thumbnail.url}
+                                  alt="image"
+                                  fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                />
+                              </Box>
+
                               <Box flex={2}>
                                 {/* <LinkOverlay
                                 href={`/post/${cartItem.mealkit?.postId}`}

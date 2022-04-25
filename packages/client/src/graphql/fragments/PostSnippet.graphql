@@ -8,17 +8,7 @@ fragment PostSnippet on Post {
   voteStatus
   isPublished
   mealkits {
-    id
-    name
-    images
-    price
-    portion
-    reviewAvg
-    reviewsCounter
-    mealkitFiles {
-      id
-      url
-    }
+    ...MealkitSnippet
   }
   creator {
     id

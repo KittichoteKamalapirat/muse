@@ -1,0 +1,24 @@
+fragment MealkitSnippet on Mealkit {
+  id
+  name
+  price
+  portion
+  reviewAvg
+  reviewsCounter
+  postId
+  creatorId
+  items
+  deliveryFee
+  thumbnail {
+    id
+    url
+  }
+  creator {
+    username
+    avatar
+  }
+  mealkitFiles {
+    id
+    url
+  }
+}

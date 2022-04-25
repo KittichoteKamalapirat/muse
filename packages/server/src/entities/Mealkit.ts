@@ -37,9 +37,9 @@ class Mealkit extends BaseEntity {
   @Field(() => [String], { nullable: true })
   items: string[];
 
-  @Column("text", { nullable: true, array: true })
-  @Field(() => [String], { nullable: true })
-  images: string[];
+  // @Column("text", { nullable: true, array: true })
+  // @Field(() => [String], { nullable: true })
+  // images: string[];
 
   @Column()
   @Field()

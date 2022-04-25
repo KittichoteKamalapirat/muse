@@ -18,11 +18,14 @@ query allCartItems {
     mealkit {
       id
       name
-      images
       price
       portion
       deliveryFee
       creatorId
+      mealkitFiles {
+        id
+        url
+      }
       creator {
         username
         avatar

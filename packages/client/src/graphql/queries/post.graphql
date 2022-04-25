@@ -22,13 +22,13 @@ query Post($id: Int!) {
       username
       avatar
     }
-    # video{
-    #   id
-    #   url
-    # }
-    # image{
-    #   id
-    #   url
-    # }
+    video {
+      id
+      url
+    }
+    image {
+      id
+      url
+    }
   }
 }

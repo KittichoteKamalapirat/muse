@@ -73,11 +73,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
                 backgroundColor={post.isPublished ? "" : "gray.100"}
               >
                 <Box flex={1} my={2}>
-                  <Image
-                    src={post.thumbnailUrl}
-                    alt="image"
-                    borderRadius="10%"
-                  />
+                  <Image src={post.image.url} alt="image" borderRadius="10%" />
                 </Box>
                 <Box flex={2} m={2}>
                   <Text>{post.title}</Text>

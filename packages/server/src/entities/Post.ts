@@ -50,10 +50,6 @@ class Post extends BaseEntity {
   @Field(() => Int, { nullable: true })
   voteStatus: number | null; // willl be 1 or -1, this is used to check the status of this post for a user
 
-  @Column({ nullable: true })
-  @Field()
-  thumbnailUrl!: string;
-
   @Column({ default: true })
   @Field()
   isPublished!: boolean;

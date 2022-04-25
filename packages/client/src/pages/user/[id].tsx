@@ -115,7 +115,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
                   <Flex key={post.id}>
                     <Box flex={1} my={2}>
                       <Image
-                        src={post.thumbnailUrl}
+                        src={post.image.url}
                         alt="image"
                         borderRadius="10%"
                       />

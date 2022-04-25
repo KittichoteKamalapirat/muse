@@ -221,7 +221,6 @@ export type Mealkit = {
   creatorId: Scalars['String'];
   deliveryFee: Scalars['Float'];
   id: Scalars['Float'];
-  images?: Maybe<Array<Scalars['String']>>;
   items?: Maybe<Array<Scalars['String']>>;
   mealkitFiles: Array<MealkitFile>;
   name: Scalars['String'];
@@ -233,6 +232,7 @@ export type Mealkit = {
   reviews: Array<Review>;
   reviewsCounter: Scalars['Int'];
   reviewsSum: Scalars['Int'];
+  thumbnail: MealkitFile;
   updatedAt: Scalars['String'];
 };
 
@@ -282,7 +282,6 @@ export type Mutation = {
   register: UserResponse;
   signAvatarS3: SignedS3;
   signMealkitS3: Array<SignedS3Result>;
-  signS3: PostSignedS3;
   signSingleFileS3: SingleFileSignedS3;
   switchAccountType: Scalars['Boolean'];
   toggleFollow: Scalars['Boolean'];
@@ -419,14 +418,6 @@ export type MutationSignAvatarS3Args = {
 
 export type MutationSignMealkitS3Args = {
   input: Array<SignS3Params>;
-};
-
-
-export type MutationSignS3Args = {
-  thumbnailFiletype: Scalars['String'];
-  thumbnailname: Scalars['String'];
-  videoFiletype: Scalars['String'];
-  videoname: Scalars['String'];
 };
 
 
@@ -587,7 +578,6 @@ export type Post = {
   portion?: Maybe<Scalars['Int']>;
   text: Scalars['String'];
   textSnippet: Scalars['String'];
-  thumbnailUrl: Scalars['String'];
   title: Scalars['String'];
   updatedAt: Scalars['String'];
   video: Video;
@@ -602,14 +592,6 @@ export type PostInput = {
   portion: Scalars['Float'];
   text: Scalars['String'];
   title: Scalars['String'];
-};
-
-export type PostSignedS3 = {
-  __typename?: 'PostSignedS3';
-  thumbnailSignedRequest: Scalars['String'];
-  thumbnailUrl: Scalars['String'];
-  videoSignedRequest: Scalars['String'];
-  videoUrl: Scalars['String'];
 };
 
 export type Query = {
@@ -889,7 +871,9 @@ export type Video = {
   url: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } };
+export type MealkitSnippetFragment = { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> };
+
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -940,7 +924,7 @@ export type CreateMealkitMutationVariables = Exact<{
 }>;
 
 
-export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
+export type CreateMealkitMutation = { __typename?: 'Mutation', createMealkit: { __typename?: 'Mealkit', name: string, items?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, id: number } };
 
 export type CreateOrderMutationVariables = Exact<{
   cartItemIds: Array<Scalars['Int']> | Scalars['Int'];
@@ -1094,16 +1078,6 @@ export type SignMealkitS3MutationVariables = Exact<{
 
 export type SignMealkitS3Mutation = { __typename?: 'Mutation', signMealkitS3: Array<{ __typename?: 'SignedS3Result', signedRequest: string, url: string }> };
 
-export type SignS3MutationVariables = Exact<{
-  videoname: Scalars['String'];
-  thumbnailname: Scalars['String'];
-  videoFiletype: Scalars['String'];
-  thumbnailFiletype: Scalars['String'];
-}>;
-
-
-export type SignS3Mutation = { __typename?: 'Mutation', signS3: { __typename?: 'PostSignedS3', videoSignedRequest: string, thumbnailSignedRequest: string, videoUrl: string, thumbnailUrl: string } };
-
 export type SwitchAccountTypeMutationVariables = Exact<{
   becomeCreator: Scalars['Boolean'];
 }>;
@@ -1141,7 +1115,7 @@ export type UpdateMealkitMutationVariables = Exact<{
 }>;
 
 
-export type UpdateMealkitMutation = { __typename?: 'Mutation', updateMealkit?: Maybe<{ __typename?: 'Mealkit', items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, id: number }> };
+export type UpdateMealkitMutation = { __typename?: 'Mutation', updateMealkit?: Maybe<{ __typename?: 'Mealkit', items?: Maybe<Array<string>>, price?: Maybe<number>, id: number }> };
 
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1181,12 +1155,12 @@ export type AddressQuery = { __typename?: 'Query', address: { __typename?: 'Addr
 export type AllCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllCartItemsQuery = { __typename?: 'Query', allCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, status: string, user?: Maybe<{ __typename?: 'User', id: string, username: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, creatorId: string, postId: number, creator: { __typename?: 'User', username: string, avatar: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
+export type AllCartItemsQuery = { __typename?: 'Query', allCartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, total: number, status: string, user?: Maybe<{ __typename?: 'User', id: string, username: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, deliveryFee: number, creatorId: string, postId: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }>, creator: { __typename?: 'User', username: string, avatar: string, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, bankAccount: string, bankCode: string }> }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
 
 export type CartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, fieldTotal: number, user?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, creatorId: string, deliveryFee: number, postId: number, creator: { __typename?: 'User', username: string, avatar: string }, post?: Maybe<{ __typename?: 'Post', id: number, title: string }> } }> };
+export type CartItemsQuery = { __typename?: 'Query', cartItems: Array<{ __typename?: 'CartItem', id: number, quantity: number, userId: string, mealkitId: number, fieldTotal: number, user?: Maybe<{ __typename?: 'User', username: string, avatar: string }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }> };
 
 export type FollowersQueryVariables = Exact<{
   userId: Scalars['String'];
@@ -1205,7 +1179,7 @@ export type MealkitQueryVariables = Exact<{
 }>;
 
 
-export type MealkitQuery = { __typename?: 'Query', mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, portion: number, price?: Maybe<number>, postId: number, reviewAvg: number, reviewsCounter: number, creator: { __typename?: 'User', username: string, avatar: string } }> };
+export type MealkitQuery = { __typename?: 'Query', mealkit?: Maybe<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }> };
 
 export type ReviewsQueryVariables = Exact<{
   mealkitId: Scalars['Int'];
@@ -1219,14 +1193,14 @@ export type MealkitsQueryVariables = Exact<{
 }>;
 
 
-export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, items?: Maybe<Array<string>>, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, deliveryFee: number, reviewAvg: number, reviewsCounter: number }>> };
+export type MealkitsQuery = { __typename?: 'Query', mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>> };
 
 export type CreatorOrdersQueryVariables = Exact<{
   status: CartItemStatus;
 }>;
 
 
-export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus?: Maybe<string> }> }> };
+export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus?: Maybe<string> }> }> };
 
 export type ManuallyConfirmPaymentQueryVariables = Exact<{
   paymentId: Scalars['Int'];
@@ -1238,14 +1212,14 @@ export type ManuallyConfirmPaymentQuery = { __typename?: 'Query', manuallyConfir
 export type OrderNotisQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OrderNotisQuery = { __typename?: 'Query', orderNotis: Array<{ __typename?: 'CartItemNoti', id: number, message: string, read: boolean, cartItemId: number, createdAt: any, cartItem: { __typename?: 'CartItem', id: number, quantity: number, status: string, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } } }> };
+export type OrderNotisQuery = { __typename?: 'Query', orderNotis: Array<{ __typename?: 'CartItemNoti', id: number, message: string, read: boolean, cartItemId: number, createdAt: any, cartItem: { __typename?: 'CartItem', id: number, quantity: number, status: string, user?: Maybe<{ __typename?: 'User', username: string }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } } }> };
 
 export type TrackingQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, isFound?: Maybe<boolean>, courier?: Maybe<string>, courierKey?: Maybe<string>, status?: Maybe<string>, color?: Maybe<string>, currentStatus?: Maybe<string>, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', name: string, images?: Maybe<Array<string>> } }>, timelines?: Maybe<Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }>> } };
+export type TrackingQuery = { __typename?: 'Query', tracking: { __typename?: 'Tracking', trackingNo: string, isFound?: Maybe<boolean>, courier?: Maybe<string>, courierKey?: Maybe<string>, status?: Maybe<string>, color?: Maybe<string>, currentStatus?: Maybe<string>, cartItems: Array<{ __typename?: 'CartItem', mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }>, timelines?: Maybe<Array<{ __typename?: 'Timeline', date: string, details: Array<{ __typename?: 'TimelineDetail', dateTime: string, date: string, time: string, status: string, description: string }> }>> } };
 
 export type PaymentQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1266,7 +1240,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1274,14 +1248,14 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> } };
 
 export type PostsByCreatorQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type PostsByCreatorQuery = { __typename?: 'Query', postsByCreator: Array<{ __typename?: 'Post', id: number, title: string, text: string, points: number, isPublished: boolean }> };
+export type PostsByCreatorQuery = { __typename?: 'Query', postsByCreator: Array<{ __typename?: 'Post', id: number, title: string, text: string, points: number, isPublished: boolean, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['String'];
@@ -1295,7 +1269,7 @@ export type UserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'CartItemsByOrderFormat', orderId: number, grossOrder: number, paymentId: number, trackingId?: Maybe<number>, byCreator: Array<{ __typename?: 'CartItemsByCreatorFormat', creatorId: string, creatorName: string, avatar: string, deliveryFee: number, totalByCreator: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, isReviewed: boolean, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, images?: Maybe<Array<string>>, creatorId: string, creator: { __typename?: 'User', username: string, avatar: string } } }> }> }> };
+export type UserOrdersQuery = { __typename?: 'Query', userOrders: Array<{ __typename?: 'CartItemsByOrderFormat', orderId: number, grossOrder: number, paymentId: number, trackingId?: Maybe<number>, byCreator: Array<{ __typename?: 'CartItemsByCreatorFormat', creatorId: string, creatorName: string, avatar: string, deliveryFee: number, totalByCreator: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, isReviewed: boolean, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }> }> }> };
 
 export type VotedPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1303,8 +1277,34 @@ export type VotedPostsQueryVariables = Exact<{
 }>;
 
 
-export type VotedPostsQuery = { __typename?: 'Query', votedPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string }> } };
+export type VotedPostsQuery = { __typename?: 'Query', votedPosts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> } };
 
+export const MealkitSnippetFragmentDoc = gql`
+    fragment MealkitSnippet on Mealkit {
+  id
+  name
+  price
+  portion
+  reviewAvg
+  reviewsCounter
+  postId
+  creatorId
+  items
+  deliveryFee
+  thumbnail {
+    id
+    url
+  }
+  creator {
+    username
+    avatar
+  }
+  mealkitFiles {
+    id
+    url
+  }
+}
+    `;
 export const PostSnippetFragmentDoc = gql`
     fragment PostSnippet on Post {
   id
@@ -1316,17 +1316,7 @@ export const PostSnippetFragmentDoc = gql`
   voteStatus
   isPublished
   mealkits {
-    id
-    name
-    images
-    price
-    portion
-    reviewAvg
-    reviewsCounter
-    mealkitFiles {
-      id
-      url
-    }
+    ...MealkitSnippet
   }
   creator {
     id
@@ -1342,7 +1332,7 @@ export const PostSnippetFragmentDoc = gql`
     url
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 export const RegularErrorFragmentDoc = gql`
     fragment RegularError on FieldError {
   field
@@ -1559,7 +1549,6 @@ export const CreateMealkitDocument = gql`
   createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
     name
     items
-    images
     price
     portion
     id
@@ -2329,50 +2318,6 @@ export function useSignMealkitS3Mutation(baseOptions?: Apollo.MutationHookOption
 export type SignMealkitS3MutationHookResult = ReturnType<typeof useSignMealkitS3Mutation>;
 export type SignMealkitS3MutationResult = Apollo.MutationResult<SignMealkitS3Mutation>;
 export type SignMealkitS3MutationOptions = Apollo.BaseMutationOptions<SignMealkitS3Mutation, SignMealkitS3MutationVariables>;
-export const SignS3Document = gql`
-    mutation signS3($videoname: String!, $thumbnailname: String!, $videoFiletype: String!, $thumbnailFiletype: String!) {
-  signS3(
-    videoname: $videoname
-    thumbnailname: $thumbnailname
-    videoFiletype: $videoFiletype
-    thumbnailFiletype: $thumbnailFiletype
-  ) {
-    videoSignedRequest
-    thumbnailSignedRequest
-    videoUrl
-    thumbnailUrl
-  }
-}
-    `;
-export type SignS3MutationFn = Apollo.MutationFunction<SignS3Mutation, SignS3MutationVariables>;
-
-/**
- * __useSignS3Mutation__
- *
- * To run a mutation, you first call `useSignS3Mutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignS3Mutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signS3Mutation, { data, loading, error }] = useSignS3Mutation({
- *   variables: {
- *      videoname: // value for 'videoname'
- *      thumbnailname: // value for 'thumbnailname'
- *      videoFiletype: // value for 'videoFiletype'
- *      thumbnailFiletype: // value for 'thumbnailFiletype'
- *   },
- * });
- */
-export function useSignS3Mutation(baseOptions?: Apollo.MutationHookOptions<SignS3Mutation, SignS3MutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SignS3Mutation, SignS3MutationVariables>(SignS3Document, options);
-      }
-export type SignS3MutationHookResult = ReturnType<typeof useSignS3Mutation>;
-export type SignS3MutationResult = Apollo.MutationResult<SignS3Mutation>;
-export type SignS3MutationOptions = Apollo.BaseMutationOptions<SignS3Mutation, SignS3MutationVariables>;
 export const SwitchAccountTypeDocument = gql`
     mutation switchAccountType($becomeCreator: Boolean!) {
   switchAccountType(becomeCreator: $becomeCreator)
@@ -2523,7 +2468,6 @@ export const UpdateMealkitDocument = gql`
     mutation updateMealkit($input: MealkitInput!, $id: Int!) {
   updateMealkit(input: $input, id: $id) {
     items
-    images
     price
     id
   }
@@ -2761,11 +2705,14 @@ export const AllCartItemsDocument = gql`
     mealkit {
       id
       name
-      images
       price
       portion
       deliveryFee
       creatorId
+      mealkitFiles {
+        id
+        url
+      }
       creator {
         username
         avatar
@@ -2824,25 +2771,11 @@ export const CartItemsDocument = gql`
       avatar
     }
     mealkit {
-      name
-      images
-      price
-      portion
-      creatorId
-      deliveryFee
-      creator {
-        username
-        avatar
-      }
-      postId
-      post {
-        id
-        title
-      }
+      ...MealkitSnippet
     }
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useCartItemsQuery__
@@ -2946,21 +2879,10 @@ export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const MealkitDocument = gql`
     query mealkit($id: Int!) {
   mealkit(id: $id) {
-    id
-    name
-    images
-    portion
-    price
-    postId
-    reviewAvg
-    reviewsCounter
-    creator {
-      username
-      avatar
-    }
+    ...MealkitSnippet
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useMealkitQuery__
@@ -3039,18 +2961,10 @@ export type ReviewsQueryResult = Apollo.QueryResult<ReviewsQuery, ReviewsQueryVa
 export const MealkitsDocument = gql`
     query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
-    id
-    name
-    items
-    images
-    price
-    portion
-    deliveryFee
-    reviewAvg
-    reviewsCounter
+    ...MealkitSnippet
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useMealkitsQuery__
@@ -3099,15 +3013,7 @@ export const CreatorOrdersDocument = gql`
         }
       }
       mealkit {
-        id
-        name
-        price
-        images
-        creatorId
-        creator {
-          username
-          avatar
-        }
+        ...MealkitSnippet
       }
       mealkitId
     }
@@ -3121,7 +3027,7 @@ export const CreatorOrdersDocument = gql`
     }
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useCreatorOrdersQuery__
@@ -3199,13 +3105,12 @@ export const OrderNotisDocument = gql`
         username
       }
       mealkit {
-        name
-        images
+        ...MealkitSnippet
       }
     }
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useOrderNotisQuery__
@@ -3245,8 +3150,7 @@ export const TrackingDocument = gql`
     currentStatus
     cartItems {
       mealkit {
-        name
-        images
+        ...MealkitSnippet
       }
     }
     timelines {
@@ -3261,7 +3165,7 @@ export const TrackingDocument = gql`
     }
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useTrackingQuery__
@@ -3386,6 +3290,14 @@ export const PostDocument = gql`
       username
       avatar
     }
+    video {
+      id
+      url
+    }
+    image {
+      id
+      url
+    }
   }
 }
     `;
@@ -3464,6 +3376,14 @@ export const PostsByCreatorDocument = gql`
     text
     points
     isPublished
+    video {
+      id
+      url
+    }
+    image {
+      id
+      url
+    }
   }
 }
     `;
@@ -3567,22 +3487,14 @@ export const UserOrdersDocument = gql`
           }
         }
         mealkit {
-          id
-          name
-          price
-          images
-          creatorId
-          creator {
-            username
-            avatar
-          }
+          ...MealkitSnippet
         }
         mealkitId
       }
     }
   }
 }
-    `;
+    ${MealkitSnippetFragmentDoc}`;
 
 /**
  * __useUserOrdersQuery__
@@ -3618,6 +3530,14 @@ export const VotedPostsDocument = gql`
       id
       title
       textSnippet
+      video {
+        id
+        url
+      }
+      image {
+        id
+        url
+      }
     }
     hasMore
   }

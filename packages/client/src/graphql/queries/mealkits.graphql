@@ -1,13 +1,5 @@
 query mealkits($postId: Int!) {
   mealkits(postId: $postId) {
-    id
-    name
-    items
-    images
-    price
-    portion
-    deliveryFee
-    reviewAvg
-    reviewsCounter
+    ...MealkitSnippet
   }
 }
