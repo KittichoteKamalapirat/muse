@@ -286,6 +286,7 @@ export type Mutation = {
   signSingleFileS3: SingleFileSignedS3;
   switchAccountType: Scalars['Boolean'];
   toggleFollow: Scalars['Boolean'];
+  toggleIsPublished: Scalars['Boolean'];
   updateAddress?: Maybe<Address>;
   updateAvatar: Scalars['Boolean'];
   updateCartItem: CartItem;
@@ -445,6 +446,12 @@ export type MutationToggleFollowArgs = {
 };
 
 
+export type MutationToggleIsPublishedArgs = {
+  id: Scalars['Int'];
+  isPublished: Scalars['Boolean'];
+};
+
+
 export type MutationUpdateAddressArgs = {
   id: Scalars['Int'];
   input: AddressInput;
@@ -574,6 +581,7 @@ export type Post = {
   image: Image;
   ingredients?: Maybe<Array<Ingredient>>;
   instruction?: Maybe<Array<Scalars['String']>>;
+  isPublished: Scalars['Boolean'];
   mealkits?: Maybe<Array<Mealkit>>;
   points: Scalars['Float'];
   portion?: Maybe<Scalars['Int']>;
@@ -881,7 +889,7 @@ export type Video = {
   url: Scalars['String'];
 };
 
-export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } };
+export type PostSnippetFragment = { __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } };
 
 export type RegularErrorFragment = { __typename?: 'FieldError', field: string, message: string };
 
@@ -1046,6 +1054,14 @@ export type UpdatePaymentInfoMutationVariables = Exact<{
 
 
 export type UpdatePaymentInfoMutation = { __typename?: 'Mutation', updatePaymentInfo?: Maybe<{ __typename?: 'PaymentInfoResponse', errors?: Maybe<Array<{ __typename?: 'FieldError', field: string, message: string }>>, paymentInfo?: Maybe<{ __typename?: 'PaymentInfo', id: number, userId: string, bankCode: string, bankAccount: string }> }> };
+
+export type ToggleIsPublishedMutationVariables = Exact<{
+  id: Scalars['Int'];
+  isPublished: Scalars['Boolean'];
+}>;
+
+
+export type ToggleIsPublishedMutation = { __typename?: 'Mutation', toggleIsPublished: boolean };
 
 export type RegisterMutationVariables = Exact<{
   data: UsernamePasswordInput;
@@ -1250,7 +1266,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string } }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1258,14 +1274,14 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> } };
+export type PostsQuery = { __typename?: 'Query', posts: { __typename?: 'PaginatedPosts', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: number, title: string, textSnippet: string, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', id: number, name: string, images?: Maybe<Array<string>>, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> } };
 
 export type PostsByCreatorQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
 
 
-export type PostsByCreatorQuery = { __typename?: 'Query', postsByCreator: Array<{ __typename?: 'Post', id: number, title: string, text: string, points: number }> };
+export type PostsByCreatorQuery = { __typename?: 'Query', postsByCreator: Array<{ __typename?: 'Post', id: number, title: string, text: string, points: number, isPublished: boolean }> };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['String'];
@@ -1298,6 +1314,7 @@ export const PostSnippetFragmentDoc = gql`
   updatedAt
   points
   voteStatus
+  isPublished
   mealkits {
     id
     name
@@ -2138,6 +2155,38 @@ export function useUpdatePaymentInfoMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdatePaymentInfoMutationHookResult = ReturnType<typeof useUpdatePaymentInfoMutation>;
 export type UpdatePaymentInfoMutationResult = Apollo.MutationResult<UpdatePaymentInfoMutation>;
 export type UpdatePaymentInfoMutationOptions = Apollo.BaseMutationOptions<UpdatePaymentInfoMutation, UpdatePaymentInfoMutationVariables>;
+export const ToggleIsPublishedDocument = gql`
+    mutation ToggleIsPublished($id: Int!, $isPublished: Boolean!) {
+  toggleIsPublished(id: $id, isPublished: $isPublished)
+}
+    `;
+export type ToggleIsPublishedMutationFn = Apollo.MutationFunction<ToggleIsPublishedMutation, ToggleIsPublishedMutationVariables>;
+
+/**
+ * __useToggleIsPublishedMutation__
+ *
+ * To run a mutation, you first call `useToggleIsPublishedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleIsPublishedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleIsPublishedMutation, { data, loading, error }] = useToggleIsPublishedMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      isPublished: // value for 'isPublished'
+ *   },
+ * });
+ */
+export function useToggleIsPublishedMutation(baseOptions?: Apollo.MutationHookOptions<ToggleIsPublishedMutation, ToggleIsPublishedMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleIsPublishedMutation, ToggleIsPublishedMutationVariables>(ToggleIsPublishedDocument, options);
+      }
+export type ToggleIsPublishedMutationHookResult = ReturnType<typeof useToggleIsPublishedMutation>;
+export type ToggleIsPublishedMutationResult = Apollo.MutationResult<ToggleIsPublishedMutation>;
+export type ToggleIsPublishedMutationOptions = Apollo.BaseMutationOptions<ToggleIsPublishedMutation, ToggleIsPublishedMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($data: UsernamePasswordInput!) {
   register(data: $data) {
@@ -3326,6 +3375,7 @@ export const PostDocument = gql`
     updatedAt
     points
     voteStatus
+    isPublished
     ingredients {
       ingredient
       amount
@@ -3413,6 +3463,7 @@ export const PostsByCreatorDocument = gql`
     title
     text
     points
+    isPublished
   }
 }
     `;

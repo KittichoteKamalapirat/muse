@@ -4,6 +4,7 @@ query postsByCreator($userId: String!) {
     title
     text
     points
+    isPublished
     # video{
     #   id
     #   url

@@ -6,6 +6,7 @@ fragment PostSnippet on Post {
   updatedAt
   points
   voteStatus
+  isPublished
   mealkits {
     id
     name

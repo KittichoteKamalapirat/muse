@@ -306,8 +306,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     if (
       mealkitInput.name != "" &&
       mealkitInput.portion != "" &&
-      mealkitInput.price != "" &&
-      mealkitInput.images.length > 0
+      mealkitInput.price != ""
+      // &&    mealkitInput.images.length > 0
       // mealkitInput.items.length > 0
     ) {
       mealkitSubmittable = true;
@@ -321,6 +321,9 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     ) {
       postSubmittable = true;
     }
+
+    console.log(mealkitSubmittable);
+    console.log(postSubmittable);
 
     if (mealkitSubmittable && postSubmittable) {
       setSubmittable(true);

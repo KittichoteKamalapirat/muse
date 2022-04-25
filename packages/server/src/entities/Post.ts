@@ -54,6 +54,10 @@ class Post extends BaseEntity {
   @Field()
   thumbnailUrl!: string;
 
+  @Column({ default: true })
+  @Field()
+  isPublished!: boolean;
+
   @Column()
   @Field()
   // @Field()

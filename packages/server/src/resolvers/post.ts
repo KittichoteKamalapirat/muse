@@ -13,19 +13,12 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { s3Bucket } from "../constants";
-import {
-  Image,
-  Mealkit,
-  MealkitFile,
-  Post,
-  Upvote,
-  User,
-  Video,
-} from "../entities";
+import { Image, Mealkit, Post, Upvote, User, Video } from "../entities";
 import { PaginatedPosts, PostSignedS3, SignedS3 } from "../entities/utils";
 import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import getPosts from "../utils/getPosts";
 import { s3, s3Params } from "../utils/s3";
 
 @Resolver(Post)
@@ -172,49 +165,16 @@ export class PostResolver {
 
   @Query(() => PaginatedPosts)
   async posts(
-    @Arg("limit", () => Int) limit: number, // be defalt number -> Float in graphql
-    @Arg("cursor", () => String, { nullable: true }) cursor: string | null // when we sset something nullable, we also has to set the type String excplicitly
+    @Arg("limit", () => Int) limit: number,
+    @Arg("cursor", () => String, { nullable: true }) cursor: string | null // when we set something nullable, we also has to set the type String excplicitly
   ): Promise<PaginatedPosts> {
-    // return await Post.find(); //will use query builder instead when complex query
     const realLimit = Math.min(50, limit); // if no limit specified, default is 50
     const realLimitPlusOne = realLimit + 1;
-    const replacements: any[] = [realLimitPlusOne];
 
-    if (cursor) {
-      replacements.push(new Date(parseInt(cursor, 10)));
-      // cursorIndex = replacements.length;
-    }
+    const posts = await getPosts(cursor, realLimitPlusOne);
 
-    const posts = await getConnection().query(
-      `
-      select p.*
-      from post p
-      ${cursor ? `where p."createdAt" < $2` : ""}
-      order by p."createdAt" DESC
-      limit $1
-      `,
-      replacements
-    );
+    const slicedPosts = await posts.slice(0, realLimit);
 
-    const slicedPosts = await posts
-      .slice(0, realLimit)
-      .map(async (post: Post) => {
-        const mealkits = await Mealkit.find({
-          where: { postId: post.id },
-          relations: ["mealkitFiles"],
-        });
-
-        const video = await Video.findOne({ postId: post.id });
-        const image = await Image.findOne({ postId: post.id });
-
-        post.mealkits = mealkits;
-
-        post.video = video as Video;
-        post.image = image as Image;
-        return post;
-      });
-
-    // sliced posts is returned because above is async which = non-blocking
     return {
       posts: slicedPosts,
       hasMore: posts.length === realLimitPlusOne,
@@ -367,5 +327,20 @@ export class PostResolver {
       signedRequest,
       url,
     };
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async toggleIsPublished(
+    @Arg("id", () => Int) id: number,
+    @Arg("isPublished") isPublished: boolean
+  ) {
+    await Post.update(
+      { id },
+      {
+        isPublished,
+      }
+    );
+    return true;
   }
 }

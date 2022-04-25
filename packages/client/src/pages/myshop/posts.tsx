@@ -68,7 +68,10 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
         ) : (
           <Box>
             {posts.postsByCreator.map((post) => (
-              <Flex key={post.id}>
+              <Flex
+                key={post.id}
+                backgroundColor={post.isPublished ? "" : "gray.100"}
+              >
                 <Box flex={1} my={2}>
                   <Image
                     src={post.thumbnailUrl}
@@ -86,7 +89,10 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
                 </Box>
 
                 <Box>
-                  <EditDeletePostButtons id={post.id} />
+                  <EditDeletePostButtons
+                    id={post.id}
+                    isPublished={post.isPublished}
+                  />
                 </Box>
               </Flex>
             ))}

@@ -99,7 +99,10 @@ const Index = () => {
 
                 {meData?.me?.id !== post.creator.id ? null : (
                   <Box>
-                    <EditDeletePostButtons id={post.id} />
+                    <EditDeletePostButtons
+                      id={post.id}
+                      isPublished={post.isPublished}
+                    />
                   </Box>
                 )}
               </Flex>

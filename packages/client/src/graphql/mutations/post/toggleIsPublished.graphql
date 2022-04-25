@@ -1,0 +1,3 @@
+mutation ToggleIsPublished($id: Int!, $isPublished: Boolean!) {
+  toggleIsPublished(id: $id, isPublished: $isPublished)
+}

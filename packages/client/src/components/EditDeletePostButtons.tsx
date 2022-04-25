@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -8,18 +8,25 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
+import { gql } from "@apollo/client";
 import NextLink from "next/link";
 import React from "react";
-import { useDeletePostMutation } from "../generated/graphql";
+import {
+  useDeletePostMutation,
+  useToggleIsPublishedMutation,
+} from "../generated/graphql";
 
 interface EditDeletePostButtonsProps {
   id: number;
+  isPublished: boolean;
 }
 
 export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
   id,
+  isPublished,
 }) => {
   const [deletePost] = useDeletePostMutation();
+  const [toggleIsPublished] = useToggleIsPublishedMutation();
   return (
     <Box m={2}>
       <Menu>
@@ -48,6 +55,29 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
             }
           >
             Delete post
+          </MenuItem>
+
+          <MenuItem
+            icon={isPublished ? <ViewOffIcon /> : <ViewIcon />}
+            onClick={() =>
+              toggleIsPublished({
+                variables: { isPublished: !isPublished, id },
+                update: (cache, { data: success }) => {
+                  cache.writeFragment({
+                    id: "Post:" + id,
+                    fragment: gql`
+                      fragment __ on Post {
+                        isPublished
+                      }
+                    `,
+                    data: { isPublished: success ? !isPublished : isPublished },
+                  });
+                  cache.evict({ fieldName: "posts:{}" }); //if fieldName postsByCreator -> don't remove this post
+                },
+              })
+            }
+          >
+            {isPublished ? "Unpublish" : "Publish"}
           </MenuItem>
         </MenuList>
       </Menu>

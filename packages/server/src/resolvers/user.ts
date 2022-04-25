@@ -381,8 +381,6 @@ export class UserResolver {
     @Arg("becomeCreator") becomeCreator: boolean,
     @Ctx() { req }: MyContext
   ) {
-    console.log("switch account type");
-    console.log(req.session.userId);
     await User.update(
       { id: req.session.userId },
       {

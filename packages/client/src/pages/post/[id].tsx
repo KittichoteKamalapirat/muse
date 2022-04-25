@@ -57,7 +57,10 @@ const Post = ({}) => {
               </Flex>
 
               {meData?.me?.id !== data.post.creator.id ? null : (
-                <EditDeletePostButtons id={data.post.id} />
+                <EditDeletePostButtons
+                  id={data.post.id}
+                  isPublished={data.post.isPublished}
+                />
               )}
             </Flex>
             <video

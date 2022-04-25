@@ -11,6 +11,7 @@ query Post($id: Int!) {
     updatedAt
     points
     voteStatus
+    isPublished
     ingredients {
       ingredient
       amount
