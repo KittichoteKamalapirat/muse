@@ -1,22 +1,21 @@
 import { Twilio } from "twilio";
-import {
-  TWILIO_ACCOUNT_SID,
-  TWILIO_AUTH_TOKEN,
-  TWILIO_TEST_PHONE_NUMBER,
-} from "../constants";
 
-// const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const accountSid = TWILIO_ACCOUNT_SID;
-const authToken = TWILIO_AUTH_TOKEN;
+export const sendSMS = async () => {
+  const client = new Twilio(
+    process.env.TWILIO_ACCOUNT_SID as string,
+    process.env.TWILIO_AUTH_TOKEN as string
+  );
 
-const client = new Twilio(accountSid, authToken);
+  console.log(process.env.TWILIO_ACCOUNT_SID);
+  console.log(process.env.TWILIO_AUTH_TOKEN);
+  console.log(process.env.TWILIO_TEST_PHONE_NUMBER);
 
-export async function sendSMS() {
+  console.log("sened sms");
   client.messages
     .create({
       body: "Hi there from Twilio",
-      from: TWILIO_TEST_PHONE_NUMBER,
+      from: process.env.TWILIO_TEST_PHONE_NUMBER,
       to: "+66961489046",
     })
     .then((message) => console.log(message.sid));
-}
+};

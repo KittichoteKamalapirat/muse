@@ -31,6 +31,7 @@ import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
+import { sendSMS } from "./utils/sendSms";
 
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
@@ -79,7 +80,7 @@ export const startServer = async () => {
   const app = express();
 
   // console.log(process.memoryUsage());
-  // sendSMS();
+  sendSMS();
   // generateQr();
   // generateQr();
   // console.log(shitColor);

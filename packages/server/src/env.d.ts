@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -17,8 +16,11 @@ declare global {
       REQUEST_CREATE_SCB_QR30_URL: string;
       ETRACKINGS_API_KEY: string;
       ETRACKINGS_API_SECRET: string;
+      TWILIO_ACCOUNT_SID: string;
+      TWILIO_AUTH_TOKEN: string;
+      TWILIO_TEST_PHONE_NUMBER: string;
     }
   }
 }
 
-export {};
+export {}
