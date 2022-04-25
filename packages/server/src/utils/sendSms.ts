@@ -6,16 +6,14 @@ export const sendSMS = async () => {
     process.env.TWILIO_AUTH_TOKEN as string
   );
 
-  console.log(process.env.TWILIO_ACCOUNT_SID);
-  console.log(process.env.TWILIO_AUTH_TOKEN);
-  console.log(process.env.TWILIO_TEST_PHONE_NUMBER);
+  const x = "variable x";
 
-  console.log("sened sms");
   client.messages
     .create({
-      body: "Hi there from Twilio",
+      body: `🎶I am _not_ ~pushing~ throwing away my *shot*! http://www.cookknow.com/ ${x} `,
       from: process.env.TWILIO_TEST_PHONE_NUMBER,
       to: "+66961489046",
+      // to: "+66917261499",
     })
     .then((message) => console.log(message.sid));
 };

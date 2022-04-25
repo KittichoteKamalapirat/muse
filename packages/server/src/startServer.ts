@@ -80,7 +80,7 @@ export const startServer = async () => {
   const app = express();
 
   // console.log(process.memoryUsage());
-  sendSMS();
+  // sendSMS();
   // generateQr();
   // generateQr();
   // console.log(shitColor);
