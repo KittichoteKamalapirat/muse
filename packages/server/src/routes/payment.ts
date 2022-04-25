@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { CartItem, Order, CartItemNoti } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
+import creatorReceivesPaymentMessage from "../utils/emailContents/creatorReceivesPaymentMessage";
+import userCompletesPaymentMessage from "../utils/emailContents/userCompletesPaymentMessage";
+import { sendEmail } from "../utils/sendEmail";
 
 const router = Router();
 
@@ -32,6 +35,32 @@ router.post("/scb-confirm", async (req, res) => {
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
+
+      // send sms to creator
+      sendEmail(
+        "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
+        `💶 ${cartItem.mealkit.name} has completed a payment for link to for ${
+          cartItem.quantity
+        } ${cartItem.mealkit.name}${cartItem.quantity > 1 ? "s" : ""}`,
+        creatorReceivesPaymentMessage(
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
+      );
+
+      // send sms to users
+      sendEmail(
+        "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
+        `💶 You made a payment for ${cartItem.quantity} ${
+          cartItem.mealkit.name
+        }${cartItem.quantity > 1 ? "s" : ""}`,
+        userCompletesPaymentMessage(
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
+      );
     });
 
     // have to send back to SCB

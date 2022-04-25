@@ -31,7 +31,7 @@ import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
-import { sendSMS } from "./utils/sendSms";
+import { sendEmail } from "./utils/sendEmail";
 
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
@@ -81,6 +81,10 @@ export const startServer = async () => {
 
   // console.log(process.memoryUsage());
   // sendSMS();
+  // sendEmail(
+  //   "kittichoteshane@gmail.com",
+  //   ` Go to <a href="https://cookknow.com/"> cookknow</a>`
+  // );
   // generateQr();
   // generateQr();
   // console.log(shitColor);

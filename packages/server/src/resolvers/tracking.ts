@@ -4,6 +4,8 @@ import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
 import { CartItem, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
+import createTrackingMessage from "../utils/emailContents/createTrackingcreateTrackingMessage";
+import { sendEmail } from "../utils/sendEmail";
 
 // @ObjectType()
 // class Location {
@@ -127,7 +129,28 @@ export class TrackingResolver {
           { id },
           { trackingId: tracking.id, status: CartItemStatus.OnDelivery }
         );
+
+        // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnDelivery})
+
+        const cartItem = await CartItem.findOne({ id });
+
+        if (cartItem)
+          sendEmail(
+            "kittichoteshane@gmail.com", // TODO change to tracking.cartItems.map(cartitem => cartitem.user.username)
+            `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${
+              cartItem?.quantity > 1 ? "s are" : " is"
+            } on the way `,
+            createTrackingMessage(
+              tracking.id,
+              cartItem?.quantity,
+              cartItem?.mealkit.name,
+              cartItem?.order.user.username,
+              tracking.courier
+            )
+          );
       });
+
+      // send email
 
       return tracking;
     } catch (error) {

@@ -131,6 +131,7 @@ export class UserResolver {
 
     await sendEmail(
       email,
+      "🔑 Reset your password",
       `<a href="http://localhost:3000/change-password/${token}">Reset Password</a>`
     );
     return true;

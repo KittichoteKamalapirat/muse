@@ -13,6 +13,8 @@ import { CartItem, Mealkit, Review } from "../entities";
 import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import userCreatedReviewMessage from "../utils/emailContents/userCreatedReviewMessage";
+import { sendEmail } from "../utils/sendEmail";
 
 @Resolver(Review)
 export class ReviewResolver {
@@ -46,6 +48,8 @@ export class ReviewResolver {
       // Really creating a review
 
       await CartItem.update({ id: cartItemId }, { isReviewed: true });
+
+      //
       const mealkit = await Mealkit.findOne({ id: mealkitId });
       if (mealkit) {
         Mealkit.update(
@@ -67,6 +71,20 @@ export class ReviewResolver {
         mealkitId,
         cartItemId,
       }).save();
+
+      const cartItem = await CartItem.findOne({ id: cartItemId });
+
+      if (cartItem && review)
+        sendEmail(
+          "kittichoteshane@gmail.com", // TODO change to review.mealkit.creator.email
+          `💶 You got a new review`,
+          userCreatedReviewMessage(
+            review.mealkit.creator.username,
+            cartItem.quantity,
+            cartItem.mealkit.name,
+            cartItem.order.user.username
+          )
+        );
 
       return review;
     } catch (error) {

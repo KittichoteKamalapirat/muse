@@ -17,6 +17,8 @@ import { AddToCart, CartItemInput } from "../entities/utils";
 import { isAdmin } from "../middlware/isAdmin";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import userReceivedCartItemMessage from "../utils/emailContents/userReceivedCartItemMessage";
+import { sendEmail } from "../utils/sendEmail";
 
 @Resolver(CartItem)
 export class CartItemResolver {
@@ -162,6 +164,23 @@ export class CartItemResolver {
       { id, userId: req.session.userId },
       { status: CartItemStatus.Received }
     );
+
+    const cartItem = await CartItem.findOne(id);
+
+    if (cartItem)
+      sendEmail(
+        "kittichoteshane@gmail.com", // TODO change to cartItem?.order.user.email
+        `📝 ${cartItem?.order.user.username} has received the ${
+          cartItem?.quantity
+        } ${cartItem?.mealkit.name}${cartItem?.quantity > 1 ? "s" : ""}`,
+        userReceivedCartItemMessage(
+          cartItem?.mealkit.creator.username,
+          cartItem?.order.user.username,
+          cartItem?.quantity,
+          cartItem?.mealkit.name
+        )
+      );
+
     return true;
   }
 

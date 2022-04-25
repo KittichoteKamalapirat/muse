@@ -17,11 +17,13 @@ import { CartItemStatus } from "../entities/CartItem";
 import { CartItemsByCreatorInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import receiveOrderMessage from "../utils/emailContents/receiveOrderMessage";
 import {
   CartItemsByOrderFormat,
   MappedCreatorOrders,
 } from "../utils/ObjectType";
 import { s3, s3Params } from "../utils/s3";
+import { sendEmail } from "../utils/sendEmail";
 import { toCreatorOrdersMap } from "../utils/toCreatorOrdersMap";
 import { toUserOrdersMap } from "../utils/toUserOrdersMap";
 import { createScbQr } from "./payment";
@@ -52,7 +54,6 @@ export class OrderResolver {
     // s3 signed request done
 
     // payment object
-
     const payment = await Payment.create({
       amount: grossOrder,
       qrUrl: url,
@@ -95,7 +96,7 @@ export class OrderResolver {
 
         const cartItem = await CartItem.findOne({
           where: { id: cartItemId },
-          relations: ["mealkit", "mealkit.mealkitFiles", "user"],
+          relations: ["mealkit", "user", "order", "order.user"],
         });
 
         if (cartItem) {
@@ -106,6 +107,22 @@ export class OrderResolver {
             cartItemId: cartItem.id,
             userId: cartItem?.mealkit.creatorId,
           }).save();
+
+          // send email (to creator that you receive an order)
+          // You received an order for $mealkitName from $username link to
+
+          // send sms for each cartItem
+          sendEmail(
+            "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
+            "📝 You have received an order",
+            receiveOrderMessage(
+              cartItem.quantity,
+              cartItem.mealkit.name,
+              cartItem.order.user.username
+            )
+          );
+
+          // TODO sendSms
         }
       });
     } catch (error) {

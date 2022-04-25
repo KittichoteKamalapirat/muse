@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export async function sendEmail(to: string, html: string) {
+export async function sendEmail(to: string, subject, html: string) {
   const transporter = nodemailer.createTransport({
     // site ground from hormchocoalte
     host: "gsgp1008.siteground.asia",
@@ -16,12 +16,11 @@ export async function sendEmail(to: string, html: string) {
     },
   });
 
-  console.log("trying to send email");
   try {
     const info = await transporter.sendMail({
       from: '"🧑‍🍳 Cookknow 🍳" <noreply@hormchocolate.com>', // sender address
       to, // list of receivers
-      subject: "Change password ✔", // Subject line
+      subject, // Subject line
       html, // html body
     });
     console.log("Message sent: %s", info.messageId);
