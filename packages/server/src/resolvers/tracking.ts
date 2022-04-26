@@ -132,19 +132,22 @@ export class TrackingResolver {
 
         // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnDelivery})
 
-        const cartItem = await CartItem.findOne({ id });
+        const cartItem = await CartItem.findOne({
+          where: { id },
+          relations: ["mealkit", "order", "order.user"],
+        });
 
         if (cartItem)
           sendEmail(
-            "kittichoteshane@gmail.com", // TODO change to tracking.cartItems.map(cartitem => cartitem.user.username)
+            cartItem.order.user.email,
             `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${
               cartItem?.quantity > 1 ? "s are" : " is"
             } on the way `,
             createTrackingMessage(
               tracking.id,
-              cartItem?.quantity,
-              cartItem?.mealkit.name,
-              cartItem?.order.user.username,
+              cartItem.quantity,
+              cartItem.mealkit.name,
+              cartItem.order.user.username,
               tracking.courier
             )
           );

@@ -168,9 +168,10 @@ export class CartItemResolver {
     const cartItem = await CartItem.findOne(id);
 
     if (cartItem)
+      // send to creator
       sendEmail(
-        "kittichoteshane@gmail.com", // TODO change to cartItem?.order.user.email
-        `📝 ${cartItem?.order.user.username} has received the ${
+        cartItem?.mealkit.creator.email,
+        `👌 ${cartItem?.order.user.username} has received ${
           cartItem?.quantity
         } ${cartItem?.mealkit.name}${cartItem?.quantity > 1 ? "s" : ""}`,
         userReceivedCartItemMessage(

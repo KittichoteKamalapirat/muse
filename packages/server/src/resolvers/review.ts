@@ -75,9 +75,10 @@ export class ReviewResolver {
       const cartItem = await CartItem.findOne({ id: cartItemId });
 
       if (cartItem && review)
+        // send to creator
         sendEmail(
-          "kittichoteshane@gmail.com", // TODO change to review.mealkit.creator.email
-          `💶 You got a new review`,
+          review.mealkit.creator.email,
+          `⭐ You got a new review`,
           userCreatedReviewMessage(
             review.mealkit.creator.username,
             cartItem.quantity,

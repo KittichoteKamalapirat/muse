@@ -3,6 +3,9 @@ import { getConnection } from "typeorm";
 import { Tracking, CartItem } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { ETrackingStatus } from "../entities/Tracking";
+import cartItemDeliveredMessageForCreator from "../utils/emailContents/cartItemDeliveredMessageForCreator";
+import cartItemDeliveredMessageForUser from "../utils/emailContents/cartItemDeliveredMessageForUser";
+import { sendEmail } from "../utils/sendEmail";
 
 const router = Router();
 
@@ -49,10 +52,44 @@ router.post("/update", async (req, res) => {
   // delivered successfully
   if (tracking && status === ETrackingStatus.ON_DELIVERED) {
     // update every cartItem that has this trackingId
-    CartItem.update(
+    await CartItem.update(
       { trackingId: tracking.id },
       { status: CartItemStatus.Delivered }
     );
+
+    const cartItem = await CartItem.findOne({ trackingId: tracking.id });
+
+    // send to user
+    if (cartItem) {
+      sendEmail(
+        cartItem.order.user.email, // TODO change to review.mealkit.creator.email
+        `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
+          cartItem.quantity > 1 ? "s" : ""
+        } have been successfully delivered to you.`,
+        cartItemDeliveredMessageForUser(
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
+      );
+      // send to creator
+      sendEmail(
+        cartItem.mealkit.creator.email, // TODO change to review.mealkit.creator.email
+        `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
+          cartItem.quantity > 1 ? "s" : ""
+        } have been successfully delivered to ${cartItem.order.user.username}.`,
+        cartItemDeliveredMessageForCreator(
+          cartItem.mealkit.creator.username,
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
+      );
+    }
+
+    // send to user
   }
   res.send("tracking updated");
 });

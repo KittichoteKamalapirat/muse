@@ -1,5 +1,4 @@
 const cartItemDeliveredMessageForUser = (
-  creatorName: string,
   courierName: string,
   quantity: number,
   mealkitName: string,

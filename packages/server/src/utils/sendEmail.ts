@@ -18,7 +18,7 @@ export async function sendEmail(to: string, subject, html: string) {
 
   try {
     const info = await transporter.sendMail({
-      from: '"🧑‍🍳 Cookknow 🍳" <noreply@hormchocolate.com>', // sender address
+      from: '"🍳 Cookknow" <noreply@hormchocolate.com>', // sender address
       to, // list of receivers
       subject, // Subject line
       html, // html body

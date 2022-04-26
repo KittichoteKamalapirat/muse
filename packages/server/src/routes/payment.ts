@@ -22,7 +22,7 @@ router.post("/scb-confirm", async (req, res) => {
 
     const cartItems = await CartItem.find({
       where: { orderId: ref1 },
-      relations: ["user", "mealkit"],
+      relations: ["user", "mealkit", "mealkit.creator", "order", "order.user"],
     });
 
     cartItems.forEach(async (cartItem) => {
@@ -38,8 +38,8 @@ router.post("/scb-confirm", async (req, res) => {
 
       // send sms to creator
       sendEmail(
-        "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
-        `💶 ${cartItem.mealkit.name} has completed a payment for link to for ${
+        cartItem.mealkit.creator.email,
+        `💰 ${cartItem.order.user.username} has completed a payment for ${
           cartItem.quantity
         } ${cartItem.mealkit.name}${cartItem.quantity > 1 ? "s" : ""}`,
         creatorReceivesPaymentMessage(
@@ -51,8 +51,8 @@ router.post("/scb-confirm", async (req, res) => {
 
       // send sms to users
       sendEmail(
-        "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
-        `💶 You made a payment for ${cartItem.quantity} ${
+        cartItem.order.user.email,
+        `💰 You made a payment for ${cartItem.quantity} ${
           cartItem.mealkit.name
         }${cartItem.quantity > 1 ? "s" : ""}`,
         userCompletesPaymentMessage(
