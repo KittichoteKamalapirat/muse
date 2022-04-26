@@ -1,18 +1,10 @@
 import { Img } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
+import { Button, ListItem, UnorderedList } from "@chakra-ui/react";
 import { Skeleton } from "@chakra-ui/skeleton";
-import {
-  List,
-  ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
-  Button,
-} from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React from "react";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { primaryColor } from "../../../components/Variables";
 import { Wrapper } from "../../../components/Wrapper";
 import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
 import { useTrackingQuery } from "../../../generated/graphql";
@@ -22,7 +14,8 @@ interface TrackingProps {}
 
 const Tracking: React.FC<TrackingProps> = ({}) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // trackingId
+
   const {
     data: trackingData,
     loading: trackingLoading,
@@ -48,11 +41,19 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
     );
   }
   return (
-    <HeadingLayout heading="Track my order">
+    <HeadingLayout
+      heading="Track my order"
+      // if previous was create tracking -> back to /myshop/order (don't want create again!)
+      // if previous was /order -> default
+      backUrl={router.query.next as string}
+    >
       <Wrapper>
         <ContentWrapper>
           <Box flex={3}>
-            <Text color={trackingData?.tracking.color} fontWeight="bold">
+            <Text
+              color={trackingData?.tracking.color as string}
+              fontWeight="bold"
+            >
               {trackingData?.tracking.courier}
             </Text>
             <Text>Tracking Number: {trackingData?.tracking.trackingNo}</Text>
@@ -65,7 +66,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
               {" "}
               <Box my={4}>
                 <Text fontWeight="bold">Detail</Text>
-                {trackingData?.tracking.timelines.map((byDate, index) => (
+                {trackingData.tracking.timelines?.map((byDate, index) => (
                   <Box my={2} key={index}>
                     <Box>
                       {byDate.details.map((detail, subindex) => (
@@ -128,10 +129,6 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
                   </ListItem>
                 </UnorderedList>
               </Box>
-
-              <Button onClick={() => router.back()} color="white">
-                Edit Tracking Number
-              </Button>
 
               <Button onClick={() => router.push("/")} color="white">
                 Back to home

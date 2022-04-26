@@ -28,6 +28,7 @@ query creatorOrders($status: CartItemStatus!) {
     deliveryFee
     tracking {
       id
+      trackingNo
       currentStatus
     }
   }

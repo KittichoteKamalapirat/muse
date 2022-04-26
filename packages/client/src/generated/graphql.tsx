@@ -354,6 +354,7 @@ export type MutationCreateReviewArgs = {
 
 
 export type MutationCreateTrackingArgs = {
+  id?: Maybe<Scalars['Int']>;
   input: TrackingInput;
 };
 
@@ -993,6 +994,7 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type CreateTrackingMutationVariables = Exact<{
+  id?: Maybe<Scalars['Int']>;
   input: TrackingInput;
 }>;
 
@@ -1200,7 +1202,7 @@ export type CreatorOrdersQueryVariables = Exact<{
 }>;
 
 
-export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, currentStatus?: Maybe<string> }> }> };
+export type CreatorOrdersQuery = { __typename?: 'Query', creatorOrders: Array<{ __typename?: 'MappedCreatorOrders', orderId?: Maybe<number>, username: string, avatar: string, deliveryFee: number, cartItems: Array<{ __typename?: 'CartItem', id: number, orderId: number, quantity: number, total: number, mealkitId: number, user?: Maybe<{ __typename?: 'User', username: string, address?: Maybe<{ __typename?: 'Address', id: number, line1: string }> }>, mealkit: { __typename?: 'Mealkit', id: number, name: string, price?: Maybe<number>, portion: number, reviewAvg: number, reviewsCounter: number, postId: number, creatorId: string, items?: Maybe<Array<string>>, deliveryFee: number, thumbnail: { __typename?: 'MealkitFile', id: number, url: string }, creator: { __typename?: 'User', username: string, avatar: string }, mealkitFiles: Array<{ __typename?: 'MealkitFile', id: number, url: string }> } }>, address: { __typename?: 'Address', id: number }, tracking?: Maybe<{ __typename?: 'Tracking', id: number, trackingNo: string, currentStatus?: Maybe<string> }> }> };
 
 export type ManuallyConfirmPaymentQueryVariables = Exact<{
   paymentId: Scalars['Int'];
@@ -1897,8 +1899,8 @@ export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const CreateTrackingDocument = gql`
-    mutation createTracking($input: TrackingInput!) {
-  createTracking(input: $input) {
+    mutation createTracking($id: Int, $input: TrackingInput!) {
+  createTracking(id: $id, input: $input) {
     id
   }
 }
@@ -1918,6 +1920,7 @@ export type CreateTrackingMutationFn = Apollo.MutationFunction<CreateTrackingMut
  * @example
  * const [createTrackingMutation, { data, loading, error }] = useCreateTrackingMutation({
  *   variables: {
+ *      id: // value for 'id'
  *      input: // value for 'input'
  *   },
  * });
@@ -3023,6 +3026,7 @@ export const CreatorOrdersDocument = gql`
     deliveryFee
     tracking {
       id
+      trackingNo
       currentStatus
     }
   }

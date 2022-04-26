@@ -165,7 +165,10 @@ export class CartItemResolver {
       { status: CartItemStatus.Received }
     );
 
-    const cartItem = await CartItem.findOne(id);
+    const cartItem = await CartItem.findOne({
+      where: { id },
+      relations: ["mealkit", "mealkit.creator", "order", "order.user"],
+    });
 
     if (cartItem)
       // send to creator

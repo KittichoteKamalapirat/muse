@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { getConnection } from "typeorm";
-import { Tracking, CartItem } from "../entities";
+import { CartItem, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { ETrackingStatus } from "../entities/Tracking";
 import cartItemDeliveredMessageForCreator from "../utils/emailContents/cartItemDeliveredMessageForCreator";
@@ -26,10 +25,9 @@ router.post("/update", async (req, res) => {
     timelines,
   } = req.body;
 
-  const result = await getConnection()
-    .createQueryBuilder()
-    .update(Tracking)
-    .set({
+  await Tracking.update(
+    { trackingNo },
+    {
       trackingNo,
       courier,
       courierKey,
@@ -38,16 +36,10 @@ router.post("/update", async (req, res) => {
       currentStatus,
       shareLink,
       timelines,
-    })
-    .where("trackingNo = :trackingNo ", {
-      trackingNo,
-    })
-    .returning("*")
-    .execute();
-  const tracking = result.raw[0] as Tracking;
+    }
+  );
 
-  console.log("updated tracking");
-  console.log({ tracking });
+  const tracking = await Tracking.findOne({ trackingNo }); // TODO technically this could match more than 1
 
   // delivered successfully
   if (tracking && status === ETrackingStatus.ON_DELIVERED) {
@@ -57,7 +49,10 @@ router.post("/update", async (req, res) => {
       { status: CartItemStatus.Delivered }
     );
 
-    const cartItem = await CartItem.findOne({ trackingId: tracking.id });
+    const cartItem = await CartItem.findOne({
+      where: { trackingId: tracking.id },
+      relations: ["mealkit", "mealkit.creator", "order", "order.user"],
+    });
 
     // send to user
     if (cartItem) {

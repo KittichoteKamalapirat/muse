@@ -1,5 +1,22 @@
-mutation createTracking($input: TrackingInput!) {
-  createTracking(input: $input) {
+mutation createTracking($id: Int, $input: TrackingInput!) {
+  createTracking(id: $id, input: $input) {
     id
+    trackingNo
+    isFound
+    courier
+    courierKey
+    status
+    color
+    currentStatus
+    timelines {
+      date
+      details {
+        dateTime
+        date
+        time
+        status
+        description
+      }
+    }
   }
 }

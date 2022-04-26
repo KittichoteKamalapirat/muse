@@ -63,7 +63,7 @@ export class ReviewResolver {
         return new Error("cannot find the mealkit");
       }
 
-      const review = await Review.create({
+      const newReview = await Review.create({
         score: input.score,
         title: input.title,
         text: input.text,
@@ -72,9 +72,19 @@ export class ReviewResolver {
         cartItemId,
       }).save();
 
-      const cartItem = await CartItem.findOne({ id: cartItemId });
+      const review = await Review.findOne({
+        where: { id: newReview.id },
+        relations: ["mealkit", "mealkit.creator"],
+      });
 
-      if (cartItem && review)
+      console.log({ review });
+
+      const cartItem = await CartItem.findOne({
+        where: { id: cartItemId },
+        relations: ["mealkit", "order", "order.user"],
+      });
+
+      if (cartItem && review) {
         // send to creator
         sendEmail(
           review.mealkit.creator.email,
@@ -86,8 +96,9 @@ export class ReviewResolver {
             cartItem.order.user.username
           )
         );
-
-      return review;
+        return review;
+      }
+      return new Error("Cannot create review");
     } catch (error) {
       console.log(error);
       return new Error("Cannot create review");

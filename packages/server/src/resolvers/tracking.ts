@@ -1,9 +1,17 @@
 /* eslint-disable class-methods-use-this */
 import fetch from "node-fetch";
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from "type-graphql";
 import { CartItem, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
+import { isAuth } from "../middlware/isAuth";
 import createTrackingMessage from "../utils/emailContents/createTrackingcreateTrackingMessage";
 import { sendEmail } from "../utils/sendEmail";
 
@@ -63,21 +71,25 @@ export class TrackingResolver {
     try {
       const tracking = await Tracking.findOne({
         where: { id },
-        relations: ["cartItems", "cartItems.mealkit"],
+        relations: [
+          "cartItems",
+          "cartItems.mealkit",
+          "cartItems.mealkit.mealkitFiles",
+          "cartItems.mealkit.creator",
+        ],
       });
-
-      console.log(tracking);
 
       return tracking;
     } catch (error) {
-      console.log(error.message);
-      return error;
+      return new Error("can't find the tracking");
     }
   }
 
   //   @Mutation(() => TrackingResult)
+  @UseMiddleware(isAuth)
   @Mutation(() => Tracking)
   async createTracking(
+    @Arg("id", () => Int, { nullable: true }) id: number,
     @Arg("input") input: TrackingInput
   ): Promise<Tracking | Error | undefined> {
     // 1. look for the tracking by the number
@@ -94,6 +106,7 @@ export class TrackingResolver {
 
       // if not found, create blank tracking and don't update cartItemStatus
       if (response.status !== 200) {
+        console.log("not found");
         const tracking = await Tracking.create({
           trackingNo: input.trackingNo,
           isFound: false,
@@ -109,25 +122,46 @@ export class TrackingResolver {
         return tracking;
       }
 
+      console.log("found");
+      // eTracking found the tracking
       const data: any = await response.json();
       const trackingData = data.data;
 
-      const tracking = await Tracking.create({
-        trackingNo: trackingData.trackingNo,
-        isFound: true,
-        courier: trackingData.courier,
-        courierKey: trackingData.courierKey,
-        shareLink: trackingData.shareLink,
-        color: trackingData.color,
-        status: trackingData.status,
-        currentStatus: trackingData.currentStatus,
-        timelines: trackingData.timelines,
-      }).save();
+      const tracking = await (async () => {
+        if (!id)
+          return Tracking.create({
+            trackingNo: trackingData.trackingNo,
+            isFound: true,
+            courier: trackingData.courier,
+            courierKey: trackingData.courierKey,
+            shareLink: trackingData.shareLink,
+            color: trackingData.color,
+            status: trackingData.status,
+            currentStatus: trackingData.currentStatus,
+            timelines: trackingData.timelines,
+          }).save();
 
-      input.cartItemIds.forEach(async (id) => {
-        await CartItem.update(
+        await Tracking.update(
           { id },
-          { trackingId: tracking.id, status: CartItemStatus.OnDelivery }
+          {
+            trackingNo: trackingData.trackingNo,
+            isFound: true,
+            courier: trackingData.courier,
+            courierKey: trackingData.courierKey,
+            shareLink: trackingData.shareLink,
+            color: trackingData.color,
+            status: trackingData.status,
+            currentStatus: trackingData.currentStatus,
+            timelines: trackingData.timelines,
+          }
+        );
+        return Tracking.findOne(id);
+      })();
+
+      input.cartItemIds.forEach(async (cartItemId) => {
+        await CartItem.update(
+          { id: cartItemId },
+          { trackingId: tracking?.id, status: CartItemStatus.OnDelivery }
         );
 
         // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnDelivery})
@@ -137,7 +171,7 @@ export class TrackingResolver {
           relations: ["mealkit", "order", "order.user"],
         });
 
-        if (cartItem)
+        if (cartItem && tracking)
           sendEmail(
             cartItem.order.user.email,
             `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${

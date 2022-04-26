@@ -17,6 +17,7 @@ import {
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
+import order from "../order";
 
 //format
 // by orderId
@@ -32,6 +33,8 @@ const Order: React.FC<OrderProps> = ({}) => {
 
   const [creatorOrders, { loading, error, data: creatorOrdersData }] =
     useCreatorOrdersLazyQuery();
+
+  console.log({ creatorOrdersData });
 
   useEffect(() => {
     creatorOrders({
@@ -244,20 +247,27 @@ const Order: React.FC<OrderProps> = ({}) => {
                     </Box>
 
                     <Box>Delivery Fee: {orderItem.deliveryFee}</Box>
+
                     <NextLink
                       href={{
-                        pathname: "/order/create-tracking",
+                        pathname: "/order/tracking/create",
                         query: {
                           cartItemIds: orderItem.cartItems.map(
                             (cartItem) => cartItem.id
                           ),
+
+                          ...(orderItem.tracking?.id && {
+                            id: orderItem.tracking?.id,
+                          }),
                         },
                       }}
                       passHref
                     >
                       <Link>
                         <Button my="10px" color="white">
-                          Deliver to {orderItem.username}
+                          {orderItem.tracking
+                            ? "Update tracking"
+                            : `Deliver to ${orderItem.username}`}
                         </Button>
                       </Link>
                     </NextLink>

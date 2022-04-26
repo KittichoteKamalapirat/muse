@@ -1,17 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
-import { NavigationContainer, RouteProp } from "@react-navigation/native";
-import { ActivityIndicator, Button, Text, View } from "react-native";
-import { Center } from "./components/Container/Center";
-import { AuthNavProps, AuthParamList } from "./utils/AuthParamList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
 import { AuthContext } from "./components/AuthProvider";
-
+import { Center } from "./components/Container/Center";
 import { AuthStack } from "./components/stacks/auth/AuthStack";
 import { AppTab } from "./components/stacks/protected/AppTab";
+import { AuthParamList } from "./utils/AuthParamList";
 
 interface RoutesProps {}
 

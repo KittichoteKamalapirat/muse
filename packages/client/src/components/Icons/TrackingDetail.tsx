@@ -12,7 +12,7 @@ export const TrackingDetail: React.FC<TrackingDetailProps> = ({ tracking }) => {
       <Text fontWeight="bold" color={tracking?.color ? tracking.color : "none"}>
         {tracking?.courier}
       </Text>
-      <Text>Traking No: {tracking?.trackingNo}</Text>
+      <Text>Tracking No: {tracking?.trackingNo}</Text>
       {/* <Text>{tracking.}</Text> */}
       <Text>{tracking?.currentStatus}</Text>
     </Box>
