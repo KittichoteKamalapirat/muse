@@ -30,7 +30,7 @@ import {
 } from "@chakra-ui/icons";
 import { inActiveGray, primaryColor } from "../../components/Variables";
 import SvgToDeliver from "../../components/svgComponents/ToDeliver";
-import SvgOnDelivery from "../../components/svgComponents/OnDelivery";
+import SvgOnTheWay from "../../components/svgComponents/OnTheWay";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
@@ -106,7 +106,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               <NextLink
                 href={{
                   pathname: "/myshop/order",
-                  query: { status: CartItemStatus.OnDelivery },
+                  query: { status: CartItemStatus.OnTheWay },
                 }}
                 passHref
               >

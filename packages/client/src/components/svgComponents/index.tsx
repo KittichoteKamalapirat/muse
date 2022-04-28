@@ -1,4 +1,4 @@
-export { default as OnDelivery } from "./OnDelivery";
+export { default as OnTheWay } from "./OnTheWay";
 export { default as ToDelivery } from "./ToDelivery";
 export { default as ToPay } from "./ToPay";
 export { default as ToRate } from "./ToRate";

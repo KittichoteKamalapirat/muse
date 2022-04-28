@@ -9,7 +9,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItem, Mealkit, Review } from "../entities";
+import { CartItem, CartItemNoti, Mealkit, Review } from "../entities";
 import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -83,16 +83,24 @@ export class ReviewResolver {
       });
 
       if (cartItem && review) {
+        const message = userCreatedReviewMessage(
+          review.mealkit.creator.username,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        );
+        // create noti for creator
+        await CartItemNoti.create({
+          message,
+          cartItemId: cartItem.id,
+          userId: cartItem.mealkit.creatorId,
+        }).save();
+
         // send to creator
         sendEmail(
           review.mealkit.creator.email,
           `⭐ You got a new review`,
-          userCreatedReviewMessage(
-            review.mealkit.creator.username,
-            cartItem.quantity,
-            cartItem.mealkit.name,
-            cartItem.order.user.username
-          )
+          message
         );
         return review;
       }

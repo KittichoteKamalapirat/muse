@@ -11,7 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
-import { CartItem, Mealkit } from "../entities";
+import { CartItem, CartItemNoti, Mealkit } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { AddToCart, CartItemInput } from "../entities/utils";
 import { isAdmin } from "../middlware/isAdmin";
@@ -170,20 +170,30 @@ export class CartItemResolver {
       relations: ["mealkit", "mealkit.creator", "order", "order.user"],
     });
 
-    if (cartItem)
+    if (cartItem) {
+      const message = userReceivedCartItemMessage(
+        cartItem?.mealkit.creator.username,
+        cartItem?.order.user.username,
+        cartItem?.quantity,
+        cartItem?.mealkit.name
+      );
+
+      // create noti for creator
+      await CartItemNoti.create({
+        message,
+        cartItemId: cartItem.id,
+        userId: cartItem.mealkit.creatorId,
+      }).save();
+
       // send to creator
       sendEmail(
         cartItem?.mealkit.creator.email,
         `👌 ${cartItem?.order.user.username} has received ${
           cartItem?.quantity
         } ${cartItem?.mealkit.name}${cartItem?.quantity > 1 ? "s" : ""}`,
-        userReceivedCartItemMessage(
-          cartItem?.mealkit.creator.username,
-          cartItem?.order.user.username,
-          cartItem?.quantity,
-          cartItem?.mealkit.name
-        )
+        message
       );
+    }
 
     return true;
   }

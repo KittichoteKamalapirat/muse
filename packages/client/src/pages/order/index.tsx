@@ -102,7 +102,7 @@ const Order: React.FC<OrderProps> = ({}) => {
           {[
             CartItemStatus.PaymentPending,
             CartItemStatus.ToDeliver,
-            CartItemStatus.OnDelivery,
+            CartItemStatus.OnTheWay,
           ].includes(cartItemStatus!) &&
             (address ? (
               <Box mt={2} bgColor="white">

@@ -52,7 +52,7 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
             // if found -> show the info
             // if not found -> let user knows, maybe it's not added to the system OR wrong number
             router.push(
-              `/order/tracking/${response.data?.createTracking.id}?next=/myshop/order?status=OnDelivery`
+              `/order/tracking/${response.data?.createTracking.id}?next=/myshop/order?status=OnTheWay`
             );
           }}
         >

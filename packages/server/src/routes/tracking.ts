@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CartItem, Tracking } from "../entities";
+import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { ETrackingStatus } from "../entities/Tracking";
 import cartItemDeliveredMessageForCreator from "../utils/emailContents/cartItemDeliveredMessageForCreator";
@@ -54,33 +54,51 @@ router.post("/update", async (req, res) => {
       relations: ["mealkit", "mealkit.creator", "order", "order.user"],
     });
 
-    // send to user
     if (cartItem) {
+      const messageForUser = cartItemDeliveredMessageForUser(
+        tracking.courier,
+        cartItem.quantity,
+        cartItem.mealkit.name,
+        cartItem.order.user.username
+      );
+      const messageForCreator = cartItemDeliveredMessageForCreator(
+        cartItem.mealkit.creator.username,
+        tracking.courier,
+        cartItem.quantity,
+        cartItem.mealkit.name,
+        cartItem.order.user.username
+      );
+
+      // noti for user
+      CartItemNoti.create({
+        message: messageForCreator,
+        cartItemId: cartItem.id,
+        userId: cartItem.userId,
+      }).save();
+
+      // noti for creator
+      CartItemNoti.create({
+        message: messageForCreator,
+        cartItemId: cartItem.id,
+        userId: cartItem.mealkit.creatorId,
+      }).save();
+
+      // send to user
       sendEmail(
         cartItem.order.user.email, // TODO change to review.mealkit.creator.email
         `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
           cartItem.quantity > 1 ? "s" : ""
         } have been successfully delivered to you.`,
-        cartItemDeliveredMessageForUser(
-          tracking.courier,
-          cartItem.quantity,
-          cartItem.mealkit.name,
-          cartItem.order.user.username
-        )
+        messageForUser
       );
+
       // send to creator
       sendEmail(
         cartItem.mealkit.creator.email, // TODO change to review.mealkit.creator.email
         `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
           cartItem.quantity > 1 ? "s" : ""
         } have been successfully delivered to ${cartItem.order.user.username}.`,
-        cartItemDeliveredMessageForCreator(
-          cartItem.mealkit.creator.username,
-          tracking.courier,
-          cartItem.quantity,
-          cartItem.mealkit.name,
-          cartItem.order.user.username
-        )
+        messageForCreator
       );
     }
 

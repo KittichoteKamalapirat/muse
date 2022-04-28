@@ -67,12 +67,12 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         textAlign="center"
         borderBottom={2}
         borderStyle="solid"
-        borderColor={cartItemStatus === "OnDelivery" ? primaryColor : "white"}
-        color={cartItemStatus === "OnDelivery" ? primaryColor : inActiveGray}
+        borderColor={cartItemStatus === "OnTheWay" ? primaryColor : "white"}
+        color={cartItemStatus === "OnTheWay" ? primaryColor : inActiveGray}
         mx={1}
         onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.OnDelivery } });
-          setCartItemStatus(CartItemStatus.OnDelivery);
+          userOrders({ variables: { status: CartItemStatus.OnTheWay } });
+          setCartItemStatus(CartItemStatus.OnTheWay);
         }}
       >
         On the way

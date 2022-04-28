@@ -16,8 +16,8 @@ export enum CartItemStatus {
   UnOrdered = "UnOrdered", // user: to pay, creator: payment pending. User has made an order.
   PaymentPending = "PaymentPending", // user: to pay, creator: payment pending. User has made an order.
   ToDeliver = "ToDeliver", // user: to be delivered, creator: to deliver. User paid and waiting for the creator to deliver
-  OnDelivery = "OnDelivery", // user and creator: the products are being delivered. waiting for the courrier to deliver
-  Delivered = "Delivered", // user and creator: complete.
+  OnTheWay = "OnTheWay", // user and creator: the products are being delivered. waiting for the courrier to deliver
+  Delivered = "Delivered", // courier delivered (webhook)
   Received = "Received", // user confirmed
   Complete = "Complete", // admin transfered money to seller
   Cancelled = "Cancelled", // user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER

@@ -102,7 +102,6 @@ export class OrderResolver {
         if (cartItem) {
           // create notis for creators
           CartItemNoti.create({
-            read: false,
             message: `You received an order for ${cartItem?.quantity} ${cartItem?.mealkit.name} from ${cartItem?.user.username}.`,
             cartItemId: cartItem.id,
             userId: cartItem?.mealkit.creatorId,

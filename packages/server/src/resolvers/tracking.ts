@@ -8,7 +8,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
-import { CartItem, Tracking } from "../entities";
+import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
@@ -115,7 +115,7 @@ export class TrackingResolver {
         input.cartItemIds.forEach(async (id) => {
           await CartItem.update(
             { id },
-            { trackingId: tracking.id, status: CartItemStatus.ToDeliver } // didn't update to OnDelivery yet since not found
+            { trackingId: tracking.id, status: CartItemStatus.ToDeliver } // didn't update to OnTheWay yet since not found
           );
         });
 
@@ -161,30 +161,40 @@ export class TrackingResolver {
       input.cartItemIds.forEach(async (cartItemId) => {
         await CartItem.update(
           { id: cartItemId },
-          { trackingId: tracking?.id, status: CartItemStatus.OnDelivery }
+          { trackingId: tracking?.id, status: CartItemStatus.OnTheWay }
         );
 
-        // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnDelivery})
+        // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnTheWay})
 
         const cartItem = await CartItem.findOne({
           where: { id },
           relations: ["mealkit", "order", "order.user"],
         });
 
-        if (cartItem && tracking)
+        if (cartItem && tracking) {
+          const message = creatorCreatedTrackingMessage(
+            tracking.id,
+            cartItem.quantity,
+            cartItem.mealkit.name,
+            cartItem.order.user.username,
+            tracking.courier
+          );
+
+          // create noti for users
+          await CartItemNoti.create({
+            message,
+            cartItemId: cartItem.id,
+            userId: cartItem.userId,
+          }).save();
+
           sendEmail(
             cartItem.order.user.email,
             `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${
               cartItem?.quantity > 1 ? "s are" : " is"
             } on the way `,
-            creatorCreatedTrackingMessage(
-              tracking.id,
-              cartItem.quantity,
-              cartItem.mealkit.name,
-              cartItem.order.user.username,
-              tracking.courier
-            )
+            message
           );
+        }
       });
 
       // send email

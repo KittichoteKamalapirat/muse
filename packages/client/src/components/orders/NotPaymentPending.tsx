@@ -159,7 +159,7 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                 </Flex>
 
                 {cartItemStatus ===
-                  (CartItemStatus.OnDelivery || CartItemStatus.Delivered) && (
+                  (CartItemStatus.OnTheWay || CartItemStatus.Delivered) && (
                   <NextLink
                     href="/order/tracking/[id]"
                     as={`/order/tracking/${order.trackingId}`}

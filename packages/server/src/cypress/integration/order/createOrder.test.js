@@ -51,14 +51,14 @@ describe("order", () => {
     cy.url().should("contain", `${Cypress.env("clientUrl")}/order`);
 
     // task: add a tracking number and update CartItemStatus
-    // (ToDeliver -> OnDelivery)
+    // (ToDeliver -> OnTheWay)
     cy.task("creatorCreateTracking").then((tracking) => {
       console.log("print tracking");
       console.log({ tracking });
     });
 
     // cy.request to update to be Delivered (replicate eTracking web hook)
-    // (OnDelivery -> Delivered)
+    // (OnTheWay -> Delivered)
 
     const eTrackingBody = {
       trackingNo: "SHD1063000874",
@@ -90,8 +90,8 @@ describe("order", () => {
         recipientPhoneNumber: "",
         sendDate: "",
         dueDate: "2021-02-10",
-        cashOnDelivery: "0",
-        isPayCashOnDelivery: false,
+        cashOnTheWay: "0",
+        isPayCashOnTheWay: false,
         deliveryStaffName: "",
         deliveryStaffPhoneNumber: "",
         deliveryStaffBranchPhoneNumber: "",

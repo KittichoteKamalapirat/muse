@@ -150,7 +150,7 @@ module.exports = (on, config) => {
 
       await cartItemRepository.update(
         { orderId: 1 },
-        { status: CartItemStatus.OnDelivery, trackingId: tracking.id }
+        { status: CartItemStatus.OnTheWay, trackingId: tracking.id }
       );
       await connection.close;
 

@@ -149,7 +149,7 @@ const Account: React.FC<indexProps> = ({}) => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: CartItemStatus.OnDelivery },
+                query: { status: CartItemStatus.OnTheWay },
               }}
               passHref
             >

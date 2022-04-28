@@ -120,17 +120,17 @@ const Order: React.FC<OrderProps> = ({}) => {
           textAlign="center"
           borderBottom={1}
           borderStyle="solid"
-          borderColor={cartItemStatus === "OnDelivery" ? primaryColor : "white"}
-          color={cartItemStatus === "OnDelivery" ? primaryColor : inActiveGray}
+          borderColor={cartItemStatus === "OnTheWay" ? primaryColor : "white"}
+          color={cartItemStatus === "OnTheWay" ? primaryColor : inActiveGray}
           mx={1}
           onClick={() => {
             creatorOrders({
               variables: {
-                status: CartItemStatus.OnDelivery,
+                status: CartItemStatus.OnTheWay,
               },
             });
 
-            setCartItemStatus(CartItemStatus.OnDelivery);
+            setCartItemStatus(CartItemStatus.OnTheWay);
           }}
         >
           Shipping
@@ -275,7 +275,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                 </Box>
               )}
 
-              {cartItemStatus !== CartItemStatus.OnDelivery &&
+              {cartItemStatus !== CartItemStatus.OnTheWay &&
                 orderItem.tracking && (
                   <TrackingDetail tracking={orderItem.tracking} />
                 )}

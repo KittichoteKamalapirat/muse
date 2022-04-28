@@ -30,7 +30,7 @@ export var CartItemStatus;
 (function (CartItemStatus) {
   CartItemStatus["Cancelled"] = "Cancelled";
   CartItemStatus["Delivered"] = "Delivered";
-  CartItemStatus["OnDelivery"] = "OnDelivery";
+  CartItemStatus["OnTheWay"] = "OnTheWay";
   CartItemStatus["PaymentPending"] = "PaymentPending";
   CartItemStatus["Received"] = "Received";
   CartItemStatus["Refunded"] = "Refunded";

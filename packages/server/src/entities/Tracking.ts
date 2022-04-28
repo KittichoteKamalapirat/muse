@@ -142,9 +142,9 @@ class Tracking extends BaseEntity {
 //   @Field()
 //   dueDate: string;
 //   @Field()
-//   cashOnDelivery: string;
+//   cashOnTheWay: string;
 //   @Field()
-//   isPayCashOnDelivery: boolean;
+//   isPayCashOnTheWay: boolean;
 //   @Field()
 //   deliveryStaffName: string;
 //   @Field()
@@ -190,8 +190,8 @@ class Tracking extends BaseEntity {
 //   recipientPhoneNumber: '',
 //   sendDate: '',
 //   dueDate: '',
-//   cashOnDelivery: '0',
-//   isPayCashOnDelivery: false,
+//   cashOnTheWay: '0',
+//   isPayCashOnTheWay: false,
 //   deliveryStaffName: '',
 //   deliveryStaffPhoneNumber: '',
 //   deliveryStaffBranchPhoneNumber: '',

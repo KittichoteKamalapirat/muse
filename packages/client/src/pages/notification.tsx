@@ -84,7 +84,7 @@ const Notification: React.FC<NotificationProps> = ({}) => {
                   borderColor={primaryColor}
                   borderRadius="4px"
                 >
-                  <Avatar src={noti.cartItem.mealkit.images![0]} mx={2} />
+                  <Avatar src={noti.cartItem.mealkit.thumbnail.url} mx={2} />
 
                   <Text>{noti.message}</Text>
                 </Flex>

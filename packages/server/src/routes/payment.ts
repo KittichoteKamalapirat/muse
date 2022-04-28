@@ -26,28 +26,30 @@ router.post("/scb-confirm", async (req, res) => {
     });
 
     cartItems.forEach(async (cartItem) => {
-      const message = ` ${cartItem.user.username} has completed the payment for ${cartItem.quantity} ${cartItem.mealkit.name}. Pleaes deliver soon.`;
+      const messageForCreator = creatorReceivesPaymentMessage(
+        cartItem.quantity,
+        cartItem.mealkit.name,
+        cartItem.user.username
+      );
+      const messageForUser = userCompletesPaymentMessage(
+        cartItem.quantity,
+        cartItem.mealkit.name,
+        cartItem.user.username
+      );
+
+      // create notis for users
+      await CartItemNoti.create({
+        message: messageForUser,
+        cartItemId: cartItem.id,
+        userId: cartItem.userId,
+      }).save();
 
       // create notis for creators
       await CartItemNoti.create({
-        read: false,
-        message,
+        message: messageForCreator,
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
-
-      // send sms to creator
-      sendEmail(
-        cartItem.mealkit.creator.email,
-        `💰 ${cartItem.order.user.username} has completed a payment for ${
-          cartItem.quantity
-        } ${cartItem.mealkit.name}${cartItem.quantity > 1 ? "s" : ""}`,
-        creatorReceivesPaymentMessage(
-          cartItem.quantity,
-          cartItem.mealkit.name,
-          cartItem.order.user.username
-        )
-      );
 
       // send sms to users
       sendEmail(
@@ -55,11 +57,16 @@ router.post("/scb-confirm", async (req, res) => {
         `💰 You made a payment for ${cartItem.quantity} ${
           cartItem.mealkit.name
         }${cartItem.quantity > 1 ? "s" : ""}`,
-        userCompletesPaymentMessage(
-          cartItem.quantity,
-          cartItem.mealkit.name,
-          cartItem.order.user.username
-        )
+        messageForUser
+      );
+
+      // send sms to creator
+      sendEmail(
+        cartItem.mealkit.creator.email,
+        `💰 Please deliver ${cartItem.quantity} ${cartItem.mealkit.name}${
+          cartItem.quantity > 1 ? "s" : ""
+        } to ${cartItem.order.user.username}.`,
+        messageForCreator
       );
     });
 

@@ -59,7 +59,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
             <Text>Tracking Number: {trackingData?.tracking.trackingNo}</Text>
           </Box>
 
-          {/* <Text>Status: {trackingData?.tracking.status === 'onDelivery'}</Text> */}
+          {/* <Text>Status: {trackingData?.tracking.status === 'OnTheWay'}</Text> */}
 
           {trackingData?.tracking.isFound ? (
             <>
