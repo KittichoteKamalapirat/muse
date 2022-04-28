@@ -3,13 +3,15 @@ import { Flex, Heading, Text } from "@chakra-ui/layout";
 import { Avatar, Box, Button, Center, Img, useToast } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { MainNav } from "../../components/MainNav";
+import { Error } from "../../components/skeletons/Error";
+import { Loading } from "../../components/skeletons/Loading";
 import {
   useCreateReviewMutation,
-  useMealkitLazyQuery,
+  useMealkitQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
@@ -19,28 +21,21 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
   const router = useRouter();
   const { mealkitId, cartItemId } = router.query;
 
-  const [
-    mealkit,
-    { data: mealkitData, loading: mealkitLoading, error: mealkitError },
-  ] = useMealkitLazyQuery();
+  const {
+    data: mealkitData,
+    loading: mealkitLoading,
+    error: mealkitError,
+  } = useMealkitQuery({ variables: { id: parseInt(mealkitId as string) } });
 
   const [hover, setHover] = useState<number | null>(null);
   const toast = useToast();
 
   const [createReview] = useCreateReviewMutation();
 
-  useEffect(() => {
-    if (mealkitId) {
-      mealkit({
-        variables: {
-          id: parseInt(mealkitId as string),
-        },
-      });
-    }
-  }, [mealkitId, mealkit]);
+  return <Error />;
 
   if (mealkitLoading) {
-    return <Text>loading</Text>;
+    return <Loading />;
   }
 
   if (mealkitError) {
@@ -66,7 +61,7 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
             </Flex>
             <Flex my={4}>
               <Img
-                src={(mealkitData?.mealkit?.images as Array<string>)[0]}
+                src={mealkitData.mealkit?.thumbnail.url}
                 flex={1}
                 boxSize="20%"
               />

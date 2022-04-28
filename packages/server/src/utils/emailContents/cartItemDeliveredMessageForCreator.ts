@@ -5,7 +5,7 @@ const cartItemDeliveredMessageForCreator = (
   mealkitName: string,
   username: string
 ) =>
-  `Hi ${creatorName}, <br> ${courierName} has successfully delivery <a href=${
+  `Hi ${creatorName}, <br> ${courierName} has successfully delivered <a href=${
     process.env.CORS_ORIGIN
   }/myshop/order?status=Delivered> ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""

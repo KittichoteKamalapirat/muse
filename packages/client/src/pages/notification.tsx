@@ -49,6 +49,8 @@ const Notification: React.FC<NotificationProps> = ({}) => {
     error: errorNori,
   } = useOrderNotisQuery({});
 
+  console.log(orderNoti);
+
   const [readOrderNotis] = useReadOrderNotisMutation();
   // readOrderNotis();
 

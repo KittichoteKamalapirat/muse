@@ -127,7 +127,6 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                                   mealkitId: cartItem.mealkitId,
                                 },
                               }}
-                              as={`/review/create`}
                               passHref
                             >
                               <Button as={Link} my="10px" width="100%">

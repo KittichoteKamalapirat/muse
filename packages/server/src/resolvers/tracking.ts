@@ -128,7 +128,7 @@ export class TrackingResolver {
       const trackingData = data.data;
 
       const tracking = await (async () => {
-        if (!id)
+        if (!id) {
           return Tracking.create({
             trackingNo: trackingData.trackingNo,
             isFound: true,
@@ -140,7 +140,7 @@ export class TrackingResolver {
             currentStatus: trackingData.currentStatus,
             timelines: trackingData.timelines,
           }).save();
-
+        }
         await Tracking.update(
           { id },
           {
@@ -167,11 +167,12 @@ export class TrackingResolver {
         // CartItem.save({id, trackingId: tracking.id, status:  CartItemStatus.OnTheWay})
 
         const cartItem = await CartItem.findOne({
-          where: { id },
+          where: { id: cartItemId },
           relations: ["mealkit", "order", "order.user"],
         });
 
         if (cartItem && tracking) {
+          console.log("create cartItem noti and send email");
           const message = creatorCreatedTrackingMessage(
             tracking.id,
             cartItem.quantity,

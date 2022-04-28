@@ -4,7 +4,7 @@ const cartItemDeliveredMessageForUser = (
   mealkitName: string,
   username: string
 ) =>
-  `Hi ${username}, <br> ${courierName} has successfully delivery <a href=${
+  `Hi ${username}, <br> ${courierName} has successfully delivered <a href=${
     process.env.CORS_ORIGIN
   }/order?status=Delivered> ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""

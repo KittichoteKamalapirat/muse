@@ -17,7 +17,8 @@ export class CartItemNotiResolver {
           "cartItem",
           "cartItem.user",
           "cartItem.mealkit",
-          // "cartItem.mealkit.creator",
+          "cartItem.mealkit.creator",
+          "cartItem.mealkit.mealkitFiles",
         ],
       });
 

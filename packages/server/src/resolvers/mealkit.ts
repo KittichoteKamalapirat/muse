@@ -57,7 +57,10 @@ export class MealkitResolver {
     @Arg("id", () => Int) id: number
   ): Promise<Mealkit | Error | undefined> {
     try {
-      return Mealkit.findOne({ where: { id }, relations: ["creator"] });
+      return Mealkit.findOne({
+        where: { id },
+        relations: ["creator", "mealkitFiles"],
+      });
     } catch (error) {
       console.log(error);
       return new Error(error);

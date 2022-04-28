@@ -18,10 +18,15 @@ enum Position {
 type Props = ButtonProps & {
   children: ReactNode;
   position?: Position;
+  textAlign?: "center" | "start" | "end";
 };
 
-const Button = ({ children, position, ...props }: Props) => {
-  return <ChakraButton color="white">{children}</ChakraButton>;
+const Button = ({ children, position, textAlign, ...props }: Props) => {
+  return (
+    <div style={{ textAlign }}>
+      <ChakraButton color="white">{children}</ChakraButton>
+    </div>
+  );
 };
 
 export default Button;
