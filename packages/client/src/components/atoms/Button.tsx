@@ -21,7 +21,12 @@ type Props = ButtonProps & {
   textAlign?: "center" | "start" | "end";
 };
 
-const Button = ({ children, position, textAlign, ...props }: Props) => {
+const Button = ({
+  children,
+  position,
+  textAlign = "center",
+  ...props
+}: Props) => {
   return (
     <div style={{ textAlign }}>
       <ChakraButton color="white">{children}</ChakraButton>

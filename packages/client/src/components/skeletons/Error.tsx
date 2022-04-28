@@ -28,7 +28,7 @@ export const Error = ({ text, overlay = false }: Props) => {
         </Text>
         <NextLink href={homeUrl} passHref>
           <Link my="10px" width="100%">
-            <Button textAlign="center">Back to Home</Button>
+            <Button>Back to Home</Button>
           </Link>
         </NextLink>
       </Flex>
