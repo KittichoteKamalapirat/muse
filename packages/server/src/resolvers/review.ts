@@ -77,8 +77,6 @@ export class ReviewResolver {
         relations: ["mealkit", "mealkit.creator"],
       });
 
-      console.log({ review });
-
       const cartItem = await CartItem.findOne({
         where: { id: cartItemId },
         relations: ["mealkit", "order", "order.user"],

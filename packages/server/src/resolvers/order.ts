@@ -113,7 +113,7 @@ export class OrderResolver {
 
           // send sms for each cartItem
           sendEmail(
-            "kittichoteshane@gmail.com", // TODO change to cartItem.mealkit.creator.email later
+            "kittichoteshane@gmail.com", // creatorOrders cartItem.mealkit.creator.email later
             "📝 You have received an order",
             receiveOrderMessage(
               cartItem.quantity,
@@ -183,7 +183,6 @@ export class OrderResolver {
       ],
     });
 
-    console.log(cartItems);
     const mapped = toCreatorOrdersMap(cartItems);
     // console.log(mapped);
     if (mapped) {
