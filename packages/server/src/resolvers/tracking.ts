@@ -12,7 +12,9 @@ import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
-import creatorCreatedTrackingMessage from "../utils/emailContents/creatorCreatedTrackingMessage";
+import creatorCreatedTrackingEmail from "../utils/notifications/emailContents/creatorCreatedTrackingEmail";
+import creatorCreatedTrackingInApp from "../utils/notifications/inAppMessage/creatorCreatedTrackingInApp";
+
 import { sendEmail } from "../utils/sendEmail";
 
 // @ObjectType()
@@ -97,7 +99,6 @@ export class TrackingResolver {
     // 3. update the order status and create tracking
 
     try {
-      console.log({ input });
       const options = getTrackingOptions(input.trackingNo, input.courier);
       const response = await fetch(
         "https://fast.etrackings.com/api/v3/tracks/find",
@@ -112,9 +113,9 @@ export class TrackingResolver {
           isFound: false,
         }).save();
 
-        input.cartItemIds.forEach(async (id) => {
+        input.cartItemIds.forEach(async (inputId) => {
           await CartItem.update(
-            { id },
+            { id: inputId },
             { trackingId: tracking.id, status: CartItemStatus.ToDeliver } // didn't update to OnTheWay yet since not found
           );
         });
@@ -122,7 +123,6 @@ export class TrackingResolver {
         return tracking;
       }
 
-      console.log("found");
       // eTracking found the tracking
       const data: any = await response.json();
       const trackingData = data.data;
@@ -172,18 +172,13 @@ export class TrackingResolver {
         });
 
         if (cartItem && tracking) {
-          console.log("create cartItem noti and send email");
-          const message = creatorCreatedTrackingMessage(
-            tracking.id,
-            cartItem.quantity,
-            cartItem.mealkit.name,
-            cartItem.order.user.username,
-            tracking.courier
-          );
-
           // create noti for users
           await CartItemNoti.create({
-            message,
+            message: creatorCreatedTrackingInApp(
+              cartItem.quantity,
+              cartItem.mealkit.name,
+              tracking.courier
+            ),
             cartItemId: cartItem.id,
             userId: cartItem.userId,
           }).save();
@@ -193,7 +188,13 @@ export class TrackingResolver {
             `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${
               cartItem?.quantity > 1 ? "s are" : " is"
             } on the way `,
-            message
+            creatorCreatedTrackingEmail(
+              tracking.id,
+              cartItem.quantity,
+              cartItem.mealkit.name,
+              cartItem.order.user.username,
+              tracking.courier
+            )
           );
         }
       });

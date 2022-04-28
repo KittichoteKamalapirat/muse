@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { CartItem, Order, CartItemNoti } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
-import creatorReceivesPaymentMessage from "../utils/emailContents/creatorReceivesPaymentMessage";
-import userCompletesPaymentMessage from "../utils/emailContents/userCompletesPaymentMessage";
+import creatorReceivedPaymentEmail from "../utils/notifications/emailContents/creatorReceivedPaymentEmail";
+import userCompletedPaymentEmail from "../utils/notifications/emailContents/userCompletedPaymentEmail";
+import creatorReceivedPaymentInApp from "../utils/notifications/inAppMessage/creatorReceivedPaymentInApp";
+import userCompletedPaymentInApp from "../utils/notifications/inAppMessage/userCompletedPaymentInApp";
 import { sendEmail } from "../utils/sendEmail";
 
 const router = Router();
@@ -26,27 +28,23 @@ router.post("/scb-confirm", async (req, res) => {
     });
 
     cartItems.forEach(async (cartItem) => {
-      const messageForCreator = creatorReceivesPaymentMessage(
-        cartItem.quantity,
-        cartItem.mealkit.name,
-        cartItem.user.username
-      );
-      const messageForUser = userCompletesPaymentMessage(
-        cartItem.quantity,
-        cartItem.mealkit.name,
-        cartItem.user.username
-      );
-
       // create notis for users
       await CartItemNoti.create({
-        message: messageForUser,
+        message: userCompletedPaymentInApp(
+          cartItem.quantity,
+          cartItem.mealkit.name
+        ),
         cartItemId: cartItem.id,
         userId: cartItem.userId,
       }).save();
 
       // create notis for creators
       await CartItemNoti.create({
-        message: messageForCreator,
+        message: creatorReceivedPaymentInApp(
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.user.username
+        ),
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
@@ -57,7 +55,11 @@ router.post("/scb-confirm", async (req, res) => {
         `💰 You made a payment for ${cartItem.quantity} ${
           cartItem.mealkit.name
         }${cartItem.quantity > 1 ? "s" : ""}`,
-        messageForUser
+        userCompletedPaymentEmail(
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.user.username
+        )
       );
 
       // send sms to creator
@@ -66,7 +68,11 @@ router.post("/scb-confirm", async (req, res) => {
         `💰 Please deliver ${cartItem.quantity} ${cartItem.mealkit.name}${
           cartItem.quantity > 1 ? "s" : ""
         } to ${cartItem.order.user.username}.`,
-        messageForCreator
+        creatorReceivedPaymentEmail(
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.user.username
+        )
       );
     });
 

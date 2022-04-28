@@ -1,4 +1,4 @@
-const cartItemDeliveredMessageForUser = (
+const cartItemDeliveredEmailForUser = (
   courierName: string,
   quantity: number,
   mealkitName: string,
@@ -12,4 +12,4 @@ const cartItemDeliveredMessageForUser = (
     process.env.CORS_ORIGIN
   }/order?status=Delivered> here </a>`;
 
-export default cartItemDeliveredMessageForUser;
+export default cartItemDeliveredEmailForUser;

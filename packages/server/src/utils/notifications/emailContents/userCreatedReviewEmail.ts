@@ -1,4 +1,4 @@
-const userCreatedReviewMessage = (
+const userCreatedReviewEmail = (
   creatorName: string,
   quantity: number,
   mealkitName: string,
@@ -10,4 +10,4 @@ const userCreatedReviewMessage = (
     quantity > 1 ? "s" : ""
   }</a>.`;
 
-export default userCreatedReviewMessage;
+export default userCreatedReviewEmail;

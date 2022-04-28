@@ -1,4 +1,4 @@
-const cartItemDeliveredMessageForCreator = (
+const cartItemDeliveredEmailForCreator = (
   creatorName: string,
   courierName: string,
   quantity: number,
@@ -11,4 +11,4 @@ const cartItemDeliveredMessageForCreator = (
     quantity > 1 ? "s" : ""
   }</a>. Please wait for ${username} to confirm.`;
 
-export default cartItemDeliveredMessageForCreator;
+export default cartItemDeliveredEmailForCreator;

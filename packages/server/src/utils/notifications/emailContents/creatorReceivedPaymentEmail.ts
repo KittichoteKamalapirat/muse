@@ -1,4 +1,4 @@
-const creatorReceivesPaymentMessage = (
+const creatorReceivedPaymentEmail = (
   quantity: number,
   mealkitName: string,
   username: string
@@ -9,4 +9,4 @@ const creatorReceivesPaymentMessage = (
     quantity > 1 ? "s" : ""
   }</a>. Please deliver to ${username} as soon as possible`;
 
-export default creatorReceivesPaymentMessage;
+export default creatorReceivedPaymentEmail;

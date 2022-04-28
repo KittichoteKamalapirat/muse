@@ -1,4 +1,4 @@
-const userCompletesPaymentMessage = (
+const userCompletedPaymentEmail = (
   quantity: number,
   mealkitName: string,
   username: string
@@ -9,4 +9,4 @@ const userCompletesPaymentMessage = (
     quantity > 1 ? "s" : ""
   }</a>. We will let you know when the seller has delivered your order`;
 
-export default userCompletesPaymentMessage;
+export default userCompletedPaymentEmail;

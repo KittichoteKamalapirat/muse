@@ -2,8 +2,10 @@ import { Router } from "express";
 import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { ETrackingStatus } from "../entities/Tracking";
-import cartItemDeliveredMessageForCreator from "../utils/emailContents/cartItemDeliveredMessageForCreator";
-import cartItemDeliveredMessageForUser from "../utils/emailContents/cartItemDeliveredMessageForUser";
+import cartItemDeliveredEmailForCreator from "../utils/notifications/emailContents/cartItemDeliveredEmailForCreator";
+import cartItemDeliveredEmailForUser from "../utils/notifications/emailContents/cartItemDeliveredEmailForUser";
+import cartItemDeliveredInAppForCreator from "../utils/notifications/inAppMessage/cartItemDeliveredInAppForCreator";
+import cartItemDeliveredInAppForUser from "../utils/notifications/inAppMessage/cartItemDeliveredInAppForUser";
 import { sendEmail } from "../utils/sendEmail";
 
 const router = Router();
@@ -55,30 +57,25 @@ router.post("/update", async (req, res) => {
     });
 
     if (cartItem) {
-      const messageForUser = cartItemDeliveredMessageForUser(
-        tracking.courier,
-        cartItem.quantity,
-        cartItem.mealkit.name,
-        cartItem.order.user.username
-      );
-      const messageForCreator = cartItemDeliveredMessageForCreator(
-        cartItem.mealkit.creator.username,
-        tracking.courier,
-        cartItem.quantity,
-        cartItem.mealkit.name,
-        cartItem.order.user.username
-      );
-
       // noti for user
       CartItemNoti.create({
-        message: messageForCreator,
+        message: cartItemDeliveredInAppForUser(
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name
+        ),
         cartItemId: cartItem.id,
         userId: cartItem.userId,
       }).save();
 
       // noti for creator
       CartItemNoti.create({
-        message: messageForCreator,
+        message: cartItemDeliveredInAppForCreator(
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        ),
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
@@ -89,7 +86,12 @@ router.post("/update", async (req, res) => {
         `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
           cartItem.quantity > 1 ? "s" : ""
         } have been successfully delivered to you.`,
-        messageForUser
+        cartItemDeliveredEmailForUser(
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
       );
 
       // send to creator
@@ -98,7 +100,13 @@ router.post("/update", async (req, res) => {
         `📦 ${cartItem.quantity} ${cartItem.mealkit.name}${
           cartItem.quantity > 1 ? "s" : ""
         } have been successfully delivered to ${cartItem.order.user.username}.`,
-        messageForCreator
+        cartItemDeliveredEmailForCreator(
+          cartItem.mealkit.creator.username,
+          tracking.courier,
+          cartItem.quantity,
+          cartItem.mealkit.name,
+          cartItem.order.user.username
+        )
       );
     }
 

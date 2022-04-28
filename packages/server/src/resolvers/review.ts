@@ -13,7 +13,8 @@ import { CartItem, CartItemNoti, Mealkit, Review } from "../entities";
 import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import userCreatedReviewMessage from "../utils/emailContents/userCreatedReviewMessage";
+import userCreatedReviewEmail from "../utils/notifications/emailContents/userCreatedReviewEmail";
+import userCreatedReviewInApp from "../utils/notifications/inAppMessage/userCreatedReviewInApp";
 import { sendEmail } from "../utils/sendEmail";
 
 @Resolver(Review)
@@ -83,15 +84,13 @@ export class ReviewResolver {
       });
 
       if (cartItem && review) {
-        const message = userCreatedReviewMessage(
-          review.mealkit.creator.username,
-          cartItem.quantity,
-          cartItem.mealkit.name,
-          cartItem.order.user.username
-        );
         // create noti for creator
         await CartItemNoti.create({
-          message,
+          message: userCreatedReviewInApp(
+            cartItem.quantity,
+            cartItem.mealkit.name,
+            cartItem.order.user.username
+          ),
           cartItemId: cartItem.id,
           userId: cartItem.mealkit.creatorId,
         }).save();
@@ -100,7 +99,12 @@ export class ReviewResolver {
         sendEmail(
           review.mealkit.creator.email,
           `⭐ You got a new review`,
-          message
+          userCreatedReviewEmail(
+            review.mealkit.creator.username,
+            cartItem.quantity,
+            cartItem.mealkit.name,
+            cartItem.order.user.username
+          )
         );
         return review;
       }

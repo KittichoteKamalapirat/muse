@@ -17,7 +17,8 @@ import { CartItemStatus } from "../entities/CartItem";
 import { CartItemsByCreatorInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import receiveOrderMessage from "../utils/emailContents/receiveOrderMessage";
+import receivedOrderEmail from "../utils/notifications/emailContents/receivedOrderEmail";
+import receivedOrderInApp from "../utils/notifications/inAppMessage/receivedOrderInApp";
 import {
   CartItemsByOrderFormat,
   MappedCreatorOrders,
@@ -102,7 +103,11 @@ export class OrderResolver {
         if (cartItem) {
           // create notis for creators
           CartItemNoti.create({
-            message: `You received an order for ${cartItem?.quantity} ${cartItem?.mealkit.name} from ${cartItem?.user.username}.`,
+            message: receivedOrderInApp(
+              cartItem.quantity,
+              cartItem.mealkit.name,
+              cartItem.order.user.username
+            ),
             cartItemId: cartItem.id,
             userId: cartItem?.mealkit.creatorId,
           }).save();
@@ -114,7 +119,7 @@ export class OrderResolver {
           sendEmail(
             "kittichoteshane@gmail.com", // creatorOrders cartItem.mealkit.creator.email later
             "📝 You have received an order",
-            receiveOrderMessage(
+            receivedOrderEmail(
               cartItem.quantity,
               cartItem.mealkit.name,
               cartItem.order.user.username

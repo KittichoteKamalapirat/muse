@@ -1,4 +1,4 @@
-const receiveOrderMessage = (
+const receivedOrderEmail = (
   quantity: number,
   mealkitName: string,
   username: string
@@ -9,4 +9,4 @@ const receiveOrderMessage = (
     quantity > 1 ? "s" : ""
   } from ${username}.  <br> Please wait for ${username} to complete the payment.`;
 
-export default receiveOrderMessage;
+export default receivedOrderEmail;

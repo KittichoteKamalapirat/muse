@@ -17,7 +17,8 @@ import { AddToCart, CartItemInput } from "../entities/utils";
 import { isAdmin } from "../middlware/isAdmin";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import userReceivedCartItemMessage from "../utils/emailContents/userReceivedCartItemMessage";
+import userReceivedCartItemEmail from "../utils/notifications/emailContents/userReceivedCartItemEmail";
+import userReceivedCartItemInApp from "../utils/notifications/inAppMessage/userReceivedCartItemInApp";
 import { sendEmail } from "../utils/sendEmail";
 
 @Resolver(CartItem)
@@ -171,16 +172,13 @@ export class CartItemResolver {
     });
 
     if (cartItem) {
-      const message = userReceivedCartItemMessage(
-        cartItem?.mealkit.creator.username,
-        cartItem?.order.user.username,
-        cartItem?.quantity,
-        cartItem?.mealkit.name
-      );
-
       // create noti for creator
       await CartItemNoti.create({
-        message,
+        message: userReceivedCartItemInApp(
+          cartItem?.mealkit.creator.username,
+          cartItem?.quantity,
+          cartItem?.mealkit.name
+        ),
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
@@ -191,7 +189,12 @@ export class CartItemResolver {
         `👌 ${cartItem?.order.user.username} has received ${
           cartItem?.quantity
         } ${cartItem?.mealkit.name}${cartItem?.quantity > 1 ? "s" : ""}`,
-        message
+        userReceivedCartItemEmail(
+          cartItem?.mealkit.creator.username,
+          cartItem?.order.user.username,
+          cartItem?.quantity,
+          cartItem?.mealkit.name
+        )
       );
     }
 
