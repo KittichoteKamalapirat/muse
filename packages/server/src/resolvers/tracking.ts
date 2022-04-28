@@ -12,7 +12,7 @@ import { CartItem, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
-import createTrackingMessage from "../utils/emailContents/createTrackingcreateTrackingMessage";
+import creatorCreatedTrackingMessage from "../utils/emailContents/creatorCreatedTrackingMessage";
 import { sendEmail } from "../utils/sendEmail";
 
 // @ObjectType()
@@ -177,7 +177,7 @@ export class TrackingResolver {
             `📝 ${cartItem?.quantity} ${cartItem?.mealkit.name}${
               cartItem?.quantity > 1 ? "s are" : " is"
             } on the way `,
-            createTrackingMessage(
+            creatorCreatedTrackingMessage(
               tracking.id,
               cartItem.quantity,
               cartItem.mealkit.name,

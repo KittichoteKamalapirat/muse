@@ -1,4 +1,4 @@
-const createTrackingMessage = (
+const creatorCreatedTrackingMessage = (
   id: number,
   quantity: number,
   mealkitName: string,
@@ -12,4 +12,4 @@ const createTrackingMessage = (
   }/order/tracking/${id}>
     here </a>. `;
 
-export default createTrackingMessage;
+export default creatorCreatedTrackingMessage;
