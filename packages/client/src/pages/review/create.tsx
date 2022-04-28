@@ -32,8 +32,6 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
 
   const [createReview] = useCreateReviewMutation();
 
-  return <Error />;
-
   if (mealkitLoading) {
     return <Loading />;
   }
