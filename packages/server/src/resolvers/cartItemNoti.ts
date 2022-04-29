@@ -7,7 +7,7 @@ import { MyContext } from "../types";
 
 @Resolver(CartItemNoti)
 export class CartItemNotiResolver {
-  @UseMiddleware(isAuth)
+  // @UseMiddleware(isAuth) // had to remove this other wise not authenticated error
   @Query(() => [CartItemNoti])
   async orderNotis(@Ctx() { req }: MyContext): Promise<CartItemNoti[] | Error> {
     try {
