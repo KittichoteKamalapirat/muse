@@ -5,6 +5,7 @@ import React from "react";
 import { useMealkitsQuery, useReviewsQuery } from "../generated/graphql";
 import { Layout } from "./Layout/Layout";
 import { ReviewStars } from "./ReviewStars";
+import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
@@ -25,7 +26,11 @@ export const Reviews: React.FC<ReviewsProps> = ({ mealkitId }) => {
     );
   }
   if (error) {
-    return <Text>{error.message}</Text>;
+    return (
+      <Layout>
+        <Error text={error.message} />
+      </Layout>
+    );
   }
 
   //   const hi = moment(review.createdAt)

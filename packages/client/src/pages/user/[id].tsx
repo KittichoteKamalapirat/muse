@@ -6,6 +6,7 @@ import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
+import { Error } from "../../components/skeletons/Error";
 import { Wrapper } from "../../components/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
@@ -50,7 +51,11 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
   }
 
   if (userError) {
-    return <Text>{userError.message}</Text>;
+    return (
+      <Layout>
+        <Error text={userError.message} />
+      </Layout>
+    );
   }
   return (
     <HeadingLayout

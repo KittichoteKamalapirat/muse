@@ -29,6 +29,7 @@ import {
 import { adminColumn } from "../components/admin/adminColumn";
 import { adminData } from "../components/admin/adminData";
 import { Layout } from "../components/Layout/Layout";
+import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import {
@@ -93,7 +94,11 @@ const Admin: React.FC<AdminProps> = ({}) => {
     );
   }
   if (error) {
-    return <Text> {error.message} </Text>;
+    return (
+      <Layout>
+        <Error text={error.message} />
+      </Layout>
+    );
   }
 
   return (

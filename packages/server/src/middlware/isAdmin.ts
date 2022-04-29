@@ -4,7 +4,7 @@ import { MyContext } from "../types";
 
 export const isAdmin: MiddlewareFn<MyContext> = async ({ context }, next) => {
   const { userId } = context.req.session;
-  console.log("isAdmin page");
+
   if (!userId) {
     throw Error("Not authenticated as admin");
   }

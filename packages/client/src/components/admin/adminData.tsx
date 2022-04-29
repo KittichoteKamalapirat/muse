@@ -7,6 +7,12 @@ export const adminData = (
   if (loading) {
     return [];
   }
+
+  // without this -> cannot read forEach of undefined
+  if (!cartItems) {
+    return [];
+  }
+
   return cartItems?.allCartItems.map((cartItem) => {
     return {
       cartItemId: cartItem.id,
