@@ -1,8 +1,13 @@
 import { gql } from "@apollo/client";
-import { Button } from "@chakra-ui/button";
-import { AddIcon, CheckCircleIcon } from "@chakra-ui/icons";
+
+import {
+  AddIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  SmallCloseIcon,
+} from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, Img, useToast } from "@chakra-ui/react";
+import { Avatar, Img, useToast, IconButton } from "@chakra-ui/react";
 import NextLink from "next/link";
 import router from "next/router";
 import React, { useState } from "react";
@@ -10,6 +15,7 @@ import {
   useCreateCartItemMutation,
   useMealkitsQuery,
 } from "../generated/graphql";
+import Button from "./atoms/Button";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -25,6 +31,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
   const toast = useToast();
   const [createCartItem, { data: cartItemData, loading: cartItemLoading }] =
     useCreateCartItemMutation();
+  console.log("1");
+  console.log(cartItemData);
   const [cartLoading, setCartLoading] = useState(false);
   const { data: mealkits, loading } = useMealkitsQuery({
     variables: { postId: postId },
@@ -203,15 +211,40 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     status: "success",
                     duration: 4000,
                     isClosable: true,
-                    position: "top",
-                    render: () => (
-                      <Box width="100%" bgColor="white" p={4} boxShadow="lg">
-                        <Flex alignItems="center">
-                          <CheckCircleIcon color="brand" m={2} />
-                          <Box m={2}>
-                            <Heading fontSize="lg">Added to Cart</Heading>
+                    position: "top-right",
+                    render: ({ id, onClose }) => (
+                      <Box
+                        key={id}
+                        width="100%"
+                        bgColor="white"
+                        p={2}
+                        boxShadow="lg"
+                      >
+                        <Flex
+                          alignItems="center"
+                          minWidth="-webkit-fill-available"
+                        >
+                          <Box>
+                            <Flex
+                              justifyContent="space-between"
+                              alignItems="flex-start"
+                            >
+                              <Flex alignItems="center">
+                                <CheckCircleIcon color="brand" m={2} />
+                                <Heading fontSize="lg">Added to Cart</Heading>
+                              </Flex>
+
+                              <IconButton
+                                onClick={onClose}
+                                aria-label="closeIcon"
+                                backgroundColor="none"
+                                width="1rem"
+                                height="1rem"
+                                icon={<SmallCloseIcon color="black" />}
+                              />
+                            </Flex>
+
                             <Text color="blackAlpha.600">
-                              {" "}
                               {mealkit.name} has been added to your cart.
                             </Text>
 
@@ -219,6 +252,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                               as={Link}
                               mr={2}
                               onClick={() => router.push("/cart")}
+                              textAlign="center"
+                              size="xs"
                             >
                               See Cart
                             </Button>

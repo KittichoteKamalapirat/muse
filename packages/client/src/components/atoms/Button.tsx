@@ -19,17 +19,27 @@ type Props = ButtonProps & {
   children: ReactNode;
   position?: Position;
   textAlign?: "center" | "start" | "end";
+  size?: "xs" | "sm" | "md" | "lg";
 };
 
 const Button = ({
   children,
   position,
   textAlign = "center",
+  size = "sm",
   ...props
 }: Props) => {
   return (
-    <div style={{ textAlign }}>
-      <ChakraButton color="white">{children}</ChakraButton>
+    <div>
+      <ChakraButton
+        width="100%"
+        color="white"
+        my={2}
+        size={size}
+        textAlign={textAlign}
+      >
+        {children}
+      </ChakraButton>
     </div>
   );
 };

@@ -67,11 +67,7 @@ const Index = () => {
           !post ? (
             <NewsFeedSkeleton />
           ) : (
-            <Box
-              key={post.id}
-              // shadow="md"
-              // borderWidth="1px"
-            >
+            <Box key={post.id}>
               <Flex alignItems="center" justifyContent="space-between">
                 <LinkBox>
                   <NextLink
