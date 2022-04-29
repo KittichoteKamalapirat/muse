@@ -104,7 +104,7 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   return (
     <Flex
       direction={["row", "row", "column"]}
-      zIndex={1}
+      zIndex={10}
       position="fixed"
       bottom={0}
       bg={"white"}

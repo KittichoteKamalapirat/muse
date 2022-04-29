@@ -7,7 +7,7 @@ interface TopNavProps {}
 export const TopNav: React.FC<TopNavProps> = ({}) => {
   return (
     <Flex
-      zIndex={1}
+      zIndex={10}
       justifyContent="center"
       position="fixed"
       width="100%"
