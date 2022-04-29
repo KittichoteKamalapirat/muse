@@ -22,6 +22,7 @@ import {
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Layout } from "../components/Layout/Layout";
 import { Loading } from "../components/skeletons/Loading";
+import ButtonLink from "../components/atoms/LinkButton";
 
 interface cartProps {}
 
@@ -180,11 +181,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                     <Text>฿{gross}</Text>
                   </Flex>
 
-                  <Button p={3} color="white" width="100%">
-                    <NextLink href={{ pathname: "/checkout" }} passHref>
-                      <Link>Checkout</Link>
-                    </NextLink>
-                  </Button>
+                  <ButtonLink pathname="/checkout">Checkout</ButtonLink>
                 </Box>
               </Box>
             </Box>

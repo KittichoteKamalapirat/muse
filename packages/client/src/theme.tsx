@@ -48,6 +48,7 @@ const theme = extendTheme(
     colors: {
       black: "#16161D",
       brand: "#3dc795",
+      brandHover: "#26d997",
       action: "#3dc795",
       alert: "#EB5757",
       inputLabel: "#4f4c4d",

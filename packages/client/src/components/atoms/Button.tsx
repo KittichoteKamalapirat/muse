@@ -26,7 +26,7 @@ const Button: ComponentWithAs<"button", Props> = ({
   children,
   position,
   textAlign = "center",
-  size = "sm",
+  size = "md",
   ...props
 }: Props) => {
   return (
