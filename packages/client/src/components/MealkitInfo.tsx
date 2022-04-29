@@ -137,6 +137,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       mx="auto"
                       leftIcon={<AddIcon />}
                       isLoading={cartLoading}
+                      color="white"
                       onClick={() => {
                         setCartLoading(true);
                         createCartItem({
@@ -192,7 +193,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                         // router.push("/cart");
                       }}
                     >
-                      ใส่ตะกร้า
+                      Add to cart
                     </Button>
                   </Box>
                 </Box>
@@ -208,7 +209,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     title: "Added to Cart.",
                     description: `${mealkit.name} has been added to your cart.`,
                     status: "success",
-                    duration: 400000,
+                    duration: 4000,
                     isClosable: true,
                     position: "top-right",
                     render: ({ id, onClose }) => (
