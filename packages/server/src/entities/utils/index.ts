@@ -3,7 +3,7 @@ export { default as IngredientInput } from "./post/InputType/IngredientInput";
 export { default as PostInput } from "./post/InputType/PostInput";
 
 export { default as PaginatedPosts } from "./post/ObjectType/PaginatedPosts";
-export { default as PostSignedS3 } from "./post/ObjectType/PostSignedS3";
+export { default as PostSignedS3 } from "./post/ObjectType/SignedS3";
 export { default as SignedS3 } from "./post/ObjectType/SignedS3";
 
 // payment

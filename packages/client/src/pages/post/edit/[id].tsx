@@ -47,7 +47,7 @@ const EditPost = ({}) => {
           initialValues={{
             title: data.post.title,
             text: data.post.text,
-            videoUrl: data.post.videoUrl,
+            videoUrl: data.post.video.url,
           }}
           onSubmit={async (values) => {
             // console.log(values);
