@@ -22,7 +22,7 @@ type Props = ButtonProps & {
   size?: "xs" | "sm" | "md" | "lg";
 };
 
-const Button = ({
+const Button: ComponentWithAs<"button", Props> = ({
   children,
   position,
   textAlign = "center",

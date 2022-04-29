@@ -7,7 +7,7 @@ import {
   SmallCloseIcon,
 } from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, Img, useToast, IconButton } from "@chakra-ui/react";
+import { Avatar, Img, useToast, IconButton, Button } from "@chakra-ui/react";
 import NextLink from "next/link";
 import router from "next/router";
 import React, { useState } from "react";
@@ -15,7 +15,6 @@ import {
   useCreateCartItemMutation,
   useMealkitsQuery,
 } from "../generated/graphql";
-import Button from "./atoms/Button";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -209,7 +208,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     title: "Added to Cart.",
                     description: `${mealkit.name} has been added to your cart.`,
                     status: "success",
-                    duration: 4000,
+                    duration: 400000,
                     isClosable: true,
                     position: "top-right",
                     render: ({ id, onClose }) => (
@@ -217,17 +216,14 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                         key={id}
                         width="100%"
                         bgColor="white"
-                        p={2}
+                        p={4}
                         boxShadow="lg"
                       >
-                        <Flex
-                          alignItems="center"
-                          minWidth="-webkit-fill-available"
-                        >
-                          <Box>
+                        <Flex alignItems="center">
+                          <Box minWidth="-webkit-fill-available">
                             <Flex
                               justifyContent="space-between"
-                              alignItems="flex-start"
+                              alignItems="flex-center"
                             >
                               <Flex alignItems="center">
                                 <CheckCircleIcon color="brand" m={2} />
@@ -254,6 +250,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                               onClick={() => router.push("/cart")}
                               textAlign="center"
                               size="xs"
+                              color="white"
                             >
                               See Cart
                             </Button>
