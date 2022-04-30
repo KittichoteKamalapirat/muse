@@ -1,16 +1,14 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { EffectCoverflow, Pagination, Navigation } from "swiper";
+import { Img } from "@chakra-ui/image";
+import { Flex } from "@chakra-ui/layout";
+import React from "react";
+import SwiperCore, { EffectCoverflow, Navigation, Pagination } from "swiper";
 import "swiper/css";
+import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/effect-coverflow";
-
-import React from "react";
-import { Img } from "@chakra-ui/image";
-import { Box, Flex } from "@chakra-ui/layout";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
-import { Center, Square, Circle } from "@chakra-ui/react";
 
 // Swiper.use([Navigation, Pagination]);
 
