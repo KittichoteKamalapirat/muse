@@ -17,6 +17,7 @@ import {
 import { withApollo } from "../../util/withApollo";
 import useFetch from "../../util/useFetch";
 import UrlResolver from "../../lib/UrlResolver";
+import { Error } from "../../components/skeletons/Error";
 
 interface PaymentProps {}
 
@@ -96,7 +97,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   }
 
   if (error) {
-    console.log(error);
+    <Error />;
   }
 
   return (
