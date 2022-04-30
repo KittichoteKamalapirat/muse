@@ -4,6 +4,7 @@ import NextLink from "next/link";
 import React from "react";
 import UrlResolver from "../../lib/UrlResolver";
 import Button from "../atoms/Button";
+import LinkButton from "../atoms/LinkButton";
 
 interface Props {
   text?: string;
@@ -26,11 +27,8 @@ export const Error = ({ text, overlay = false }: Props) => {
         <Text color="alert" fontWeight="bold" mb={5}>
           {text || "Hmm.. something is wrong"}
         </Text>
-        <NextLink href={homeUrl} passHref>
-          <Link my="10px" width="100%">
-            <Button>Back to Home</Button>
-          </Link>
-        </NextLink>
+
+        <LinkButton pathname={homeUrl}>Back to Home</LinkButton>
       </Flex>
     </Flex>
   );

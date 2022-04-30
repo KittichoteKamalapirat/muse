@@ -24,6 +24,7 @@ import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { useRouter } from "next/router";
 import { primaryColor } from "../../../components/Variables";
 import { Loading } from "../../../components/skeletons/Loading";
+import LinkButton from "../../../components/atoms/LinkButton";
 
 interface addressProps {}
 
@@ -46,13 +47,10 @@ const Address: React.FC<addressProps> = ({}) => {
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
-        <NextLink
-          href="/account/address/create"
-          as="/account/address/create"
-          passHref
-        >
-          <Button leftIcon={<AddIcon />}>Add address</Button>
-        </NextLink>
+
+        <LinkButton pathname="/account/address/create" leftIcon={<AddIcon />}>
+          Add address
+        </LinkButton>
       </Flex>
     </Flex>
   );

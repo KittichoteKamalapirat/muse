@@ -14,6 +14,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import LinkButton from "../../components/atoms/LinkButton";
 import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 import { AddressComponent } from "../../components/Icons/AddressComponent";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
@@ -116,11 +117,9 @@ const Order: React.FC<OrderProps> = ({}) => {
                     </h2>
                     <AccordionPanel pb={4}>
                       <AddressComponent address={address?.address} />
-                      <NextLink href="/account/address/edit" passHref>
-                        <Link>
-                          <Button my="10px">Edit Address</Button>
-                        </Link>
-                      </NextLink>
+                      <LinkButton pathname="/account/address/edit">
+                        Edit Address
+                      </LinkButton>
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
@@ -128,13 +127,13 @@ const Order: React.FC<OrderProps> = ({}) => {
             ) : (
               <Box>
                 <Text>You have not added your address. Please add one</Text>
-                <NextLink
-                  href="/account/address/create"
-                  as="/account/address/create"
-                  passHref
+
+                <LinkButton
+                  pathname="/account/address/create"
+                  leftIcon={<AddIcon />}
                 >
-                  <Button leftIcon={<AddIcon />}>Add address</Button>
-                </NextLink>
+                  Add Address
+                </LinkButton>
               </Box>
             ))}
 
@@ -254,17 +253,13 @@ const Order: React.FC<OrderProps> = ({}) => {
                       <Text>Gross Order</Text>
                       <Text>{order.grossOrder}</Text>
                     </Flex>
-                    <NextLink
-                      href="/payment/[id]"
-                      as={`/payment/${order.paymentId}`}
-                      passHref
+
+                    <LinkButton
+                      href={`/payment/${order.paymentId}`}
+                      leftIcon={<AddIcon />}
                     >
-                      <Link>
-                        <Button my="10px" width="100%">
-                          Make a payment
-                        </Button>
-                      </Link>
-                    </NextLink>
+                      Make a payment
+                    </LinkButton>
                   </Box>
                 ))}
               </Box>

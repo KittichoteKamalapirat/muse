@@ -1,28 +1,41 @@
-import { Link } from "@chakra-ui/react";
+import {
+  ButtonProps as ChakraButtonProps,
+  ComponentWithAs,
+  IconProps,
+  Link,
+} from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import Button from "./Button";
 import NextLink from "next/link";
 
-interface Props {
+type Props = ChakraButtonProps & {
   children: ReactNode;
-  pathname: string;
-}
+  pathname?: string;
+  href?: any;
+  leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+};
 
-const ButtonLink = ({ children, pathname, ...props }: Props) => {
+const LinkButton = ({
+  children,
+  href,
+  pathname,
+  leftIcon,
+  ...props
+}: Props) => {
+  console.log(href);
   return (
-    <NextLink href={{ pathname }} passHref>
+    <NextLink href={href || { pathname }} passHref>
       <Link
         _hover={{
           textDecoration: "none",
         }}
       >
         <Button
-          p={3}
-          color="white"
-          width="100%"
           _hover={{
             backgroundColor: "brandHover",
           }}
+          leftIcon={leftIcon}
+          {...props}
         >
           {children}
         </Button>
@@ -31,4 +44,4 @@ const ButtonLink = ({ children, pathname, ...props }: Props) => {
   );
 };
 
-export default ButtonLink;
+export default LinkButton;

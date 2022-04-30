@@ -17,6 +17,7 @@ import { withApollo } from "../../util/withApollo";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import { LikeSkeleton } from "../../components/skeletons/LikeSkeleton";
 import NextLink from "next/link";
+import LinkButton from "../../components/atoms/LinkButton";
 
 interface MyPostsProps {}
 
@@ -54,16 +55,12 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
             alignItems="center"
           >
             <Heading fontWeight="normal" fontSize="md" m={2}>
-              You have not created any posts yet!{" "}
+              You have not created any posts yet!
             </Heading>
-            <Button>
-              <NextLink href="/create-post" passHref>
-                <Text as={Link}>
-                  {/* <SmallAddIcon />  */}
-                  Create a new post with Meal kit
-                </Text>
-              </NextLink>
-            </Button>
+
+            <LinkButton pathname="/create-post">
+              Create a new post with Meal kit
+            </LinkButton>
           </Flex>
         ) : (
           <Box>

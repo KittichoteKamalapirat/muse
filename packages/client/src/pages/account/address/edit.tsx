@@ -1,4 +1,4 @@
-import { Flex, Button } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
@@ -14,6 +14,7 @@ import {
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 import { Loading } from "../../../components/skeletons/Loading";
+import Button from "../../../components/atoms/Button";
 
 interface EditAddressProps {}
 
@@ -136,8 +137,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
                 />{" "}
               </Flex>
 
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting}>
                 Update
               </Button>
             </Form>

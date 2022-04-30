@@ -1,9 +1,10 @@
 import { Img } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
-import { Button, ListItem, UnorderedList } from "@chakra-ui/react";
+import { ListItem, UnorderedList } from "@chakra-ui/react";
 import { Skeleton } from "@chakra-ui/skeleton";
 import { useRouter } from "next/router";
 import React from "react";
+import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper";
 import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
@@ -130,9 +131,7 @@ const Tracking: React.FC<TrackingProps> = ({}) => {
                 </UnorderedList>
               </Box>
 
-              <Button onClick={() => router.push("/")} color="white">
-                Back to home
-              </Button>
+              <LinkButton pathname="/">Back to home</LinkButton>
             </Box>
           )}
         </ContentWrapper>

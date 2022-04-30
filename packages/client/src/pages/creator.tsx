@@ -15,6 +15,7 @@ import SvgCreator1 from "../components/svgComponents/Creator1";
 import SvgCreator2 from "../components/svgComponents/Creator2";
 import SvgCreator3 from "../components/svgComponents/Creator3";
 import SvgCreator4 from "../components/svgComponents/Creator4";
+import LinkButton from "../components/atoms/LinkButton";
 
 interface WelcomeCreatorProps {}
 
@@ -26,7 +27,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
       <Flex
         flexDirection="column"
         alignItems="center"
-        mt={["0px", "100px"]}
+        mt="100px"
         mb={["5px", "100px"]}
         pb={["10px"]}
       >
@@ -36,7 +37,6 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
           textAlign="center"
         >
           <Box>
-            {" "}
             <Heading>Share your recipe</Heading>
             <Box
               // flexDirection={["column", "row"]}
@@ -46,19 +46,15 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
               <Text>Film your recipe, Provide ingredients</Text>
               <Text>Generate Income</Text>
             </Box>
-            <NextLink
+            <LinkButton
               href={{
                 pathname: "/register",
                 query: { isCreator: true },
               }}
-              passHref
+              mt={10}
             >
-              <Link>
-                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
-                  Sign up as Creator
-                </Button>
-              </Link>
-            </NextLink>
+              Sign up as Creator
+            </LinkButton>
           </Box>
 
           <Img

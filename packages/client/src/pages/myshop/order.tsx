@@ -18,6 +18,7 @@ import {
 import { withApollo } from "../../util/withApollo";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import order from "../order";
+import LinkButton from "../../components/atoms/LinkButton";
 
 //format
 // by orderId
@@ -248,7 +249,7 @@ const Order: React.FC<OrderProps> = ({}) => {
 
                     <Box>Delivery Fee: {orderItem.deliveryFee}</Box>
 
-                    <NextLink
+                    <LinkButton
                       href={{
                         pathname: "/order/tracking/create",
                         query: {
@@ -261,16 +262,11 @@ const Order: React.FC<OrderProps> = ({}) => {
                           }),
                         },
                       }}
-                      passHref
                     >
-                      <Link>
-                        <Button my="10px" color="white">
-                          {orderItem.tracking
-                            ? "Update tracking"
-                            : `Deliver to ${orderItem.username}`}
-                        </Button>
-                      </Link>
-                    </NextLink>
+                      {orderItem.tracking
+                        ? "Update tracking"
+                        : `Deliver to ${orderItem.username}`}
+                    </LinkButton>
                   </Box>
                 </Box>
               )}

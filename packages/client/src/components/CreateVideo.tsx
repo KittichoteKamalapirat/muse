@@ -1,6 +1,5 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
@@ -10,6 +9,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import Button from "./atoms/Button";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
@@ -139,12 +139,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
       {/* hide if no s3 or is creating auto thumbnail */}
       {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
         <Flex justifyContent="right">
-          <Button
-            variant="transparent"
-            color="brand"
-            mt="5rem"
-            onClick={() => nextStep()}
-          >
+          <Button variant="ghost" color="brand" onClick={() => nextStep()}>
             Next
           </Button>
         </Flex>

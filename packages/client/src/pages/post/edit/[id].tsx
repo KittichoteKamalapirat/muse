@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
@@ -13,6 +13,7 @@ import {
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
 import { Loading } from "../../../components/skeletons/Loading";
+import Button from "../../../components/atoms/Button";
 
 const EditPost = ({}) => {
   const router = useRouter(); //for pushing after we finished updating
@@ -50,14 +51,6 @@ const EditPost = ({}) => {
             videoUrl: data.post.video.url,
           }}
           onSubmit={async (values) => {
-            // console.log(values);
-            // const { error } = await createPost({ input: values });
-            // console.log("error", error);
-            // // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
-            // if (!error) {
-            //   router.push("/");
-            // }
-            // await updatePost({ variables: { id: postId, ...values } });
             router.back();
           }}
         >
@@ -74,8 +67,7 @@ const EditPost = ({}) => {
                 />
               </Box>
 
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting}>
                 Update Post
               </Button>
             </Form>

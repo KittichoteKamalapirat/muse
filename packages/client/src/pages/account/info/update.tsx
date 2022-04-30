@@ -1,10 +1,11 @@
-import { Button } from "@chakra-ui/button";
-import { Flex, Text } from "@chakra-ui/layout";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
 import { Wrapper } from "../../../components/Wrapper";
 import {
   useMeQuery,
@@ -12,8 +13,6 @@ import {
   useUpdateUserMutation,
 } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
-import { Layout } from "../../../components/Layout/Layout";
-import { Loading } from "../../../components/skeletons/Loading";
 
 interface userProps {}
 
@@ -71,8 +70,7 @@ const UpdateUser: React.FC<userProps> = ({}) => {
                 placeholder="about"
                 label="about"
               />
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting}>
                 Update
               </Button>
             </Form>

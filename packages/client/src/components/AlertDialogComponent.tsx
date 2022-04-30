@@ -45,22 +45,8 @@ export const AlertDialogComponent: React.FC<AlertDialogComponentProps> = ({
   cancelRef,
   onClose,
 }) => {
-  //   const [isOpen, setIsOpen] = useState(false);
-  //   const onClose = () => setIsOpen(false);
-  //   const cancelRef = React.useRef() as LegacyRef<HTMLButtonElement> | undefined;
-
-  //   const AlertDialogProps = {
-  //     isOpen: isOpen,
-  //     leastDestructiveRef: cancelRef,
-  //     onClose: () => onClose(),
-  //   };
-
   return (
     <>
-      {/* <Button colorScheme="red" onClick={() => setIsOpen(true)}>
-        Delete Customer
-      </Button> */}
-
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={

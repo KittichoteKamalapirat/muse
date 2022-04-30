@@ -1,6 +1,6 @@
 import { Avatar } from "@chakra-ui/avatar";
 import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Button, Image } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -9,6 +9,7 @@ import {
   useReceivedCartItemMutation,
   UserOrdersQuery,
 } from "../../generated/graphql";
+import Button from "../atoms/Button";
 interface NotPaymentPendingProps {
   userOrderData: UserOrdersQuery | undefined;
   cartItemStatus: CartItemStatus;
@@ -100,8 +101,6 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                             passHref
                           >
                             <Button
-                              my="10px"
-                              width="100%"
                               onClick={() => {
                                 receivedCartItem({
                                   variables: { id: cartItem.id },
@@ -129,17 +128,10 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                               }}
                               passHref
                             >
-                              <Button as={Link} my="10px" width="100%">
-                                Leave a Review
-                              </Button>
+                              <Button as={Link}>Leave a Review</Button>
                             </NextLink>
                           ) : (
-                            <Button
-                              variant="outline"
-                              as={Link}
-                              my="10px"
-                              width="100%"
-                            >
+                            <Button variant="outline" color="black" as={Link}>
                               Reviewed
                             </Button>
                           )

@@ -1,9 +1,8 @@
-import { gql } from "@apollo/client";
-import { Button } from "@chakra-ui/button";
 import { Box, Center, Text } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper";
@@ -74,12 +73,7 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
                 <InputField name="trackingNo" placeholder="Tracking Number" />
               </Box>
               <Center>
-                <Button
-                  mt={4}
-                  type="submit"
-                  isLoading={isSubmitting}
-                  color="white"
-                >
+                <Button type="submit" isLoading={isSubmitting}>
                   Update tracking
                 </Button>
               </Center>

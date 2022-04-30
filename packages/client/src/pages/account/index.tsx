@@ -3,7 +3,6 @@ import { Center, Heading } from "@chakra-ui/layout";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Flex,
   Link,
@@ -18,6 +17,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../components/atoms/Button";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { Layout } from "../../components/Layout/Layout";
 import { Loading } from "../../components/skeletons/Loading";
@@ -233,7 +233,7 @@ const Account: React.FC<indexProps> = ({}) => {
                   passHref
                 >
                   <LinkOverlay>
-                    <Text fontSize="md">My profile</Text>
+                    <Text fontSize="md">Address</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
@@ -248,10 +248,10 @@ const Account: React.FC<indexProps> = ({}) => {
                 m={1}
                 rounded="md"
               >
-                <HeartIcon />
+                <HeartIcon color="#eb5757" />
                 <NextLink href="/like" as="/like" passHref>
                   <LinkOverlay>
-                    <Text fontSize="md">My profile</Text>
+                    <Text fontSize="md">Liked</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
@@ -318,17 +318,18 @@ const Account: React.FC<indexProps> = ({}) => {
           <Text fontSize="sm" color={inActiveGray}>
             Current: {meData?.me?.isCreator ? "Creator" : "Personal"} Account
           </Text>
+
           <Flex justifyContent="center">
             <Button
               onClick={async () => {
                 await logout();
                 router.push("/");
                 await apolloClient.resetStore();
-
-                // router.reload();
               }}
               isLoading={logoutLoading}
-              mt={10}
+              variant="outline"
+              color="black"
+              width="min-content"
             >
               logout
             </Button>

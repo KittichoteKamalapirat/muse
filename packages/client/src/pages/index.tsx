@@ -4,7 +4,6 @@ import NextLink from "next/link";
 import { Link, LinkBox, LinkOverlay } from "@chakra-ui/layout";
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Image,
@@ -22,6 +21,7 @@ import { Welcome } from "../components/Welcome";
 import { NewsFeedSkeleton } from "../components/skeletons/NewsFeedSkeleton";
 import { Layout } from "../components/Layout/Layout";
 import { ReviewStars } from "../components/ReviewStars";
+import Button from "../components/atoms/Button";
 
 const Index = () => {
   const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
@@ -185,7 +185,7 @@ const Index = () => {
             }}
             isLoading={loading}
             bgColor="lightgrey"
-            m="auto"
+            variant="ghost"
             my={8}
           >
             load more

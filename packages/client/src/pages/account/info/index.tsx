@@ -9,6 +9,7 @@ import { withApollo } from "../../../util/withApollo";
 import NextLink from "next/link";
 import { primaryColor } from "../../../components/Variables";
 import { Button } from "@chakra-ui/button";
+import LinkButton from "../../../components/atoms/LinkButton";
 
 interface infoProps {}
 
@@ -64,11 +65,9 @@ const Info: React.FC<infoProps> = ({}) => {
           <Divider mt={2} />
 
           <Flex justifyContent="center" mt={4}>
-            <NextLink href="/account/info/update" passHref>
-              <Link style={{ textDecoration: "none" }}>
-                <Button mx="auto">Edit account info</Button>
-              </Link>
-            </NextLink>
+            <LinkButton pathname="/account/info/update">
+              Edit account info
+            </LinkButton>
           </Flex>
         </Box>
       </Wrapper>

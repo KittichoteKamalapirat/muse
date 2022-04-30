@@ -1,10 +1,11 @@
 import { ChevronLeftIcon } from "@chakra-ui/icons";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Button, IconButton } from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import React, { RefObject, useEffect, useRef, useState } from "react";
+import Button from "../components/atoms/Button";
 import { CreateMealkit } from "../components/CreateMealkit";
 import { CreatePostForm } from "../components/CreatePostForm";
 import { CreateRecipe } from "../components/CreateRecipe";
@@ -420,7 +421,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                           />
 
                           <Button
-                            variant="transparent"
+                            variant="ghost"
                             color="brand"
                             onClick={() => nextStep()}
                           >

@@ -1,4 +1,3 @@
-import { Button } from "@chakra-ui/button";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
@@ -6,6 +5,8 @@ import { Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
 import NextLink from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import Button from "../components/atoms/Button";
+import LinkButton from "../components/atoms/LinkButton";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
 import { Wrapper } from "../components/Wrapper";
@@ -96,13 +97,10 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
-        <NextLink
-          href="/account/address/create"
-          as="/account/address/create"
-          passHref
-        >
-          <Button leftIcon={<AddIcon />}>Add address</Button>
-        </NextLink>
+
+        <LinkButton leftIcon={<AddIcon />} pathname="/account/address/create">
+          Add address
+        </LinkButton>
       </Flex>
     </Flex>
   );
@@ -259,22 +257,6 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   <Divider />
                   {/* summary of the order */}
 
-                  {/* <Box
-                    bgColor="green.50"
-                    py={2}
-                    borderTopWidth="1px"
-                    borderBottomWidth="1px"
-                    borderColor="green.300"
-                  >
-                    <Wrapper mt={0} mb={0}>
-                      <Flex justifyContent="space-between">
-                        <Text>Total order</Text>
-                        <Heading fontSize="md" color={primaryColor}>
-                          ฿ {item.totalByCreator + item.deliveryFee}
-                        </Heading>
-                      </Flex>
-                    </Wrapper>
-                  </Box> */}
                   <Divider />
                 </Box>
               ))
@@ -324,9 +306,6 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   },
                 });
               }}
-              p={3}
-              color="white"
-              width="100%"
               disabled={!address}
             >
               Make a payment

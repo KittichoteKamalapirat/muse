@@ -1,13 +1,5 @@
 import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Flex,
-  IconButton,
-  Image,
-  Img,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, IconButton, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
@@ -17,6 +9,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import Button from "./atoms/Button";
 
 interface CreateThumbnailProps {
   prevStep: Function;
@@ -145,7 +138,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           variant="transparent"
         />
 
-        <Button variant="transparent" color="brand" onClick={() => nextStep()}>
+        <Button variant="ghost" color="brand" onClick={() => nextStep()}>
           Next
         </Button>
       </Flex>

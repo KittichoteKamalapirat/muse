@@ -7,7 +7,7 @@ import {
   SmallCloseIcon,
 } from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, Img, useToast, IconButton, Button } from "@chakra-ui/react";
+import { Avatar, Img, useToast, IconButton } from "@chakra-ui/react";
 import NextLink from "next/link";
 import router from "next/router";
 import React, { useState } from "react";
@@ -15,6 +15,9 @@ import {
   useCreateCartItemMutation,
   useMealkitsQuery,
 } from "../generated/graphql";
+import Button from "./atoms/Button";
+import LinkButton from "./atoms/LinkButton";
+import ButtonLink from "./atoms/LinkButton";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -56,10 +59,10 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
 
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
-          <Text>ไม่มีชุดทำอาหาร</Text>
-          <NextLink href="/" as="/" passHref>
-            <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
-          </NextLink>
+          <Text>There are no mealkits for this post</Text>
+          <LinkButton pathname="/" leftIcon={<AddIcon />}>
+            Add a mealkit
+          </LinkButton>
         </Box>
       ) : (
         <Box>
@@ -133,11 +136,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       <Text>฿{mealkit.price}</Text>
                     </Flex>
                     <Button
-                      width="100%"
-                      mx="auto"
                       leftIcon={<AddIcon />}
                       isLoading={cartLoading}
-                      color="white"
                       onClick={() => {
                         setCartLoading(true);
                         createCartItem({

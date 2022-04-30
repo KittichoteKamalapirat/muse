@@ -1,7 +1,8 @@
-import { Button, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper";
@@ -74,8 +75,7 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
                 placeholder="bankAccount"
                 label="Bank Account"
               />
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting}>
                 Update
               </Button>
             </Form>

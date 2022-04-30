@@ -5,28 +5,20 @@ import {
   ComponentWithAs,
 } from "@chakra-ui/react";
 
-enum Position {
-  center = "center",
-  left = "left",
-  right = "right",
-}
-// interface Props extends ComponentWithAs<"button", ButtonProps> {
-//   children: ReactNode;
-//   position?: Position;
-// }
-
 type Props = ButtonProps & {
   children: ReactNode;
-  position?: Position;
   textAlign?: "center" | "start" | "end";
   size?: "xs" | "sm" | "md" | "lg";
+  onClick?: Function;
+  variant?: "outline" | "solid" | "unstyled" | "link" | "ghost";
 };
 
 const Button: ComponentWithAs<"button", Props> = ({
   children,
-  position,
   textAlign = "center",
   size = "md",
+  onClick,
+  variant,
   ...props
 }: Props) => {
   return (
@@ -37,6 +29,12 @@ const Button: ComponentWithAs<"button", Props> = ({
         my={2}
         size={size}
         textAlign={textAlign}
+        onClick={onClick}
+        variant={variant}
+        _hover={{
+          backgroundColor: "brandHover",
+        }}
+        {...props}
       >
         {children}
       </ChakraButton>

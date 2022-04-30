@@ -1,7 +1,8 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout/Layout";
 import { Wrapper } from "../../../components/Wrapper";
@@ -112,8 +113,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
                 />{" "}
               </Flex>
 
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button mt={10} type="submit" isLoading={isSubmitting}>
                 Update
               </Button>
             </Form>

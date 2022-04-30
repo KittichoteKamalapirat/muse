@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
+import { Box, Flex, Link } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
@@ -14,6 +14,7 @@ import {
 import { toErrorMap } from "../../util/toErrorMap";
 import NextLink from "next/link";
 import { withApollo } from "../../util/withApollo";
+import Button from "../../components/atoms/Button";
 
 export const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();
@@ -81,8 +82,7 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
               </Flex>
             ) : null}
 
-            <Button mt={4} type="submit" isLoading={isSubmitting}>
-              {" "}
+            <Button type="submit" isLoading={isSubmitting}>
               Change password
             </Button>
           </Form>

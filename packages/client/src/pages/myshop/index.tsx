@@ -1,45 +1,32 @@
-import {
-  Box,
-  Divider,
-  Heading,
-  Link,
-  Image,
-  Flex,
-  Text,
-  Button,
-  Avatar,
-  useMediaQuery,
-} from "@chakra-ui/react";
-import React from "react";
-import { AccountIcon } from "../../components/Icons/AccountIcon";
-import { Layout } from "../../components/Layout/Layout";
-import { Wrapper } from "../../components/Wrapper";
-import { withApollo } from "../../util/withApollo";
-import NextLink from "next/link";
-import {
-  CartItemStatus,
-  useFollowersQuery,
-  useMeQuery,
-} from "../../generated/graphql";
+import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
 import { Center, LinkBox, LinkOverlay } from "@chakra-ui/layout";
 import {
-  PlusSquareIcon,
-  SmallAddIcon,
-  SpinnerIcon,
-  StarIcon,
-} from "@chakra-ui/icons";
-import { inActiveGray, primaryColor } from "../../components/Variables";
-import SvgToDeliver from "../../components/svgComponents/ToDeliver";
-import SvgOnTheWay from "../../components/svgComponents/OnTheWay";
-import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
-import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
-import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
-import SvgThreeDotsIcon from "../../components/svgComponents/ThreeDotsIcon";
-import SvgOpenedIcon from "../../components/svgComponents/OpenedIcon";
-import SvgVideoIcon from "../../components/svgComponents/VideoIcon";
-import SvgPizzaIcon from "../../components/svgComponents/PizzaIcon";
-import SvgCardIcon from "../../components/svgComponents/CardIcon";
+  Avatar,
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  Link,
+  Text,
+  useMediaQuery,
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import React from "react";
+import Button from "../../components/atoms/Button";
+import LinkButton from "../../components/atoms/LinkButton";
+import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
+import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
+import SvgCardIcon from "../../components/svgComponents/CardIcon";
+import SvgOpenedIcon from "../../components/svgComponents/OpenedIcon";
+import SvgPizzaIcon from "../../components/svgComponents/PizzaIcon";
+import SvgThreeDotsIcon from "../../components/svgComponents/ThreeDotsIcon";
+import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
+import SvgVideoIcon from "../../components/svgComponents/VideoIcon";
+import { Wrapper } from "../../components/Wrapper";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { CartItemStatus, useMeQuery } from "../../generated/graphql";
+import { withApollo } from "../../util/withApollo";
 
 interface MyShopProps {}
 
@@ -207,43 +194,6 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               </Flex>
               {/* <Box flex={1}></Box> */}
             </Flex>
-
-            {/* show create button or just link with text */}
-            {isLargerThan30Em ? (
-              <Box textAlign="left" mt={4}>
-                <LinkBox mt={2}>
-                  <Button
-                    borderRadius="50%"
-                    width="0.3rem"
-                    padding-top="100%"
-                    mr={1}
-                  >
-                    <SmallAddIcon color="white" />
-                  </Button>
-                  <NextLink href="/create-post" passHref>
-                    <LinkOverlay>Create new video with meal kit</LinkOverlay>
-                  </NextLink>
-                  <Divider mt={2} />
-                </LinkBox>
-              </Box>
-            ) : (
-              <Button
-                position="fixed"
-                right="2rem"
-                bottom="5rem"
-                bgColor="brand"
-                borderRadius="50%"
-                width="2rem"
-                padding-top="100%"
-                boxShadow="lg"
-              >
-                <NextLink href="/create-post" passHref>
-                  <Text as={Link}>
-                    <SmallAddIcon color="white" fontSize="2rem" />
-                  </Text>
-                </NextLink>
-              </Button>
-            )}
           </Box>
 
           {/* My post section ends*/}
@@ -273,6 +223,32 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               <Box flex={1}></Box>
             </Flex>
           </Box>
+
+          {/* show create button or just link with text */}
+          {isLargerThan30Em ? (
+            <Box textAlign="left" mt={4}>
+              <LinkButton pathname="/create-post" leftIcon={<AddIcon />}>
+                Create a new video with meal kit
+              </LinkButton>
+            </Box>
+          ) : (
+            <Button
+              position="fixed"
+              right="2rem"
+              bottom="5rem"
+              bgColor="brand"
+              borderRadius="50%"
+              width="2rem"
+              padding-top="100%"
+              boxShadow="lg"
+            >
+              <NextLink href="/create-post" passHref>
+                <Text as={Link}>
+                  <SmallAddIcon color="white" fontSize="2rem" />
+                </Text>
+              </NextLink>
+            </Button>
+          )}
         </ContentWrapper>
       </Wrapper>
     </Layout>
