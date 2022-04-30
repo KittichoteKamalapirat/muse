@@ -72,7 +72,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [mealkitInput, setMealkitInput] = useState({
     name: "",
     price: "",
-    portion: "",
+    mealkitPortion: "",
     items: [],
     images: [""],
   });
@@ -263,14 +263,14 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
       if (postId) {
         const price = parseInt(mealkitInput.price);
-        const portion = parseInt(mealkitInput.portion);
+        const mealkitPortion = parseInt(mealkitInput.mealkitPortion);
         const { data: mealkitResult, errors: mealkitErrors } =
           await createMealkit({
             variables: {
               input: {
                 name: mealkitInput.name,
                 price: price,
-                portion: portion,
+                portion: mealkitPortion,
                 items: mealkitInput.items,
                 images: [],
               },
@@ -306,7 +306,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     if (
       mealkitInput.name != "" &&
-      mealkitInput.portion != "" &&
+      mealkitInput.mealkitPortion != "" &&
       mealkitInput.price != ""
       // &&    mealkitInput.images.length > 0
       // mealkitInput.items.length > 0
@@ -424,6 +424,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                             variant="ghost"
                             color="brand"
                             onClick={() => nextStep()}
+                            aria-label="Go to mealkit details tab"
                           >
                             Next
                           </Button>

@@ -73,7 +73,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         onDrop={(acceptedFiles, rejectedFiles) =>
           handleOnDropVideo(acceptedFiles, rejectedFiles)
         }
-        // maxSize={1000 * 1}
+        aria-label="uploadPostVideo"
         multiple={false}
         accept="video/*"
       >
@@ -139,7 +139,12 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
       {/* hide if no s3 or is creating auto thumbnail */}
       {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
         <Flex justifyContent="right">
-          <Button variant="ghost" color="brand" onClick={() => nextStep()}>
+          <Button
+            variant="ghost"
+            color="brand"
+            onClick={() => nextStep()}
+            aria-label="Go to create thumbnail tab"
+          >
             Next
           </Button>
         </Flex>

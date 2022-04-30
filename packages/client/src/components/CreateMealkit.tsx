@@ -33,7 +33,7 @@ interface CreateMealkitProps {
   input: {
     name: string;
     price: string;
-    portion: string;
+    mealkitPortion: string;
     images: string[];
     items: string[];
   };
@@ -201,12 +201,14 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             <InputLeftAddon mt={2}>Portion for</InputLeftAddon>
             {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
             <InputField
-              name="portion"
+              name="mealkitPortion"
               type="number"
-              value={input.portion}
+              value={input.mealkitPortion}
               placeholder="portion"
               variant="flushed"
-              onChange={(e) => setInput({ ...input, portion: e.target.value })}
+              onChange={(e) =>
+                setInput({ ...input, mealkitPortion: e.target.value })
+              }
             ></InputField>
 
             <InputRightAddon mt={2}>people</InputRightAddon>

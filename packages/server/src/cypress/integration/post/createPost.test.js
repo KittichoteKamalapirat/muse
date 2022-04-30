@@ -15,18 +15,25 @@ describe("post", () => {
 
     cy.get('a:contains("My shop")').click();
 
-    cy.get('a:contains("Create new video with meal kit")').click({
+    cy.get('a:contains("Create a new video with meal kit")').click({
       force: true,
     });
 
     // create a new product
-    cy.get("input").click({ force: true });
+    // cy.get("input").click({ force: true });
+    cy.contains("Select a video").click({ force: true });
 
     // upload a video
     const videoFileName = "video1.mp4";
-    cy.get("input").should("be.exist").attachFile(videoFileName, {
-      mimeType: "video/mp4",
-    });
+    cy.get("input[accept='video/*']")
+      .should("be.exist")
+      .attachFile(videoFileName, {
+        mimeType: "video/mp4",
+      });
+
+    cy.get('button[aria-label="Go to create thumbnail tab"]')
+      .should("be.visible")
+      .click({ force: true });
 
     // upload a thumbnail
     const thumbnailFileName = "thumbnail1.png";
@@ -36,9 +43,11 @@ describe("post", () => {
         mimeType: "img/png",
       });
 
-    cy.get('button:contains("Next")').click({ force: true });
+    cy.get('button[aria-label="Go to post detail tab"]')
+      .should("be.visible")
+      .click({ force: true });
 
-    // fill in details
+    // fill in post details
     const title = "Marinara";
     const text = "Marinara Details";
     const cooktime = "1";
@@ -47,9 +56,11 @@ describe("post", () => {
     cy.get('textarea[name="text"]').type(text);
     cy.get('input[name="cooktime"]').type(cooktime);
     cy.get('input[name="portion"]').type(postPortion);
-    cy.get('button:contains("Next")').click({ force: true });
+    cy.get('button[aria-label="Go to mealkit details tab"]')
+      .should("be.visible")
+      .click({ force: true });
 
-    // fill in mealkit
+    // fill in mealkit details
     const mealkitName = "Marinara Mealkit";
     const price = "100";
     const mealkitPortion = "1";
@@ -61,11 +72,9 @@ describe("post", () => {
       });
     cy.get('input[name="name"]').type(mealkitName);
     cy.get('input[name="price"]').type(price);
-    cy.get('input[name="portion"]').type(mealkitPortion);
+    cy.get('input[name="mealkitPortion"]').type(mealkitPortion);
 
     cy.get('button[type="submit"]').click({ force: true });
-
-    cy.wait(30000);
 
     // check whether redirects to home page
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);

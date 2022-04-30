@@ -138,7 +138,12 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           variant="transparent"
         />
 
-        <Button variant="ghost" color="brand" onClick={() => nextStep()}>
+        <Button
+          variant="ghost"
+          color="brand"
+          onClick={() => nextStep()}
+          aria-label="Go to post detail tab"
+        >
           Next
         </Button>
       </Flex>

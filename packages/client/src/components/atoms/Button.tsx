@@ -18,7 +18,7 @@ const Button: ComponentWithAs<"button", Props> = ({
   textAlign = "center",
   size = "md",
   onClick,
-  variant,
+  variant = "solid",
   ...props
 }: Props) => {
   return (
@@ -32,7 +32,8 @@ const Button: ComponentWithAs<"button", Props> = ({
         onClick={onClick}
         variant={variant}
         _hover={{
-          backgroundColor: "brandHover",
+          backgroundColor:
+            variant === "solid" ? "brandHover" : "brandHoverPale",
         }}
         {...props}
       >
