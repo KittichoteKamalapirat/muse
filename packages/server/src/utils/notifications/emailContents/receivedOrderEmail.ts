@@ -1,12 +1,15 @@
 const receivedOrderEmail = (
+  id: number,
   quantity: number,
   mealkitName: string,
   username: string
-) =>
-  `Hi, <br> You have received an <a href=${
+) => {
+  const message = `Hi, <br> You have received <a href=${
     process.env.CORS_ORIGIN
-  }/myshop/order?status=PaymentPending>order</a> for ${quantity} ${mealkitName}${
+  }/myshop/order/cartItem/${id}>an order for ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""
-  } from ${username}.  <br> Please wait for ${username} to complete the payment.`;
+  } </strong> </a> from ${username}. Please wait for ${username} to complete the payment.`;
+  return message;
+};
 
 export default receivedOrderEmail;

@@ -1,14 +1,6 @@
+import { Box, Flex, Skeleton, SkeletonCircle, Stack } from "@chakra-ui/react";
 import React from "react";
-import {
-  Box,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
-  Flex,
-  Img,
-} from "@chakra-ui/react";
-import { Wrapper } from "../Wrapper";
+import { Wrapper } from "../Wrapper/Wrapper";
 
 interface NewsFeedSkeletonProps {}
 

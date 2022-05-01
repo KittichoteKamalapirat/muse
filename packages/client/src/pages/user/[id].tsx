@@ -7,7 +7,7 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
 import { Error } from "../../components/skeletons/Error";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   useFollowersQuery,

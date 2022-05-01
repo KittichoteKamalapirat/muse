@@ -10,6 +10,7 @@ import {
   UserOrdersQuery,
 } from "../../generated/graphql";
 import Button from "../atoms/Button";
+import LinkButton from "../atoms/LinkButton";
 interface NotPaymentPendingProps {
   userOrderData: UserOrdersQuery | undefined;
   cartItemStatus: CartItemStatus;
@@ -52,15 +53,13 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                     {byCreator.cartItems.map((cartItem, subindex) => (
                       <Box key={subindex} my="6px">
                         <Flex>
-                          {!cartItem.mealkit?.thumbnail ? null : (
-                            <Box flex={1}>
-                              <Image
-                                src={cartItem.mealkit.thumbnail.url}
-                                alt="image"
-                                fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
-                              />
-                            </Box>
-                          )}
+                          <Box flex={1}>
+                            <Image
+                              src={cartItem.mealkit.thumbnail.url}
+                              alt="image"
+                              fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                            />
+                          </Box>
 
                           <Box flex={3} m={1} textAlign="left">
                             <Heading size="md">
@@ -95,30 +94,28 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                         </Flex>
 
                         {cartItemStatus === CartItemStatus.Delivered && (
-                          <NextLink
-                            href={`/mealkit/[id]`}
-                            as={`/mealkit/${cartItem.mealkitId}`}
-                            passHref
+                          <LinkButton
+                            onClick={async () => {
+                              const result = await receivedCartItem({
+                                variables: { id: cartItem.id },
+                                update: (cache) =>
+                                  cache.evict({ fieldName: "userOrders:{}" }),
+                              });
+
+                              if (result.data?.receivedCartItem) {
+                                router.push("/order?status=Received");
+                              }
+                            }}
                           >
-                            <Button
-                              onClick={() => {
-                                receivedCartItem({
-                                  variables: { id: cartItem.id },
-                                  update: (cache) =>
-                                    cache.evict({ fieldName: "userOrders:{}" }),
-                                });
-                              }}
-                            >
-                              Received an item
-                            </Button>
-                          </NextLink>
+                            Received an item
+                          </LinkButton>
                         )}
 
                         {/* received and not reviewed -> leave a review button */}
                         {/* received and reviewed -> reviewed button */}
                         {cartItemStatus === CartItemStatus.Received ? (
                           !cartItem.isReviewed ? (
-                            <NextLink
+                            <LinkButton
                               href={{
                                 pathname: "/review/create",
                                 query: {
@@ -126,10 +123,9 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
                                   mealkitId: cartItem.mealkitId,
                                 },
                               }}
-                              passHref
                             >
-                              <Button as={Link}>Leave a Review</Button>
-                            </NextLink>
+                              Leave a Review
+                            </LinkButton>
                           ) : (
                             <Button variant="outline" color="black" as={Link}>
                               Reviewed

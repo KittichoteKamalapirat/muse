@@ -179,6 +179,8 @@ export class TrackingResolver {
               cartItem.mealkit.name,
               tracking.courier
             ),
+            detailUrl: `/order/tracking/${tracking.id}`,
+            avatarHref: "noti/truck",
             cartItemId: cartItem.id,
             userId: cartItem.userId,
           }).save();

@@ -13,7 +13,7 @@ import SvgWhy2 from "./svgComponents/Why2";
 import SvgWhy3 from "./svgComponents/Why3";
 import SvgWhy4 from "./svgComponents/Why4";
 import { WelcomeNav } from "./WelcomeNav";
-import { Wrapper } from "./Wrapper";
+import { Wrapper } from "./Wrapper/Wrapper";
 
 interface WelcomeProps {}
 

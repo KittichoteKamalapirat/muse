@@ -1,30 +1,21 @@
+import { AddIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Button, Divider, Flex, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
+import LinkButton from "../../../components/atoms/LinkButton";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
+import { primaryColor } from "../../../components/Variables";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   useAddressQuery,
   useDeleteAddressMutation,
   useMeQuery,
 } from "../../../generated/graphql";
-import NextLink from "next/link";
-import { AddIcon, DeleteIcon, EditIcon, SmallAddIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  IconButton,
-  Link,
-  Text,
-  Button,
-  Flex,
-  Divider,
-} from "@chakra-ui/react";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
-import { useApolloClient } from "@apollo/client";
-import { Wrapper } from "../../../components/Wrapper";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { useRouter } from "next/router";
-import { primaryColor } from "../../../components/Variables";
-import { Loading } from "../../../components/skeletons/Loading";
-import LinkButton from "../../../components/atoms/LinkButton";
 
 interface addressProps {}
 

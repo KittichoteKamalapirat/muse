@@ -28,7 +28,7 @@ import SvgRateIcon from "../../components/svgComponents/RateIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
 import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   CartItemStatus,

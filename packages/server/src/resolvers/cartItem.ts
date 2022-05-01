@@ -47,6 +47,27 @@ export class CartItemResolver {
     });
   }
 
+  @Query(() => CartItem)
+  @UseMiddleware(isAuth)
+  async cartItem(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<CartItem | undefined> {
+    return CartItem.findOne({
+      where: { id, userId: req.session.userId },
+      relations: [
+        "mealkit",
+        "user",
+        "tracking",
+        "order",
+        "user.address",
+        "mealkit.post",
+        "mealkit.creator",
+        "mealkit.mealkitFiles",
+      ],
+    });
+  }
+
   // for admin
   @Query(() => [CartItem])
   @UseMiddleware(isAdmin)
@@ -179,6 +200,8 @@ export class CartItemResolver {
           cartItem?.quantity,
           cartItem?.mealkit.name
         ),
+        detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
+        avatarHref: "noti/confirm",
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();

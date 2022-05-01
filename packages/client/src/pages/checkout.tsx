@@ -9,7 +9,7 @@ import Button from "../components/atoms/Button";
 import LinkButton from "../components/atoms/LinkButton";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
-import { Wrapper } from "../components/Wrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import {
   CartItem,

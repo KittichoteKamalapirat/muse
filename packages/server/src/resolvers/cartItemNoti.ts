@@ -11,7 +11,7 @@ export class CartItemNotiResolver {
   @Query(() => [CartItemNoti])
   async orderNotis(@Ctx() { req }: MyContext): Promise<CartItemNoti[] | Error> {
     try {
-      const notis = CartItemNoti.find({
+      const notis = await CartItemNoti.find({
         where: { userId: req.session.userId },
         order: {
           createdAt: "DESC",

@@ -8,12 +8,12 @@ import {
   LinkOverlay,
   Text,
 } from "@chakra-ui/layout";
-import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Layout } from "../components/Layout/Layout";
 import { primaryColor } from "../components/Variables";
-import { Wrapper } from "../components/Wrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
+
 import {
   CartItemNoti,
   ReadOrderNotisMutation,
@@ -23,11 +23,9 @@ import {
 } from "../generated/graphql";
 import formatRelativeDate from "../util/formatRelativeDate";
 import { withApollo } from "../util/withApollo";
-interface NotificationProps {}
+interface Props {}
 
 export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
-  console.log("hi1");
-
   cache.modify({
     fields: {
       orderNotis(existingNotis = []) {
@@ -38,10 +36,9 @@ export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
       },
     },
   });
-  console.log("hi2");
 };
 
-const Notification: React.FC<NotificationProps> = ({}) => {
+const Notification = ({}: Props) => {
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
 
@@ -49,7 +46,7 @@ const Notification: React.FC<NotificationProps> = ({}) => {
     data: orderNoti,
     loading: orderNotiLoading,
     error: errorNori,
-  } = useOrderNotisQuery({});
+  } = useOrderNotisQuery();
 
   console.log(orderNoti);
 
@@ -77,26 +74,27 @@ const Notification: React.FC<NotificationProps> = ({}) => {
       <Wrapper>
         <Box mx={3}>
           <Heading fontSize="2xl">Notification</Heading>
-          <Box mt={5}>
-            {" "}
-            <Heading fontSize="lg">Order Updates</Heading>
+          <Box>
             {orderNoti?.orderNotis.map((noti) => (
-              <LinkBox key={noti.id}>
+              <LinkBox key={noti.id} mt={5}>
                 <Flex
+                  alignItems="center"
                   mt={2}
                   borderRight={noti.read ? "null" : "4px"}
                   borderColor={primaryColor}
                   borderRadius="4px"
                 >
-                  <Avatar src={noti.cartItem.mealkit.thumbnail.url} mx={2} />
+                  <Avatar src={noti.avatarHref} mx={2} />
 
                   <Text>
                     <span dangerouslySetInnerHTML={{ __html: noti.message }} />{" "}
-                    <strong>{formatRelativeDate(noti.createdAt)}</strong>
+                    <span style={{ color: "#718096" }}>
+                      {formatRelativeDate(noti.createdAt)}
+                    </span>
                   </Text>
                 </Flex>
 
-                <LinkOverlay href="/myshop/order?status=ToDeliver"></LinkOverlay>
+                <LinkOverlay href={noti.detailUrl}></LinkOverlay>
               </LinkBox>
             ))}
           </Box>

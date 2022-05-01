@@ -1,7 +1,6 @@
-import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import {
   Accordion,
   AccordionButton,
@@ -11,7 +10,6 @@ import {
   Avatar,
   Divider,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import LinkButton from "../../components/atoms/LinkButton";
@@ -21,7 +19,7 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import { primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
   useAddressQuery,
@@ -254,10 +252,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                       <Text>{order.grossOrder}</Text>
                     </Flex>
 
-                    <LinkButton
-                      href={`/payment/${order.paymentId}`}
-                      leftIcon={<AddIcon />}
-                    >
+                    <LinkButton href={`/payment/${order.paymentId}`}>
                       Make a payment
                     </LinkButton>
                   </Box>

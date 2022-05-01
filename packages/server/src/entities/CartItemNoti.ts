@@ -17,12 +17,6 @@ class CartItemNoti extends BaseEntity {
   @Field()
   id: number;
 
-  // @Column()
-  // @Field((type) => String)
-  // message(): string {
-  //   return `You received an order for ${this.cartItem.quantity} ${this.cartItem.mealkit.name} from ${this.cartItem.user.username}.`;
-  // }
-
   @Field()
   @Column({ default: false })
   read: boolean;
@@ -30,6 +24,14 @@ class CartItemNoti extends BaseEntity {
   @Field()
   @Column()
   message: string;
+
+  @Field()
+  @Column()
+  avatarHref: string; // could be url or path to icon
+
+  @Field()
+  @Column()
+  detailUrl: string;
 
   @Field()
   @Column()

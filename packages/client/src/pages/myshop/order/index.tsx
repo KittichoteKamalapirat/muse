@@ -1,24 +1,20 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/button";
-import { Image, Img } from "@chakra-ui/image";
-import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
-import { Link, Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/image";
+import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
-import { AddressComponent } from "../../components/Icons/AddressComponent";
-import { TrackingDetail } from "../../components/Icons/TrackingDetail";
-import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
-import NextLink from "next/link";
+import LinkButton from "../../../components/atoms/LinkButton";
+import { AddressComponent } from "../../../components/Icons/AddressComponent";
+import { TrackingDetail } from "../../../components/Icons/TrackingDetail";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { OrderArraySkeleton } from "../../../components/skeletons/OrderArraySkeleton";
+import { inActiveGray, primaryColor } from "../../../components/Variables";
+import { Wrapper } from "../../../components/Wrapper";
 import {
   CartItemStatus,
   useCreatorOrdersLazyQuery,
-} from "../../generated/graphql";
-import { withApollo } from "../../util/withApollo";
-import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
-import order from "../order";
-import LinkButton from "../../components/atoms/LinkButton";
+} from "../../../generated/graphql";
+import { withApollo } from "../../../util/withApollo";
 
 //format
 // by orderId

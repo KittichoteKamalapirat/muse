@@ -9,7 +9,7 @@ interface AddressProps {
 export const AddressComponent: React.FC<AddressProps> = ({ address }) => {
   return (
     <Box>
-      <Text fontWeight="bold">{address.name}</Text>
+      <Text>{address.name}</Text>
       <Box fontSize="sm" color="blackAlpha.600">
         <Text>{address.phonenumber}</Text>
         <Text d="inline">{address.line1}</Text>

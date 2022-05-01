@@ -22,7 +22,6 @@ const LinkButton = ({
   leftIcon,
   ...props
 }: Props) => {
-  console.log(href);
   return (
     <NextLink href={href || { pathname }} passHref>
       <Link

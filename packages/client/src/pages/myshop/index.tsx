@@ -1,5 +1,5 @@
 import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
-import { Center, LinkBox, LinkOverlay } from "@chakra-ui/layout";
+import { Center } from "@chakra-ui/layout";
 import {
   Avatar,
   Box,
@@ -23,8 +23,8 @@ import SvgPizzaIcon from "../../components/svgComponents/PizzaIcon";
 import SvgThreeDotsIcon from "../../components/svgComponents/ThreeDotsIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgVideoIcon from "../../components/svgComponents/VideoIcon";
-import { Wrapper } from "../../components/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { CartItemStatus, useMeQuery } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 

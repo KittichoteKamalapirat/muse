@@ -91,6 +91,8 @@ export class ReviewResolver {
             cartItem.mealkit.name,
             cartItem.order.user.username
           ),
+          detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
+          avatarHref: "noti/review",
           cartItemId: cartItem.id,
           userId: cartItem.mealkit.creatorId,
         }).save();

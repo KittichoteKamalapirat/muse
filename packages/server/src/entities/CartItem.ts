@@ -66,7 +66,7 @@ class CartItem extends BaseEntity {
   @ManyToOne(() => Mealkit, (mealkit) => mealkit.cartItems)
   mealkit: Mealkit;
 
-  // @Field(() => Order, { nullable: true })
+  @Field(() => Order)
   @ManyToOne(() => Order, (order) => order.cartItems)
   order: Order;
 
