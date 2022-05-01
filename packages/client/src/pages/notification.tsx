@@ -91,7 +91,7 @@ const Notification: React.FC<NotificationProps> = ({}) => {
                   <Avatar src={noti.cartItem.mealkit.thumbnail.url} mx={2} />
 
                   <Text>
-                    {noti.message}{" "}
+                    <span dangerouslySetInnerHTML={{ __html: noti.message }} />{" "}
                     <strong>{formatRelativeDate(noti.createdAt)}</strong>
                   </Text>
                 </Flex>
