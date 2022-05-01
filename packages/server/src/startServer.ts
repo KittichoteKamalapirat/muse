@@ -24,14 +24,13 @@ import { TrackingResolver } from "./resolvers/tracking";
 import { UserResolver } from "./resolvers/user";
 import { VideoResolver } from "./resolvers/video";
 import paymentRouter from "./routes/payment";
-import trackingRouter from "./routes/tracking";
 import s3Router from "./routes/s3";
+import trackingRouter from "./routes/tracking";
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
-import { sendEmail } from "./utils/sendEmail";
 
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 

@@ -8,6 +8,7 @@ import {
   LinkOverlay,
   Text,
 } from "@chakra-ui/layout";
+import moment from "moment";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Layout } from "../components/Layout/Layout";
@@ -20,6 +21,7 @@ import {
   useOrderNotisQuery,
   useReadOrderNotisMutation,
 } from "../generated/graphql";
+import formatRelativeDate from "../util/formatRelativeDate";
 import { withApollo } from "../util/withApollo";
 interface NotificationProps {}
 
@@ -88,8 +90,12 @@ const Notification: React.FC<NotificationProps> = ({}) => {
                 >
                   <Avatar src={noti.cartItem.mealkit.thumbnail.url} mx={2} />
 
-                  <Text>{noti.message}</Text>
+                  <Text>
+                    {noti.message}{" "}
+                    <strong>{formatRelativeDate(noti.createdAt)}</strong>
+                  </Text>
                 </Flex>
+
                 <LinkOverlay href="/myshop/order?status=ToDeliver"></LinkOverlay>
               </LinkBox>
             ))}
