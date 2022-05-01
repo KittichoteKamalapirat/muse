@@ -7,16 +7,21 @@ import {
 
 type Props = ButtonProps & {
   children: ReactNode;
-  textAlign?: "center" | "start" | "end";
-  size?: "xs" | "sm" | "md" | "lg";
-  onClick?: Function;
-  variant?: "outline" | "solid" | "unstyled" | "link" | "ghost";
+  // textAlign?: "center" | "start" | "end";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  variant?:
+    | "outline"
+    | "solid"
+    | "unstyled"
+    | "link"
+    | "ghost"
+    | (string & {})
+    | undefined;
 };
 
 const Button: ComponentWithAs<"button", Props> = ({
   children,
-  textAlign = "center",
-  size = "md",
+  // textAlign = "center",
   onClick,
   variant = "solid",
   ...props
@@ -25,12 +30,10 @@ const Button: ComponentWithAs<"button", Props> = ({
     <div>
       <ChakraButton
         width="100%"
-        color="white"
         my={2}
-        size={size}
-        textAlign={textAlign}
         onClick={onClick}
         variant={variant}
+        color={variant === "solid" ? "white" : "brand"}
         _hover={{
           backgroundColor:
             variant === "solid" ? "brandHover" : "brandHoverPale",
