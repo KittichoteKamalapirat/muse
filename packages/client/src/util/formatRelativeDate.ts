@@ -22,7 +22,7 @@ moment.locale("en", {
 
 const formatRelativeDate = (date: Date) => {
   const momentDate = moment(date);
-  return momentDate.fromNow(true);
+  return momentDate.fromNow();
 };
 
 export default formatRelativeDate;

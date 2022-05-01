@@ -13,6 +13,9 @@ export class CartItemNotiResolver {
     try {
       const notis = CartItemNoti.find({
         where: { userId: req.session.userId },
+        order: {
+          createdAt: "DESC",
+        },
         relations: [
           "cartItem",
           "cartItem.user",
