@@ -1,17 +1,16 @@
+import { Avatar, Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import { Ingredient, useMeQuery } from "../../generated/graphql";
-
-import { Box, Heading, Text, Divider, Flex, Avatar } from "@chakra-ui/react";
-import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
-import { withApollo } from "../../util/withApollo";
 import IngredientList from "../../components/IngredientList";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../components/Wrapper";
-import { MealkitInfo } from "../../components/MealkitInfo";
 import { Layout } from "../../components/Layout/Layout";
-import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { MealkitInfo } from "../../components/MealkitInfo";
 import { Loading } from "../../components/skeletons/Loading";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
+import { Ingredient, useMeQuery } from "../../generated/graphql";
+import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
+import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
   const { data, loading } = useGetPostFromUrl();

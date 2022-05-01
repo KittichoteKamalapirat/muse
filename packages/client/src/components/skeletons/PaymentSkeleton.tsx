@@ -1,15 +1,6 @@
+import { Box, Center, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
-import {
-  Box,
-  Skeleton,
-  SkeletonCircle,
-  SkeletonText,
-  Stack,
-  Flex,
-  Img,
-  Center,
-} from "@chakra-ui/react";
-import { Wrapper } from "../Wrapper";
+import { Wrapper } from "../Wrapper/Wrapper";
 
 interface PaymentSkeletonProps {}
 

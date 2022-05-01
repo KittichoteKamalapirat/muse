@@ -161,6 +161,7 @@ export class OrderResolver {
         userId: req.session.userId,
         // order: !IsNull(),
       },
+      order: { createdAt: "DESC" },
       relations: [
         "order",
         "user",

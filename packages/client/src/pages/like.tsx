@@ -5,8 +5,8 @@ import React from "react";
 import { Layout } from "../components/Layout/Layout";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
 import { Loading } from "../components/skeletons/Loading";
-import { Wrapper } from "../components/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 

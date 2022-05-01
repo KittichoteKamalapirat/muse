@@ -2,15 +2,14 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
-import NextLink from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../components/atoms/Button";
 import LinkButton from "../components/atoms/LinkButton";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
-import { Wrapper } from "../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import {
   CartItem,
   useAddressQuery,

@@ -9,8 +9,8 @@ import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Layout } from "../components/Layout/Layout";
 import { Loading } from "../components/skeletons/Loading";
-import { Wrapper } from "../components/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import {
   CartItem,
   useCartItemsQuery,

@@ -9,7 +9,8 @@ import { TrackingDetail } from "../../../components/Icons/TrackingDetail";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { OrderArraySkeleton } from "../../../components/skeletons/OrderArraySkeleton";
 import { inActiveGray, primaryColor } from "../../../components/Variables";
-import { Wrapper } from "../../../components/Wrapper";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
+
 import {
   CartItemStatus,
   useCreatorOrdersLazyQuery,

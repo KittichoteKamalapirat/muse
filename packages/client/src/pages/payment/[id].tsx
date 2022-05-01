@@ -4,20 +4,19 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
+import { Error } from "../../components/skeletons/Error";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 import { UnAuthorized } from "../../components/UnAuthorized";
-import { primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
   useManuallyConfirmPaymentLazyQuery,
   usePaymentQuery,
   useUploadSlipMutation,
 } from "../../generated/graphql";
-import { withApollo } from "../../util/withApollo";
-import useFetch from "../../util/useFetch";
 import UrlResolver from "../../lib/UrlResolver";
-import { Error } from "../../components/skeletons/Error";
+import useFetch from "../../util/useFetch";
+import { withApollo } from "../../util/withApollo";
 
 interface PaymentProps {}
 

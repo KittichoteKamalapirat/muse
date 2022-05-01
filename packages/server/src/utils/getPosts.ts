@@ -8,6 +8,9 @@ const getPosts = async (cursor, realLimitPlusOne, upvotedPostIds) =>
       ...(cursor && { createdAt: LessThan(new Date(parseInt(cursor, 10))) }),
       ...(upvotedPostIds && { id: In(upvotedPostIds) }),
     },
+    order: {
+      createdAt: "DESC",
+    },
     relations: [
       "mealkits",
       "mealkits.mealkitFiles",
