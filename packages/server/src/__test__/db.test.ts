@@ -28,7 +28,7 @@ describe("db tests", () => {
   it("create user", async () => {
     const uuid = v4();
     const data = {
-      username: "User1",
+      username: "test user 1",
       email: "user1@gmail.com",
       phonenumber: "0900000000",
       password: "123",

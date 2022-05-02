@@ -74,7 +74,7 @@ export const startServer = async () => {
   console.log("port:", process.env.PORT);
   console.log("redis url:", process.env.REDIS_URL);
 
-  const conn = await createTypeORMConn();
+  const conn = await createTypeORMConn(process.env.NODE_ENV);
 
   rollbar.error("ccc");
 

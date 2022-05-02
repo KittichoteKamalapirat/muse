@@ -2,6 +2,7 @@ import Rollbar from "rollbar";
 import dotenv from "dotenv-safe";
 
 // if not production -> do nothing
+// if no this condition -> failed on circle ci for some reasons
 if (process.env.NODE_ENV === "production") {
   dotenv.config({
     allowEmptyValues: true,
