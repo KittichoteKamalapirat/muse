@@ -5,7 +5,7 @@ import React from "react";
 import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../../components/Wrapper";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   PaymentInfoDocument,
   PaymentInfoQuery,

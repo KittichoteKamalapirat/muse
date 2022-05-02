@@ -6,7 +6,7 @@ import React from "react";
 import Button from "../components/atoms/Button";
 import { InputField } from "../components/InputField";
 import { WelcomeNav } from "../components/WelcomeNav";
-import { Wrapper } from "../components/Wrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";

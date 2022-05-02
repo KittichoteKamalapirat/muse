@@ -5,7 +5,7 @@ import React from "react";
 import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { Layout } from "../../../components/Layout/Layout";
-import { Wrapper } from "../../../components/Wrapper";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   AddressInput,
   useCreateAddressMutation,

@@ -1,20 +1,19 @@
 import { Box, Flex, Link } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
-import { useState } from "react";
+import NextLink from "next/link";
+import React, { useState } from "react";
+import Button from "../../components/atoms/Button";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   MeDocument,
   MeQuery,
   useChangePasswordMutation,
 } from "../../generated/graphql";
 import { toErrorMap } from "../../util/toErrorMap";
-import NextLink from "next/link";
 import { withApollo } from "../../util/withApollo";
-import Button from "../../components/atoms/Button";
 
 export const ChangePassword: NextPage<{ token: string }> = () => {
   const router = useRouter();

@@ -1,8 +1,6 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { Ingredient } from "../generated/graphql";
-import { Layout } from "./Layout/Layout";
-import { Wrapper } from "./Wrapper";
 
 interface IngredientListProps {
   ingredients: Ingredient[];

@@ -1,19 +1,17 @@
+import { Button } from "@chakra-ui/button";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { Box, Divider, Flex, Link, Text } from "@chakra-ui/layout";
+import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
+import NextLink from "next/link";
 import React from "react";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   useDeletePaymentInfoMutation,
-  useMeQuery,
   usePaymentInfoQuery,
 } from "../../../generated/graphql";
-
-import NextLink from "next/link";
-import { Wrapper } from "../../../components/Wrapper";
-import { Button } from "@chakra-ui/button";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/menu";
-import { withApollo } from "../../../util/withApollo";
 import { banksArray } from "../../../util/constants";
+import { withApollo } from "../../../util/withApollo";
 
 interface PaymentInfoProps {}
 

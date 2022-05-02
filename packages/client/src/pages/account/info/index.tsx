@@ -1,15 +1,11 @@
-import { InfoIcon } from "@chakra-ui/icons";
-import { Box, Divider, Heading, Link, Text, Flex } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Text } from "@chakra-ui/layout";
 import React from "react";
+import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../../components/Wrapper";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { useMeQuery } from "../../../generated/graphql";
 import { isServer } from "../../../util/isServer";
 import { withApollo } from "../../../util/withApollo";
-import NextLink from "next/link";
-import { primaryColor } from "../../../components/Variables";
-import { Button } from "@chakra-ui/button";
-import LinkButton from "../../../components/atoms/LinkButton";
 
 interface infoProps {}
 

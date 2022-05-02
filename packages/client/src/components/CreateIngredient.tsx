@@ -1,12 +1,8 @@
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Flex } from "@chakra-ui/layout";
-
-import { Input, IconButton, Button } from "@chakra-ui/react";
+import { IconButton, Input } from "@chakra-ui/react";
 import React, { useState } from "react";
-// import { useCreateIngredientMutation } from "../generated/graphql";
-import { useGetPostFromUrl } from "../util/useGetPostFromUrl";
-import { Layout } from "./Layout/Layout";
-import { Wrapper } from "./Wrapper";
+import { Wrapper } from "./Wrapper/Wrapper";
 
 // get postId from the url
 

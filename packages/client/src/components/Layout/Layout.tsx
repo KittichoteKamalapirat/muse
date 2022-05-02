@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import { Navbar } from "../Navbar";
-import { Wrapper, WrapperVariant } from "../Wrapper";
+import { WrapperVariant } from "../Wrapper/Wrapper";
 
 interface LayoutProps {
   variant?: WrapperVariant;

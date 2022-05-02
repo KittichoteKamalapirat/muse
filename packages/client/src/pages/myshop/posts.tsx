@@ -1,23 +1,14 @@
 import { Image } from "@chakra-ui/image";
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Link,
-  Button,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import React from "react";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
-import { HeartIcon } from "../../components/Icons/HeartIcon";
-import { usePostsByCreatorQuery, useMeQuery } from "../../generated/graphql";
-import { Wrapper } from "../../components/Wrapper";
-import { withApollo } from "../../util/withApollo";
-import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
-import { LikeSkeleton } from "../../components/skeletons/LikeSkeleton";
-import NextLink from "next/link";
 import LinkButton from "../../components/atoms/LinkButton";
+import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
+import { HeartIcon } from "../../components/Icons/HeartIcon";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
+import { LikeSkeleton } from "../../components/skeletons/LikeSkeleton";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
+import { useMeQuery, usePostsByCreatorQuery } from "../../generated/graphql";
+import { withApollo } from "../../util/withApollo";
 
 interface MyPostsProps {}
 

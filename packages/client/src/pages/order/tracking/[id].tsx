@@ -6,8 +6,8 @@ import { useRouter } from "next/router";
 import React from "react";
 import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../../components/Wrapper";
 import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { useTrackingQuery } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
 

@@ -1,20 +1,20 @@
 import { Flex } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
-import { Wrapper } from "../../../components/Wrapper";
+import { Loading } from "../../../components/skeletons/Loading";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   AddressInput,
-  useUpdateAddressMutation,
   useAddressQuery,
+  useUpdateAddressMutation,
 } from "../../../generated/graphql";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
-import { Loading } from "../../../components/skeletons/Loading";
-import Button from "../../../components/atoms/Button";
 
 interface EditAddressProps {}
 
