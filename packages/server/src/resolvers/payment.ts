@@ -18,6 +18,7 @@ import { Payment, Order, CartItem } from "../entities";
 import { ConfirmationResponse } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import { rollbar } from "../config/initializers/rollbar";
 
 export const pubsub = new PubSub();
 
@@ -47,7 +48,8 @@ export const getScbToken = async () => {
     const token: string = data.data.accessToken;
     return token;
   } catch (error) {
-    return "";
+    rollbar.log(error);
+    return new Error("cannot get scb token");
   }
 };
 

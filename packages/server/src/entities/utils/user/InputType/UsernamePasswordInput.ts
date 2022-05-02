@@ -3,7 +3,7 @@ import { Field, InputType } from "type-graphql";
 // For argument
 
 @InputType({ description: "Argument for register user" })
-export class UsernamePasswordInput {
+class UsernamePasswordInput {
   @Field()
   username: string;
 
@@ -19,3 +19,5 @@ export class UsernamePasswordInput {
   @Field({ nullable: true })
   isCreator?: boolean;
 }
+
+export default UsernamePasswordInput;

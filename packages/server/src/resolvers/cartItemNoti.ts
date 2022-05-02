@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItemNoti } from "../entities";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -27,7 +28,7 @@ export class CartItemNotiResolver {
 
       return notis;
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error();
     }
   }
@@ -44,6 +45,7 @@ export class CartItemNotiResolver {
         .execute();
       return true;
     } catch (error) {
+      rollbar.log(error);
       return new Error();
     }
   }

@@ -11,6 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { CartItem, CartItemNoti, Order, Payment } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
@@ -142,7 +143,7 @@ export class OrderResolver {
         }
       });
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
     }
 
     return order;
@@ -201,7 +202,7 @@ export class OrderResolver {
     });
 
     const mapped = toCreatorOrdersMap(cartItems);
-    // console.log(mapped);
+
     if (mapped) {
       return mapped;
     }

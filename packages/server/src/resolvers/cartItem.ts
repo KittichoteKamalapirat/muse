@@ -11,6 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Mealkit } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { AddToCart, CartItemInput } from "../entities/utils";
@@ -233,7 +234,7 @@ export class CartItemResolver {
       await CartItem.update({ id }, { status: CartItemStatus.Complete });
       return true;
     } catch (error) {
-      console.log(error);
+      rollbar.error(error);
       return false;
     }
   }

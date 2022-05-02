@@ -8,6 +8,7 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
+import { rollbar } from "./config/initializers/rollbar";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { CartItemResolver } from "./resolvers/cartItem";
@@ -75,10 +76,13 @@ export const startServer = async () => {
 
   const conn = await createTypeORMConn();
 
+  rollbar.error("ccc");
+
+  // rollbar.log("Hello from server!");
   // await conn.runMigrations();
   const app = express();
 
-  // console.log(process.memoryUsage());
+  // console.log(process.memoryUsage())
   // sendSMS();
   // sendEmail(
   //   "kittichoteshane@gmail.com",
@@ -115,6 +119,8 @@ export const startServer = async () => {
   app.use("/api/payment", paymentRouter);
   app.use("/api/tracking", trackingRouter);
   app.use("/api/s3", s3Router);
+
+  // app.use(rollbar.errorHandler());
 
   app.use(
     session({

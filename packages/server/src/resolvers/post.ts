@@ -12,6 +12,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { Image, Post, Upvote, User, Video } from "../entities";
 import { PaginatedPosts, SignedS3 } from "../entities/utils";
@@ -199,7 +200,6 @@ export class PostResolver {
   // @Arg("body", { nullable: true }) body: string,
   // @Arg("videoUrl") videoUrl: string
   Promise<Post | Error> {
-    console.log("hi");
     // 2 sql queries one to insert and one to select
     try {
       // TODO create transaction
@@ -211,7 +211,7 @@ export class PostResolver {
       await Image.update({ id: imageId }, { postId: post.id });
       return post;
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       throw new Error("cannot create a post");
     }
   }

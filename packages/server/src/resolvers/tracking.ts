@@ -107,7 +107,6 @@ export class TrackingResolver {
 
       // if not found, create blank tracking and don't update cartItemStatus
       if (response.status !== 200) {
-        console.log("not found");
         const tracking = await Tracking.create({
           trackingNo: input.trackingNo,
           isFound: false,
@@ -205,7 +204,7 @@ export class TrackingResolver {
 
       return tracking;
     } catch (error) {
-      console.log(error.message);
+      rollbar.log(error.message);
       return error;
     }
   }

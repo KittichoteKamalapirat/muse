@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -20,8 +19,9 @@ declare global {
       TWILIO_ACCOUNT_SID: string;
       TWILIO_AUTH_TOKEN: string;
       TWILIO_TEST_PHONE_NUMBER: string;
+      ROLLBAR_ACCESS_TOKEN: string;
     }
   }
 }
 
-export {};
+export {}

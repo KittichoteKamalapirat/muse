@@ -12,6 +12,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { Image, Mealkit, MealkitFile } from "../entities";
 import { MealkitInput, SignedS3Result, SignS3Params } from "../entities/utils";
@@ -62,7 +63,7 @@ export class MealkitResolver {
         relations: ["creator", "mealkitFiles"],
       });
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error(error);
     }
   }
@@ -124,7 +125,7 @@ export class MealkitResolver {
       })
       .returning("*")
       .execute();
-    console.log({ result });
+
     return result.raw[0];
   }
 

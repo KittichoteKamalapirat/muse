@@ -9,6 +9,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Mealkit, Review } from "../entities";
 import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
@@ -37,7 +38,7 @@ export class ReviewResolver {
           cartItemId,
         },
       });
-      console.log(existingReview);
+
       if (existingReview.length > 0) {
         return new Error("You have already reviewed this product");
       }
@@ -112,7 +113,7 @@ export class ReviewResolver {
       }
       return new Error("Cannot create review");
     } catch (error) {
-      console.log(error);
+      rollbar.error("Cannot create review");
       return new Error("Cannot create review");
     }
   }
@@ -126,7 +127,7 @@ export class ReviewResolver {
         relations: ["user", "mealkit"],
       });
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error("Cannot get reviews for this mealkit");
     }
   }
@@ -174,7 +175,7 @@ export class ReviewResolver {
 
       return result.raw[0];
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error("Cannot update this review");
     }
   }
@@ -193,9 +194,6 @@ export class ReviewResolver {
       // update score on Mealkit
       const currentReview = await Review.findOne({ cartItemId: 2 });
       const mealkit = await Mealkit.findOne({ id: mealkitId });
-
-      console.log({ mealkit });
-      console.log({ currentReview });
 
       //   update Review
       await Review.delete({
@@ -224,7 +222,7 @@ export class ReviewResolver {
       }
       return new Error("Cannot find the mealkit");
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error("Cannot delete this review");
     }
   }
