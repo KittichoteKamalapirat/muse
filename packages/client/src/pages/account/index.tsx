@@ -113,69 +113,78 @@ const Account: React.FC<indexProps> = ({}) => {
         <Box mt={4}>
           <Heading fontSize="md">My orders</Heading>
 
-          <Flex mt={4}>
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.PaymentPending },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgWalletIcon />
-                </Center>
+          <Flex mt={4} justifyContent="space-around">
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.PaymentPending },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Center>
+                    <SvgWalletIcon />
+                  </Center>
 
-                <Text>To pay</Text>
-              </Link>
-            </NextLink>
+                  <Text>To pay</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.ToDeliver },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgBoxIcon />
-                </Center>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.ToDeliver },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Center>
+                    <SvgBoxIcon />
+                  </Center>
 
-                <Text>To deliver</Text>
-              </Link>
-            </NextLink>
+                  <Text>To deliver</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.OnTheWay },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgTruckIcon fontSize="1.2rem" />
-                </Center>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.OnTheWay },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Center>
+                    <SvgTruckIcon fontSize="1.2rem" />
+                  </Center>
 
-                <Text>To recieve</Text>
-              </Link>
-            </NextLink>
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.PaymentPending },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgRateIcon fontSize="1.2rem" />
-                </Center>
+                  <Text>To recieve</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-                <Text>Rate</Text>
-              </Link>
-            </NextLink>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.Received },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Center>
+                    <SvgRateIcon fontSize="1.2rem" />
+                  </Center>
+
+                  <Text>Rate</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
           </Flex>
           <Divider mt={2} />
 

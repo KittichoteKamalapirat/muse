@@ -209,7 +209,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           <Image
             src={thumbnailPreview}
             alt="image"
-            boxSize="50%"
+            boxSize={["50%", "30%"]}
             fallbackSrc="oops.png"
           />
         </Flex>
