@@ -6,7 +6,6 @@ import Dropzone from "react-dropzone";
 import UrlResolver from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import Button from "./atoms/Button";
@@ -101,22 +100,20 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                     </Text>
                   </Flex>
                 ) : (
-                  <Box>
-                    <Box justifyContent="center" alignItems="end">
-                      <video
-                        controls
-                        width="90%"
-                        id="preview"
-                        crossOrigin="anonymous"
-                        onLoadedMetadata={() => {
-                          setTimeout(() => {
-                            handleMetadata();
-                            // nextStep();
-                          }, 1000); // 10 doesn't work
-                        }}
-                        src={videoS3UrlAndID.url}
-                      />
-                    </Box>
+                  <Box width="100%">
+                    <video
+                      controls
+                      id="preview"
+                      crossOrigin="anonymous"
+                      onLoadedMetadata={() => {
+                        setTimeout(() => {
+                          handleMetadata();
+                          // nextStep();
+                        }, 1000); // 10 doesn't work
+                      }}
+                      src={videoS3UrlAndID.url}
+                    />
+
                     <Flex
                       direction="row"
                       alignItems="center"

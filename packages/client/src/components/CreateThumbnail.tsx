@@ -6,7 +6,6 @@ import Dropzone from "react-dropzone";
 import UrlResolver from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import Button from "./atoms/Button";
@@ -65,11 +64,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
     <Box>
       {thumbnailS3UrlAndID === null ? (
         <Flex justifyContent="center">
-          <Image
-            src={autoThumbnailS3UrlAndId?.url}
-            fallbackSrc="oops.png"
-            alt="auto-thumbnail-url"
-          />
+          <Img src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
         </Flex>
       ) : (
         <Flex justifyContent="center">
@@ -122,7 +117,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
                       src={thumbnailS3UrlAndID.url}
                       alt="image"
                       boxSize="2rem"
-                      fallbackSrc="oops.png"
+                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
                     />
                   )}
                   <Text textAlign="center">Add a custom cover</Text>

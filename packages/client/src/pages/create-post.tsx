@@ -13,6 +13,7 @@ import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Loading } from "../components/skeletons/Loading";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   useCreateMealkitMutation,
   useCreatePostMutation,
@@ -37,6 +38,7 @@ const postValues = {
 };
 
 const urlResolver = new UrlResolver();
+3;
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
@@ -357,13 +359,15 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 {
                   <Box display={step === 1 ? "block" : "none"}>
                     <HeadingLayout heading="New Video">
-                      <CreateVideo
-                        nextStep={nextStep}
-                        handleMetadata={handleMetadata}
-                        videoS3UrlAndID={videoS3UrlAndID}
-                        setVideoS3UrlAndID={setVideoS3UrlAndID}
-                        isGeneratingThumbnail={isGeneratingThumbnail}
-                      />
+                      <XWrapper>
+                        <CreateVideo
+                          nextStep={nextStep}
+                          handleMetadata={handleMetadata}
+                          videoS3UrlAndID={videoS3UrlAndID}
+                          setVideoS3UrlAndID={setVideoS3UrlAndID}
+                          isGeneratingThumbnail={isGeneratingThumbnail}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                     {isGeneratingThumbnail && (
                       <Loading text="generating thumbnail" overlay={true} />
@@ -373,20 +377,22 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 {
                   <Box display={step === 2 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Cover Photo">
-                      <CreateThumbnail
-                        prevStep={prevStep}
-                        nextStep={nextStep}
-                        autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
-                        thumbnailS3UrlAndID={thumbnailS3UrlAndID}
-                        setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
-                      ></CreateThumbnail>
+                      <XWrapper>
+                        <CreateThumbnail
+                          prevStep={prevStep}
+                          nextStep={nextStep}
+                          autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
+                          thumbnailS3UrlAndID={thumbnailS3UrlAndID}
+                          setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
+                        ></CreateThumbnail>
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
                 {
                   <Box display={step === 3 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Add Post Detail">
-                      <Box>
+                      <XWrapper>
                         <CreatePostForm
                           nextStep={nextStep}
                           prevstep={prevStep}
@@ -429,22 +435,24 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                             Next
                           </Button>
                         </Flex>
-                      </Box>
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
                 {
                   <Box display={step === 4 ? "block" : "none"}>
                     <HeadingLayout heading="Add a mealkit" back={false}>
-                      <CreateMealkit
-                        ingredientsField={ingredientsField}
-                        input={mealkitInput}
-                        setInput={setMealkitInput}
-                        nextStep={nextStep}
-                        prevStep={prevStep}
-                        mealkitS3UrlAndIds={mealkitS3UrlAndIds}
-                        setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
-                      />
+                      <XWrapper>
+                        <CreateMealkit
+                          ingredientsField={ingredientsField}
+                          input={mealkitInput}
+                          setInput={setMealkitInput}
+                          nextStep={nextStep}
+                          prevStep={prevStep}
+                          mealkitS3UrlAndIds={mealkitS3UrlAndIds}
+                          setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
