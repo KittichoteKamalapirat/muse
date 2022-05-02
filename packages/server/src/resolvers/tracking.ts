@@ -8,6 +8,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
