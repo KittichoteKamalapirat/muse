@@ -14,8 +14,6 @@ beforeAll(async () => {
   expressServer = serverAndDb.server;
   postgresDb = serverAndDb.connection;
 
-  console.log({ postgresDb });
-
   postgresDb.options.entities?.forEach((item) => {
     console.log({ item });
   });
