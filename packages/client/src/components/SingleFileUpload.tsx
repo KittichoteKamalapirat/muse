@@ -210,7 +210,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
             src={thumbnailPreview}
             alt="image"
             boxSize="50%"
-            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+            fallbackSrc="oops.png"
           />
         </Flex>
       )}
@@ -253,7 +253,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                       src={thumbnailPreview}
                       alt="image"
                       boxSize="2rem"
-                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                      fallbackSrc="oops.png"
                     />
                   )}
                   {updateAvatar && (

@@ -43,7 +43,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<number>(1);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -435,7 +435,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 }
                 {
                   <Box display={step === 4 ? "block" : "none"}>
-                    <HeadingLayout heading="Add a mealkit">
+                    <HeadingLayout heading="Add a mealkit" back={false}>
                       <CreateMealkit
                         ingredientsField={ingredientsField}
                         input={mealkitInput}

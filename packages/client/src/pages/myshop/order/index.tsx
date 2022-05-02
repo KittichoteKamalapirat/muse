@@ -171,7 +171,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                           <Image
                             src={cartItem.mealkit.thumbnail.url}
                             alt="image"
-                            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                            fallbackSrc="oops.png"
                           />
                         </Box>
 

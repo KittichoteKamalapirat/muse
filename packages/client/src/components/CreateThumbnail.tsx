@@ -65,7 +65,11 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
     <Box>
       {thumbnailS3UrlAndID === null ? (
         <Flex justifyContent="center">
-          <Img src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
+          <Image
+            src={autoThumbnailS3UrlAndId?.url}
+            fallbackSrc="oops.png"
+            alt="auto-thumbnail-url"
+          />
         </Flex>
       ) : (
         <Flex justifyContent="center">
@@ -74,7 +78,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
             src={thumbnailS3UrlAndID.url}
             alt="image"
             boxSize="90%"
-            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+            fallbackSrc="oops.png"
           />
         </Flex>
       )}
@@ -118,7 +122,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
                       src={thumbnailS3UrlAndID.url}
                       alt="image"
                       boxSize="2rem"
-                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                      fallbackSrc="oops.png"
                     />
                   )}
                   <Text textAlign="center">Add a custom cover</Text>
