@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
@@ -24,4 +25,4 @@ declare global {
   }
 }
 
-export {}
+export {};
