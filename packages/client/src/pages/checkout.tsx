@@ -135,16 +135,14 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   Delivery Address
                 </Heading>
                 <Box>
-                  {/* <Text>{meLoading ? null : me?.me?.username}</Text> */}
-                  <Text flex={3}>add name to address</Text>
-                  <Text flex={3}>add phone number to address</Text>
+                  <Text flex={3}>{address.address.name}</Text>
+                  <Text flex={3}>{address.address.phonenumber}</Text>
                 </Box>
                 <Text d="inline">{address?.address.line1}</Text>
                 <Text d="inline">{address?.address.line2}, </Text>
                 <Text d="inline">{address?.address.subdistrict} </Text>
                 <Text>{address?.address.district} </Text>
-                <Text d="inline">{address?.address.province}</Text>
-                {/* <Text d="inline">{address?.address.country}</Text>{" "} */}
+                <Text d="inline">{address?.address.province} </Text>
                 <Text d="inline">{address?.address.postcode}</Text>
               </Box>
             </ContentWrapper>
@@ -297,13 +295,15 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   cartItemIds.push(cartItem.id);
                 });
 
-                await createOrder({
+                const order = await createOrder({
                   variables: {
                     cartItemIds: cartItemIds,
                     grossOrder: gross,
                     cartItemsByCreatorInput: cartItemsByCreatorInput!, //check this
                   },
                 });
+                if (order)
+                  router.push(`/payment/${order.data?.createOrder.paymentId}`);
               }}
               disabled={!address}
             >

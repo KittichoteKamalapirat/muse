@@ -943,7 +943,7 @@ export type CreateOrderMutationVariables = Exact<{
 }>;
 
 
-export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, userId: string, cartItemsByCreator?: Maybe<Array<{ __typename?: 'CartItemsByCreator', creatorId: string, deliveryFee: number, mealkitsFee: number }>> } };
+export type CreateOrderMutation = { __typename?: 'Mutation', createOrder: { __typename?: 'Order', id: number, grossOrder: number, userId: string, paymentId: number, cartItemsByCreator?: Maybe<Array<{ __typename?: 'CartItemsByCreator', creatorId: string, deliveryFee: number, mealkitsFee: number }>> } };
 
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
@@ -1611,6 +1611,7 @@ export const CreateOrderDocument = gql`
     id
     grossOrder
     userId
+    paymentId
     cartItemsByCreator {
       creatorId
       deliveryFee
