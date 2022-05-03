@@ -35,13 +35,14 @@ import {
   useLogoutMutation,
   useMeQuery,
   useSwitchAccountTypeMutation,
+  useUserOrdersQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
+import Badge from "../../components/atoms/Badge";
+import { Error } from "../../components/skeletons/Error";
 
-interface indexProps {}
-
-const Account: React.FC<indexProps> = ({}) => {
-  const { data: meData, loading } = useMeQuery();
+const Account = () => {
+  const { data: meData, loading, error } = useMeQuery();
   const router = useRouter();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apolloClient = useApolloClient();
@@ -49,14 +50,90 @@ const Account: React.FC<indexProps> = ({}) => {
   const [switchAccountType, { data: isCreator }] =
     useSwitchAccountTypeMutation();
 
+  // PaymentPending
+  const {
+    data: paymentPendingData,
+    loading: paymentPendingLoading,
+    error: paymentPendingError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.PaymentPending },
+  });
+
+  const paymentPendingNum = paymentPendingData?.userOrders.length;
+
+  // ToDeliver
+  const {
+    data: toDeliverData,
+    loading: toDeliverLoading,
+    error: toDeliverError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.ToDeliver },
+  });
+
+  const toDeliverNum = toDeliverData?.userOrders.length;
+
+  // OnTheWay
+  const {
+    data: onTheWayData,
+    loading: onTheWayLoading,
+    error: onTheWayError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.OnTheWay },
+  });
+
+  const onTheWayNum = onTheWayData?.userOrders.length;
+
+  // Delivered
+  const {
+    data: deliveredData,
+    loading: deliveredLoading,
+    error: deliveredError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.Delivered },
+  });
+
+  const deliveredNum = deliveredData?.userOrders.length;
+
+  // Received
+  const {
+    data: receivedData,
+    loading: receivedLoading,
+    error: receivedError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.Received },
+  });
+
+  const receivedNum = receivedData?.userOrders.length;
   let body;
-  if (loading) {
+  if (
+    loading ||
+    toDeliverLoading ||
+    onTheWayLoading ||
+    deliveredLoading ||
+    receivedLoading
+  ) {
     return (
       <Layout>
         <Loading />
       </Layout>
     );
-  } else if (!loading && !meData?.me) {
+  }
+
+  if (
+    error ||
+    toDeliverError ||
+    onTheWayError ||
+    deliveredError ||
+    receivedError
+  ) {
+    return (
+      <Layout>
+        <Error />
+      </Layout>
+    );
+  }
+
+  if (!loading && !meData?.me) {
     body = (
       <Flex
         minH="500px"
@@ -64,7 +141,6 @@ const Account: React.FC<indexProps> = ({}) => {
         justifyContent="center"
         alignItems="center"
       >
-        {" "}
         <Box textAlign="center">
           <Text>You are not signed in</Text>
           <Text>Please </Text>
@@ -123,9 +199,14 @@ const Account: React.FC<indexProps> = ({}) => {
                 passHref
               >
                 <LinkOverlay textAlign="center" flex={1}>
-                  <Center>
-                    <SvgWalletIcon />
-                  </Center>
+                  <Badge
+                    isDisplayed={paymentPendingNum === 0}
+                    badgeContent={paymentPendingNum as number}
+                  >
+                    <Center>
+                      <SvgWalletIcon />
+                    </Center>
+                  </Badge>
 
                   <Text>To pay</Text>
                 </LinkOverlay>
@@ -141,9 +222,14 @@ const Account: React.FC<indexProps> = ({}) => {
                 passHref
               >
                 <LinkOverlay textAlign="center" flex={1}>
-                  <Center>
-                    <SvgBoxIcon />
-                  </Center>
+                  <Badge
+                    isDisplayed={toDeliverNum === 0}
+                    badgeContent={toDeliverNum as number}
+                  >
+                    <Center>
+                      <SvgBoxIcon />
+                    </Center>
+                  </Badge>
 
                   <Text>To deliver</Text>
                 </LinkOverlay>
@@ -159,9 +245,14 @@ const Account: React.FC<indexProps> = ({}) => {
                 passHref
               >
                 <LinkOverlay textAlign="center" flex={1}>
-                  <Center>
-                    <SvgTruckIcon fontSize="1.2rem" />
-                  </Center>
+                  <Badge
+                    isDisplayed={onTheWayNum === 0}
+                    badgeContent={onTheWayNum as number}
+                  >
+                    <Center>
+                      <SvgTruckIcon fontSize="1.2rem" />
+                    </Center>
+                  </Badge>
 
                   <Text>To recieve</Text>
                 </LinkOverlay>
@@ -177,9 +268,14 @@ const Account: React.FC<indexProps> = ({}) => {
                 passHref
               >
                 <LinkOverlay textAlign="center" flex={1}>
-                  <Center>
-                    <SvgRateIcon fontSize="1.2rem" />
-                  </Center>
+                  <Badge
+                    isDisplayed={receivedNum === 0}
+                    badgeContent={receivedNum as number}
+                  >
+                    <Center>
+                      <SvgRateIcon fontSize="1.2rem" />
+                    </Center>
+                  </Badge>
 
                   <Text>Rate</Text>
                 </LinkOverlay>
@@ -297,7 +393,6 @@ const Account: React.FC<indexProps> = ({}) => {
                     })
                   }
                 >
-                  {" "}
                   Switch to Creator Account
                 </MenuItem>
                 <MenuItem

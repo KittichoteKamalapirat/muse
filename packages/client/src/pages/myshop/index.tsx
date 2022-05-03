@@ -9,13 +9,18 @@ import {
   Link,
   Text,
   useMediaQuery,
+  LinkBox,
+  LinkOverlay,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
+import Badge from "../../components/atoms/Badge";
 import Button from "../../components/atoms/Button";
 import LinkButton from "../../components/atoms/LinkButton";
 import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
+import { Error } from "../../components/skeletons/Error";
+import { Loading } from "../../components/skeletons/Loading";
 import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
 import SvgCardIcon from "../../components/svgComponents/CardIcon";
 import SvgOpenedIcon from "../../components/svgComponents/OpenedIcon";
@@ -25,17 +30,47 @@ import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgVideoIcon from "../../components/svgComponents/VideoIcon";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
-import { CartItemStatus, useMeQuery } from "../../generated/graphql";
+import {
+  CartItemStatus,
+  useMeQuery,
+  useUserOrdersQuery,
+} from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
 interface MyShopProps {}
 
 const MyShop: React.FC<MyShopProps> = ({}) => {
-  const { data: meData, loading: meLoading } = useMeQuery();
+  const { data: meData, loading: meLoading, error: meError } = useMeQuery();
   const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
 
-  if (meLoading) {
-    return <Text>loading</Text>;
+  // ToDeliver
+  const {
+    data: toDeliverData,
+    loading: toDeliverLoading,
+    error: toDeliverError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.ToDeliver },
+  });
+
+  const toDeliverNum = toDeliverData?.userOrders.length;
+
+  // OnTheWay
+  const {
+    data: onTheWayData,
+    loading: onTheWayLoading,
+    error: onTheWayError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.OnTheWay },
+  });
+
+  const onTheWayNum = onTheWayData?.userOrders.length;
+
+  if (meLoading || toDeliverLoading || onTheWayLoading) {
+    return <Loading />;
+  }
+
+  if (meError || toDeliverError || onTheWayError) {
+    return <Error />;
   }
 
   return (
@@ -73,70 +108,88 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           <Box mt={4}>
             <Heading fontSize="md">My orders</Heading>
 
-            <Flex mt={4}>
-              <NextLink
-                href={{
-                  pathname: "/myshop/order",
-                  query: { status: CartItemStatus.ToDeliver },
-                }}
-                passHref
-              >
-                <Link textAlign="center" flex={1}>
-                  <Center>
-                    <SvgBoxIcon />
-                  </Center>
+            <Flex mt={4} justifyContent="space-around">
+              <LinkBox>
+                <NextLink
+                  href={{
+                    pathname: "/myshop/order",
+                    query: { status: CartItemStatus.ToDeliver },
+                  }}
+                  passHref
+                >
+                  <LinkOverlay textAlign="center" flex={1}>
+                    <Badge
+                      isDisplayed={toDeliverNum === 0}
+                      badgeContent={toDeliverNum as number}
+                    >
+                      <Center>
+                        <SvgBoxIcon />
+                      </Center>
+                    </Badge>
 
-                  <Text>To Deliver</Text>
-                </Link>
-              </NextLink>
+                    <Text>To Deliver</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </LinkBox>
 
-              <NextLink
-                href={{
-                  pathname: "/myshop/order",
-                  query: { status: CartItemStatus.OnTheWay },
-                }}
-                passHref
-              >
-                <Link textAlign="center" flex={1}>
-                  <Center>
-                    <SvgTruckIcon fontSize="1.2rem" />
-                  </Center>
+              <LinkBox>
+                <NextLink
+                  href={{
+                    pathname: "/myshop/order",
+                    query: { status: CartItemStatus.OnTheWay },
+                  }}
+                  passHref
+                >
+                  <LinkOverlay textAlign="center" flex={1}>
+                    <Badge
+                      isDisplayed={onTheWayNum === 0}
+                      badgeContent={onTheWayNum as number}
+                    >
+                      <Center>
+                        <SvgTruckIcon fontSize="1.2rem" />
+                      </Center>
+                    </Badge>
 
-                  <Text>Shipping</Text>
-                </Link>
-              </NextLink>
+                    <Text>Shipping</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </LinkBox>
 
-              <NextLink
-                href={{
-                  pathname: "/myshop/order",
-                  query: { status: CartItemStatus.Delivered },
-                }}
-                passHref
-              >
-                <Link textAlign="center" flex={1}>
-                  <Center>
-                    <SvgOpenedIcon fontSize="1.2rem" />
-                  </Center>
+              <LinkBox>
+                <NextLink
+                  href={{
+                    pathname: "/myshop/order",
+                    query: { status: CartItemStatus.Delivered },
+                  }}
+                  passHref
+                >
+                  <LinkOverlay textAlign="center" flex={1}>
+                    <Center>
+                      <SvgOpenedIcon fontSize="1.2rem" />
+                    </Center>
 
-                  <Text>Complete</Text>
-                </Link>
-              </NextLink>
+                    <Text>Complete</Text>
+                  </LinkOverlay>
+                </NextLink>
+              </LinkBox>
 
-              <NextLink
-                href={{
-                  pathname: "/myshop/order",
-                  query: { status: CartItemStatus.PaymentPending },
-                }}
-                passHref
-              >
-                <Link textAlign="center" flex={1}>
-                  <Center>
-                    <SvgThreeDotsIcon />
-                  </Center>
+              <LinkBox>
+                <NextLink
+                  href={{
+                    pathname: "/myshop/order",
+                    query: { status: CartItemStatus.PaymentPending },
+                  }}
+                  passHref
+                >
+                  <LinkOverlay textAlign="center" flex={1}>
+                    <Center>
+                      <SvgThreeDotsIcon />
+                    </Center>
 
-                  <Text>Others </Text>
-                </Link>
-              </NextLink>
+                    <Text>Others </Text>
+                  </LinkOverlay>
+                </NextLink>
+              </LinkBox>
             </Flex>
             <Divider mt={2} />
 
