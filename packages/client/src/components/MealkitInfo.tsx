@@ -209,16 +209,16 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     title: "Added to Cart.",
                     description: `${mealkit.name} has been added to your cart.`,
                     status: "success",
-                    duration: 4000,
+                    duration: 100000,
                     isClosable: true,
                     position: "top-right",
                     render: ({ id, onClose }) => (
                       <Box
                         key={id}
-                        width="100%"
                         bgColor="white"
-                        p={4}
+                        p={3}
                         boxShadow="lg"
+                        borderRadius="lg"
                       >
                         <Flex alignItems="center">
                           <Box minWidth="-webkit-fill-available">
@@ -252,6 +252,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                               textAlign="center"
                               size="xs"
                               color="white"
+                              width="min-content"
                             >
                               See Cart
                             </Button>

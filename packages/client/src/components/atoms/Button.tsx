@@ -7,6 +7,7 @@ import {
 
 type Props = ButtonProps & {
   children: ReactNode;
+  width?: string;
   // textAlign?: "center" | "start" | "end";
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   variant?:
@@ -21,7 +22,7 @@ type Props = ButtonProps & {
 
 const Button: ComponentWithAs<"button", Props> = ({
   children,
-  // textAlign = "center",
+  width = "100%",
   onClick,
   variant = "solid",
   ...props
@@ -29,8 +30,8 @@ const Button: ComponentWithAs<"button", Props> = ({
   return (
     <div>
       <ChakraButton
-        width="100%"
-        my={2}
+        width={width}
+        mt={2}
         onClick={onClick}
         variant={variant}
         color={variant === "solid" ? "white" : "brand"}
