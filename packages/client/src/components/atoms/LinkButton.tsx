@@ -1,12 +1,7 @@
-import {
-  ButtonProps as ChakraButtonProps,
-  ComponentWithAs,
-  IconProps,
-  Link,
-} from "@chakra-ui/react";
+import { ButtonProps as ChakraButtonProps, Link } from "@chakra-ui/react";
+import NextLink from "next/link";
 import React, { ReactNode } from "react";
 import Button from "./Button";
-import NextLink from "next/link";
 
 type Props = ChakraButtonProps & {
   children: ReactNode;
