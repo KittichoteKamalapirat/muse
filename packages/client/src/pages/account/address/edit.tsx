@@ -62,7 +62,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   if (!loading && !data) {
     return (
       <Layout>
-        <div>ไม่พบที่อยู่ของคุณ</div>
+        <div>No address found</div>
       </Layout>
     );
   }

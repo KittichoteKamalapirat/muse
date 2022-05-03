@@ -45,7 +45,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
   return (
     <Layout>
       <Wrapper>
-        <h1>สร้างที่อยู่การจัดส่ง</h1>
+        <h1>Add an address for delivery</h1>
         <Formik
           initialValues={{
             name: "",

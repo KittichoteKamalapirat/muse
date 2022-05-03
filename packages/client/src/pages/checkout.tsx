@@ -132,7 +132,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
             <ContentWrapper>
               <Box>
                 <Heading size="md" flex={1}>
-                  ที่อยู่สำหรับจัดส่ง
+                  Delivery Address
                 </Heading>
                 <Box>
                   {/* <Text>{meLoading ? null : me?.me?.username}</Text> */}
