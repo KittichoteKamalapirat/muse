@@ -11,6 +11,7 @@ import {
 } from "../../generated/graphql";
 import Button from "../atoms/Button";
 import LinkButton from "../atoms/LinkButton";
+import { XWrapper } from "../Wrapper/XWrapper";
 interface NotPaymentPendingProps {
   userOrderData: UserOrdersQuery | undefined;
   cartItemStatus: CartItemStatus;
@@ -30,8 +31,6 @@ export const NotPaymentPending: React.FC<NotPaymentPendingProps> = ({
 
   return (
     <Box>
-      {/* cartItems map */}
-
       <Box>
         {userOrderData?.userOrders.map((order, index) => (
           <Box key={index}>
