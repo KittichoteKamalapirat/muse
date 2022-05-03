@@ -11,6 +11,7 @@ import {
 import { getConnection } from "typeorm";
 import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Mealkit, Review } from "../entities";
+import { CartItemStatus } from "../entities/CartItem";
 import { ReviewInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -93,7 +94,7 @@ export class ReviewResolver {
             cartItem.order.user.username
           ),
           detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
-          avatarHref: "noti/review",
+          avatarHref: `noti/${CartItemStatus.Complete}.png`, // reviewed star image
           cartItemId: cartItem.id,
           userId: cartItem.mealkit.creatorId,
         }).save();

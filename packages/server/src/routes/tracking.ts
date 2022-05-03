@@ -65,7 +65,7 @@ router.post("/update", async (req, res) => {
           cartItem.mealkit.name
         ),
         detailUrl: `/order/cartItem/${cartItem.id}`,
-        avatarHref: "noti/delivered",
+        avatarHref: `noti/${CartItemStatus.Delivered}.png`, // courier guy image
         cartItemId: cartItem.id,
         userId: cartItem.userId,
       }).save();
@@ -79,7 +79,7 @@ router.post("/update", async (req, res) => {
           cartItem.order.user.username
         ),
         detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
-        avatarHref: "noti/delivered",
+        avatarHref: `noti/${CartItemStatus.Delivered}.png`, // courier guy image
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();

@@ -180,7 +180,7 @@ export class TrackingResolver {
               tracking.courier
             ),
             detailUrl: `/order/tracking/${tracking.id}`,
-            avatarHref: "noti/truck",
+            avatarHref: `noti/${CartItemStatus.OnTheWay}.png`, // running truck image
             cartItemId: cartItem.id,
             userId: cartItem.userId,
           }).save();

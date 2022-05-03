@@ -202,7 +202,7 @@ export class CartItemResolver {
           cartItem?.mealkit.name
         ),
         detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
-        avatarHref: "noti/confirm",
+        avatarHref: `noti/${CartItemStatus.Received}.png`, // hand and package images
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
