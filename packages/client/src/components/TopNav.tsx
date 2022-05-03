@@ -2,9 +2,20 @@ import { Flex, Link, Heading } from "@chakra-ui/react";
 import React from "react";
 import { BasketIcon } from "./Icons/BasketIcon";
 import NextLink from "next/link";
+import { useCartItemsQuery } from "../generated/graphql";
+import Badge from "./atoms/Badge";
 interface TopNavProps {}
 
 export const TopNav: React.FC<TopNavProps> = ({}) => {
+  const {
+    data: cartItems,
+    loading: cartItemsLoading,
+    error: cartItemsError,
+  } = useCartItemsQuery();
+
+  console.log({ cartItems });
+
+  const cartItemsNum = cartItems?.cartItems.length;
   return (
     <Flex
       zIndex={10}
@@ -32,7 +43,12 @@ export const TopNav: React.FC<TopNavProps> = ({}) => {
 
         <NextLink href="/cart" passHref>
           <Link mx={2} fontSize="sm">
-            <BasketIcon />
+            <Badge
+              isDisplayed={cartItemsNum === 0}
+              badgeContent={cartItemsNum as number}
+            >
+              <BasketIcon />
+            </Badge>
           </Link>
         </NextLink>
       </Flex>
