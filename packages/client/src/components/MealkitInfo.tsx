@@ -1,14 +1,7 @@
 import { gql } from "@apollo/client";
-
-import {
-  AddIcon,
-  CheckCircleIcon,
-  CloseIcon,
-  SmallCloseIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, Img, useToast, IconButton } from "@chakra-ui/react";
-import NextLink from "next/link";
+import { Avatar, IconButton, Img, useToast } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useState } from "react";
 import {
@@ -17,7 +10,6 @@ import {
 } from "../generated/graphql";
 import Button from "./atoms/Button";
 import LinkButton from "./atoms/LinkButton";
-import ButtonLink from "./atoms/LinkButton";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";

@@ -100,13 +100,13 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 onClick={() => handleAddField(index)}
                 aria-label="Add ingredient"
                 bgColor="white"
-                icon={<AddIcon width={3} />}
+                icon={<AddIcon width={3} color="gray.600" />}
               />
               <IconButton
                 onClick={() => handleRemoveField(index)}
                 aria-label="Remove ingredient"
                 bgColor="white"
-                icon={<MinusIcon width={3} />}
+                icon={<MinusIcon width={3} color="gray.600" />}
               />
             </Flex>
             <Divider variant="dashed" />
@@ -133,13 +133,13 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
               onClick={() => handleAddInstructionField(index)}
               aria-label="เพิ่มขั้นตอน"
               bgColor="white"
-              icon={<AddIcon width={3} />}
+              icon={<AddIcon width={3} color="gray.600" />}
             />
             <IconButton
               onClick={() => handleRemoveInstructionField(index)}
               aria-label="ลดขั้นตอน"
               bgColor="white"
-              icon={<MinusIcon width={3} />}
+              icon={<MinusIcon width={3} color="gray.600" />}
             />
           </Flex>
         ))}

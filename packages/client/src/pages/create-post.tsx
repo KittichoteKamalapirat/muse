@@ -45,7 +45,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(3);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -115,20 +115,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       fileType: fileData.type,
       resourceType: ResourceType.POST,
     };
-
-    // axios.post(urlResolver.signS3(), input).then((response) => {
-    //   const options = getRESTOptions(fileData.type);
-
-    //   // save to s3
-    //   axios.put(response.data.sign, fileData, options);
-
-    //   // TODO
-    //   setAutoThumbnailS3UrlAndId({
-    //     id: response.data.id,
-    //     url: response.data.url,
-    //   });
-    //   nextStep();
-    // });
 
     const options = getRESTOptions(fileData.type);
     console.log({ options });

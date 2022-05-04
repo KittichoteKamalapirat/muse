@@ -182,7 +182,7 @@ export class PostResolver {
   async post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
     const post = await Post.findOne({
       where: { id },
-      relations: ["video", "image"], // for some reasons, no need to spicify creator
+      relations: ["video", "image", "mealkits"], // for some reasons, no need to spicify creator
     });
 
     return post;
@@ -227,18 +227,26 @@ export class PostResolver {
     // @Arg("videoUrl") videoUrl: string,
     // @Arg("ingredients", () => [IngredientInput]) ingredients: IngredientInput[],
     @Ctx() { req }: MyContext
-  ): Promise<Post | null> {
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(Post)
-      .set(input)
-      .where('id = :id and "creatorId" = :creatorId', {
-        id,
-        creatorId: req.session.userId,
-      })
-      .returning("*")
-      .execute();
-    return result.raw[0];
+  ): Promise<Post | Error | undefined> {
+    // const result = await getConnection()
+    //   .createQueryBuilder()
+    //   .update(Post)
+    //   .set(input)
+    //   .where('id = :id and "creatorId" = :creatorId', {
+    //     id,
+    //     creatorId: req.session.userId,
+    //   })
+    //   .returning("*")
+    //   .execute();
+
+    try {
+      await Post.update({ id, creatorId: req.session.userId }, { ...input });
+      const post = await Post.findOne(id);
+      return post;
+    } catch (error) {
+      rollbar.error("no post found");
+      return new Error("no post");
+    }
   }
 
   //   delete post

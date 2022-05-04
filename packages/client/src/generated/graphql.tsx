@@ -574,7 +574,7 @@ export type Post = {
   creatorId: Scalars['String'];
   id: Scalars['Float'];
   image: Image;
-  ingredients?: Maybe<Array<Ingredient>>;
+  ingredients: Array<Ingredient>;
   instruction?: Maybe<Array<Scalars['String']>>;
   isPublished: Scalars['Boolean'];
   mealkits?: Maybe<Array<Mealkit>>;
@@ -589,12 +589,12 @@ export type Post = {
 };
 
 export type PostInput = {
-  advice: Array<Scalars['String']>;
-  cooktime: Scalars['String'];
+  advice?: Maybe<Array<Scalars['String']>>;
+  cooktime?: Maybe<Scalars['String']>;
   ingredients: Array<IngredientInput>;
-  instruction: Array<Scalars['String']>;
-  portion: Scalars['Float'];
-  text: Scalars['String'];
+  instruction?: Maybe<Array<Scalars['String']>>;
+  portion?: Maybe<Scalars['Float']>;
+  text?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
 
@@ -1134,7 +1134,7 @@ export type UpdatePostMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: Maybe<{ __typename?: 'Post', id: number, title: string, textSnippet: string, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>> }> };
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: Maybe<{ __typename?: 'Post', id: number, title: string, textSnippet: string, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }> }> };
 
 export type UpdateUserMutationVariables = Exact<{
   input: UserInput;
@@ -1258,7 +1258,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients?: Maybe<Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string } }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string }, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', name: string, price?: Maybe<number>, portion: number, items?: Maybe<Array<string>> }>> }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -3421,6 +3421,12 @@ export const PostDocument = gql`
     image {
       id
       url
+    }
+    mealkits {
+      name
+      price
+      portion
+      items
     }
   }
 }

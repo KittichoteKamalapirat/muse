@@ -35,7 +35,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <Flex alignItems="center" position="relative">
+      <Flex alignItems="center" position="relative" mt={4}>
         <InputOrTextarea
           //   label cannot bu in props, so have to stick it outside
           className="form-input"

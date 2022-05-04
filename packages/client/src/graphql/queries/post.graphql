@@ -30,5 +30,11 @@ query Post($id: Int!) {
       id
       url
     }
+    mealkits {
+      name
+      price
+      portion
+      items
+    }
   }
 }

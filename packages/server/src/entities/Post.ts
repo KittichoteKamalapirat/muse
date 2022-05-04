@@ -19,7 +19,7 @@ class Post extends BaseEntity {
   @Field()
   id!: number;
 
-  @Column({ nullable: true })
+  @Column()
   @Field()
   title!: string;
 
@@ -74,8 +74,8 @@ class Post extends BaseEntity {
   @OneToMany(() => Upvote, (upvote) => upvote.post)
   upvotes: Upvote[];
 
-  @Field(() => [Ingredient], { nullable: true })
-  @Column("jsonb", { nullable: true })
+  @Field(() => [Ingredient])
+  @Column("jsonb")
   ingredients: Ingredient[];
   // @Column({type: 'jsonb', array: true, nullable: true})
   // testJson: object[];
