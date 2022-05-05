@@ -118,11 +118,16 @@ export class MealkitResolver {
   ): Promise<Mealkit | null | undefined> {
     await Mealkit.update({ id, creatorId: req.session.userId }, { ...input });
 
-    // currently Mealkile.mealkitId is null
-    // update it
+    // update all Mealkit.fileIds to have mealkitId
     fileIds.forEach(async (fileId) =>
       MealkitFile.update({ id: fileId }, { mealkitId: id })
     );
+
+    // remove existing files which are ont in fileIds
+
+    const allFiles = await MealkitFile.find({ where: { mealkitId: id } });
+    const filesToRemove = allFiles.filter((file) => !fileIds.includes(file.id));
+    filesToRemove.forEach((file) => MealkitFile.delete(file.id));
 
     const mealkit = await Mealkit.findOne(id);
 

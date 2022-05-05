@@ -1,7 +1,7 @@
-import { IconButton } from "@chakra-ui/react";
+import { DeleteIcon } from "@chakra-ui/icons";
 import React from "react";
 import { UploadedFile } from ".";
-import TrashIcon from "../../atoms/icons/TrashIcon";
+import IconButton from "../../atoms/IconButton/IconButton";
 
 const baseStyle = {
   flex: 1,
@@ -39,8 +39,28 @@ const FileUploads = ({ files, isMultiple, onRemoval }: Props) => (
     {files.map((file) => (
       <div
         key={file.name}
-        className="w-1/2 max-w-2xl grid grid-cols-12 items-center mt-2.5"
+        style={{
+          position: "relative",
+        }}
       >
+        <div
+          style={{
+            position: "absolute",
+            backgroundColor: "white",
+            borderRadius: "50%",
+            top: "-20px",
+            right: "-10px",
+            padding: "4px",
+            boxShadow: "1px 1px 1px 1px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <IconButton
+            icon={<DeleteIcon color="red.500" w={6} h={6} />}
+            onClick={() => onRemoval(file.name)}
+            label={`${file.name}-remove`}
+          />
+        </div>
+
         <img src={file.url} alt="meal kit" />
 
         <div style={baseStyle}>Update</div>

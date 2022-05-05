@@ -6,7 +6,14 @@ interface Props {
 }
 
 const IconButton = ({ onClick, icon, label, className }: Props) => (
-  <button className={className} type="button" name={label} aria-label={label} onClick={onClick}>
+  <button
+    style={{ fontSize: "10px" }}
+    className={className}
+    type="button"
+    name={label}
+    aria-label={label}
+    onClick={onClick}
+  >
     {icon}
   </button>
 );

@@ -85,13 +85,14 @@ const Mealkit = () => {
 
   useEffect(() => {
     if (data?.mealkit) {
-      const images = data.mealkit.mealkitFiles.map((file) => ({
+      const files = data.mealkit.mealkitFiles.map((file) => ({
+        id: file.id,
         name: file.name,
         url: file.url,
       }));
 
       setItems(data.mealkit.items as string[]);
-      setFileUploads(images);
+      setFileUploads(files);
     }
   }, [postData]);
 
