@@ -1,4 +1,5 @@
 import {
+  Box,
   Center,
   Grid,
   GridItem,
@@ -148,118 +149,123 @@ const EditPost = ({}) => {
   return (
     <HeadingLayout heading="Edit post">
       <XWrapper>
-        <Grid templateColumns="repeat(12, 1fr)" gap={4}>
-          <GridItem colSpan={6}>
-            {/* <Image
+        <Box mt={4} mb={10}>
+          <Grid templateColumns="repeat(12, 1fr)" gap={4}>
+            <GridItem colSpan={6}>
+              {/* <Image
               src={data.post.image.url}
               alt="image"
               fallbackSrc="oops.png"
               flex={1}
             /> */}
 
-            <DropzoneField
-              displayOptionalLabel
-              labelClass="mt-4.5 mb-2"
-              acceptedFileTypes="image/*"
-              maxFiles={1}
-              fileUploads={imageUploads}
-              setFileUploads={setImageUploads}
-              resourceType={ResourceType.POST}
-              inputClass="w-1/2"
-            >
-              Update a thumbnail
-            </DropzoneField>
-          </GridItem>
+              <DropzoneField
+                displayOptionalLabel
+                labelClass="mt-4.5 mb-2"
+                acceptedFileTypes="image/*"
+                maxFiles={1}
+                fileUploads={imageUploads}
+                setFileUploads={setImageUploads}
+                resourceType={ResourceType.POST}
+                inputClass="w-1/2"
+              >
+                Update a thumbnail
+              </DropzoneField>
+            </GridItem>
 
-          <GridItem colSpan={6}>
-            <video controls>
-              <source src={data.post.video.url} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-            <Center color="red.500">
-              <Text>*Video cannot be updated</Text>
-            </Center>
-          </GridItem>
-        </Grid>
+            <GridItem colSpan={6}>
+              <video controls>
+                <source src={data.post.video.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+              <Center color="red.500">
+                <Text>*Video cannot be updated</Text>
+              </Center>
+            </GridItem>
+          </Grid>
 
-        <Formik
-          initialValues={{
-            title: data?.post?.title,
-            text: data?.post?.text,
-            instruction: data?.post?.instruction,
-            advice: data?.post?.advice,
-            cooktime: data?.post?.cooktime,
-            portion: data?.post?.portion,
-          }}
-          onSubmit={async (values) => {
-            const input = {
-              title: values.title,
-              text: values.text,
-              instruction: instructionField,
-              cooktime: values.cooktime,
-              portion: values.portion,
-              advice: values.advice as string[],
-              ingredients: ingredientsField,
-            };
-            const post = await updatePost({
-              variables: {
-                input: input,
-                id: postId,
-                newImageUrl: imageUploads[0].url,
-              },
-            });
-
-            if (post) {
-              toast({
-                title: "Post successfully updated",
-                status: "success",
-                duration: 3000,
-                isClosable: true,
+          <Formik
+            initialValues={{
+              title: data?.post?.title,
+              text: data?.post?.text,
+              instruction: data?.post?.instruction,
+              advice: data?.post?.advice,
+              cooktime: data?.post?.cooktime,
+              portion: data?.post?.portion,
+            }}
+            onSubmit={async (values) => {
+              const input = {
+                title: values.title,
+                text: values.text,
+                instruction: instructionField,
+                cooktime: values.cooktime,
+                portion: values.portion,
+                advice: values.advice as string[],
+                ingredients: ingredientsField,
+              };
+              const post = await updatePost({
+                variables: {
+                  input: input,
+                  id: postId,
+                  newImageUrl: imageUploads[0].url,
+                },
               });
-              router.push(`/post/${post.data?.updatePost?.id}`);
-            }
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Form>
-              {/* post */}
-              <InputField name="title" placeholder="title" label="title" />
 
-              <InputField
-                textarea={true}
-                name="text"
-                placeholder="text..."
-                label="Body"
-              />
+              if (post) {
+                toast({
+                  title: "Post successfully updated",
+                  status: "success",
+                  duration: 3000,
+                  isClosable: true,
+                });
+                router.push(`/post/${post.data?.updatePost?.id}`);
+              }
+            }}
+          >
+            {({ isSubmitting }) => (
+              <Form>
+                {/* post */}
+                <InputField name="title" placeholder="title" label="title" />
 
-              <InputField name="cooktime" placeholder="30" label="cooktime" />
-              <InputField name="portion" placeholder="3" label="portion" />
+                <InputField
+                  textarea={true}
+                  name="text"
+                  placeholder="text..."
+                  label="Body"
+                />
 
-              <Heading fontSize="md">Tip/Advice</Heading>
-              <InputField
-                textarea={true}
-                name="advice"
-                placeholder="any advice?"
-                label=""
-              />
+                <InputField name="cooktime" placeholder="30" label="cooktime" />
+                <InputField name="portion" placeholder="3" label="portion" />
 
-              <CreateRecipe
-                ingredientsField={ingredientsField}
-                instructionField={instructionField}
-                handleChangeInput={handleChangeInput}
-                handleAddField={handleAddField}
-                handleRemoveField={handleRemoveField}
-                handleInstructionChangeInput={handleInstructionChangeInput}
-                handleAddInstructionField={handleAddInstructionField}
-                handleRemoveInstructionField={handleRemoveInstructionField}
-              />
+                <Box mt={2}>
+                  <Heading fontSize="md">Tips</Heading>
+                  <InputField
+                    textarea={true}
+                    name="advice"
+                    placeholder="any advice?"
+                    label=""
+                  />
+                </Box>
 
-              <Button type="submit" isLoading={isSubmitting}>
-                Update Post
-              </Button>
-            </Form>
-          )}
-        </Formik>
+                <Box mt={2}>
+                  <CreateRecipe
+                    ingredientsField={ingredientsField}
+                    instructionField={instructionField}
+                    handleChangeInput={handleChangeInput}
+                    handleAddField={handleAddField}
+                    handleRemoveField={handleRemoveField}
+                    handleInstructionChangeInput={handleInstructionChangeInput}
+                    handleAddInstructionField={handleAddInstructionField}
+                    handleRemoveInstructionField={handleRemoveInstructionField}
+                  />
+                </Box>
+                <Button type="submit" isLoading={isSubmitting} mt={8}>
+                  Update Post
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </Box>
       </XWrapper>
     </HeadingLayout>
   );
