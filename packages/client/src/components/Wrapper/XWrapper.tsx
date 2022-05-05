@@ -39,3 +39,18 @@ const Box = styled.div`
   }
   max-width: 30%;
 `;
+
+// if chakra ui
+// interface Props {
+//   children: ReactNode;
+// }
+
+// export const XWrapper = ({ children, ...props }: Props) => {
+//   return (
+//     <Box width="100%" {...props}>
+//       <Flex flexDirection="column" alignItems="center">
+//         <Box maxWidth={["95%", "30%"]}>{children}</Box>
+//       </Flex>
+//     </Box>
+//   );
+// };
