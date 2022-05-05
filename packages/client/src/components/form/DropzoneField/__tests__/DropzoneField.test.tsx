@@ -1,8 +1,8 @@
+import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
 import DropzoneField, { UploadedFile } from "..";
 import { ResourceType } from "../../../../types/utils/ResourceType";
-import "@testing-library/jest-dom";
 
 describe("DropzoneField", () => {
   test("should render and drop + with upload error", async () => {
@@ -35,11 +35,11 @@ describe("DropzoneField", () => {
     fireEvent.drop(inputElement);
 
     // label + children
-    const children = screen.getByText("Hello");
+    const children = screen.queryByText("Hello");
     const label = screen.getByText("Image");
     const helperText = screen.getByText("Helper text");
     const optional = screen.getByText("optional");
-    expect(children).toBeInTheDocument();
+    expect(children).not.toBeInTheDocument();
     expect(label).toBeInTheDocument();
     expect(helperText).toBeInTheDocument();
     expect(optional).toBeInTheDocument();
@@ -96,10 +96,10 @@ describe("DropzoneField", () => {
     fireEvent.drop(inputElement);
 
     // label + children
-    const children = screen.getByText("Hello");
+    const children = screen.queryByText("Hello");
     const label = screen.queryByText("Image");
     const optional = screen.queryByText("optional");
-    expect(children).toBeInTheDocument();
+    expect(children).not.toBeInTheDocument();
     expect(label).not.toBeInTheDocument();
     expect(optional).not.toBeInTheDocument();
 

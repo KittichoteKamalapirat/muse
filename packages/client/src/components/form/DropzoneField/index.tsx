@@ -177,6 +177,7 @@ const DropzoneField = ({
       {/* uploader */}
       <div
         {...getRootProps({
+          style,
           "aria-label": `${label || ariaLabel}-div`,
           className: inputClass,
         })}
