@@ -61,7 +61,14 @@ const FileUploads = ({ files, isMultiple, onRemoval }: Props) => (
           />
         </div>
 
-        <img src={file.url} alt="meal kit" />
+        {file.type?.includes("video") ? (
+          <video controls>
+            <source src={file.url} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <img src={file.url} alt="meal kit" />
+        )}
 
         <div style={baseStyle}>Update</div>
         <div className="col-span-3 lg:col-span-2 xl:col-span-1 2xl:hidden" />

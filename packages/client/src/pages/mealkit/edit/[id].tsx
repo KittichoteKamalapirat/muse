@@ -89,6 +89,7 @@ const Mealkit = () => {
         id: file.id,
         name: file.name,
         url: file.url,
+        type: file.fileType,
       }));
 
       setItems(data.mealkit.items as string[]);
@@ -111,7 +112,7 @@ const Mealkit = () => {
           <DropzoneField
             displayOptionalLabel
             labelClass="mt-4.5 mb-2"
-            acceptedFileTypes="image/*"
+            acceptedFileTypes={["image/*", "video/*"]}
             maxFiles={3}
             fileUploads={fileUploads}
             setFileUploads={setFileUploads}

@@ -28,6 +28,7 @@ export interface UploadedFile {
   id: number;
   name: string;
   url: string;
+  type?: string;
   // key: string;
   // presignedUrl?: string;
 }
@@ -84,10 +85,12 @@ const DropzoneField = ({
     maxSize: maxSize,
   });
 
+  console.log(fileRejections);
+  console.log(isDragReject);
   // error handling
   const inputError =
     isDragReject || fileRejections.length > 0
-      ? "There was an error with your upload"
+      ? "Oops, There was an error with your upload"
       : "";
 
   const [uploadError, setUploadError] = useState("");
@@ -134,11 +137,13 @@ const DropzoneField = ({
             id,
             url,
             name: file.name,
+            type: file.type,
           });
 
           console.log({ uploadedFiles });
         } catch (error) {
           const newError = (error as AxiosError)?.response?.data?.[0];
+
           setUploadError(
             newError ?? `There was an error with your ${file.name} upload`
           );
@@ -235,7 +240,7 @@ DropzoneField.defaultProps = {
   isError: false,
   acceptedFileTypes: "",
   maxFiles: 0, // 0 means no limit
-  maxSize: 5000000,
+  maxSize: 1000 * 1000 * 25, //25 mb
   customerId: "",
 };
 

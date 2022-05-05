@@ -22,5 +22,6 @@ fragment MealkitSnippet on Mealkit {
     id
     name
     url
+    fileType
   }
 }
