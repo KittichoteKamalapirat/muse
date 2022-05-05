@@ -1,11 +1,9 @@
-import { compact } from "@apollo/client/utilities";
 import {
   Box,
   Checkbox,
   CheckboxGroup,
   Flex,
   Heading,
-  Image,
   InputGroup,
   InputLeftAddon,
   InputRightAddon,
@@ -13,7 +11,6 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -31,12 +28,8 @@ import {
   usePostQuery,
   useUpdateMealkitMutation,
 } from "../../../generated/graphql";
-import { urlResolver } from "../../../lib/UrlResolver";
-import { FileInput } from "../../../types/utils/FileInput";
-import { FileMetadata } from "../../../types/utils/FileMetadata";
 import { Ingredient } from "../../../types/utils/Ingredient";
 import { ResourceType } from "../../../types/utils/ResourceType";
-import getRESTOptions from "../../../util/getRESTOptions";
 import { withApollo } from "../../../util/withApollo";
 
 const Mealkit = () => {
@@ -44,14 +37,10 @@ const Mealkit = () => {
   const toast = useToast();
   const { postId, id } = router.query;
 
-  console.log(postId);
-  console.log(id);
-
   const { data, loading, error } = useMealkitQuery({
     variables: { id: parseInt(id as string) },
   });
 
-  console.log({ data });
   const {
     data: postData,
     loading: postLoading,
@@ -63,8 +52,6 @@ const Mealkit = () => {
   const [updateMealkit] = useUpdateMealkitMutation();
   const [fileUploads, setFileUploads] = useState<UploadedFile[]>([]);
 
-  console.log({ fileUploads });
-
   const [items, setItems] = useState<string[]>([]);
 
   const [ingredientsField, setIngredientsField] = useState<Ingredient[]>([
@@ -74,8 +61,6 @@ const Mealkit = () => {
       unit: "",
     },
   ]);
-
-  console.log({ items });
 
   useEffect(() => {
     if (postData?.post) {
@@ -140,9 +125,7 @@ const Mealkit = () => {
                 variables: {
                   input,
                   id: parseInt(id as string),
-                  fileIds: fileUploads.map((file) =>
-                    parseInt(file.id as string)
-                  ),
+                  fileIds: fileUploads.map((file) => file.id),
                 },
               });
 

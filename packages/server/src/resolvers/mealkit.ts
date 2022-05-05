@@ -11,7 +11,6 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { getConnection } from "typeorm";
 import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { Image, Mealkit, MealkitFile } from "../entities";

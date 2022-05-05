@@ -21,7 +21,6 @@ import {
 import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";

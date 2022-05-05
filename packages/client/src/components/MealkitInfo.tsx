@@ -11,7 +11,7 @@ import {
 } from "../generated/graphql";
 import Button from "./atoms/Button";
 import LinkButton from "./atoms/LinkButton";
-import { EditDeleteMealkitButtons } from "./EditDeleteMealkitButtons copy";
+import { EditDeleteMealkitButtons } from "./EditDeleteMealkitButtons";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -28,14 +28,11 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
   const toast = useToast();
   const [createCartItem, { data: cartItemData, loading: cartItemLoading }] =
     useCreateCartItemMutation();
-  console.log("1");
-  console.log(cartItemData);
+
   const [cartLoading, setCartLoading] = useState(false);
   const { data: mealkits, loading } = useMealkitsQuery({
     variables: { postId: postId },
   });
-
-  console.log({ mealkits });
 
   if (loading) {
     return (

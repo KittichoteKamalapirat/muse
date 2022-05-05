@@ -120,7 +120,9 @@ const EditPost = ({}) => {
       }));
       const { instruction, image } = data.post;
 
-      const images = [{ name: image.name, url: image.url }];
+      const images = [
+        { name: image.name, url: image.url, id: image.id, type: "image" },
+      ];
 
       setIngredientsField(ingredients as Ingredient[]);
       setInstructionField(instruction as string[]);

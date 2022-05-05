@@ -85,8 +85,6 @@ const DropzoneField = ({
     maxSize: maxSize,
   });
 
-  console.log(fileRejections);
-  console.log(isDragReject);
   // error handling
   const inputError =
     isDragReject || fileRejections.length > 0
@@ -127,7 +125,6 @@ const DropzoneField = ({
           const options = getRESTOptions(file.type);
           const response = await axios.post(urlResolver.signS3(), input);
 
-          console.log("response", response.data);
           const { id, sign, url } = response.data;
           // upload file to s3
           axios.put(sign, file, options);
@@ -139,8 +136,6 @@ const DropzoneField = ({
             name: file.name,
             type: file.type,
           });
-
-          console.log({ uploadedFiles });
         } catch (error) {
           const newError = (error as AxiosError)?.response?.data?.[0];
 
@@ -151,8 +146,6 @@ const DropzoneField = ({
 
         // store uploaded files
         if (index === acceptedFiles.length - 1) {
-          console.log(isMultiple);
-          // TODO concat OR replace?
           // single => replace
           // multiple => append
           if (isMultiple) {
@@ -240,7 +233,7 @@ DropzoneField.defaultProps = {
   isError: false,
   acceptedFileTypes: "",
   maxFiles: 0, // 0 means no limit
-  maxSize: 1000 * 1000 * 25, //25 mb
+  maxSize: 1000 * 1000 * 25, //TODO 25 mb okay?
   customerId: "",
 };
 

@@ -47,43 +47,6 @@ export const EditDeleteMealkitButtons: React.FC<
               Edit meal kit
             </MenuItem>
           </NextLink>
-          {/* 
-          <MenuItem
-            icon={<DeleteIcon />}
-            onClick={() =>
-              deletePost({
-                variables: { id },
-                update: (cache) => {
-                  cache.evict({ id: "Post:" + id }); //Post: 60
-                },
-              })
-            }
-          >
-            Delete post
-          </MenuItem> */}
-
-          {/* <MenuItem
-            icon={isPublished ? <ViewOffIcon /> : <ViewIcon />}
-            onClick={() =>
-              toggleIsPublished({
-                variables: { isPublished: !isPublished, id },
-                update: (cache, { data: success }) => {
-                  cache.writeFragment({
-                    id: "Post:" + id,
-                    fragment: gql`
-                      fragment __ on Post {
-                        isPublished
-                      }
-                    `,
-                    data: { isPublished: success ? !isPublished : isPublished },
-                  });
-                  cache.evict({ fieldName: "posts:{}" }); //if fieldName postsByCreator -> don't remove this post
-                },
-              })
-            }
-          >
-            {isPublished ? "Unpublish" : "Publish"}
-          </MenuItem> */}
         </MenuList>
       </Menu>
     </Box>

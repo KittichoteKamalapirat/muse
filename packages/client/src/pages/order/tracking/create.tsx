@@ -15,8 +15,6 @@ interface CreateTrackingProps {}
 const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
   const router = useRouter();
   const { id, cartItemIds } = router.query;
-  console.log({ cartItemIds });
-  console.log({ id });
 
   const [createTracking] = useCreateTrackingMutation();
   return (
@@ -28,7 +26,6 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
             courier: "",
           }}
           onSubmit={async (values, { setErrors }) => {
-            console.log({ cartItemIds });
             const response = await createTracking({
               variables: {
                 input: {
