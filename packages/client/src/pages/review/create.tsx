@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import { InputField } from "../../components/InputField";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { MainNav } from "../../components/MainNav";
-import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import { XWrapper } from "../../components/Wrapper/XWrapper";
 import {

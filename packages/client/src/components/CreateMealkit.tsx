@@ -15,7 +15,7 @@ import axios from "axios";
 import { Form } from "formik";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 
@@ -43,8 +43,6 @@ interface CreateMealkitProps {
   mealkitS3UrlAndIds: FileMetadata[];
   setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;
 }
-
-const urlResolver = new UrlResolver();
 
 export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   ingredientsField,

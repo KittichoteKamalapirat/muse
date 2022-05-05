@@ -480,6 +480,7 @@ export type MutationUpdatePaymentInfoArgs = {
 export type MutationUpdatePostArgs = {
   id: Scalars['Int'];
   input: PostInput;
+  newImageUrl: Scalars['String'];
 };
 
 
@@ -1131,6 +1132,7 @@ export type UpdateMealkitMutation = { __typename?: 'Mutation', updateMealkit?: M
 export type UpdatePostMutationVariables = Exact<{
   id: Scalars['Int'];
   input: PostInput;
+  newImageUrl: Scalars['String'];
 }>;
 
 
@@ -1258,7 +1260,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, url: string }, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', name: string, price?: Maybe<number>, portion: number, items?: Maybe<Array<string>> }>> }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, name: string, url: string }, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', name: string, price?: Maybe<number>, portion: number, items?: Maybe<Array<string>> }>> }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -2538,8 +2540,8 @@ export type UpdateMealkitMutationHookResult = ReturnType<typeof useUpdateMealkit
 export type UpdateMealkitMutationResult = Apollo.MutationResult<UpdateMealkitMutation>;
 export type UpdateMealkitMutationOptions = Apollo.BaseMutationOptions<UpdateMealkitMutation, UpdateMealkitMutationVariables>;
 export const UpdatePostDocument = gql`
-    mutation UpdatePost($id: Int!, $input: PostInput!) {
-  updatePost(id: $id, input: $input) {
+    mutation UpdatePost($id: Int!, $input: PostInput!, $newImageUrl: String!) {
+  updatePost(id: $id, input: $input, newImageUrl: $newImageUrl) {
     id
     title
     textSnippet
@@ -2568,6 +2570,7 @@ export type UpdatePostMutationFn = Apollo.MutationFunction<UpdatePostMutation, U
  *   variables: {
  *      id: // value for 'id'
  *      input: // value for 'input'
+ *      newImageUrl: // value for 'newImageUrl'
  *   },
  * });
  */
@@ -3420,6 +3423,7 @@ export const PostDocument = gql`
     }
     image {
       id
+      name
       url
     }
     mealkits {

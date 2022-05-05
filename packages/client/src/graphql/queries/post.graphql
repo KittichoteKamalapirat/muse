@@ -28,6 +28,7 @@ query Post($id: Int!) {
     }
     image {
       id
+      name
       url
     }
     mealkits {

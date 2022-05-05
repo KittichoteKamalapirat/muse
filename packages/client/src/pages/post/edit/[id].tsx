@@ -1,20 +1,31 @@
-import { Box, Center, Heading, Text, useToast } from "@chakra-ui/react";
+import {
+  Center,
+  Grid,
+  GridItem,
+  Heading,
+  Image,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/atoms/Button";
 import { CreateRecipe } from "../../../components/CreateRecipe";
+import DropzoneField, {
+  UploadedFile,
+} from "../../../components/form/DropzoneField";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Error } from "../../../components/skeletons/Error";
 import { Loading } from "../../../components/skeletons/Loading";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   usePostQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
+import { ResourceType } from "../../../types/utils/ResourceType";
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
 
@@ -45,6 +56,7 @@ const EditPost = ({}) => {
     },
   ]);
   const [instructionField, setInstructionField] = useState([""]);
+  const [imageUploads, setImageUploads] = useState<UploadedFile[]>([]);
 
   const handleInstructionChangeInput = (
     index: number,
@@ -106,9 +118,13 @@ const EditPost = ({}) => {
         amount: ingredient.amount,
         unit: ingredient.unit,
       }));
-      const instruction = data.post.instruction;
+      const { instruction, image } = data.post;
+
+      const images = [{ name: image.name, url: image.url }];
+
       setIngredientsField(ingredients as Ingredient[]);
       setInstructionField(instruction as string[]);
+      setImageUploads(images);
     }
   }, [data?.post]);
 
@@ -132,15 +148,39 @@ const EditPost = ({}) => {
   return (
     <HeadingLayout heading="Edit post">
       <XWrapper>
-        <Center>
-          <video controls width="50%">
-            <source src={data.post.video.url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        </Center>
-        <Center>
-          <Text>Video cannot be updated</Text>
-        </Center>
+        <Grid templateColumns="repeat(12, 1fr)" gap={4}>
+          <GridItem colSpan={6}>
+            {/* <Image
+              src={data.post.image.url}
+              alt="image"
+              fallbackSrc="oops.png"
+              flex={1}
+            /> */}
+
+            <DropzoneField
+              displayOptionalLabel
+              labelClass="mt-4.5 mb-2"
+              acceptedFileTypes="image/*"
+              maxFiles={1}
+              fileUploads={imageUploads}
+              setFileUploads={setImageUploads}
+              resourceType={ResourceType.POST}
+              inputClass="w-1/2"
+            >
+              Update a thumbnail
+            </DropzoneField>
+          </GridItem>
+
+          <GridItem colSpan={6}>
+            <video controls>
+              <source src={data.post.video.url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <Center color="red.500">
+              <Text>*Video cannot be updated</Text>
+            </Center>
+          </GridItem>
+        </Grid>
 
         <Formik
           initialValues={{
@@ -162,7 +202,11 @@ const EditPost = ({}) => {
               ingredients: ingredientsField,
             };
             const post = await updatePost({
-              variables: { input: input, id: postId },
+              variables: {
+                input: input,
+                id: postId,
+                newImageUrl: imageUploads[0].url,
+              },
             });
 
             if (post) {

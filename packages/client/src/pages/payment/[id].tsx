@@ -14,15 +14,13 @@ import {
   usePaymentQuery,
   useUploadSlipMutation,
 } from "../../generated/graphql";
-import UrlResolver from "../../lib/UrlResolver";
+import { urlResolver } from "../../lib/UrlResolver";
 import useFetch from "../../util/useFetch";
 import { withApollo } from "../../util/withApollo";
 
 interface PaymentProps {}
 
 const STARTING_MINUTES = 3;
-
-const urlResolver = new UrlResolver();
 
 const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();

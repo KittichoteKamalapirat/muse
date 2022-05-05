@@ -3,7 +3,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -18,8 +18,6 @@ interface CreateVideoProps {
   setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileMetadata | null>>;
   isGeneratingThumbnail: boolean;
 }
-
-const urlResolver = new UrlResolver();
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
   nextStep,

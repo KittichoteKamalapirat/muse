@@ -18,7 +18,7 @@ import {
   useCreateMealkitMutation,
   useCreatePostMutation,
 } from "../generated/graphql";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 
@@ -37,7 +37,6 @@ const postValues = {
   videoUrl: "change this later",
 };
 
-const urlResolver = new UrlResolver();
 3;
 
 const CreatePost: React.FC<{}> = ({ children }) => {

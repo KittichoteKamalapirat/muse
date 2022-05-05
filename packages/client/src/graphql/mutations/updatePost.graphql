@@ -1,5 +1,5 @@
-mutation UpdatePost($id: Int!, $input: PostInput!) {
-  updatePost(id: $id, input: $input) {
+mutation UpdatePost($id: Int!, $input: PostInput!, $newImageUrl: String!) {
+  updatePost(id: $id, input: $input, newImageUrl: $newImageUrl) {
     id
     title
     textSnippet

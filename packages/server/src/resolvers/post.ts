@@ -221,6 +221,7 @@ export class PostResolver {
   @UseMiddleware(isAuth) // have to log in to update a post
   async updatePost(
     @Arg("input") input: PostInput,
+    @Arg("newImageUrl") newImageUrl: string,
     @Arg("id", () => Int) id: number,
     // @Arg("title") title: string,
     // @Arg("text") text: string,
@@ -242,6 +243,9 @@ export class PostResolver {
     try {
       await Post.update({ id, creatorId: req.session.userId }, { ...input });
       const post = await Post.findOne(id);
+
+      await Image.update({ postId: id }, { url: newImageUrl });
+
       return post;
     } catch (error) {
       rollbar.error("no post found");
