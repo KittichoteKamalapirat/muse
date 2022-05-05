@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import TrashIcon from "../TrashIcon";
+import "@testing-library/jest-dom";
 
 describe("ButtonIcon", () => {
   it("renders the default icon", () => {

@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import CheckIcon from "../CheckIcon";
+import "@testing-library/jest-dom";
 
 describe("DisplayIcon", () => {
   it("renders the default icon", () => {

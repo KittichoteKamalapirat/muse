@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import React from "react";
 import XCircleIcon from "../XCircleIcon";
+import "@testing-library/jest-dom";
 
 describe("DisplayIcon", () => {
   it("renders the default icon", () => {

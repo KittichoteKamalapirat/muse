@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
 import DropzoneField, { UploadedFile } from "..";
 import { ResourceType } from "../../../../types/utils/ResourceType";
+import "@testing-library/jest-dom";
 
 describe("DropzoneField", () => {
   test("should render and drop + with upload error", async () => {

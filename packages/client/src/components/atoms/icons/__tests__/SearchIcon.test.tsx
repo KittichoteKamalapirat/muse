@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import SearchIcon from "../SearchIcon";
+import "@testing-library/jest-dom";
 
 describe("SearchIcon", () => {
   it("renders the default icon", () => {

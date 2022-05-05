@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import TextAreaField from ".";
+import "@testing-library/jest-dom";
 
 describe("TextAreaField", () => {
   test("renders the text area field with a label, a placeholder and an error + helper text", () => {

@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import FormFieldLabel from "./FormFieldLabel";
+import "@testing-library/jest-dom";
 
 describe("FormFieldLabel", () => {
   test("renders the default label", () => {
