@@ -1,5 +1,5 @@
-mutation updateMealkit($input: MealkitInput!, $id: Int!) {
-  updateMealkit(input: $input, id: $id) {
+mutation updateMealkit($input: MealkitInput!, $id: Int!, $fileIds: [Int!]!) {
+  updateMealkit(input: $input, id: $id, fileIds: $fileIds) {
     items
     price
     id

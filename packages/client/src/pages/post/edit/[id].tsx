@@ -4,7 +4,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  Image,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -207,7 +206,7 @@ const EditPost = ({}) => {
                 variables: {
                   input: input,
                   id: postId,
-                  newImageUrl: imageUploads[0].url,
+                  newImageUrl: imageUploads[0].url, // update url of existing image id
                 },
               });
 

@@ -259,7 +259,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 price: price,
                 portion: mealkitPortion,
                 items: mealkitInput.items,
-                images: [],
               },
               postId: postId,
               fileIds: mealkitS3UrlAndIds.map((item) => item.id),

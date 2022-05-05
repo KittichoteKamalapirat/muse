@@ -112,21 +112,21 @@ export class MealkitResolver {
   @UseMiddleware(isAuth) // have to log in to update a Mealkit
   async updateMealkit(
     @Arg("input") input: MealkitInput,
+    @Arg("fileIds", () => [Int]) fileIds: number[],
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
-  ): Promise<Mealkit | null> {
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(Mealkit)
-      .set(input)
-      .where('id = :id and "creatorId" = :creatorId', {
-        id,
-        creatorId: req.session.userId,
-      })
-      .returning("*")
-      .execute();
+  ): Promise<Mealkit | null | undefined> {
+    await Mealkit.update({ id, creatorId: req.session.userId }, { ...input });
 
-    return result.raw[0];
+    // currently Mealkile.mealkitId is null
+    // update it
+    fileIds.forEach(async (fileId) =>
+      MealkitFile.update({ id: fileId }, { mealkitId: id })
+    );
+
+    const mealkit = await Mealkit.findOne(id);
+
+    return mealkit;
   }
 
   @Mutation(() => Boolean)

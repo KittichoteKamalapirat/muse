@@ -44,7 +44,6 @@ const Post = ({}) => {
           >
             <Flex justifyContent="space-between">
               <Flex alignItems="center">
-                {" "}
                 <Avatar
                   m={2}
                   size="sm"

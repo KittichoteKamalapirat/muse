@@ -7,9 +7,11 @@ import React, { useState } from "react";
 import {
   useCreateCartItemMutation,
   useMealkitsQuery,
+  useMeQuery,
 } from "../generated/graphql";
 import Button from "./atoms/Button";
 import LinkButton from "./atoms/LinkButton";
+import { EditDeleteMealkitButtons } from "./EditDeleteMealkitButtons copy";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -22,6 +24,7 @@ interface MealkitInfoProps {
 }
 
 export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
+  const { data: meData } = useMeQuery();
   const toast = useToast();
   const [createCartItem, { data: cartItemData, loading: cartItemLoading }] =
     useCreateCartItemMutation();
@@ -69,19 +72,29 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
               </Box>
 
               <ContentWrapper>
-                <Box>
-                  <Heading fontSize="lg"> {mealkit.name} </Heading>
-                  <ReviewStars
-                    reviewScore={4}
-                    reviewsCounter={mealkit.reviewsCounter}
-                  />
+                <Flex justifyContent="space-between" alignItems="baseline">
+                  <Box>
+                    <Heading fontSize="lg"> {mealkit.name} </Heading>
+                    <ReviewStars
+                      reviewScore={4}
+                      reviewsCounter={mealkit.reviewsCounter}
+                    />
 
-                  <Text>
-                    For {mealkit.portion}{" "}
-                    {mealkit.portion > 1 ? "people" : "person"}
-                  </Text>
-                  <Text>฿{mealkit.price}</Text>
-                </Box>
+                    <Text>
+                      For {mealkit.portion}{" "}
+                      {mealkit.portion > 1 ? "people" : "person"}
+                    </Text>
+                    <Text>฿{mealkit.price}</Text>
+                  </Box>
+
+                  {meData?.me?.id === mealkit.creatorId && (
+                    <EditDeleteMealkitButtons
+                      id={mealkit.id}
+                      postId={mealkit.postId}
+                      // isPublished={data.post.isPublished}
+                    />
+                  )}
+                </Flex>
 
                 <Box>
                   <Heading size="md">รายการ</Heading>

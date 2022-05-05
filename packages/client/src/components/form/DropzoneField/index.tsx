@@ -25,6 +25,7 @@ const rejectStyle = {
 };
 
 export interface UploadedFile {
+  id?: string;
   name: string;
   url: string;
   // key: string;
@@ -123,15 +124,19 @@ const DropzoneField = ({
           const options = getRESTOptions(file.type);
           const response = await axios.post(urlResolver.signS3(), input);
 
-          const { sign, url } = response.data;
+          console.log("response", response.data);
+          const { id, sign, url } = response.data;
           // upload file to s3
           axios.put(sign, file, options);
 
           // keep track of all uploaded files
           uploadedFiles.push({
+            id,
             url,
             name: file.name,
           });
+
+          console.log({ uploadedFiles });
         } catch (error) {
           const newError = (error as AxiosError)?.response?.data?.[0];
           setUploadError(
