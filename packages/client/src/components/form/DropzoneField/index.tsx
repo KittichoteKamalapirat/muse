@@ -156,8 +156,8 @@ const DropzoneField = ({
 
   // remove files
   const onRemoval = useCallback(
-    (fileKey: string) => {
-      setFileUploads(fileUploads.filter((file) => file.key !== fileKey));
+    (fileName: string) => {
+      setFileUploads(fileUploads.filter((file) => file.name !== fileName));
     },
     [fileUploads]
   );

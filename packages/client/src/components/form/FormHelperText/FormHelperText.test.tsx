@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import FormHelperText from "../FormHelperText";
+import FormHelperText from "./FormHelperText";
 
 describe("FormHelperText", () => {
   test("renders helper text without error", () => {

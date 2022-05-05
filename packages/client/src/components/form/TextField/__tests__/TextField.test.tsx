@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import TextField from "..";
-import SearchIcon from "@/components/icons/SearchIcon";
+import { SearchIcon } from "../../../Icons/SearchIcon";
 
 describe("TextField", () => {
   test("renders the text field with a label, a placeholder and an error + helper text", () => {
@@ -76,7 +76,13 @@ describe("TextField", () => {
   });
 
   test("renders end icon and placeholder", () => {
-    render(<TextField name="testing" placeholder="Test placeholder" endIcon={<SearchIcon />} />);
+    render(
+      <TextField
+        name="testing"
+        placeholder="Test placeholder"
+        endIcon={<SearchIcon />}
+      />
+    );
 
     // placeholder
     expect(screen.getByPlaceholderText("Test placeholder")).toBeInTheDocument();

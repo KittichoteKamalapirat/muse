@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import TextAreaField from "..";
+import TextAreaField from ".";
 
 describe("TextAreaField", () => {
   test("renders the text area field with a label, a placeholder and an error + helper text", () => {
@@ -62,7 +62,9 @@ describe("TextAreaField", () => {
     expect(screen.getByText("Test label")).toBeInTheDocument();
 
     // value
-    expect(textAreaField.textContent?.trim()).toEqual(`Test value\nSecond line`);
+    expect(textAreaField.textContent?.trim()).toEqual(
+      `Test value\nSecond line`
+    );
   });
 
   test("renders the text area field extra class", () => {

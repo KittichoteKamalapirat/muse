@@ -3,7 +3,7 @@ import { Box, Flex, IconButton, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -19,8 +19,6 @@ interface CreateThumbnailProps {
     React.SetStateAction<FileMetadata | null>
   >;
 }
-
-const urlResolver = new UrlResolver();
 
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
   prevStep,
