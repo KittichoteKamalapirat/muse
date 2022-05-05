@@ -146,8 +146,16 @@ const DropzoneField = ({
 
         // store uploaded files
         if (index === acceptedFiles.length - 1) {
-          // setFileUploads([...fileUploads, ...uploadedFiles]);
-          setFileUploads(uploadedFiles);
+          console.log(isMultiple);
+          // TODO concat OR replace?
+          // single => replace
+          // multiple => append
+          if (isMultiple) {
+            setFileUploads([...fileUploads, ...uploadedFiles]);
+          } else {
+            setFileUploads(uploadedFiles);
+          }
+
           setIsLoading(false);
         }
       });
