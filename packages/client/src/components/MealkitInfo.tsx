@@ -1,7 +1,15 @@
 import { gql } from "@apollo/client";
 import { AddIcon, CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
+
 import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, IconButton, Img, useToast } from "@chakra-ui/react";
+import {
+  Avatar,
+  IconButton,
+  Img,
+  useToast,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import router from "next/router";
 import React, { useState } from "react";
 import {
@@ -18,6 +26,7 @@ import { Reviews } from "./Reviews";
 import { ReviewStars } from "./ReviewStars";
 import { Loading } from "./skeletons/Loading";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
+import { XWrapper } from "./Wrapper/XWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -60,13 +69,22 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
         <Box>
           {mealkits.mealkits.map((mealkit, index) => (
             <Box key={index}>
-              <Box overflowX="auto" width="90%" margin="auto">
-                {mealkit.mealkitFiles.map((file, index) => (
-                  <Center key={index} m={1} minW="150px">
-                    <Img src={file.url} alt="image" borderRadius="10%" />
-                  </Center>
-                ))}
-              </Box>
+              <XWrapper>
+                <Wrap spacing="2%">
+                  {mealkit.mealkitFiles.map((file, index) => (
+                    <WrapItem key={index} m={1} width="48%">
+                      {file.fileType.includes("video") ? (
+                        <video controls>
+                          <source src={file.url} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ) : (
+                        <Img src={file.url} alt="image" borderRadius="10%" />
+                      )}
+                    </WrapItem>
+                  ))}
+                </Wrap>
+              </XWrapper>
 
               <ContentWrapper>
                 <Flex justifyContent="space-between" alignItems="baseline">
