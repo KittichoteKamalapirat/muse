@@ -43,7 +43,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(3);
+  const [step, setStep] = useState<number>(1);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
