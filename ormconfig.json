@@ -14,6 +14,8 @@
     "port": 5432,
     "entities": ["dist/entities/*.js"],
     "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*{.js}"],
+    "factories": ["dist/factories/**/*{.js}"],
     "logging": true,
     "synchronize": true
   },
@@ -29,22 +31,32 @@
     "synchronize": true
   },
   {
-    "name": "default",
+    "name": "comment",
     "type": "postgres",
     "host": "localhost",
+    "url": "postgresql://postgres:chain123@localhost:5432/cookknowdb_dev",
     "username": "postgres",
     "password": "chain123",
     "database": "cookknowdb_dev",
     "port": 5432,
-    "entities": ["src/entities/**/*{.js,.ts}"],
-    "migrations": ["src/migrations/**/*{.js,.ts}"],
-    "subscribers": ["src/subscriber/**/*{.js,.ts}"],
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*{.js}"],
+    "factories": ["dist/factories/**/*{.js}"],
+    "subscribers": ["dist/subscriber/**/*{.js,.ts}"],
     "logging": true,
-    "synchronize": false,
-    "cli": {
-      "entitiesDir": "src/entities",
-      "migrationDir": "src/migrations",
-      "subscribersDir": "src/subscriber"
-    }
+    "synchronize": false
+  },
+  {
+    "name": "default",
+    "type": "postgres",
+    "url": "postgresql://postgres:chain123@localhost:5432/cookknowdb_dev",
+    "entities": ["dist/entities/**/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*.js"],
+    "factories": ["dist/factories/**/*.js"],
+    "subscribers": ["dist/subscriber/**/*{.js,.ts}"],
+    "logging": true,
+    "synchronize": false
   }
 ]

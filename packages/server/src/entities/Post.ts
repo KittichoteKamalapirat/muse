@@ -17,15 +17,15 @@ import { Mealkit, Upvote, User, Ingredient, Video, Image } from ".";
 class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field()
-  id!: number;
+  id: number;
 
   @Column()
   @Field()
-  title!: string;
+  title: string;
 
   @Column({ nullable: true })
   @Field()
-  text!: string;
+  text: string;
 
   @Column("text", { nullable: true, array: true })
   @Field(() => [String], { nullable: true })
@@ -37,22 +37,22 @@ class Post extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  cooktime!: string;
+  cooktime: string;
 
   @Column({ type: "int", nullable: true })
   @Field(() => Int, { nullable: true })
-  portion!: number;
+  portion: number;
 
   @Column({ type: "int", default: 0 })
   @Field()
-  points!: number;
+  points: number;
 
   @Field(() => Int, { nullable: true })
   voteStatus: number | null; // willl be 1 or -1, this is used to check the status of this post for a user
 
   @Column({ default: true })
   @Field()
-  isPublished!: boolean;
+  isPublished: boolean;
 
   @Column()
   @Field()
@@ -60,7 +60,9 @@ class Post extends BaseEntity {
   creatorId: string;
 
   @Field(() => User) // need to have explicit type
-  @ManyToOne(() => User, (user) => user.posts)
+  @ManyToOne(() => User, (user) => user.posts, {
+    onDelete: "CASCADE",
+  })
   // user.posts have to be added in the User type
   creator: User;
   // └the foreign Id will be creatorId

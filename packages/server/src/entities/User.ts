@@ -45,9 +45,9 @@ class User extends BaseEntity {
   @Field()
   isCreator!: boolean;
 
-  @Column({ unique: true })
+  @Column()
   @Field()
-  avatar!: string;
+  avatar: string;
 
   @Column({ unique: true, nullable: true })
   @Field({ nullable: true })
@@ -57,7 +57,9 @@ class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @OneToMany(() => Post, (post) => post.creator)
+  @OneToMany(() => Post, (post) => post.creator, {
+    cascade: true,
+  })
   posts: Post[];
 
   @OneToMany(() => Mealkit, (mealkit) => mealkit.creator)
@@ -76,7 +78,9 @@ class User extends BaseEntity {
 
   // relatioship with profile starts
   @Field(() => Address, { nullable: true })
-  @OneToOne(() => Address, (address) => address.user)
+  @OneToOne(() => Address, (address) => address.user, {
+    cascade: true,
+  })
   // @JoinColumn()
   address: Address;
   // relatioship with account ends -> profileId

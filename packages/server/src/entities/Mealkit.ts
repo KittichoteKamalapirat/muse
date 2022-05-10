@@ -56,7 +56,9 @@ class Mealkit extends BaseEntity {
   creatorId: string;
 
   @Field(() => User) // need to have explicit type
-  @ManyToOne(() => User, (user) => user.mealkits)
+  @ManyToOne(() => User, (user) => user.mealkits, {
+    onDelete: "CASCADE",
+  })
   // user.posts have to be added in the User type
   creator: User;
 
@@ -74,7 +76,9 @@ class Mealkit extends BaseEntity {
   @Field()
   deliveryFee: number;
 
-  @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit)
+  @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit, {
+    cascade: true,
+  })
   @Field(() => [MealkitFile])
   mealkitFiles: MealkitFile[];
 
