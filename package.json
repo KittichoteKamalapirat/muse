@@ -1,8 +1,16 @@
 {
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/typeorm/**",
+      "**/typeorm",
+      "**/typeorm-seeding/**",
+      "**/typeorm-seeding"
+    ]
+  },
   "devDependencies": {
     "lerna": "^4.0.0"
   },
