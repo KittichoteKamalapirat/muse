@@ -7,9 +7,8 @@
   "scripts": {
     "dev": "NODE_ENV=development nodemon dist/index.js",
     "dev:test": "NODE_ENV=test nodemon dist/index.js",
-    "typeorm:create": "npx typeorm migrations:create -n Name -d src/migrations",
-    "typeorm:gen": "ts-node ./../../node_modules/typeorm/cli.js migration:generate -n migrationName -p",
-    "typeorm:genben": "npx ts-node ./../../node_modules/.bin/typeorm migration:generate -n migrationName -p",
+    "typeorm:create": "npx typeorm migration:create -n Name -d src/migrations",
+    "typeorm:gen": "ts-node node_modules/typeorm/cli.js migration:generate -n migrationName -p -d src/migrations -c forMigrationOfRemoteProductionDb",
     "gen-env": "gen-env-types .env -o src/env.d.ts -e .",
     "build": "tsc",
     "watch": "tsc -w",
@@ -24,7 +23,7 @@
     "cypress:open": "NODE_ENV=test yarn cypress open --project ./src",
     "cypress:run": "NODE_ENV=test yarn cypress run --project ./src",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seed:run": "node ../../node_modules/typeorm-seeding/dist/cli.js --configName ../../ormconfig.json seed"
+    "seed:run": "node node_modules/typeorm-seeding/dist/cli.js --configName ormconfig.json seed"
   },
   "keywords": [],
   "author": "",

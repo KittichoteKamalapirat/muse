@@ -1,0 +1,88 @@
+[
+  {
+    "name": "production",
+    "type": "postgres",
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "logging": true,
+    "synchronize": false
+  },
+  {
+    "name": "development",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*{.js}"],
+    "factories": ["dist/factories/**/*{.js}"],
+    "logging": true,
+    "synchronize": true
+  },
+  {
+    "name": "test",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "entities": ["dist/entities/*.js"],
+    "dropSchema": true,
+    "migrations": ["src/migrations/*.js"],
+    "logging": false,
+    "synchronize": true
+  },
+  {
+    "name": "comment",
+    "type": "postgres",
+    "host": "localhost",
+    "url": "postgresql://postgres:chain123@localhost:5432/cookknowdb_dev",
+    "username": "postgres",
+    "password": "chain123",
+    "database": "cookknowdb_dev",
+    "port": 5432,
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*{.js}"],
+    "factories": ["dist/factories/**/*{.js}"],
+    "subscribers": ["dist/subscriber/**/*{.js,.ts}"],
+    "logging": true,
+    "synchronize": false
+  },
+  {
+    "name": "forMigrationOfRemoteProductionDb",
+    "type": "postgres",
+    "host": "128.199.205.119",
+    "port": "9937",
+    "username": "postgres",
+    "password": "234d135f3b1c3be3e003f3446c95fe90",
+    "database": "cookknowdb",
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "logging": true,
+    "synchronize": false
+  },
+  {
+    "name": "forMigrationOfRemoteStagingDb",
+    "type": "postgres",
+    "host": "139.59.110.114",
+    "port": "3732",
+    "username": "postgres",
+    "password": "ee4c523f0bddf983ae50238ffc131653",
+    "database": "test_db",
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "logging": true,
+    "synchronize": false
+  },
+  {
+    "name": "default",
+    "type": "postgres",
+    "url": "postgresql://postgres:chain123@localhost:5432/shane",
+    "entities": ["dist/entities/**/*.js"],
+    "migrations": ["dist/migrations/*.js"],
+    "seeds": ["dist/db/seeds/**/*.js"],
+    "factories": ["dist/factories/**/*.js"],
+    "subscribers": ["dist/subscriber/**/*{.js,.ts}"],
+    "logging": true,
+    "synchronize": false
+  }
+]
