@@ -73,7 +73,7 @@ class Post extends BaseEntity {
   // Because, by using function syntax we solve the problem of circular dependencies (e.g. Post <--> User), so it was adopted as a convention.
   // You can use the shorthand syntax @Field(() => Rate) if you want to save some keystrokes but it might be less readable for others.
 
-  @OneToMany(() => Upvote, (upvote) => upvote.post)
+  @OneToMany(() => Upvote, (upvote) => upvote.post, { cascade: true })
   upvotes: Upvote[];
 
   @Field(() => [Ingredient])

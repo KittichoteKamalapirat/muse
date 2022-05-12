@@ -68,7 +68,9 @@ class Mealkit extends BaseEntity {
   // @JoinColumn()
   // cartItem: CartItem;
 
-  @OneToMany(() => CartItem, (cartItem) => cartItem.mealkit)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.mealkit, {
+    cascade: true,
+  })
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
 
@@ -82,7 +84,7 @@ class Mealkit extends BaseEntity {
   @Field(() => [MealkitFile])
   mealkitFiles: MealkitFile[];
 
-  @OneToMany(() => Review, (reviews) => reviews.mealkit)
+  @OneToMany(() => Review, (reviews) => reviews.mealkit, { cascade: true })
   @Field(() => [Review])
   reviews: Review[];
 
@@ -93,8 +95,6 @@ class Mealkit extends BaseEntity {
   @Column({ type: "int", default: 0 })
   @Field(() => Int)
   reviewsCounter: number;
-
-  // Date
 
   @Field(() => String)
   @CreateDateColumn()

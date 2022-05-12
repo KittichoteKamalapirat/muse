@@ -47,7 +47,7 @@ class CartItem extends BaseEntity {
   userId: string;
 
   @Field(() => User, { nullable: true })
-  @ManyToOne(() => User, (user) => user.cartItems)
+  @ManyToOne(() => User, (user) => user.cartItems, { onDelete: "CASCADE" })
   user: User;
 
   @Column({ default: CartItemStatus.UnOrdered })
@@ -63,11 +63,13 @@ class CartItem extends BaseEntity {
   mealkitId: number;
 
   @Field(() => Mealkit)
-  @ManyToOne(() => Mealkit, (mealkit) => mealkit.cartItems)
+  @ManyToOne(() => Mealkit, (mealkit) => mealkit.cartItems, {
+    onDelete: "CASCADE",
+  })
   mealkit: Mealkit;
 
   @Field(() => Order)
-  @ManyToOne(() => Order, (order) => order.cartItems)
+  @ManyToOne(() => Order, (order) => order.cartItems, { onDelete: "CASCADE" })
   order: Order;
 
   // Order can have many cartItems
@@ -77,14 +79,18 @@ class CartItem extends BaseEntity {
 
   // tracking
   @Field(() => Tracking, { nullable: true })
-  @ManyToOne(() => Tracking, (tracking) => tracking.cartItems)
+  @ManyToOne(() => Tracking, (tracking) => tracking.cartItems, {
+    cascade: true,
+  })
   tracking: Tracking;
 
   @Column({ nullable: true })
   trackingId: number;
 
   @Field(() => CartItemNoti)
-  @OneToMany(() => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem)
+  @OneToMany(() => CartItemNoti, (cartItemNoti) => cartItemNoti.cartItem, {
+    cascade: true,
+  })
   cartItemNotis: CartItemNoti[];
 
   @Field()

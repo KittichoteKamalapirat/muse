@@ -86,27 +86,29 @@ class User extends BaseEntity {
   // relatioship with account ends -> profileId
 
   // has many carts
-  @OneToMany(() => CartItem, (cartItem) => cartItem.user)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.user, { cascade: true })
   cartItems: CartItem[];
 
   // One user can have many orders
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user, { cascade: true })
   orders: Order[];
 
   // Follow function
-  @OneToMany(() => Follow, (followed) => followed.user)
+  @OneToMany(() => Follow, (followed) => followed.user, { cascade: true })
   followed: Follow[];
 
-  @OneToMany(() => Follow, (following) => following.follower)
+  @OneToMany(() => Follow, (following) => following.follower, { cascade: true })
   following: Follow[];
 
-  @OneToOne(() => PaymentInfo, (paymentInfo) => paymentInfo.user)
+  @OneToOne(() => PaymentInfo, (paymentInfo) => paymentInfo.user, {
+    cascade: true,
+  })
   @JoinColumn()
   @Field(() => PaymentInfo, { nullable: true })
   paymentInfo: PaymentInfo;
 
   // relationshiop with reviews
-  @OneToMany(() => Review, (reviews) => reviews.user)
+  @OneToMany(() => Review, (reviews) => reviews.user, { cascade: true })
   @Field(() => [Review])
   reviews: Review[];
 

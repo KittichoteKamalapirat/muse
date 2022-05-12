@@ -40,7 +40,7 @@ class Image extends BaseEntity {
   postId: number;
 
   @Field(() => Post)
-  @OneToOne(() => Post, (post) => post.image)
+  @OneToOne(() => Post, (post) => post.image, { onDelete: "CASCADE" })
   @JoinColumn()
   post: Post;
 

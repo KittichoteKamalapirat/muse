@@ -42,7 +42,9 @@ class CartItemNoti extends BaseEntity {
   cartItemId: number;
 
   @Field(() => CartItem)
-  @ManyToOne(() => CartItem, (cartItem) => cartItem.cartItemNotis)
+  @ManyToOne(() => CartItem, (cartItem) => cartItem.cartItemNotis, {
+    onDelete: "CASCADE",
+  })
   cartItem: CartItem;
 
   @CreateDateColumn()
