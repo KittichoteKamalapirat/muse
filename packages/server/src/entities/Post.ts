@@ -56,7 +56,6 @@ class Post extends BaseEntity {
 
   @Column()
   @Field()
-  // @Field()
   creatorId: string;
 
   @Field(() => User) // need to have explicit type

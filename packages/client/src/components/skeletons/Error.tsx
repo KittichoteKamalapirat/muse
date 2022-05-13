@@ -20,7 +20,7 @@ export const Error = ({ text, overlay = false }: Props) => {
     >
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <WarningIcon color="alert" fontSize="5xl" mb={5} />
-        <Text color="alert" fontWeight="bold" mb={5}>
+        <Text color="alert" fontWeight="bold" mb={5} textAlign="center">
           {text || "Hmm.. something is wrong"}
         </Text>
 

@@ -3,9 +3,8 @@ import Faker from "faker";
 import { User } from "../entities";
 
 define(User, (faker: typeof Faker) => {
-  const username = faker.name.findName();
   const user = new User();
-  user.username = username;
+  user.username = faker.name.findName();
   user.email = faker.internet.email();
   user.phonenumber = faker.phone.phoneNumber();
   user.isCreator = true;

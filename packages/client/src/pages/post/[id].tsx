@@ -5,6 +5,7 @@ import IngredientList from "../../components/IngredientList";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
 import { MealkitInfo } from "../../components/MealkitInfo";
+import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
@@ -13,13 +14,21 @@ import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
-  const { data, loading } = useGetPostFromUrl();
+  const { data, loading, error } = useGetPostFromUrl();
   const { data: meData } = useMeQuery();
 
   if (loading) {
     return (
       <Layout>
         <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout>
+        <Error text={error.message} />
       </Layout>
     );
   }

@@ -20,13 +20,11 @@
     "test": "NODE_ENV=test jest ",
     "start": "node dist/index.js",
     "postinstall": "expo-yarn-workspaces postinstall",
-    "start:cicommend": "(NODE_ENV=development node --trace-warnings dist/index.js&) >/dev/null ",
     "start:ci": "NODE_ENV=test node --trace-warnings dist/index.js",
     "ci:test": "jest NODE_ENV=test jest --ci --runInBand --detectOpenHandles --forceExit",
     "cypress:open": "NODE_ENV=test yarn cypress open --project ./src",
     "cypress:run": "NODE_ENV=test yarn cypress run --project ./src",
-    "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
-    "seed:run": "node node_modules/typeorm-seeding/dist/cli.js --configName ormconfig.json seed"
+    "seed:run": "ts-node node_modules/typeorm-seeding/dist/cli.js --configName ormconfig.json seed"
   },
   "keywords": [],
   "author": "",
