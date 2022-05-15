@@ -1,4 +1,4 @@
-import { ArrowUpIcon, ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import {
   Box,
@@ -6,7 +6,6 @@ import {
   CheckboxGroup,
   Flex,
   Heading,
-  IconButton,
   Image,
   Stack,
   Text,
@@ -18,7 +17,6 @@ import Dropzone from "react-dropzone";
 import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import { InputField } from "./InputField";
@@ -217,21 +215,25 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         {/* checkbox */}
         <Box my={4}>
           <Heading fontSize="lg">Items include</Heading>
-          {ingredientsField.length === 0 ||
-            (ingredientsField.length === 1 &&
-            ingredientsField[0].ingredient === "" ? (
-              <div>You have not added any ingredients</div>
-            ) : (
-              <CheckboxGroup
-                colorScheme="green"
-                // defaultValue={ingredientsField.map(
-                //   (ingredientWithUnit) => ingredientWithUnit.ingredient
-                // )}
-              >
-                {ingredientsField &&
-                  ingredientsField.map((ingredientWitUnit, index) => (
+          {ingredientsField.filter(
+            (ingredientObj) => ingredientObj.ingredient !== ""
+          ).length === 0 ? (
+            <div>
+              You have not added any ingredients. Please add them in the
+              previous page.
+            </div>
+          ) : (
+            <CheckboxGroup
+              colorScheme="green"
+              // defaultValue={ingredientsField.map(
+              //   (ingredientWithUnit) => ingredientWithUnit.ingredient
+              // )}
+            >
+              {ingredientsField &&
+                ingredientsField
+                  .filter((ingredientObj) => ingredientObj.ingredient !== "")
+                  .map((ingredientWitUnit, index) => (
                     <Stack key={index}>
-                      {" "}
                       <Checkbox
                         colorScheme="green"
                         value={ingredientWitUnit.ingredient}
@@ -263,8 +265,8 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                       </Checkbox>
                     </Stack>
                   ))}
-              </CheckboxGroup>
-            ))}
+            </CheckboxGroup>
+          )}
         </Box>
       </Form>
     </Box>

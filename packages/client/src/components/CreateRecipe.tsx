@@ -65,7 +65,8 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
         </Flex>
         {ingredientsField.map((inputField, index) => (
           <Box key={index}>
-            <Flex>
+            <Flex alignItems="center">
+              <Text mr={2}>{index + 1}. </Text>
               <Input
                 name="ingredient"
                 type="text"
@@ -109,7 +110,6 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 icon={<MinusIcon width={3} color="gray.600" />}
               />
             </Flex>
-            <Divider variant="dashed" />
           </Box>
         ))}
       </Form>

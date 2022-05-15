@@ -25,7 +25,6 @@ export const TopNav: React.FC<TopNavProps> = ({}) => {
       top={0}
       bg="white"
       p={2}
-      // ml={"auto"}
       borderBottom="solid"
       borderBottomColor="gray.200"
       borderBottomWidth="1px"

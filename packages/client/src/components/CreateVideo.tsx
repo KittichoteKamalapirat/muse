@@ -1,6 +1,7 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import axios from "axios";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { urlResolver } from "../lib/UrlResolver";
@@ -9,10 +10,11 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import Button from "./atoms/Button";
+import FormActionButtons from "./form/FormActionButtons/FormActionButtons";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
-  nextStep: Function;
+  nextStep: () => void;
   handleMetadata: Function;
   videoS3UrlAndID: FileMetadata | null;
   setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileMetadata | null>>;
@@ -26,6 +28,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
   setVideoS3UrlAndID,
   isGeneratingThumbnail,
 }) => {
+  const router = useRouter();
   const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
@@ -133,16 +136,12 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
 
       {/* hide if no s3 or is creating auto thumbnail */}
       {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
-        <Flex justifyContent="right">
-          <Button
-            variant="ghost"
-            color="brand"
-            onClick={() => nextStep()}
-            aria-label="Go to create thumbnail tab"
-          >
-            Next
-          </Button>
-        </Flex>
+        <FormActionButtons
+          primaryText="Next"
+          onPrimaryClick={nextStep}
+          secondaryText="Back"
+          onSecondaryClick={() => router.back()}
+        />
       )}
     </Box>
   );
