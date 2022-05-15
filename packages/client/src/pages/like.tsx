@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { Layout } from "../components/Layout/Layout";
+import { Error } from "../components/skeletons/Error";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
 import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
@@ -10,11 +11,10 @@ import { Wrapper } from "../components/Wrapper/Wrapper";
 import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
-interface likeProps {}
-
-const Like: React.FC = ({}) => {
+const Like = () => {
   const { data, error, loading, fetchMore, variables } = useVotedPostsQuery({
     variables: { limit: 10, cursor: null as null | string },
+    fetchPolicy: "cache-and-network",
   });
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
@@ -32,16 +32,17 @@ const Like: React.FC = ({}) => {
       </Wrapper>
     );
   }
-  if (loading) {
-    body = (
-      <Layout>
-        <Loading />
-      </Layout>
-    );
-  } else if (!meData?.me) {
+
+  if (error) {
+    <Error text={error.message} />;
+  }
+
+  if (!meData?.me) {
     router.push("/");
-    // body = <Text>You don't have a favorite recipe</Text>;
-  } else {
+  } else if (data?.votedPosts.posts.length === 0) {
+    body = <Text>You don&apos;t have a favorite recipe</Text>;
+  }
+  {
     body = (
       <Box>
         {data?.votedPosts.posts.map((post, index) => (

@@ -67,7 +67,7 @@ export class PostResolver {
     const realLimitPlusOne = realLimit + 1;
 
     const upvotes = await Upvote.find({
-      where: { userId: req.session.userId },
+      where: { userId: req.session.userId, value: 1 },
     });
 
     const upvotedPostIds: number[] = upvotes.map((u) => u.postId);
