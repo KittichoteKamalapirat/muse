@@ -1,7 +1,6 @@
 import { gql } from "@apollo/client";
 import { AddIcon, CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
-
-import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import {
   Avatar,
   IconButton,
@@ -26,7 +25,6 @@ import { Reviews } from "./Reviews";
 import { ReviewStars } from "./ReviewStars";
 import { Loading } from "./skeletons/Loading";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
-import { XWrapper } from "./Wrapper/XWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -69,8 +67,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
         <Box>
           {mealkits.mealkits.map((mealkit, index) => (
             <Box key={index} mx={4}>
-              {/* <XWrapper> */}
-              <Wrap spacing="2%">
+              <Wrap spacing="2% " justify="center">
                 {mealkit.mealkitFiles.map((file, index) => (
                   <WrapItem key={index} m={1} width="48%">
                     {file.fileType.includes("video") ? (
@@ -84,7 +81,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                   </WrapItem>
                 ))}
               </Wrap>
-              {/* </XWrapper> */}
 
               <ContentWrapper>
                 <Flex justifyContent="space-between" alignItems="baseline">

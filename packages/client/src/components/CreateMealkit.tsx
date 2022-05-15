@@ -7,8 +7,11 @@ import {
   Flex,
   Heading,
   Image,
+  Img,
   Stack,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Form } from "formik";
@@ -49,6 +52,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   mealkitS3UrlAndIds,
   setMealkitS3UrlAndIds,
 }) => {
+  console.log({ mealkitS3UrlAndIds });
   const [mealkitFiles, setMealkitFiles] = useState<any>([]);
 
   const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
@@ -95,29 +99,20 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
   return (
     <Box mt={4}>
-      {mealkitS3UrlAndIds.length === 0 ? null : (
-        <Flex overflowX="scroll">
-          {/* if there is file preview */}{" "}
-          {mealkitS3UrlAndIds.map((s3UrlAndId, index: number) => (
-            <Box key={index} mx={2}>
-              {s3UrlAndId.fileType?.includes("video") ? (
-                <video controls width="50%">
-                  <source src={s3UrlAndId.url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <Image
-                  src={s3UrlAndId.url}
-                  alt="meal kit image"
-                  height="200px"
-                  // vh="80%"
-                  borderRadius={10}
-                />
-              )}
-            </Box>
-          ))}
-        </Flex>
-      )}
+      <Wrap spacing="2%" justify="center">
+        {mealkitS3UrlAndIds.map((s3UrlAndId, index) => (
+          <WrapItem key={index} m={1} width="48%">
+            {s3UrlAndId.fileType!.includes("video") ? (
+              <video controls>
+                <source src={s3UrlAndId.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <Img src={s3UrlAndId.url} alt="meal kit" borderRadius="10%" />
+            )}
+          </WrapItem>
+        ))}
+      </Wrap>
 
       <Dropzone
         onDrop={(acceptedFiles, rejectedFiles) =>
