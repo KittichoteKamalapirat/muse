@@ -1,5 +1,5 @@
-import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Flex, IconButton, Image, Img, Text } from "@chakra-ui/react";
+import { PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
@@ -8,7 +8,6 @@ import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
-import Button from "./atoms/Button";
 
 interface CreateThumbnailProps {
   autoThumbnailS3UrlAndId: FileMetadata | null;

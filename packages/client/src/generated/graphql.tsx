@@ -192,12 +192,8 @@ export type Image = {
 export type Ingredient = {
   __typename?: 'Ingredient';
   amount: Scalars['String'];
-  createdAt: Scalars['String'];
-  id: Scalars['Float'];
   ingredient: Scalars['String'];
-  postId: Scalars['Float'];
   unit: Scalars['String'];
-  updatedAt: Scalars['String'];
 };
 
 export type IngredientInput = {
@@ -249,6 +245,11 @@ export type MealkitFile = {
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
+};
+
+export type MealkitFileInput = {
+  fileType: Scalars['String'];
+  postId: Scalars['Float'];
 };
 
 export type MealkitInput = {
@@ -323,8 +324,8 @@ export type MutationCreateCartItemArgs = {
 
 
 export type MutationCreateMealkitArgs = {
-  fileIds: Array<Scalars['Int']>;
   input: MealkitInput;
+  mealkitFiles: Array<MealkitFileInput>;
   postId: Scalars['Int'];
 };
 
@@ -931,7 +932,7 @@ export type CreateCartItemMutation = { __typename?: 'Mutation', createCartItem: 
 export type CreateMealkitMutationVariables = Exact<{
   input: MealkitInput;
   postId: Scalars['Int'];
-  fileIds: Array<Scalars['Int']> | Scalars['Int'];
+  mealkitFiles: Array<MealkitFileInput> | MealkitFileInput;
 }>;
 
 
@@ -1569,8 +1570,8 @@ export type CreateCartItemMutationHookResult = ReturnType<typeof useCreateCartIt
 export type CreateCartItemMutationResult = Apollo.MutationResult<CreateCartItemMutation>;
 export type CreateCartItemMutationOptions = Apollo.BaseMutationOptions<CreateCartItemMutation, CreateCartItemMutationVariables>;
 export const CreateMealkitDocument = gql`
-    mutation createMealkit($input: MealkitInput!, $postId: Int!, $fileIds: [Int!]!) {
-  createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
+    mutation createMealkit($input: MealkitInput!, $postId: Int!, $mealkitFiles: [MealkitFileInput!]!) {
+  createMealkit(input: $input, postId: $postId, mealkitFiles: $mealkitFiles) {
     name
     items
     price
@@ -1596,7 +1597,7 @@ export type CreateMealkitMutationFn = Apollo.MutationFunction<CreateMealkitMutat
  *   variables: {
  *      input: // value for 'input'
  *      postId: // value for 'postId'
- *      fileIds: // value for 'fileIds'
+ *      mealkitFiles: // value for 'mealkitFiles'
  *   },
  * });
  */

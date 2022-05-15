@@ -1,9 +1,9 @@
 mutation createMealkit(
   $input: MealkitInput!
   $postId: Int!
-  $fileIds: [Int!]!
+  $mealkitFiles: [MealkitFileInput!]!
 ) {
-  createMealkit(input: $input, postId: $postId, fileIds: $fileIds) {
+  createMealkit(input: $input, postId: $postId, mealkitFiles: $mealkitFiles) {
     name
     items
     price

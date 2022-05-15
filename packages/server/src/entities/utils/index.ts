@@ -49,6 +49,7 @@ export { default as PaymentInfoResponse } from "./paymentInfo/ObjectType/Payment
 
 // mealkit
 export { default as MealkitInput } from "./mealkit/InputType/MealkitInput";
+export { default as MealkitFileInput } from "./mealkit/InputType/MealkitFileInput";
 
 export { default as SignedS3Result } from "./mealkit/ObjectType/SignedS3Result";
 

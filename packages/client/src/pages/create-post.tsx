@@ -249,19 +249,21 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       if (postId) {
         const price = parseInt(mealkitInput.price);
         const mealkitPortion = parseInt(mealkitInput.mealkitPortion);
-        const { data: mealkitResult, errors: mealkitErrors } =
-          await createMealkit({
-            variables: {
-              input: {
-                name: mealkitInput.name,
-                price: price,
-                portion: mealkitPortion,
-                items: mealkitInput.items,
-              },
-              postId: postId,
-              fileIds: mealkitS3UrlAndIds.map((item) => item.id),
+        const { errors: mealkitErrors } = await createMealkit({
+          variables: {
+            input: {
+              name: mealkitInput.name,
+              price: price,
+              portion: mealkitPortion,
+              items: mealkitInput.items,
             },
-          });
+            postId: postId,
+            mealkitFiles: mealkitS3UrlAndIds.map((item) => ({
+              postId: item.id,
+              fileType: item.fileType as string,
+            })),
+          },
+        });
         if (!errors && !mealkitErrors) {
           router.push("/");
         }
