@@ -26,7 +26,7 @@ class Mealkit extends BaseEntity {
 
   @Column({ type: "int", nullable: true })
   @Field(() => Int, { nullable: true })
-  price!: number;
+  price: number;
 
   @Column()
   @Field()
@@ -37,9 +37,9 @@ class Mealkit extends BaseEntity {
   @Field(() => [String], { nullable: true })
   items: string[];
 
-  // @Column("text", { nullable: true, array: true })
-  // @Field(() => [String], { nullable: true })
-  // images: string[];
+  @Column({ default: 0 })
+  @Field()
+  deliveryFee: number;
 
   @Column()
   @Field()
@@ -73,10 +73,6 @@ class Mealkit extends BaseEntity {
   })
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
-
-  @Column({ default: 0 })
-  @Field()
-  deliveryFee: number;
 
   @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit, {
     cascade: true,

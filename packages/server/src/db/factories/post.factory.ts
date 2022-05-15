@@ -1,6 +1,6 @@
 import { define } from "typeorm-seeding";
 import Faker from "faker";
-import { Post } from "../entities";
+import { Post } from "../../entities";
 
 define(Post, (faker: typeof Faker) => {
   const post = new Post();

@@ -1,6 +1,6 @@
 import { define } from "typeorm-seeding";
 import Faker from "faker";
-import { Image } from "../entities";
+import { Image } from "../../entities";
 
 define(Image, (faker: typeof Faker) => {
   const name = faker.name.findName();

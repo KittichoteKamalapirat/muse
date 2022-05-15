@@ -1,6 +1,6 @@
 import { define } from "typeorm-seeding";
 import Faker from "faker";
-import { Ingredient } from "../entities";
+import { Ingredient } from "../../entities";
 
 define(Ingredient, (faker: typeof Faker) => {
   const ingredient = new Ingredient();

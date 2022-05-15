@@ -1,6 +1,6 @@
 import Faker from "faker";
 import { define } from "typeorm-seeding";
-import { Video } from "../entities";
+import { Video } from "../../entities";
 
 define(Video, (faker: typeof Faker) => {
   const name = faker.name.findName();

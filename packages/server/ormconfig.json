@@ -80,7 +80,7 @@
     "entities": ["dist/entities/**/*.js"],
     "migrations": ["dist/migrations/*.js"],
     "seeds": ["dist/db/seeds/**/*.js"],
-    "factories": ["dist/factories/**/*.js"],
+    "factories": ["dist/db/factories/**/*.js"],
     "subscribers": ["dist/subscriber/**/*{.js,.ts}"],
     "logging": false,
     "synchronize": false
