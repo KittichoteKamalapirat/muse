@@ -196,10 +196,7 @@ export class PostResolver {
     @Arg("videoId", () => Int) videoId: number,
     @Arg("imageId", () => Int) imageId: number,
     @Ctx() { req }: MyContext
-  ): // @Arg("title") title: string,
-  // @Arg("body", { nullable: true }) body: string,
-  // @Arg("videoUrl") videoUrl: string
-  Promise<Post | Error> {
+  ): Promise<Post | Error> {
     // 2 sql queries one to insert and one to select
     try {
       // TODO create transaction

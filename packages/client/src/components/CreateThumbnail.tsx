@@ -11,8 +11,6 @@ import getRESTOptions from "../util/getRESTOptions";
 import Button from "./atoms/Button";
 
 interface CreateThumbnailProps {
-  prevStep: Function;
-  nextStep: Function;
   autoThumbnailS3UrlAndId: FileMetadata | null;
   thumbnailS3UrlAndID: FileMetadata | null;
   setThumbnailS3UrlAndID: React.Dispatch<
@@ -21,8 +19,6 @@ interface CreateThumbnailProps {
 }
 
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
-  prevStep,
-  nextStep,
   autoThumbnailS3UrlAndId,
   thumbnailS3UrlAndID,
   setThumbnailS3UrlAndID,
@@ -125,25 +121,6 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           </Box>
         )}
       </Dropzone>
-      <Flex justifyContent="space-between">
-        <IconButton
-          aria-label="Search database"
-          icon={<ChevronLeftIcon />}
-          onClick={() => prevStep()}
-          fontSize="x-large"
-          color="dark.200"
-          variant="transparent"
-        />
-
-        <Button
-          variant="ghost"
-          color="brand"
-          onClick={() => nextStep()}
-          aria-label="Go to post detail tab"
-        >
-          Next
-        </Button>
-      </Flex>
     </Box>
   );
 };

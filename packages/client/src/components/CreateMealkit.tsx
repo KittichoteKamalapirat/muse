@@ -38,7 +38,6 @@ interface CreateMealkitProps {
     items: string[];
   };
   setInput: Function;
-  nextStep: Function;
   prevStep: Function;
   mealkitS3UrlAndIds: FileMetadata[];
   setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;

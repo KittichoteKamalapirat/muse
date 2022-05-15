@@ -7,6 +7,7 @@ import {
 
 type Props = ButtonProps & {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  width?: "100%" | "fit-content";
   variant?:
     | "outline"
     | "solid"
@@ -21,11 +22,13 @@ const Button: ComponentWithAs<"button", Props> = ({
   children,
   onClick,
   variant = "solid",
+  width = "100%",
+
   ...props
 }: Props) => {
   return (
     <ChakraButton
-      width="100%"
+      width={width}
       mt={2}
       onClick={onClick}
       variant={variant}
