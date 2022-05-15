@@ -35,24 +35,20 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <Flex alignItems="center" position="relative" mt={4}>
+      <Flex alignItems="center" position="relative">
         <InputOrTextarea
           className="form-input"
           {...field}
           {...props}
           variant={variant}
           id={field.name}
-          placeholder="    "
-          pt="30px"
-          pb="20px"
+          placeholder=""
         />
         <FormLabel
           className="form-label"
           htmlFor={field.name}
           position="absolute"
           color="inputLabel"
-          left={4}
-          top="14px"
         >
           {label}
         </FormLabel>

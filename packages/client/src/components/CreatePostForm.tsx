@@ -1,76 +1,63 @@
-import { Image } from "@chakra-ui/image";
 import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Divider, Flex, Heading } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import React from "react";
 import { InputField } from "./InputField";
 
-interface CreatePostFormProps {
-  nextStep: Function;
-  prevstep: Function;
-}
+interface CreatePostFormProps {}
 
-export const CreatePostForm: React.FC<CreatePostFormProps> = ({
-  nextStep,
-  prevstep,
-}) => {
+export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
   return (
     <Box mt={4}>
-      <Flex justifyContent="center">
-        <Box flex={2}>
-          {" "}
-          <Heading fontSize="md">Menu</Heading>
-          <InputField name="title" placeholder="ชื่อเมนู" label="" />
-          <Heading fontSize="md">Details</Heading>
-          <InputField
-            textarea={true}
-            name="text"
-            placeholder="รายละเอียดเกี่ยวกับเมนู"
-            label=""
-          />
-        </Box>
-      </Flex>
-      <Divider my={2} />
       <Box>
+        <Heading fontSize="md">Menu</Heading>
+        <InputField name="title" placeholder="ชื่อเมนู" label="" />
+      </Box>
+
+      <Box mt={4}>
+        <Heading fontSize="md">Details</Heading>
+        <InputField
+          textarea={true}
+          name="text"
+          placeholder="รายละเอียดเกี่ยวกับเมนู"
+          label=""
+        />
+      </Box>
+
+      <Box mt={4}>
         <Flex alignItems="center">
           <Heading fontSize="md">Cooking time</Heading>
 
           <Flex justifyContent="left">
-            <Box width="4rem" ml={2}>
+            <Box width="4rem" mx={2}>
               <InputField
                 name="cooktime"
-                variant="flushed"
+                // variant="flushed"
                 // placeholder="เวลาในการทำโดยประมาณ"
                 placeholder="30"
                 label=""
               />
             </Box>
-            <Select placeholder="mins" mt={2} width="6rem">
+            <Select placeholder="mins" width="6rem" variant="outline">
               {/* <option value="mins">mins</option> */}
               <option value="hrs">hrs</option>
             </Select>
           </Flex>
         </Flex>
 
-        <Divider my={2} />
-        <Flex alignItems="center">
+        <Flex alignItems="center" mt={4}>
           <Heading fontSize="md" whiteSpace="nowrap">
             Portion for
           </Heading>
 
-          <InputGroup size="sm" ml={2}>
-            <InputField
-              name="portion"
-              placeholder="2"
-              type="number"
-              variant="flushed"
-            />
+          <InputGroup ml={2}>
+            <InputField name="portion" placeholder="2" type="number" />
 
-            <InputRightAddon mt={2}>people</InputRightAddon>
+            <InputRightAddon>people</InputRightAddon>
           </InputGroup>
         </Flex>
-        <Divider my={2} />
-        <Box>
+
+        <Box mt={4}>
           <Heading fontSize="md">Tip/Advice</Heading>
           <InputField
             textarea={true}
@@ -80,7 +67,6 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({
           />
         </Box>
       </Box>
-      <Divider my={2} />
     </Box>
   );
 };

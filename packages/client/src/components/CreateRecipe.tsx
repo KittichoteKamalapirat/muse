@@ -28,13 +28,13 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
   handleRemoveInstructionField,
 }) => {
   return (
-    <Box>
+    <Box mt={4}>
       <Form>
         <Heading fontSize="lg">Ingredient need</Heading>
 
         <Flex justifyContent="space-between">
           <Text
-            flex={1}
+            flex={2}
             m={1}
             color="gray.800"
             fontSize="sm"
@@ -43,7 +43,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
             Ingredient
           </Text>
           <Text
-            flex={1}
+            flex={2}
             m={1}
             color="gray.800"
             fontSize="sm"
@@ -52,7 +52,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
             Amount
           </Text>
           <Text
-            flex={1}
+            flex={2}
             m={1}
             color="gray.800"
             fontSize="sm"
@@ -72,9 +72,9 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 m={1}
                 borderColor="gray.300"
                 value={inputField.ingredient}
-                placeholder="วัตถุดิบ"
+                // placeholder="วัตถุดิบ"
+                placeholder="ingredient"
                 onChange={(event) => handleChangeInput(index, event)}
-                variant="flushed"
               ></Input>
               <Input
                 name="amount"
@@ -82,19 +82,19 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 m={1}
                 borderColor="gray.300"
                 value={inputField.amount}
-                placeholder="ปริมาณ"
+                // placeholder="ปริมาณ"
+                placeholder="amount"
                 onChange={(event) => handleChangeInput(index, event)}
-                variant="flushed"
               ></Input>
               <Input
                 name="unit"
                 type="text"
                 m={1}
                 borderColor="gray.300"
-                placeholder="หน่วย"
+                // placeholder="หน่วย"
+                placeholder="unit"
                 value={inputField.unit}
                 onChange={(event) => handleChangeInput(index, event)}
-                variant="flushed"
               ></Input>
               <IconButton
                 onClick={() => handleAddField(index)}
@@ -115,7 +115,8 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
       </Form>
       <Divider my={2} />
       <Form>
-        <Heading fontSize="md">ขั้นตอน</Heading>
+        <Heading fontSize="md">Instruction</Heading>
+        {/* <Heading fontSize="md">ขั้นตอน</Heading> */}
         {instructionField.map((inputField, index) => (
           <Flex key={index} m={1} alignItems="center">
             <Text mr={2}>{index + 1}. </Text>
@@ -124,20 +125,20 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
               type="textarea"
               borderColor="gray.300"
               value={inputField}
-              placeholder="โปรดกรอกขั้นตอนการทำตรงนี้"
+              placeholder="Add the instruction here"
+              // placeholder="โปรดกรอกขั้นตอนการทำตรงนี้"
               onChange={(event) => handleInstructionChangeInput(index, event)}
-              variant="flushed"
             ></Input>
 
             <IconButton
               onClick={() => handleAddInstructionField(index)}
-              aria-label="เพิ่มขั้นตอน"
+              aria-label="addInstruction"
               bgColor="white"
               icon={<AddIcon width={3} color="gray.600" />}
             />
             <IconButton
               onClick={() => handleRemoveInstructionField(index)}
-              aria-label="ลดขั้นตอน"
+              aria-label="removeInstruction"
               bgColor="white"
               icon={<MinusIcon width={3} color="gray.600" />}
             />
