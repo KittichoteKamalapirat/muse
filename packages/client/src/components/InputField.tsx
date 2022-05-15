@@ -37,27 +37,14 @@ export const InputField: React.FC<InputFieldProps> = ({
     <FormControl isInvalid={!!error}>
       <Flex alignItems="center" position="relative" mt={4}>
         <InputOrTextarea
-          //   label cannot bu in props, so have to stick it outside
           className="form-input"
           {...field}
           {...props}
           variant={variant}
           id={field.name}
-          // placeholder={props.placeholder}
           placeholder="    "
           pt="30px"
           pb="20px"
-          // _focus={{
-          //   fontSize: "sm",
-          //   fontWeight: "400",
-          //   color: "inputField",
-          //   top: "4px",
-          //   left: "10px",
-          //   px: "5px",
-          //   // backgroundColor: "white",
-          //   zIndex: 1,
-          //   transition: "all 0.3s ease",
-          // }}
         />
         <FormLabel
           className="form-label"
@@ -66,17 +53,6 @@ export const InputField: React.FC<InputFieldProps> = ({
           color="inputLabel"
           left={4}
           top="14px"
-          // _focus={{
-          //   fontSize: "sm",
-          //   fontWeight: "400",
-          //   color: "inputField",
-          //   top: "4px",
-          //   left: "10px",
-          //   px: "5px",
-          //   // backgroundColor: "white",
-          //   zIndex: 1,
-          //   transition: "all 0.3s ease",
-          // }}
         >
           {label}
         </FormLabel>

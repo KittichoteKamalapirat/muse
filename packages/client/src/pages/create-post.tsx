@@ -379,10 +379,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                   <Box display={step === 3 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Add Post Detail">
                       <XWrapper>
-                        <CreatePostForm
-                          nextStep={nextStep}
-                          prevstep={prevStep}
-                        />
+                        <CreatePostForm />
                         <CreateRecipe
                           ingredientsField={ingredientsField}
                           instructionField={instructionField}
