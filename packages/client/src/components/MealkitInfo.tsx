@@ -68,23 +68,23 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       ) : (
         <Box>
           {mealkits.mealkits.map((mealkit, index) => (
-            <Box key={index}>
-              <XWrapper>
-                <Wrap spacing="2%">
-                  {mealkit.mealkitFiles.map((file, index) => (
-                    <WrapItem key={index} m={1} width="48%">
-                      {file.fileType.includes("video") ? (
-                        <video controls>
-                          <source src={file.url} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      ) : (
-                        <Img src={file.url} alt="image" borderRadius="10%" />
-                      )}
-                    </WrapItem>
-                  ))}
-                </Wrap>
-              </XWrapper>
+            <Box key={index} mx={4}>
+              {/* <XWrapper> */}
+              <Wrap spacing="2%">
+                {mealkit.mealkitFiles.map((file, index) => (
+                  <WrapItem key={index} m={1} width="48%">
+                    {file.fileType.includes("video") ? (
+                      <video controls>
+                        <source src={file.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <Img src={file.url} alt="image" borderRadius="10%" />
+                    )}
+                  </WrapItem>
+                ))}
+              </Wrap>
+              {/* </XWrapper> */}
 
               <ContentWrapper>
                 <Flex justifyContent="space-between" alignItems="baseline">
