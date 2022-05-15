@@ -11,6 +11,8 @@ import {
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { Layout } from "../components/Layout/Layout";
+import { Error } from "../components/skeletons/Error";
+import { Loading } from "../components/skeletons/Loading";
 import { primaryColor } from "../components/Variables";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 
@@ -39,7 +41,7 @@ export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
 };
 
 const Notification = ({}: Props) => {
-  const { data: meData, loading: meLoading } = useMeQuery();
+  const { data: meData, loading: meLoading, error: meError } = useMeQuery();
   const router = useRouter();
 
   const {
@@ -47,8 +49,6 @@ const Notification = ({}: Props) => {
     loading: orderNotiLoading,
     error: errorNori,
   } = useOrderNotisQuery();
-
-  console.log(orderNoti);
 
   const [readOrderNotis] = useReadOrderNotisMutation();
   // readOrderNotis();
@@ -62,42 +62,57 @@ const Notification = ({}: Props) => {
   }, [readOrderNotis]);
 
   if (meLoading || orderNotiLoading) {
-    return <Text>Loading</Text>;
+    return <Loading />;
+  }
+
+  if (meError || errorNori) {
+    return <Error />;
   }
 
   if (!meLoading && !meData?.me) {
     router.push("/");
   }
 
+  // show no noti of noties based on conditions
+  const body = (() => {
+    if (orderNoti?.orderNotis.length === 0) {
+      return <Text>You have no notifications.</Text>;
+    }
+
+    return (
+      <Box>
+        {orderNoti?.orderNotis.map((noti) => (
+          <LinkBox key={noti.id} mt={5}>
+            <Flex
+              alignItems="center"
+              mt={2}
+              borderRight={noti.read ? "null" : "4px"}
+              borderColor={primaryColor}
+              borderRadius="4px"
+            >
+              <Avatar src={noti.avatarHref} mx={2} />
+
+              <Text>
+                <span dangerouslySetInnerHTML={{ __html: noti.message }} />{" "}
+                <span style={{ color: "#718096" }}>
+                  {formatRelativeDate(noti.createdAt)}
+                </span>
+              </Text>
+            </Flex>
+
+            <LinkOverlay href={noti.detailUrl}></LinkOverlay>
+          </LinkBox>
+        ))}
+      </Box>
+    );
+  })();
+
   return (
     <Layout>
       <Wrapper>
         <Box mx={3}>
           <Heading fontSize="2xl">Notification</Heading>
-          <Box>
-            {orderNoti?.orderNotis.map((noti) => (
-              <LinkBox key={noti.id} mt={5}>
-                <Flex
-                  alignItems="center"
-                  mt={2}
-                  borderRight={noti.read ? "null" : "4px"}
-                  borderColor={primaryColor}
-                  borderRadius="4px"
-                >
-                  <Avatar src={noti.avatarHref} mx={2} />
-
-                  <Text>
-                    <span dangerouslySetInnerHTML={{ __html: noti.message }} />{" "}
-                    <span style={{ color: "#718096" }}>
-                      {formatRelativeDate(noti.createdAt)}
-                    </span>
-                  </Text>
-                </Flex>
-
-                <LinkOverlay href={noti.detailUrl}></LinkOverlay>
-              </LinkBox>
-            ))}
-          </Box>
+          {body}
         </Box>
       </Wrapper>
     </Layout>

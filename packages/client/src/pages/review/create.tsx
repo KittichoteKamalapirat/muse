@@ -1,9 +1,10 @@
 import { StarIcon } from "@chakra-ui/icons";
 import { Flex, Heading, Text } from "@chakra-ui/layout";
-import { Avatar, Box, Button, Center, Img, useToast } from "@chakra-ui/react";
+import { Avatar, Box, Center, Img, useToast } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import Button from "../../components/atoms/Button";
 import { InputField } from "../../components/InputField";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { MainNav } from "../../components/MainNav";
@@ -146,7 +147,7 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
                   <Text fontWeight="bold">Title</Text>
                   <InputField name="title" placeholder="title" />
                 </Box>
-                <Box>
+                <Box mt={4}>
                   <Text fontWeight="bold">Text</Text>
                   <InputField name="text" placeholder="text" textarea={true} />
                 </Box>
