@@ -435,7 +435,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         </Flex> */}
                         {!submittable && (
                           <Text color="alert">
-                            Some required fields are missing
+                            * Some required fields are missing
                           </Text>
                         )}
 

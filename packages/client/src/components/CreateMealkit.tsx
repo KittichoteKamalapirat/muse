@@ -96,7 +96,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   }, [mealkitFiles.length]);
 
   return (
-    <Box>
+    <Box mt={4}>
       {mealkitS3UrlAndIds.length === 0 ? null : (
         <Flex overflowX="scroll">
           {/* if there is file preview */}{" "}
@@ -169,60 +169,53 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
       </Dropzone>
 
       <Form>
-        {/* <Heading>Create a mealkit</Heading> */}
-
-        <InputField
-          name="name"
-          value={input.name}
-          placeholder="name of the mealkit"
-          onChange={(e) => setInput({ ...input, name: e.target.value })}
-        />
-        <InputGroup>
-          <InputLeftAddon mt={2}>Price</InputLeftAddon>
+        <Box mt={4}>
+          <Heading fontSize="md">Meal Kit Name</Heading>
           <InputField
-            name="price"
-            type="number"
-            value={input.price}
-            placeholder="price"
-            variant="flushed"
-            onChange={(e) => setInput({ ...input, price: e.target.value })}
+            name="name"
+            value={input.name}
+            placeholder="name of the mealkit"
+            onChange={(e) => setInput({ ...input, name: e.target.value })}
           />
-          <InputRightAddon mt={2}>THB</InputRightAddon>
-        </InputGroup>
+        </Box>
 
-        {/* <Heading fontSize="md" whiteSpace="nowrap">
-          Portion for
-        </Heading> */}
-        <Flex alignItems="center">
+        <Box mt={4}>
+          <Heading fontSize="md">Price</Heading>
+
           <InputGroup>
-            <InputLeftAddon mt={2}>Portion for</InputLeftAddon>
-            {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
+            <InputField
+              name="price"
+              type="number"
+              value={input.price}
+              placeholder="price"
+              onChange={(e) => setInput({ ...input, price: e.target.value })}
+            />
+            <InputRightAddon>THB</InputRightAddon>
+          </InputGroup>
+        </Box>
+
+        <Box mt={4}>
+          <Heading fontSize="md">Portion For</Heading>
+
+          <InputGroup>
+            <InputLeftAddon>Portion for</InputLeftAddon>
+            {/* <InputLeftAddon children="ปริมาณสำหรับ"  /> */}
             <InputField
               name="mealkitPortion"
               type="number"
               value={input.mealkitPortion}
               placeholder="portion"
-              variant="flushed"
               onChange={(e) =>
                 setInput({ ...input, mealkitPortion: e.target.value })
               }
             ></InputField>
 
-            <InputRightAddon mt={2}>people</InputRightAddon>
+            <InputRightAddon>people</InputRightAddon>
           </InputGroup>
-        </Flex>
-        {/* <InputField
-          name="items"
-          type="text"
-          value={input.items}
-          placeholder="items"
-          onChange={(e) => setInput({ ...input, items: e.target.value })}
-        ></InputField> */}
-        <Text>items included</Text>
+        </Box>
 
         {/* checkbox */}
         <Box my={4}>
-          {" "}
           <Heading fontSize="lg">Items include</Heading>
           {ingredientsField.length === 0 ||
             (ingredientsField.length === 1 &&
@@ -274,17 +267,6 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             ))}
         </Box>
       </Form>
-
-      <Flex justifyContent="space-between">
-        <IconButton
-          aria-label="Search database"
-          icon={<ChevronLeftIcon />}
-          onClick={() => prevStep()}
-          fontSize="x-large"
-          color="dark.200"
-          variant="transparent"
-        />
-      </Flex>
     </Box>
   );
 };
