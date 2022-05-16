@@ -4,6 +4,7 @@ import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Avatar, Center, Img, Link, useMediaQuery } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
+import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
@@ -44,17 +45,13 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 <Text>มีวัตถุดิบ มีคลิปสอน </Text>
                 <Text> พร้อมทำอาหาร</Text>
               </Box>
-              <NextLink href="/register" passHref>
-                <Link>
-                  <Button
-                    rightIcon={<ChevronRightIcon />}
-                    variant="solid"
-                    my={8}
-                  >
-                    Create Account
-                  </Button>
-                </Link>
-              </NextLink>
+              <LinkButton
+                href="/register"
+                rightIcon={<ChevronRightIcon />}
+                width="fit-content"
+              >
+                Create Account
+              </LinkButton>
             </Box>
 
             <Img
@@ -162,19 +159,13 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               for your recipe
             </Text>
 
-            <NextLink
-              href={{
-                pathname: "/creator",
-                // query: { isCreator: true },
-              }}
-              passHref
+            <LinkButton
+              href="/register"
+              rightIcon={<ChevronRightIcon />}
+              width="fit-content"
             >
-              <Link>
-                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
-                  Become a creator
-                </Button>
-              </Link>
-            </NextLink>
+              Become a creator
+            </LinkButton>
           </Wrapper>
         </Box>
 

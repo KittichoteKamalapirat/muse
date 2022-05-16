@@ -48,6 +48,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
                 query: { isCreator: true },
               }}
               mt={10}
+              width="fit-content"
             >
               Sign up as Creator
             </LinkButton>
