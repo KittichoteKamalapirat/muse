@@ -8,6 +8,7 @@ type Props = ChakraButtonProps & {
   pathname?: string;
   href?: any;
   leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+  width?: "100%" | "fit-content" | "min-content";
 };
 
 const LinkButton = ({
@@ -15,6 +16,7 @@ const LinkButton = ({
   href,
   pathname,
   leftIcon,
+  width = "100%",
   ...props
 }: Props) => {
   return (
@@ -29,6 +31,7 @@ const LinkButton = ({
             backgroundColor: "brandHover",
           }}
           leftIcon={leftIcon}
+          width={width}
           {...props}
         >
           {children}

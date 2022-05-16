@@ -13,7 +13,7 @@ import {
 } from "type-graphql";
 import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
-import { Image, Mealkit, MealkitFile, Post } from "../entities";
+import { Image, Mealkit, MealkitFile } from "../entities";
 import {
   MealkitFileInput,
   MealkitInput,

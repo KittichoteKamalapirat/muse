@@ -7,7 +7,7 @@ import {
 
 type Props = ButtonProps & {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  width?: "100%" | "fit-content" | "min-content";
+  width?: "100%" | "fit-content" | "min-content" | string;
   variant?:
     | "outline"
     | "solid"
