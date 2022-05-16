@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
 describe("order", () => {
-  it("a buyer can create an order", () => {
+  it.skip("a buyer can create an order", () => {
     // login a user and redirect to homepage
 
     // create post and mealkit in db
