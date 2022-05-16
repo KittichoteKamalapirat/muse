@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import FormActionButtons from "./FormActionButtons";
+import "@testing-library/jest-dom";
 
 describe("FormActionButtons", () => {
   test("renders default buttons", () => {
