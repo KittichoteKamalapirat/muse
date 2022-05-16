@@ -369,6 +369,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         ></CreateThumbnail>
                         <FormActionButtons
                           primaryText="Next"
+                          primaryAriaLabel="Go to post detail tab"
                           onPrimaryClick={nextStep}
                           secondaryText="Back"
                           onSecondaryClick={prevStep}
@@ -399,6 +400,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
                         <FormActionButtons
                           primaryText="Next"
+                          primaryAriaLabel="Go to mealkit details tab"
                           onPrimaryClick={nextStep}
                           secondaryText="Back"
                           onSecondaryClick={prevStep}
@@ -409,7 +411,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 }
                 {
                   <Box display={step === 4 ? "block" : "none"}>
-                    <HeadingLayout heading="Add a mealkit" back={false}>
+                    <HeadingLayout heading="Add a Meal Kit" back={false}>
                       <XWrapper>
                         <CreateMealkit
                           ingredientsField={ingredientsField}

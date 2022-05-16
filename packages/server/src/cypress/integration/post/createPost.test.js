@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 
 describe("post", () => {
+  Cypress.on("uncaught:exception", () => false);
   it("creator can create a post", () => {
     // login a user and redirect to homepage
     // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);
@@ -19,11 +20,14 @@ describe("post", () => {
       force: true,
     });
 
+    cy.url().should("eq", `${Cypress.env("clientUrl")}/create-post`);
+
     // create a new product
     // cy.get("input").click({ force: true });
     cy.contains("Select a video").click({ force: true });
 
     // upload a video
+    cy.contains("New Video").should("be.visible", { force: true });
     const videoFileName = "video1.mp4";
     cy.get("input[accept='video/*']")
       .should("be.exist")
@@ -31,11 +35,14 @@ describe("post", () => {
         mimeType: "video/mp4",
       });
 
+    // manually click since no redirect in cypress?
     cy.get('button[aria-label="Go to create thumbnail tab"]')
       .should("be.visible")
       .click({ force: true });
 
     // upload a thumbnail
+    cy.contains("Cover Photo").should("be.visible", { force: true });
+
     const thumbnailFileName = "thumbnail1.png";
     cy.get('input[accept="image/*"]')
       .should("be.exist")
@@ -47,6 +54,7 @@ describe("post", () => {
       .should("be.visible")
       .click({ force: true });
 
+    cy.contains("Add Post Detail").should("be.visible", { force: true });
     // fill in post details
     const title = "Marinara";
     const text = "Marinara Details";
@@ -59,6 +67,8 @@ describe("post", () => {
     cy.get('button[aria-label="Go to mealkit details tab"]')
       .should("be.visible")
       .click({ force: true });
+
+    cy.contains("Add a Meal Kit").should("be.visible", { force: true });
 
     // fill in mealkit details
     const mealkitName = "Marinara Mealkit";

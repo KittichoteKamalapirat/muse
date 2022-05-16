@@ -13,6 +13,7 @@ interface Props {
   secondaryButtonVariant?: "outline" | "solid" | "unstyled" | "link" | "ghost";
   primaryIsDisabled?: boolean;
   primaryIsLoading?: boolean;
+  primaryAriaLabel?: string;
 }
 
 const FormActionButtons = ({
@@ -21,6 +22,7 @@ const FormActionButtons = ({
   primaryText = "Save",
   primaryButtonVariant = "solid",
   primaryButtonType = "button",
+  primaryAriaLabel = "next",
   secondaryText = "Cancel",
   secondaryButtonVariant = "outline",
   secondaryButtonType = "button",
@@ -43,6 +45,7 @@ const FormActionButtons = ({
       disabled={primaryIsDisabled}
       isLoading={primaryIsLoading}
       type={primaryButtonType}
+      aria-label={primaryAriaLabel}
     >
       {primaryText}
     </Button>

@@ -138,6 +138,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
       {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
         <FormActionButtons
           primaryText="Next"
+          primaryAriaLabel="Go to create thumbnail tab"
           onPrimaryClick={nextStep}
           secondaryText="Back"
           onSecondaryClick={() => router.back()}
