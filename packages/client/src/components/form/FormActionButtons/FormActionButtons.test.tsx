@@ -7,7 +7,7 @@ describe("FormActionButtons", () => {
   test("renders default buttons", () => {
     render(<FormActionButtons onSecondaryClick={() => undefined} />);
 
-    const primaryButton = screen.getByRole("button", { name: "Save" });
+    const primaryButton = screen.getByRole("button", { name: "Save" }); // corresponds to aria-label
     const secondaryButton = screen.getByRole("button", { name: "Cancel" });
     expect(primaryButton).toBeInTheDocument();
     expect(secondaryButton).toBeInTheDocument();

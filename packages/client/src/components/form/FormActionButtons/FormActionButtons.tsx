@@ -22,7 +22,7 @@ const FormActionButtons = ({
   primaryText = "Save",
   primaryButtonVariant = "solid",
   primaryButtonType = "button",
-  primaryAriaLabel = "next",
+  primaryAriaLabel,
   secondaryText = "Cancel",
   secondaryButtonVariant = "outline",
   secondaryButtonType = "button",
@@ -45,7 +45,7 @@ const FormActionButtons = ({
       disabled={primaryIsDisabled}
       isLoading={primaryIsLoading}
       type={primaryButtonType}
-      aria-label={primaryAriaLabel}
+      aria-label={primaryAriaLabel || primaryText}
     >
       {primaryText}
     </Button>
