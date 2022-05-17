@@ -19,8 +19,6 @@ const Like = () => {
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
 
-  let body = null;
-
   if (loading) {
     return (
       <Wrapper>
@@ -39,11 +37,13 @@ const Like = () => {
 
   if (!meData?.me) {
     router.push("/");
-  } else if (data?.votedPosts.posts.length === 0) {
-    body = <Text>You don&apos;t have a favorite recipe</Text>;
   }
-  {
-    body = (
+
+  const body = (() => {
+    if (data?.votedPosts.posts.length === 0)
+      return <Text>You don&apos;t have a favorite recipe</Text>;
+
+    return (
       <Box>
         {data?.votedPosts.posts.map((post, index) => (
           <NextLink
@@ -69,7 +69,8 @@ const Like = () => {
         ))}
       </Box>
     );
-  }
+  })();
+
   return (
     <Layout>
       <Wrapper>
