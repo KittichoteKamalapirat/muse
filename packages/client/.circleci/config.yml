@@ -49,6 +49,16 @@ jobs:
           event: fail
           template: basic_fail_1
 
+  client-successful-build-slack-notification:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - run:
+          name: Success
+          command: |
+            exit 0
+
   client-deploy-test:
     docker:
       - image: cimg/node:17.6.0
@@ -145,10 +155,46 @@ workflows:
           context:
             - slack-secrets
 
+      - client-successful-build-slack-notification:
+        requires:
+          - client-test
+        context:
+          - slack-secrets
+        post-steps:
+          - slack/notify:
+              custom: |
+                {
+                  "text": "",
+                  "blocks": [
+                    {
+                      "type": "section",
+                      "text": {
+                        "type": "mrkdwn",
+                        "text": "✅ *Success*: Build #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}` by `${CIRCLE_USERNAME}`"
+                      }
+                    },
+                    {
+                      "type": "actions",
+                      "elements": [
+                        {
+                          "type": "button",
+                          "text": {
+                            "type": "plain_text",
+                            "text": "View Job"
+                          },
+                          "url": "${CIRCLE_BUILD_URL}"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              event: always
+
       - client-deploy-test:
           name: 🌍 Deploy to test
           requires:
             - 🔬 Run jest
+            # - client-successful-build-slack-notification
           filters:
             branches:
               only: test-master
