@@ -48,7 +48,10 @@ const Address: React.FC<addressProps> = ({}) => {
     </Flex>
   );
   return (
-    <HeadingLayout heading="ที่อยู่จัดส่ง">
+    <HeadingLayout
+      // heading="ที่อยู่จัดส่ง"
+      heading="Delivery Address"
+    >
       {!data ? (
         <Wrapper>{noAddress}</Wrapper>
       ) : (
