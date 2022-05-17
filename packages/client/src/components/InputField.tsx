@@ -15,6 +15,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   textarea?: boolean;
   variant?: string;
+  mt?: number;
   //   placeholder: string;  rmeove cause redundant, already in InputHTMLAttributes
 };
 
@@ -24,6 +25,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   textarea,
   size: _,
   variant,
+  mt = 0,
   ...props
 }) => {
   // somehow props don't like the size in it, so we destructure it out,
@@ -35,20 +37,24 @@ export const InputField: React.FC<InputFieldProps> = ({
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <Flex alignItems="center" position="relative">
+      <Flex alignItems="center" position="relative" mt={mt}>
         <InputOrTextarea
           className="form-input"
-          variant={variant}
-          id={field.name}
-          placeholder=""
           {...field}
           {...props}
+          variant={variant}
+          id={field.name}
+          placeholder="    "
+          pt="30px"
+          pb="20px"
         />
         <FormLabel
           className="form-label"
           htmlFor={field.name}
           position="absolute"
           color="inputLabel"
+          left={4}
+          top="14px"
         >
           {label}
         </FormLabel>
