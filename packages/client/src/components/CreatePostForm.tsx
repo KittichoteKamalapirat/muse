@@ -11,7 +11,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
     <Box mt={4}>
       <Box>
         <Heading fontSize="md">Menu</Heading>
-        <InputField name="title" placeholder="ชื่อเมนู" label="" />
+        <InputField name="title" placeholder="Menu Name" label="" />
       </Box>
 
       <Box mt={4}>
@@ -19,53 +19,52 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
         <InputField
           textarea={true}
           name="text"
-          placeholder="รายละเอียดเกี่ยวกับเมนู"
+          // placeholder="รายละเอียดเกี่ยวกับเมนู"
+          placeholder="Details about the menu"
           label=""
         />
       </Box>
 
       <Box mt={4}>
-        <Flex alignItems="center">
-          <Heading fontSize="md">Cooking time</Heading>
+        <Heading fontSize="md">Cooking time</Heading>
 
-          <Flex justifyContent="left">
-            <Box width="4rem" mx={2}>
-              <InputField
-                name="cooktime"
-                // variant="flushed"
-                // placeholder="เวลาในการทำโดยประมาณ"
-                placeholder="30"
-                label=""
-              />
-            </Box>
-            <Select placeholder="mins" width="6rem" variant="outline">
-              {/* <option value="mins">mins</option> */}
-              <option value="hrs">hrs</option>
-            </Select>
-          </Flex>
+        <Flex justifyContent="left">
+          <Box mr={2}>
+            <InputField
+              name="cooktime"
+              // placeholder="เวลาในการทำโดยประมาณ"
+              placeholder="30"
+              label=""
+            />
+          </Box>
+
+          <Select placeholder="mins" width="6rem" variant="outline">
+            {/* <option value="mins">mins</option> */}
+            <option value="hrs">hrs</option>
+          </Select>
         </Flex>
+      </Box>
 
-        <Flex alignItems="center" mt={4}>
-          <Heading fontSize="md" whiteSpace="nowrap">
-            Portion for
-          </Heading>
+      <Box mt={4}>
+        <Heading fontSize="md" whiteSpace="nowrap">
+          Portion for
+        </Heading>
+        <InputGroup>
+          <InputField name="portion" placeholder="2" type="number" />
 
-          <InputGroup ml={2}>
-            <InputField name="portion" placeholder="2" type="number" />
+          <InputRightAddon>people</InputRightAddon>
+        </InputGroup>
+      </Box>
 
-            <InputRightAddon>people</InputRightAddon>
-          </InputGroup>
-        </Flex>
-
-        <Box mt={4}>
-          <Heading fontSize="md">Tip/Advice</Heading>
-          <InputField
-            textarea={true}
-            name="advice"
-            placeholder="ข้อแนะนำ"
-            label=""
-          />
-        </Box>
+      <Box mt={4}>
+        <Heading fontSize="md">Tip/Advice</Heading>
+        <InputField
+          textarea={true}
+          name="advice"
+          // placeholder="ข้อแนะนำ"
+          placeholder="Add advice here"
+          label=""
+        />
       </Box>
     </Box>
   );

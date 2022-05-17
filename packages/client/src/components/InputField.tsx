@@ -38,11 +38,11 @@ export const InputField: React.FC<InputFieldProps> = ({
       <Flex alignItems="center" position="relative">
         <InputOrTextarea
           className="form-input"
-          {...field}
-          {...props}
           variant={variant}
           id={field.name}
           placeholder=""
+          {...field}
+          {...props}
         />
         <FormLabel
           className="form-label"

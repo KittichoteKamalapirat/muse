@@ -191,8 +191,6 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           <Heading fontSize="md">Portion For</Heading>
 
           <InputGroup>
-            <InputLeftAddon>Portion for</InputLeftAddon>
-            {/* <InputLeftAddon children="ปริมาณสำหรับ"  /> */}
             <InputField
               name="mealkitPortion"
               type="number"
@@ -201,7 +199,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
               onChange={(e) =>
                 setInput({ ...input, mealkitPortion: e.target.value })
               }
-            ></InputField>
+            />
 
             <InputRightAddon>people</InputRightAddon>
           </InputGroup>
