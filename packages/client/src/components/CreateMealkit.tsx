@@ -52,7 +52,6 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   mealkitS3UrlAndIds,
   setMealkitS3UrlAndIds,
 }) => {
-  console.log({ mealkitS3UrlAndIds });
   const [mealkitFiles, setMealkitFiles] = useState<any>([]);
 
   const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
@@ -89,13 +88,14 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             fileType: file.type,
           });
 
-          if (index === mealkitFiles.length - 1) {
+          // if last loop, can't use index because it's async (2->4->3->1 could happen)
+          if (fileMetadatas.length === mealkitFiles.length) {
             setMealkitS3UrlAndIds(fileMetadatas);
           }
         });
       });
     }
-  }, [mealkitFiles.length]);
+  }, [mealkitFiles, setMealkitS3UrlAndIds]);
 
   return (
     <Box mt={4}>
