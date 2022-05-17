@@ -1,5 +1,5 @@
 import { AddIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Button, Divider, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -37,7 +37,9 @@ const Address: React.FC<addressProps> = ({}) => {
   const noAddress = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
-        <Text m={5}>You have not added your address yet</Text>
+        <Heading size="h2" m={5}>
+          You have not added your address yet
+        </Heading>
 
         <LinkButton pathname="/account/address/create" leftIcon={<AddIcon />}>
           Add address
