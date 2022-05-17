@@ -157,7 +157,7 @@ workflows:
 
       - client-successful-build-slack-notification:
           requires:
-            - client-test
+            - 🔬 Run jest
           context:
             - slack-secrets
           post-steps:

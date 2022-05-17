@@ -276,7 +276,7 @@ workflows:
 
       - server-successful-build-slack-notification:
           requires:
-            - server-test
+            - 🧪  Run jest and cypress
           context:
             - slack-secrets
           post-steps:
