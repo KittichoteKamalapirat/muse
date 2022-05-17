@@ -1,5 +1,6 @@
 import { Image } from "@chakra-ui/image";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
 import React from "react";
 import LinkButton from "../../components/atoms/LinkButton";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
@@ -7,6 +8,7 @@ import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { LikeSkeleton } from "../../components/skeletons/LikeSkeleton";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../components/Wrapper/XWrapper";
 import { useMeQuery, usePostsByCreatorQuery } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
@@ -37,7 +39,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="My posts">
-      <Wrapper>
+      <XWrapper>
         {posts && posts.postsByCreator.length === 0 ? (
           <Flex
             height="80vh"
@@ -61,7 +63,13 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
                 backgroundColor={post.isPublished ? "" : "gray.100"}
               >
                 <Box flex={1} my={2}>
-                  <Image src={post.image.url} alt="image" borderRadius="10%" />
+                  <NextLink href={`/post/${post.id}`} passHref>
+                    <Image
+                      src={post.image.url}
+                      alt="image"
+                      borderRadius="10%"
+                    />
+                  </NextLink>
                 </Box>
                 <Box flex={2} m={2}>
                   <Text>{post.title}</Text>
@@ -82,7 +90,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
             ))}
           </Box>
         )}
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

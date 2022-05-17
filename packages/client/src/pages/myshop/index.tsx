@@ -215,63 +215,61 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
             <Heading fontSize="md">My posts</Heading>
 
             <Flex mt={2}>
-              <Flex
-                flex={1}
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={4}
-                m={1}
-                rounded="md"
-              >
-                <SvgVideoIcon fontSize="1.5rem" />
+              <LinkBox flex={1}>
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  boxShadow="xs"
+                  p={4}
+                  m={1}
+                  rounded="md"
+                >
+                  <SvgVideoIcon fontSize="1.5rem" />
 
-                <NextLink href="/myshop/posts/" as="/myshop/posts/" passHref>
-                  <Link mt={2}>Posts</Link>
-                </NextLink>
-              </Flex>
+                  <NextLink href="/myshop/posts/" as="/myshop/posts/" passHref>
+                    <LinkOverlay mt={2}>Posts</LinkOverlay>
+                  </NextLink>
+                </Flex>
+              </LinkBox>
 
-              <Flex
-                flex={1}
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={4}
-                m={1}
-                rounded="md"
-              >
-                <SvgPizzaIcon fontSize="1.5rem" />
-                <Text mt={2} fontSize="md">
-                  Meal kits
-                </Text>
-              </Flex>
-              {/* <Box flex={1}></Box> */}
+              <LinkBox flex={1}>
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  boxShadow="xs"
+                  p={4}
+                  m={1}
+                  rounded="md"
+                >
+                  <SvgPizzaIcon fontSize="1.5rem" />
+                  <Text mt={2} fontSize="md">
+                    Meal kits
+                  </Text>
+                </Flex>
+              </LinkBox>
             </Flex>
           </Box>
-
-          {/* My post section ends*/}
-
-          {/* otherssection starts */}
 
           <Box mt={4}>
             <Heading fontSize="md">Others</Heading>
 
             <Flex mt={2}>
-              <Flex
-                flex={1}
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={2}
-                m={1}
-                rounded="md"
-              >
-                <SvgCardIcon fontSize="1.5rem" />
+              <LinkBox flex={1}>
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  boxShadow="xs"
+                  p={2}
+                  m={1}
+                  rounded="md"
+                >
+                  <SvgCardIcon fontSize="1.5rem" />
 
-                <NextLink href="/myshop/payment-info" passHref>
-                  <Link mt={2}>Payment Info</Link>
-                </NextLink>
-              </Flex>
+                  <NextLink href="/myshop/payment-info" passHref>
+                    <LinkOverlay mt={2}>Payment Info</LinkOverlay>
+                  </NextLink>
+                </Flex>
+              </LinkBox>
 
               <Box flex={1}></Box>
             </Flex>
