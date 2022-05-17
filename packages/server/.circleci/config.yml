@@ -1,7 +1,10 @@
 version: 2.1
 
+orbs: 
+  slack: circleci/slack@4.10.1
+
 jobs:
-  server-test:
+server-test:
     docker:
       - image: cypress/base:17.8.0
         environment:
@@ -70,6 +73,10 @@ jobs:
 
       - store_artifacts:
           path: ~/project/packages/server/src/cypress/screenshots
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   server-deploy-test:
     docker:
@@ -149,6 +156,10 @@ jobs:
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh root@139.59.110.114 " docker pull kittishane/cookknow-test:$VERSION && docker tag kittishane/cookknow-test:$VERSION dokku/test-api:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   server-deploy-prod:
     docker:
@@ -240,12 +251,18 @@ jobs:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
 
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 workflows:
   version: 2
   server-workflow:
     jobs:
       - server-test:
           name: 🧪  Run jest and cypress
+          context:
+            - slack-secrets
 
       - server-deploy-test:
           name: 🚀 Deploy to test.cookknow
@@ -254,6 +271,8 @@ workflows:
           filters:
             branches:
               only: test-master
+          context:
+            - slack-secrets
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
@@ -262,3 +281,5 @@ workflows:
           filters:
             branches:
               only: master
+          context:
+            - slack-secrets

@@ -1,6 +1,8 @@
 version: 2.1
 # orbs:
 # node: circleci/node@4.7
+orbs:
+  slack: circleci/slack@4.10.1
 
 # define the job to be used in the owrkflow
 jobs:
@@ -43,6 +45,10 @@ jobs:
           working_directory: packages/client
           command: yarn test
 
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
   client-deploy-test:
     docker:
       - image: cimg/node:17.6.0
@@ -79,6 +85,10 @@ jobs:
           filters:
             branches:
               only: test-master
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   client-deploy-prod:
     docker:
@@ -122,12 +132,18 @@ jobs:
             branches:
               only: master
 
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 # workflow will run the job. I can define the jobs first then run by jobs name
 workflows:
   client-workflow:
     jobs:
       - client-test:
           name: 🔬 Run jest
+          context:
+            - slack-secrets
 
       - client-deploy-test:
           name: 🌍 Deploy to test
@@ -136,6 +152,8 @@ workflows:
           filters:
             branches:
               only: test-master
+          context:
+            - slack-secrets
 
       - client-deploy-prod:
           name: 🌍 Deploy to production!
@@ -144,4 +162,6 @@ workflows:
           filters:
             branches:
               only: master
+          context:
+            - slack-secrets
 #test
