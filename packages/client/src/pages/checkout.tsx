@@ -10,6 +10,7 @@ import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../components/Wrapper/Wrapper";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   CartItem,
   useAddressQuery,
@@ -122,31 +123,25 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
 
   return (
     <HeadingLayout heading="Checkout">
-      <Box mb={32}>
+      <XWrapper mb={32}>
         {!address ? (
-          <Wrapper>
-            <ContentWrapper>{noAddress}</ContentWrapper>
-          </Wrapper>
+          <Box>{noAddress}</Box>
         ) : (
-          <Wrapper>
-            <ContentWrapper>
-              <Box>
-                <Heading size="md" flex={1}>
-                  Delivery Address
-                </Heading>
-                <Box>
-                  <Text flex={3}>{address.address.name}</Text>
-                  <Text flex={3}>{address.address.phonenumber}</Text>
-                </Box>
-                <Text d="inline">{address?.address.line1}</Text>
-                <Text d="inline">{address?.address.line2}, </Text>
-                <Text d="inline">{address?.address.subdistrict} </Text>
-                <Text>{address?.address.district} </Text>
-                <Text d="inline">{address?.address.province} </Text>
-                <Text d="inline">{address?.address.postcode}</Text>
-              </Box>
-            </ContentWrapper>
-          </Wrapper>
+          <ContentWrapper>
+            <Heading size="md" flex={1}>
+              Delivery Address
+            </Heading>
+            <Box>
+              <Text flex={3}>{address.address.name}</Text>
+              <Text flex={3}>{address.address.phonenumber}</Text>
+            </Box>
+            <Text d="inline">{address?.address.line1}</Text>
+            <Text d="inline">{address?.address.line2}, </Text>
+            <Text d="inline">{address?.address.subdistrict} </Text>
+            <Text>{address?.address.district} </Text>
+            <Text d="inline">{address?.address.province} </Text>
+            <Text d="inline">{address?.address.postcode}</Text>
+          </ContentWrapper>
         )}
 
         <Divider />
@@ -238,18 +233,16 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   <Divider />
                   {/* summary of each creator */}
                   <Box py={4}>
-                    <Wrapper mt={0} mb={0}>
-                      <ContentWrapper>
-                        <Heading fontSize="md">Delivery</Heading>
-                        <Flex justifyContent="space-between">
-                          <Box>
-                            <Text>By Inter Express</Text>
-                            <Text color="gray.600"> arrive on tomorrow</Text>
-                          </Box>
-                          <Text>฿ {item.deliveryFee}</Text>
-                        </Flex>
-                      </ContentWrapper>
-                    </Wrapper>
+                    <ContentWrapper>
+                      <Heading fontSize="md">Delivery</Heading>
+                      <Flex justifyContent="space-between">
+                        <Box>
+                          <Text>By Inter Express</Text>
+                          <Text color="gray.600"> arrive on tomorrow</Text>
+                        </Box>
+                        <Text>฿ {item.deliveryFee}</Text>
+                      </Flex>
+                    </ContentWrapper>
                   </Box>
                   <Divider />
                   {/* summary of the order */}
@@ -318,7 +311,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
         </Box>
 
         {/* {!qrLoading ? null : <Image src={qrData?.createScbQr.data.qrImage} />} */}
-      </Box>
+      </XWrapper>
     </HeadingLayout>
   );
 };
