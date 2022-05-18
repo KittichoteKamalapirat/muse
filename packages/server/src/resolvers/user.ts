@@ -273,6 +273,13 @@ export class UserResolver {
     // set a cookie on the user
     req.session.userId = user.id;
 
+    // TODO cron jobs?
+    await sendEmail(
+      data.email,
+      "Hello from Cookknow ",
+      `Thank you for your registeration</a>`
+    );
+
     return { user };
   }
 
