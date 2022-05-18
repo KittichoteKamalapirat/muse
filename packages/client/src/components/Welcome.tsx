@@ -133,7 +133,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 </Text>
                 is available on the platform. Learn to cook{" "}
                 <Text fontWeight="600" as="mark">
-                  new and exiting food
+                  new and exciting food
                 </Text>{" "}
                 such as Thai, Japanese, Korean, Italian, or even Indian dishes.
               </Text>
