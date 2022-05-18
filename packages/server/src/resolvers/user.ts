@@ -25,6 +25,7 @@ import {
 } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import thanksForRegister from "../utils/notifications/emailContents/register";
 import { sendEmail } from "../utils/sendEmail";
 import { validateRegister } from "../utils/validateRegister";
 
@@ -277,7 +278,7 @@ export class UserResolver {
     await sendEmail(
       data.email,
       "Hello from Cookknow ",
-      `Thank you for your registeration</a>`
+      thanksForRegister(data.username)
     );
 
     return { user };
