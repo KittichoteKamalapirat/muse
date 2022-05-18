@@ -1,12 +1,11 @@
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Layout } from "../../../components/Layout/Layout";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   AddressInput,
   useCreateAddressMutation,
@@ -45,7 +44,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
   };
   return (
     <HeadingLayout heading="Create address">
-      <Wrapper mt={20}>
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             name: "",
@@ -120,7 +119,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

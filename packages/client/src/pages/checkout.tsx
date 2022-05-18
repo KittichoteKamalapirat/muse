@@ -122,7 +122,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
 
   return (
     <HeadingLayout heading="Checkout">
-      <Box mb="50px">
+      <Box mb={32}>
         {!address ? (
           <Wrapper>
             <ContentWrapper>{noAddress}</ContentWrapper>

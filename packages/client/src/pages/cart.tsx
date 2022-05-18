@@ -73,7 +73,8 @@ const Cart: React.FC<cartProps> = ({}) => {
 
   return (
     <HeadingLayout heading="Cart">
-      <Wrapper>
+      {/* a lot margin otherwise bottom nav hides cartItem */}
+      <Wrapper mb={32}>
         <ContentWrapper>
           <Heading>My cart</Heading>
 

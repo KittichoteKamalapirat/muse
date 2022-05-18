@@ -7,7 +7,7 @@ import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   AddressInput,
   useAddressQuery,
@@ -68,7 +68,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="Edit address">
-      <Wrapper mt={20}>
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             name: data?.address.name,
@@ -146,7 +146,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

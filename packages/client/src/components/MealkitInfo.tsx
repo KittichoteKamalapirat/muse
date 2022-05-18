@@ -225,7 +225,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     title: "Added to Cart.",
                     description: `${mealkit.name} has been added to your cart.`,
                     status: "success",
-                    duration: 100000,
+                    duration: 1000 * 4,
                     isClosable: true,
                     position: "top-right",
                     render: ({ id, onClose }) => (
