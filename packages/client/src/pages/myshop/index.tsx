@@ -232,7 +232,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 </Flex>
               </LinkBox>
 
-              <LinkBox flex={1}>
+              {/* <LinkBox flex={1}>
                 <Flex
                   flexDirection="column"
                   alignItems="center"
@@ -246,7 +246,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                     Meal kits
                   </Text>
                 </Flex>
-              </LinkBox>
+              </LinkBox> */}
             </Flex>
           </Box>
 

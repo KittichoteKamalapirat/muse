@@ -86,6 +86,7 @@ export const startServer = async () => {
   // sendSMS();
   // sendEmail(
   //   "kittichoteshane@gmail.com",
+  //   "subject",
   //   ` Go to <a href="https://cookknow.com/"> cookknow</a>`
   // );
   // generateQr();
