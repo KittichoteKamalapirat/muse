@@ -1,13 +1,13 @@
-import { Button } from "@chakra-ui/button";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Avatar, Center, Img, Link, useMediaQuery } from "@chakra-ui/react";
-import NextLink from "next/link";
+import { Avatar, Center, Img, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
+import { Slider2 } from "./Slider2/Slider2";
+import { Slider3 } from "./Slider3/Slider3";
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
@@ -141,6 +141,8 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
           </Box>
 
           <Slider />
+          {/* <Slider2 /> */}
+          {/* <Slider3 /> */}
         </Box>
 
         {/* How it works section
