@@ -19,7 +19,7 @@ const Post = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
@@ -27,7 +27,7 @@ const Post = ({}) => {
 
   if (error) {
     return (
-      <Layout>
+      <Layout heading="error">
         <Error text={error.message} />
       </Layout>
     );
@@ -36,7 +36,7 @@ const Post = ({}) => {
   if (!data?.post) {
     //finish downloading, cannot finda post( like wrong id)
     return (
-      <Layout>
+      <Layout heading="error">
         <div>could not find a post</div>
       </Layout>
     );

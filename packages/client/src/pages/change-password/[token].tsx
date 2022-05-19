@@ -6,6 +6,7 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import Button from "../../components/atoms/Button";
 import { InputField } from "../../components/InputField";
+import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   MeDocument,
@@ -21,73 +22,75 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
   const [changePassword] = useChangePasswordMutation();
   const [tokenError, setTokenError] = useState("");
   return (
-    <Wrapper variant="small">
-      <Formik
-        initialValues={{
-          newPassword: "",
-        }}
-        onSubmit={async (values, { setErrors }) => {
-          //   console.log(values);
-          const response = await changePassword({
-            variables: {
-              newPassword: values.newPassword,
-              token:
-                typeof router.query.token === "string"
-                  ? router.query.token
-                  : "",
-            },
-            update: (cache, { data }) => {
-              cache.writeQuery<MeQuery>({
-                query: MeDocument,
-                data: {
-                  __typename: "Query",
-                  me: data?.changePassword.user,
-                },
-              });
-            },
-          });
-          // └ has to match what defined in graphqlmutation
-          if (response.data?.changePassword.errors) {
-            const errorMap = toErrorMap(response.data.changePassword.errors);
-            if ("token" in errorMap) {
-              setTokenError(errorMap.token);
-            } else {
-              setErrors(errorMap);
+    <HeadingLayout heading="Change password">
+      <Wrapper variant="small">
+        <Formik
+          initialValues={{
+            newPassword: "",
+          }}
+          onSubmit={async (values, { setErrors }) => {
+            //   console.log(values);
+            const response = await changePassword({
+              variables: {
+                newPassword: values.newPassword,
+                token:
+                  typeof router.query.token === "string"
+                    ? router.query.token
+                    : "",
+              },
+              update: (cache, { data }) => {
+                cache.writeQuery<MeQuery>({
+                  query: MeDocument,
+                  data: {
+                    __typename: "Query",
+                    me: data?.changePassword.user,
+                  },
+                });
+              },
+            });
+            // └ has to match what defined in graphqlmutation
+            if (response.data?.changePassword.errors) {
+              const errorMap = toErrorMap(response.data.changePassword.errors);
+              if ("token" in errorMap) {
+                setTokenError(errorMap.token);
+              } else {
+                setErrors(errorMap);
+              }
+            } else if (response.data?.changePassword.user) {
+              router.push("/");
             }
-          } else if (response.data?.changePassword.user) {
-            router.push("/");
-          }
-        }}
-      >
-        {({ isSubmitting }) => (
-          <Form>
-            <Box mt={4}>
-              {" "}
-              <InputField
-                name="newPassword"
-                placeholder="new password"
-                label="New Password"
-                type="password"
-              />
-            </Box>
-            {tokenError ? (
-              <Flex>
-                <Box color="red" mr={2}>
-                  {tokenError}
-                </Box>
-                <NextLink href="/forgot-password" passHref>
-                  <Link>Get another one</Link>
-                </NextLink>
-              </Flex>
-            ) : null}
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <Box mt={4}>
+                {" "}
+                <InputField
+                  name="newPassword"
+                  placeholder="new password"
+                  label="New Password"
+                  type="password"
+                />
+              </Box>
+              {tokenError ? (
+                <Flex>
+                  <Box color="red" mr={2}>
+                    {tokenError}
+                  </Box>
+                  <NextLink href="/forgot-password" passHref>
+                    <Link>Get another one</Link>
+                  </NextLink>
+                </Flex>
+              ) : null}
 
-            <Button type="submit" isLoading={isSubmitting}>
-              Change password
-            </Button>
-          </Form>
-        )}
-      </Formik>
-    </Wrapper>
+              <Button type="submit" isLoading={isSubmitting}>
+                Change password
+              </Button>
+            </Form>
+          )}
+        </Formik>
+      </Wrapper>
+    </HeadingLayout>
   );
 };
 

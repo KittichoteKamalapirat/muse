@@ -29,7 +29,7 @@ const Address: React.FC<addressProps> = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );

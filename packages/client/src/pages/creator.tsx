@@ -1,6 +1,8 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Heading, Text } from "@chakra-ui/layout";
-import { Flex, Img } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
+import Head from "next/head";
+import Image from "next/image";
 import React from "react";
 import LinkButton from "../components/atoms/LinkButton";
 import { Footer } from "../components/Footer";
@@ -10,7 +12,6 @@ import SvgCreator3 from "../components/svgComponents/Creator3";
 import SvgCreator4 from "../components/svgComponents/Creator4";
 import { WelcomeNav } from "../components/WelcomeNav";
 import { Wrapper } from "../components/Wrapper/Wrapper";
-
 import { withApollo } from "../util/withApollo";
 
 interface WelcomeCreatorProps {}
@@ -18,6 +19,9 @@ interface WelcomeCreatorProps {}
 const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
   return (
     <>
+      <Head>
+        <title>Welcome creators - Pitch</title>
+      </Head>
       <WelcomeNav />
 
       <Flex
@@ -54,12 +58,14 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
             </LinkButton>
           </Box>
 
-          <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/creator.png"
-            // boxSize={["150px", "300px"]}
-            width={["150px", "250px"]}
-            alt="mealkit image"
+          {/* <Box width={["60%", "100%"]}> */}
+          <Image
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/creator.webp"
+            width={250}
+            height={350}
+            alt="creator"
           />
+          {/* </Box> */}
         </Flex>
         <ChevronDownIcon mt={4} w={6} h={6} />
       </Flex>

@@ -1,5 +1,6 @@
 import { Img } from "@chakra-ui/image";
-import { Flex } from "@chakra-ui/layout";
+import { Flex, Box } from "@chakra-ui/layout";
+import Image from "next/image";
 import React from "react";
 import SwiperCore, { EffectCoverflow, Navigation, Pagination } from "swiper";
 import "swiper/css";
@@ -37,33 +38,36 @@ export const CustomerVoiceSlider: React.FC<CustomerVoiceSliderProps> = ({}) => {
           clickable: true,
         }}
       >
-        {" "}
         <SwiperSlide>
-          <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto1.png"
-            width="100%"
-            style={{ margin: "auto" }}
+          <Image
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto1.webp"
+            width={865}
+            height={650}
+            alt="customer voice 1"
           />
         </SwiperSlide>
         <SwiperSlide>
-          <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto2.png"
-            width="100%"
-            style={{ margin: "auto" }}
+          <Image
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto2.webp"
+            width={865}
+            height={650}
+            alt="customer voice 2"
           />
         </SwiperSlide>
         <SwiperSlide>
-          <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.jpg"
-            width="100%"
-            style={{ margin: "auto" }}
+          <Image
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto3.webp"
+            width={865}
+            height={650}
+            alt="customer voice 3"
           />
         </SwiperSlide>
         <SwiperSlide>
-          <Img
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto4.png"
-            width="100%"
-            style={{ margin: "auto" }}
+          <Image
+            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/pesto4.webp"
+            width={865}
+            height={650}
+            alt="customer voice 4"
           />
         </SwiperSlide>
       </Swiper>

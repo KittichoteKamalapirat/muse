@@ -33,7 +33,7 @@ const UpdateUser: React.FC<userProps> = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );

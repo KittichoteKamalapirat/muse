@@ -20,21 +20,18 @@ export const Reviews: React.FC<ReviewsProps> = ({ mealkitId }) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
   }
   if (error) {
     return (
-      <Layout>
+      <Layout heading="error">
         <Error text={error.message} />
       </Layout>
     );
   }
-
-  //   const hi = moment(review.createdAt)
-  console.log(moment());
 
   return (
     <ContentWrapper>

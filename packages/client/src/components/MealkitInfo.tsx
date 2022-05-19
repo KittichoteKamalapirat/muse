@@ -43,7 +43,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );

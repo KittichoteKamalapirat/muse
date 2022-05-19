@@ -72,7 +72,7 @@ const Like = () => {
   })();
 
   return (
-    <Layout>
+    <Layout heading="like">
       <Wrapper>
         <ContentWrapper>
           <Heading fontSize="2xl">My Likes</Heading>

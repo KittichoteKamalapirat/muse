@@ -40,8 +40,6 @@ const Order: React.FC<OrderProps> = ({}) => {
     statusParam as CartItemStatus
   );
 
-  console.log({ statusParam });
-  console.log({ cartItemStatus });
   const [mappedCartItems, setMappedCartItems] =
     useState<mappedCartItemsByCreatorResult[]>();
 
@@ -51,8 +49,7 @@ const Order: React.FC<OrderProps> = ({}) => {
     userOrders,
     { data: userOrderData, loading: userOrderLoading, error: userOrderError },
   ] = useUserOrdersLazyQuery();
-  console.log("xxx");
-  console.log(userOrderData);
+
   useEffect(() => {
     if (statusParam === CartItemStatus.PaymentPending) {
       userOrders({ variables: { status: CartItemStatus.PaymentPending } });
