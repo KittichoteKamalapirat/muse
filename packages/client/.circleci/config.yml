@@ -170,7 +170,7 @@ workflows:
                         "type": "section",
                         "text": {
                           "type": "mrkdwn",
-                          "text": "✅ *Success*: Build #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` on `${CIRCLE_BRANCH}` by `${CIRCLE_USERNAME}`"
+                          "text": "✅ *Success*: Build #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` at `CIRCLE_JOB` on `${CIRCLE_BRANCH}` by `${CIRCLE_USERNAME}`"
                         }
                       },
                       {
