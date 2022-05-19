@@ -80,7 +80,7 @@ const Mealkit = () => {
       setItems(data.mealkit.items as string[]);
       setFileUploads(files);
     }
-  }, [postData]);
+  }, [data, postData]);
 
   if (loading) {
     return (
