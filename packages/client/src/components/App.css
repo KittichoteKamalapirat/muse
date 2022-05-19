@@ -142,7 +142,7 @@
 
 .form-input:not(:placeholder-shown) + .form-label,
 .form-input:-webkit-autofill + .form-label,
-.form-input:focus .form-label:focus {
+.form-input:focus + .form-label:focus {
   font-size: 0.8rem;
   font-weight: 400;
   color: "#3dc795";

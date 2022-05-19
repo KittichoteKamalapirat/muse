@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 interface Props {
   children: ReactNode;
+  width?: string;
   mt?: string | number;
   mb?: string | number;
 }
@@ -44,11 +45,19 @@ interface Props {
 
 // if chakra ui
 
-export const XWrapper = ({ children, mt, mb, ...props }: Props) => {
+export const XWrapper = ({
+  children,
+  width = "100%",
+  mt,
+  mb,
+  ...props
+}: Props) => {
   return (
     <Box width="100%" mt={mt} mb={mb} {...props}>
       <Flex flexDirection="column" alignItems="center">
-        <Box maxWidth={["95%", "30%"]}>{children}</Box>
+        <Box maxWidth={["95%", "30%"]} width={width}>
+          {children}
+        </Box>
       </Flex>
     </Box>
   );

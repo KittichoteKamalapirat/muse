@@ -30,10 +30,8 @@ export const InputField: React.FC<InputFieldProps> = ({
 }) => {
   // somehow props don't like the size in it, so we destructure it out,
 
-  let InputOrTextarea: any = Input;
-  if (textarea) {
-    InputOrTextarea = Textarea;
-  }
+  const InputOrTextarea: any = textarea ? Textarea : Input;
+
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>

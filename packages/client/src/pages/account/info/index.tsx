@@ -1,8 +1,10 @@
-import { Box, Divider, Flex, Text } from "@chakra-ui/layout";
+import { Box, Divider, Text } from "@chakra-ui/layout";
+import { Heading } from "@chakra-ui/react";
 import React from "react";
 import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import { useMeQuery } from "../../../generated/graphql";
 import { isServer } from "../../../util/isServer";
 import { withApollo } from "../../../util/withApollo";
@@ -16,57 +18,49 @@ const Info: React.FC<infoProps> = ({}) => {
 
   return (
     <HeadingLayout heading="My Account Information">
-      <Wrapper>
-        <Box mt={2}>
-          <Flex alignItems="start">
-            <Text flex={1} fontSize="md">
+      <XWrapper mt={20}>
+        <ContentWrapper>
+          <Box>
+            <Heading size="xs" as="h3">
               username
-            </Text>
-            <Text flex={2} fontSize="md">
-              {data?.me?.username}
-            </Text>
-          </Flex>
+            </Heading>
+            <Text fontSize="md">{data?.me?.username}</Text>
+          </Box>
           <Divider mt={2} />
 
-          <Flex alignItems="start">
-            <Text flex={1} fontSize="md">
+          <Box>
+            <Heading size="xs" as="h3">
               email
-            </Text>
-            <Text flex={2} fontSize="md">
-              {data?.me?.email}
-            </Text>
-          </Flex>
+            </Heading>
+            <Text fontSize="md">{data?.me?.email}</Text>
+          </Box>
           <Divider mt={2} />
 
-          <Flex alignItems="start">
-            <Text flex={1} fontSize="md">
+          <Box>
+            <Heading size="xs" as="h3">
               phonenumber
-            </Text>
-            <Text flex={2} fontSize="md">
-              {data?.me?.phonenumber}
-            </Text>
-          </Flex>
+            </Heading>
+            <Text fontSize="md">{data?.me?.phonenumber}</Text>
+          </Box>
           <Divider mt={2} />
 
           {!data?.me?.isCreator ? null : (
-            <Flex alignItems="start">
-              <Text flex={1} fontSize="md">
+            <Box>
+              <Heading size="xs" as="h3">
                 about
-              </Text>
-              <Text flex={2} fontSize="md">
-                {data?.me?.about}
-              </Text>
-            </Flex>
+              </Heading>
+              <Text fontSize="md">{data?.me?.about}</Text>
+            </Box>
           )}
           <Divider mt={2} />
 
-          <Flex justifyContent="center" mt={4}>
+          <Box justifyContent="center" mt={4}>
             <LinkButton pathname="/account/info/update">
               Edit account info
             </LinkButton>
-          </Flex>
-        </Box>
-      </Wrapper>
+          </Box>
+        </ContentWrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

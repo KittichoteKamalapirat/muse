@@ -6,7 +6,7 @@ import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   useMeQuery,
   UserInput,
@@ -40,7 +40,7 @@ const UpdateUser: React.FC<userProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="Edit Profile">
-      <Wrapper>
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             username: meData?.me?.username!,
@@ -57,26 +57,33 @@ const UpdateUser: React.FC<userProps> = ({}) => {
                 placeholder="username"
                 label="username"
               />{" "}
-              <InputField name="email" placeholder="email" label="email" />{" "}
+              <InputField
+                name="email"
+                placeholder="email"
+                label="email"
+                mt={2}
+              />
               <InputField
                 name="phonenumber"
                 type="tel"
                 placeholder="phonenumber"
                 label="phonenumber"
+                mt={2}
               />
               <InputField
                 name="about"
                 textarea={true}
                 placeholder="about"
                 label="about"
+                mt={2}
               />
-              <Button type="submit" isLoading={isSubmitting}>
+              <Button type="submit" isLoading={isSubmitting} mt={10}>
                 Update
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };
