@@ -1,13 +1,12 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Avatar, Center, Img, useMediaQuery } from "@chakra-ui/react";
+import { Avatar, Center, useMediaQuery } from "@chakra-ui/react";
+import Image from "next/image";
 import React from "react";
 import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
-import { Slider2 } from "./Slider2/Slider2";
-import { Slider3 } from "./Slider3/Slider3";
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
@@ -54,11 +53,14 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               </LinkButton>
             </Box>
 
-            <Img
-              src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mealkit.png"
-              boxSize={["150px", "300px"]}
-              alt="mealkit image"
-            />
+            <Box width={["150px", "300px"]}>
+              <Image
+                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mealkit.webp"
+                alt="mealkit"
+                width={300}
+                height={300}
+              />
+            </Box>
           </Flex>
           <ChevronDownIcon w={6} h={6} />
         </Flex>
@@ -181,7 +183,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             <Center my={6}>
               <Avatar
                 name="Dan"
-                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/dan.png"
+                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/dan.webp"
                 size="2xl"
               />
             </Center>
