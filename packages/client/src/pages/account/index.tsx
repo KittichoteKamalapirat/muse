@@ -113,7 +113,7 @@ const Account = () => {
     receivedLoading
   ) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
@@ -127,7 +127,7 @@ const Account = () => {
     receivedError
   ) {
     return (
-      <Layout>
+      <Layout heading="error">
         <Error />
       </Layout>
     );
@@ -444,7 +444,7 @@ const Account = () => {
   }
 
   return (
-    <Layout>
+    <Layout heading="My account">
       <Wrapper>
         <ContentWrapper>{body}</ContentWrapper>
       </Wrapper>

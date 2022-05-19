@@ -87,21 +87,21 @@ const Admin: React.FC<AdminProps> = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
   }
   if (error) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Error text={error.message} />
       </Layout>
     );
   }
 
   return (
-    <Layout>
+    <Layout heading="loading">
       <ContentWrapper m={20}>
         <Heading fontSize="2xl">Admin Dashboard</Heading>
         <Table {...getTableProps()}>

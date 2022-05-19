@@ -84,7 +84,7 @@ const Mealkit = () => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );

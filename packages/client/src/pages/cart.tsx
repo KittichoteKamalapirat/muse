@@ -8,6 +8,7 @@ import ButtonLink from "../components/atoms/LinkButton";
 import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Layout } from "../components/Layout/Layout";
+import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../components/Wrapper/Wrapper";
@@ -56,7 +57,7 @@ const Cart: React.FC<cartProps> = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
@@ -64,10 +65,9 @@ const Cart: React.FC<cartProps> = ({}) => {
 
   if (!loading && !cartItems) {
     return (
-      <div>
-        <div>query failed</div>
-        <div>{error?.message}</div>
-      </div>
+      <Layout heading="loading">
+        <Error text={error?.message} />
+      </Layout>
     );
   }
 

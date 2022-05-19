@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Heading, Text } from "@chakra-ui/layout";
 import { Flex } from "@chakra-ui/react";
+import Head from "next/head";
 import Image from "next/image";
 import React from "react";
 import LinkButton from "../components/atoms/LinkButton";
@@ -18,6 +19,9 @@ interface WelcomeCreatorProps {}
 const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
   return (
     <>
+      <Head>
+        <title>Welcome creators - Pitch</title>
+      </Head>
       <WelcomeNav />
 
       <Flex

@@ -108,7 +108,7 @@ const Notification = ({}: Props) => {
   })();
 
   return (
-    <Layout>
+    <Layout heading="notifications">
       <Wrapper>
         <Box mx={3}>
           <Heading fontSize="2xl">Notification</Heading>

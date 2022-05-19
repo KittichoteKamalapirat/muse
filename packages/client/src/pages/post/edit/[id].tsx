@@ -132,7 +132,7 @@ const EditPost = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
@@ -141,7 +141,7 @@ const EditPost = ({}) => {
   if (!data?.post) {
     //finish downloading, cannot finda post( like wrong id)
     return (
-      <Layout>
+      <Layout heading="error">
         <Error text="could not find a post" />
       </Layout>
     );

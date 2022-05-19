@@ -1,6 +1,7 @@
 import { Box, Heading, Link } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
+import Head from "next/head";
 import NextLink from "next/link";
 import React from "react";
 import Button from "../components/atoms/Button";
@@ -22,6 +23,9 @@ export const Register: React.FC<registerProps> = ({}) => {
 
   return (
     <WelcomeNav>
+      <Head>
+        <title>Signup - Cookknow</title>
+      </Head>
       <Wrapper variant="small">
         <ContentWrapper>
           <Box textAlign="center">

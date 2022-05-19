@@ -11,12 +11,16 @@ import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { withApollo } from "../util/withApollo";
+import Head from "next/head";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
   const [login] = useLoginMutation();
   return (
     <WelcomeNav>
+      <Head>
+        <title>Login - Cookknow</title>
+      </Head>
       <Wrapper variant="small">
         <ContentWrapper>
           <Box textAlign="center" m={10}>

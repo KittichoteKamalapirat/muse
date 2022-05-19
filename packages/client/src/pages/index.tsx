@@ -62,7 +62,7 @@ const Index = () => {
     return <Error text={error?.message} />;
   }
   return (
-    <Layout>
+    <Layout heading="home">
       {/* Navbar also does server side rendering since it's inside this fille with ssr */}
       {/* add ! because it can't be undefined becase wee catched it! typescrypt didnt know that somehow */}
 

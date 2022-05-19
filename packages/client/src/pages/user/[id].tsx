@@ -44,7 +44,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
 
   if (userLoading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <div>loading ...</div>
       </Layout>
     );
@@ -52,7 +52,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
 
   if (userError) {
     return (
-      <Layout>
+      <Layout heading="error">
         <Error text={userError.message} />
       </Layout>
     );

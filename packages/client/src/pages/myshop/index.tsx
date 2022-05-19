@@ -7,10 +7,10 @@ import {
   Flex,
   Heading,
   Link,
-  Text,
-  useMediaQuery,
   LinkBox,
   LinkOverlay,
+  Text,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
@@ -24,7 +24,6 @@ import { Loading } from "../../components/skeletons/Loading";
 import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
 import SvgCardIcon from "../../components/svgComponents/CardIcon";
 import SvgOpenedIcon from "../../components/svgComponents/OpenedIcon";
-import SvgPizzaIcon from "../../components/svgComponents/PizzaIcon";
 import SvgThreeDotsIcon from "../../components/svgComponents/ThreeDotsIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgVideoIcon from "../../components/svgComponents/VideoIcon";
@@ -74,7 +73,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
   }
 
   return (
-    <Layout>
+    <Layout heading="My shop">
       <Wrapper>
         <ContentWrapper>
           <Heading fontSize="2xl">My shop</Heading>
