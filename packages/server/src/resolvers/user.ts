@@ -13,15 +13,21 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { v4 } from "uuid";
+import { rollbar } from "../config/initializers/rollbar";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, IS_PROD } from "../constants";
 import { Mealkit, User } from "../entities";
 import Follow from "../entities/Follow";
-import { UserInput, UserResponse, UserReview } from "../entities/utils";
+import {
+  UserInput,
+  UsernamePasswordInput,
+  UserResponse,
+  UserReview,
+} from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import thanksForRegister from "../utils/notifications/emailContents/register";
 import { sendEmail } from "../utils/sendEmail";
 import { validateRegister } from "../utils/validateRegister";
-import { UsernamePasswordInput } from "./UsernamePasswordInput";
 
 // Resolver starts
 @Resolver(User)
@@ -152,7 +158,7 @@ export class UserResolver {
 
       return { reviewCounter: counter, reviewScore: avg };
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error("cannot find");
     }
   }
@@ -268,6 +274,13 @@ export class UserResolver {
     // set a cookie on the user
     req.session.userId = user.id;
 
+    // TODO cron jobs?
+    await sendEmail(
+      data.email,
+      "Hello from Cookknow ",
+      thanksForRegister(data.username)
+    );
+
     return { user };
   }
 
@@ -347,8 +360,6 @@ export class UserResolver {
     }
     req.session.userId = user.id;
 
-    console.log("print userId session from login resolver");
-    console.log(req.session.userId);
     return { user };
   }
 
@@ -367,11 +378,8 @@ export class UserResolver {
           // console.log(err);
           resolve(false);
           return;
-          // return so it doesn't go on
         }
-        // console.log(res.cookie);
-        console.log("logged out");
-        resolve(true);
+        resolve(true); // logged out
       });
     });
   }
@@ -401,7 +409,7 @@ export class UserResolver {
       User.update({ id: req.session.userId }, { avatar: newAvatar });
       return true;
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return Error("cannot update avatar");
     }
   }

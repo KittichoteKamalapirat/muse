@@ -1,15 +1,16 @@
-import { Button } from "@chakra-ui/button";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Avatar, LinkBox, LinkOverlay } from "@chakra-ui/react";
-import NextLink from "next/link";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
+import Button from "../components/atoms/Button";
+import LinkButton from "../components/atoms/LinkButton";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { PaymentSkeleton } from "../components/skeletons/PaymentSkeleton";
-import { Wrapper } from "../components/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   CartItem,
   useAddressQuery,
@@ -96,13 +97,10 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
         <Text m={5}>You have not added your address yet</Text>
-        <NextLink
-          href="/account/address/create"
-          as="/account/address/create"
-          passHref
-        >
-          <Button leftIcon={<AddIcon />}>Add address</Button>
-        </NextLink>
+
+        <LinkButton leftIcon={<AddIcon />} pathname="/account/address/create">
+          Add address
+        </LinkButton>
       </Flex>
     </Flex>
   );
@@ -125,33 +123,25 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
 
   return (
     <HeadingLayout heading="Checkout">
-      <Box mb="50px">
+      <XWrapper mb={32}>
         {!address ? (
-          <Wrapper>
-            <ContentWrapper>{noAddress}</ContentWrapper>
-          </Wrapper>
+          <Box>{noAddress}</Box>
         ) : (
-          <Wrapper>
-            <ContentWrapper>
-              <Box>
-                <Heading size="md" flex={1}>
-                  ที่อยู่สำหรับจัดส่ง
-                </Heading>
-                <Box>
-                  {/* <Text>{meLoading ? null : me?.me?.username}</Text> */}
-                  <Text flex={3}>add name to address</Text>
-                  <Text flex={3}>add phone number to address</Text>
-                </Box>
-                <Text d="inline">{address?.address.line1}</Text>
-                <Text d="inline">{address?.address.line2}, </Text>
-                <Text d="inline">{address?.address.subdistrict} </Text>
-                <Text>{address?.address.district} </Text>
-                <Text d="inline">{address?.address.province}</Text>
-                {/* <Text d="inline">{address?.address.country}</Text>{" "} */}
-                <Text d="inline">{address?.address.postcode}</Text>
-              </Box>
-            </ContentWrapper>
-          </Wrapper>
+          <ContentWrapper>
+            <Heading size="md" flex={1}>
+              Delivery Address
+            </Heading>
+            <Box>
+              <Text flex={3}>{address.address.name}</Text>
+              <Text flex={3}>{address.address.phonenumber}</Text>
+            </Box>
+            <Text d="inline">{address?.address.line1}</Text>
+            <Text d="inline">{address?.address.line2}, </Text>
+            <Text d="inline">{address?.address.subdistrict} </Text>
+            <Text>{address?.address.district} </Text>
+            <Text d="inline">{address?.address.province} </Text>
+            <Text d="inline">{address?.address.postcode}</Text>
+          </ContentWrapper>
         )}
 
         <Divider />
@@ -192,7 +182,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                               <Image
                                 src={cartItem.mealkit.thumbnail.url}
                                 alt="image"
-                                fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                fallbackSrc="oops.png"
                               />
                             </Box>
 
@@ -243,38 +233,20 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   <Divider />
                   {/* summary of each creator */}
                   <Box py={4}>
-                    <Wrapper mt={0} mb={0}>
-                      <ContentWrapper>
-                        <Heading fontSize="md">Delivery</Heading>
-                        <Flex justifyContent="space-between">
-                          <Box>
-                            <Text>By Inter Express</Text>
-                            <Text color="gray.600"> arrive on tomorrow</Text>
-                          </Box>
-                          <Text>฿ {item.deliveryFee}</Text>
-                        </Flex>
-                      </ContentWrapper>
-                    </Wrapper>
+                    <ContentWrapper>
+                      <Heading fontSize="md">Delivery</Heading>
+                      <Flex justifyContent="space-between">
+                        <Box>
+                          <Text>By Inter Express</Text>
+                          <Text color="gray.600"> arrive on tomorrow</Text>
+                        </Box>
+                        <Text>฿ {item.deliveryFee}</Text>
+                      </Flex>
+                    </ContentWrapper>
                   </Box>
                   <Divider />
                   {/* summary of the order */}
 
-                  {/* <Box
-                    bgColor="green.50"
-                    py={2}
-                    borderTopWidth="1px"
-                    borderBottomWidth="1px"
-                    borderColor="green.300"
-                  >
-                    <Wrapper mt={0} mb={0}>
-                      <Flex justifyContent="space-between">
-                        <Text>Total order</Text>
-                        <Heading fontSize="md" color={primaryColor}>
-                          ฿ {item.totalByCreator + item.deliveryFee}
-                        </Heading>
-                      </Flex>
-                    </Wrapper>
-                  </Box> */}
                   <Divider />
                 </Box>
               ))
@@ -316,17 +288,16 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   cartItemIds.push(cartItem.id);
                 });
 
-                await createOrder({
+                const order = await createOrder({
                   variables: {
                     cartItemIds: cartItemIds,
                     grossOrder: gross,
                     cartItemsByCreatorInput: cartItemsByCreatorInput!, //check this
                   },
                 });
+                if (order)
+                  router.push(`/payment/${order.data?.createOrder.paymentId}`);
               }}
-              p={3}
-              color="white"
-              width="100%"
               disabled={!address}
             >
               Make a payment
@@ -340,7 +311,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
         </Box>
 
         {/* {!qrLoading ? null : <Image src={qrData?.createScbQr.data.qrImage} />} */}
-      </Box>
+      </XWrapper>
     </HeadingLayout>
   );
 };

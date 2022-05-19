@@ -43,7 +43,10 @@ class Video extends BaseEntity {
   postId: number;
 
   @Field(() => Post)
-  @OneToOne(() => Post, (post) => post.video, { nullable: true })
+  @OneToOne(() => Post, (post) => post.video, {
+    nullable: true,
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   post: Post;
 

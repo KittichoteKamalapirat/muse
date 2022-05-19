@@ -1,23 +1,21 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Button } from "@chakra-ui/button";
-import { Image, Img } from "@chakra-ui/image";
-import { Box, Divider, Flex, Heading, Stack, Text } from "@chakra-ui/layout";
-import { Link, Skeleton, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/image";
+import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { HeadingLayout } from "../../components/Layout/HeadingLayout";
-import { AddressComponent } from "../../components/Icons/AddressComponent";
-import { TrackingDetail } from "../../components/Icons/TrackingDetail";
-import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
-import NextLink from "next/link";
+import LinkButton from "../../../components/atoms/LinkButton";
+import { AddressComponent } from "../../../components/Icons/AddressComponent";
+import { TrackingDetail } from "../../../components/Icons/TrackingDetail";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { OrderArraySkeleton } from "../../../components/skeletons/OrderArraySkeleton";
+import { inActiveGray, primaryColor } from "../../../components/Variables";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
+
 import {
   CartItemStatus,
   useCreatorOrdersLazyQuery,
-} from "../../generated/graphql";
-import { withApollo } from "../../util/withApollo";
-import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
-import order from "../order";
+} from "../../../generated/graphql";
+import { withApollo } from "../../../util/withApollo";
 
 //format
 // by orderId
@@ -173,7 +171,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                           <Image
                             src={cartItem.mealkit.thumbnail.url}
                             alt="image"
-                            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                            fallbackSrc="oops.png"
                           />
                         </Box>
 
@@ -248,7 +246,7 @@ const Order: React.FC<OrderProps> = ({}) => {
 
                     <Box>Delivery Fee: {orderItem.deliveryFee}</Box>
 
-                    <NextLink
+                    <LinkButton
                       href={{
                         pathname: "/order/tracking/create",
                         query: {
@@ -261,16 +259,11 @@ const Order: React.FC<OrderProps> = ({}) => {
                           }),
                         },
                       }}
-                      passHref
                     >
-                      <Link>
-                        <Button my="10px" color="white">
-                          {orderItem.tracking
-                            ? "Update tracking"
-                            : `Deliver to ${orderItem.username}`}
-                        </Button>
-                      </Link>
-                    </NextLink>
+                      {orderItem.tracking
+                        ? "Update tracking"
+                        : `Deliver to ${orderItem.username}`}
+                    </LinkButton>
                   </Box>
                 </Box>
               )}

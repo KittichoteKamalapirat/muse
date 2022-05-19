@@ -1,18 +1,18 @@
-import { Box, Button, Flex, Link } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Box, Flex, Link } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
-import React from "react";
-import { useState } from "react";
+import NextLink from "next/link";
+import React, { useState } from "react";
+import Button from "../../components/atoms/Button";
 import { InputField } from "../../components/InputField";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   MeDocument,
   MeQuery,
   useChangePasswordMutation,
 } from "../../generated/graphql";
 import { toErrorMap } from "../../util/toErrorMap";
-import NextLink from "next/link";
 import { withApollo } from "../../util/withApollo";
 
 export const ChangePassword: NextPage<{ token: string }> = () => {
@@ -81,8 +81,7 @@ export const ChangePassword: NextPage<{ token: string }> = () => {
               </Flex>
             ) : null}
 
-            <Button mt={4} type="submit" isLoading={isSubmitting}>
-              {" "}
+            <Button type="submit" isLoading={isSubmitting}>
               Change password
             </Button>
           </Form>

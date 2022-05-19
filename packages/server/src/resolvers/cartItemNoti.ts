@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import { Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItemNoti } from "../entities";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
@@ -11,8 +12,11 @@ export class CartItemNotiResolver {
   @Query(() => [CartItemNoti])
   async orderNotis(@Ctx() { req }: MyContext): Promise<CartItemNoti[] | Error> {
     try {
-      const notis = CartItemNoti.find({
+      const notis = await CartItemNoti.find({
         where: { userId: req.session.userId },
+        order: {
+          createdAt: "DESC",
+        },
         relations: [
           "cartItem",
           "cartItem.user",
@@ -24,7 +28,7 @@ export class CartItemNotiResolver {
 
       return notis;
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       return new Error();
     }
   }
@@ -41,6 +45,7 @@ export class CartItemNotiResolver {
         .execute();
       return true;
     } catch (error) {
+      rollbar.log(error);
       return new Error();
     }
   }

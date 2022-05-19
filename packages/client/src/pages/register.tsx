@@ -1,12 +1,13 @@
-import { Box, Button, Heading, Link } from "@chakra-ui/react";
+import { Box, Heading, Link } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import NextLink from "next/link";
 import React from "react";
+import Button from "../components/atoms/Button";
 import { InputField } from "../components/InputField";
 import { WelcomeNav } from "../components/WelcomeNav";
-import { Wrapper } from "../components/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { withApollo } from "../util/withApollo";
@@ -118,13 +119,7 @@ export const Register: React.FC<registerProps> = ({}) => {
                   </NextLink>
                 </Box>
 
-                <Button
-                  mt={4}
-                  width="100%"
-                  type="submit"
-                  isLoading={isSubmitting}
-                >
-                  {" "}
+                <Button type="submit" isLoading={isSubmitting}>
                   Register
                 </Button>
               </Form>

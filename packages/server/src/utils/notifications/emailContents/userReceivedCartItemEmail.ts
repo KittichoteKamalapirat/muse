@@ -9,6 +9,6 @@ const userReceivedCartItemEmail = (
     process.env.CORS_ORIGIN
   }/myshop/order?status=Received>${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""
-  }</a>. <br> You will received the payment soon`;
+  }</a>. <br> You will receive the payment soon`;
 
 export default userReceivedCartItemEmail;

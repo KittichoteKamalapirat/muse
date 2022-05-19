@@ -5,42 +5,41 @@ import {
   ComponentWithAs,
 } from "@chakra-ui/react";
 
-enum Position {
-  center = "center",
-  left = "left",
-  right = "right",
-}
-// interface Props extends ComponentWithAs<"button", ButtonProps> {
-//   children: ReactNode;
-//   position?: Position;
-// }
-
 type Props = ButtonProps & {
-  children: ReactNode;
-  position?: Position;
-  textAlign?: "center" | "start" | "end";
-  size?: "xs" | "sm" | "md" | "lg";
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  width?: "100%" | "fit-content" | "min-content" | string;
+  variant?:
+    | "outline"
+    | "solid"
+    | "unstyled"
+    | "link"
+    | "ghost"
+    | (string & {})
+    | undefined;
 };
 
 const Button: ComponentWithAs<"button", Props> = ({
   children,
-  position,
-  textAlign = "center",
-  size = "md",
+  onClick,
+  variant = "solid",
+  width = "100%",
+
   ...props
 }: Props) => {
   return (
-    <div>
-      <ChakraButton
-        width="100%"
-        color="white"
-        my={2}
-        size={size}
-        textAlign={textAlign}
-      >
-        {children}
-      </ChakraButton>
-    </div>
+    <ChakraButton
+      width={width}
+      mt={2}
+      onClick={onClick}
+      variant={variant}
+      color={variant === "solid" ? "white" : "brand"}
+      _hover={{
+        backgroundColor: variant === "solid" ? "brandHover" : "brandHoverPale",
+      }}
+      {...props} // props like width can overwrite width= 00%
+    >
+      {children}
+    </ChakraButton>
   );
 };
 

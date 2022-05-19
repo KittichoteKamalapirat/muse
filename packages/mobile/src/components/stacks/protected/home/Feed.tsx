@@ -3,8 +3,8 @@ import {
   useMeQuery,
   usePostsQuery,
 } from "@cookknow/shared-package";
+import { Video } from "expo-av";
 import React from "react";
-import { Video, AVPlaybackStatus } from "expo-av";
 import {
   Button,
   FlatList,

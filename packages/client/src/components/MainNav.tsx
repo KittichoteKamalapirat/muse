@@ -1,22 +1,16 @@
-import { Flex, Link, Avatar, Text, Box } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import { Avatar, Box, Flex, Link, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import React from "react";
+import { useMeQuery, useOrderNotisQuery } from "../generated/graphql";
+import { isServer } from "../util/isServer";
+import Badge from "./atoms/Badge";
 import { AccountIcon } from "./Icons/AccountIcon";
+import { BellIcon } from "./Icons/BellIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { HomeIcon } from "./Icons/HomeIcon";
 import { ShopIcon } from "./Icons/ShopIcon";
-import { primaryColor, inActiveGray } from "./Variables";
-import NextLink from "next/link";
-import { useRouter } from "next/router";
-import {
-  useMeQuery,
-  useOrderNotisQuery,
-  useReadOrderNotisMutation,
-} from "../generated/graphql";
-import { isServer } from "../util/isServer";
-import SvgBell from "./svgComponents/Bell";
-import { BellIcon } from "./Icons/BellIcon";
-import { BasketIcon } from "./Icons/BasketIcon";
-import { updateAfterRead } from "../pages/notification";
+import { inActiveGray, primaryColor } from "./Variables";
 
 interface MainNavProps {}
 
@@ -54,6 +48,10 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   // after cookie forwarding
   // server knows who is me, knows who voted
   // client knows who is me
+
+  const notiUnreadNum = orderNoti?.orderNotis.filter(
+    (noti) => noti.read == false
+  ).length;
 
   let currentUser = null;
 
@@ -210,33 +208,12 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
             alignItems="center"
             justifyContent="center"
           >
-            <Box position="relative">
+            <Badge
+              isDisplayed={notiUnreadNum === 0}
+              badgeContent={notiUnreadNum as number}
+            >
               <BellIcon isactive={notiActive ? "true" : undefined} />
-              <Text
-                display={
-                  orderNoti?.orderNotis.filter((noti) => noti.read == false)
-                    .length === 0
-                    ? "none"
-                    : "block"
-                }
-                position="absolute"
-                top="-6px"
-                right="-7px"
-                bgColor="alert"
-                color="white"
-                minWidth="1.2rem"
-                maxH="1.2rem"
-                borderRadius="8px"
-                textAlign="center"
-                fontSize="xs"
-                px="2px"
-              >
-                {
-                  orderNoti?.orderNotis.filter((noti) => noti.read == false)
-                    .length
-                }
-              </Text>
-            </Box>
+            </Badge>
 
             <Text
               fontSize="xs"

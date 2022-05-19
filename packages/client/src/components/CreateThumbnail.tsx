@@ -1,26 +1,15 @@
-import { ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Button,
-  Flex,
-  IconButton,
-  Image,
-  Img,
-  Text,
-} from "@chakra-ui/react";
+import { PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 
 interface CreateThumbnailProps {
-  prevStep: Function;
-  nextStep: Function;
   autoThumbnailS3UrlAndId: FileMetadata | null;
   thumbnailS3UrlAndID: FileMetadata | null;
   setThumbnailS3UrlAndID: React.Dispatch<
@@ -28,11 +17,7 @@ interface CreateThumbnailProps {
   >;
 }
 
-const urlResolver = new UrlResolver();
-
 export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
-  prevStep,
-  nextStep,
   autoThumbnailS3UrlAndId,
   thumbnailS3UrlAndID,
   setThumbnailS3UrlAndID,
@@ -81,7 +66,7 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
             src={thumbnailS3UrlAndID.url}
             alt="image"
             boxSize="90%"
-            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+            fallbackSrc="oops.png"
           />
         </Flex>
       )}
@@ -135,20 +120,6 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           </Box>
         )}
       </Dropzone>
-      <Flex justifyContent="space-between">
-        <IconButton
-          aria-label="Search database"
-          icon={<ChevronLeftIcon />}
-          onClick={() => prevStep()}
-          fontSize="x-large"
-          color="dark.200"
-          variant="transparent"
-        />
-
-        <Button variant="transparent" color="brand" onClick={() => nextStep()}>
-          Next
-        </Button>
-      </Flex>
     </Box>
   );
 };

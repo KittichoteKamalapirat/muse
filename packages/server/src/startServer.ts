@@ -8,6 +8,7 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
+import { rollbar } from "./config/initializers/rollbar";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { CartItemResolver } from "./resolvers/cartItem";
@@ -24,14 +25,13 @@ import { TrackingResolver } from "./resolvers/tracking";
 import { UserResolver } from "./resolvers/user";
 import { VideoResolver } from "./resolvers/video";
 import paymentRouter from "./routes/payment";
-import trackingRouter from "./routes/tracking";
 import s3Router from "./routes/s3";
+import trackingRouter from "./routes/tracking";
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
-import { sendEmail } from "./utils/sendEmail";
 
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
@@ -74,15 +74,19 @@ export const startServer = async () => {
   console.log("port:", process.env.PORT);
   console.log("redis url:", process.env.REDIS_URL);
 
-  const conn = await createTypeORMConn();
+  const conn = await createTypeORMConn(process.env.NODE_ENV);
 
+  rollbar.error("ccc");
+
+  // rollbar.log("Hello from server!");
   // await conn.runMigrations();
   const app = express();
 
-  // console.log(process.memoryUsage());
+  // console.log(process.memoryUsage())
   // sendSMS();
   // sendEmail(
   //   "kittichoteshane@gmail.com",
+  //   "subject",
   //   ` Go to <a href="https://cookknow.com/"> cookknow</a>`
   // );
   // generateQr();
@@ -116,6 +120,8 @@ export const startServer = async () => {
   app.use("/api/payment", paymentRouter);
   app.use("/api/tracking", trackingRouter);
   app.use("/api/s3", s3Router);
+
+  // app.use(rollbar.errorHandler());
 
   app.use(
     session({

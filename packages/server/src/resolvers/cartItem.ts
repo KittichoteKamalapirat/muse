@@ -11,6 +11,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Mealkit } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { AddToCart, CartItemInput } from "../entities/utils";
@@ -40,6 +41,27 @@ export class CartItemResolver {
       relations: [
         "mealkit",
         "user",
+        "mealkit.post",
+        "mealkit.creator",
+        "mealkit.mealkitFiles",
+      ],
+    });
+  }
+
+  @Query(() => CartItem)
+  @UseMiddleware(isAuth)
+  async cartItem(
+    @Arg("id", () => Int) id: number,
+    @Ctx() { req }: MyContext
+  ): Promise<CartItem | undefined> {
+    return CartItem.findOne({
+      where: { id, userId: req.session.userId },
+      relations: [
+        "mealkit",
+        "user",
+        "tracking",
+        "order",
+        "user.address",
         "mealkit.post",
         "mealkit.creator",
         "mealkit.mealkitFiles",
@@ -179,6 +201,8 @@ export class CartItemResolver {
           cartItem?.quantity,
           cartItem?.mealkit.name
         ),
+        detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
+        avatarHref: `noti/${CartItemStatus.Received}.png`, // hand and package images
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();
@@ -210,7 +234,7 @@ export class CartItemResolver {
       await CartItem.update({ id }, { status: CartItemStatus.Complete });
       return true;
     } catch (error) {
-      console.log(error);
+      rollbar.error(error);
       return false;
     }
   }

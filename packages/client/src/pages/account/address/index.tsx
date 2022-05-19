@@ -1,29 +1,21 @@
+import { AddIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Button, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
+import LinkButton from "../../../components/atoms/LinkButton";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
+import { primaryColor } from "../../../components/Variables";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   useAddressQuery,
   useDeleteAddressMutation,
   useMeQuery,
 } from "../../../generated/graphql";
-import NextLink from "next/link";
-import { AddIcon, DeleteIcon, EditIcon, SmallAddIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  IconButton,
-  Link,
-  Text,
-  Button,
-  Flex,
-  Divider,
-} from "@chakra-ui/react";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
-import { useApolloClient } from "@apollo/client";
-import { Wrapper } from "../../../components/Wrapper";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { useRouter } from "next/router";
-import { primaryColor } from "../../../components/Variables";
-import { Loading } from "../../../components/skeletons/Loading";
 
 interface addressProps {}
 
@@ -45,19 +37,21 @@ const Address: React.FC<addressProps> = ({}) => {
   const noAddress = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">
-        <Text m={5}>You have not added your address yet</Text>
-        <NextLink
-          href="/account/address/create"
-          as="/account/address/create"
-          passHref
-        >
-          <Button leftIcon={<AddIcon />}>Add address</Button>
-        </NextLink>
+        <Heading size="h2" m={5}>
+          You have not added your address yet
+        </Heading>
+
+        <LinkButton pathname="/account/address/create" leftIcon={<AddIcon />}>
+          Add address
+        </LinkButton>
       </Flex>
     </Flex>
   );
   return (
-    <HeadingLayout heading="ที่อยู่จัดส่ง">
+    <HeadingLayout
+      // heading="ที่อยู่จัดส่ง"
+      heading="Delivery Address"
+    >
       {!data ? (
         <Wrapper>{noAddress}</Wrapper>
       ) : (

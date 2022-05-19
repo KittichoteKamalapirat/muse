@@ -12,6 +12,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { Image, Post, Upvote, User, Video } from "../entities";
 import { PaginatedPosts, SignedS3 } from "../entities/utils";
@@ -66,7 +67,7 @@ export class PostResolver {
     const realLimitPlusOne = realLimit + 1;
 
     const upvotes = await Upvote.find({
-      where: { userId: req.session.userId },
+      where: { userId: req.session.userId, value: 1 },
     });
 
     const upvotedPostIds: number[] = upvotes.map((u) => u.postId);
@@ -181,7 +182,7 @@ export class PostResolver {
   async post(@Arg("id", () => Int) id: number): Promise<Post | undefined> {
     const post = await Post.findOne({
       where: { id },
-      relations: ["video", "image"], // for some reasons, no need to spicify creator
+      relations: ["video", "image", "mealkits"], // for some reasons, no need to spicify creator
     });
 
     return post;
@@ -195,11 +196,7 @@ export class PostResolver {
     @Arg("videoId", () => Int) videoId: number,
     @Arg("imageId", () => Int) imageId: number,
     @Ctx() { req }: MyContext
-  ): // @Arg("title") title: string,
-  // @Arg("body", { nullable: true }) body: string,
-  // @Arg("videoUrl") videoUrl: string
-  Promise<Post | Error> {
-    console.log("hi");
+  ): Promise<Post | Error> {
     // 2 sql queries one to insert and one to select
     try {
       // TODO create transaction
@@ -211,7 +208,7 @@ export class PostResolver {
       await Image.update({ id: imageId }, { postId: post.id });
       return post;
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
       throw new Error("cannot create a post");
     }
   }
@@ -221,24 +218,36 @@ export class PostResolver {
   @UseMiddleware(isAuth) // have to log in to update a post
   async updatePost(
     @Arg("input") input: PostInput,
+    @Arg("newImageUrl") newImageUrl: string,
     @Arg("id", () => Int) id: number,
     // @Arg("title") title: string,
     // @Arg("text") text: string,
     // @Arg("videoUrl") videoUrl: string,
     // @Arg("ingredients", () => [IngredientInput]) ingredients: IngredientInput[],
     @Ctx() { req }: MyContext
-  ): Promise<Post | null> {
-    const result = await getConnection()
-      .createQueryBuilder()
-      .update(Post)
-      .set(input)
-      .where('id = :id and "creatorId" = :creatorId', {
-        id,
-        creatorId: req.session.userId,
-      })
-      .returning("*")
-      .execute();
-    return result.raw[0];
+  ): Promise<Post | Error | undefined> {
+    // const result = await getConnection()
+    //   .createQueryBuilder()
+    //   .update(Post)
+    //   .set(input)
+    //   .where('id = :id and "creatorId" = :creatorId', {
+    //     id,
+    //     creatorId: req.session.userId,
+    //   })
+    //   .returning("*")
+    //   .execute();
+
+    try {
+      await Post.update({ id, creatorId: req.session.userId }, { ...input });
+      const post = await Post.findOne(id);
+
+      await Image.update({ postId: id }, { url: newImageUrl });
+
+      return post;
+    } catch (error) {
+      rollbar.error("no post found");
+      return new Error("no post");
+    }
   }
 
   //   delete post

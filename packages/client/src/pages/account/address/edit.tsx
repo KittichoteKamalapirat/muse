@@ -1,19 +1,20 @@
-import { Flex, Button } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Flex } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
-import { Wrapper } from "../../../components/Wrapper";
+import { Loading } from "../../../components/skeletons/Loading";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   AddressInput,
-  useUpdateAddressMutation,
   useAddressQuery,
+  useUpdateAddressMutation,
 } from "../../../generated/graphql";
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
-import { Loading } from "../../../components/skeletons/Loading";
 
 interface EditAddressProps {}
 
@@ -61,13 +62,13 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   if (!loading && !data) {
     return (
       <Layout>
-        <div>ไม่พบที่อยู่ของคุณ</div>
+        <div>No address found</div>
       </Layout>
     );
   }
   return (
     <HeadingLayout heading="Edit address">
-      <Wrapper>
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             name: data?.address.name,
@@ -84,66 +85,68 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <InputField name="name" placeholder="Name" label="Name" />
+              <InputField name="name" placeholder="Name" label="Name" mt={4} />
               <InputField
                 name="phonenumber"
                 type="tel"
                 placeholder="phonenumber"
                 label="phonenumber"
+                mt={4}
               />
 
               <InputField
                 name="line1"
                 placeholder="Address line 1"
                 label="line1"
+                mt={4}
               />
               <InputField
                 name="line2"
                 placeholder="Address line 2"
                 label="line2"
+                mt={4}
               />
               <Flex>
                 <InputField
                   name="subdistrict"
                   placeholder="subdistrict"
                   label="subdistrict"
+                  mt={4}
                 />
                 <InputField
                   name="district"
                   placeholder="district"
                   label="district"
+                  mt={4}
                 />
               </Flex>
-              <Flex>
-                {" "}
+              <Flex mt={4}>
                 <InputField
                   name="province"
                   placeholder="province"
                   label="province"
-                />{" "}
+                />
                 <InputField
                   name="country"
                   placeholder="country"
                   label="country"
                 />
               </Flex>
-              <Flex>
-                {" "}
+              <Flex mt={4}>
                 <InputField
                   name="postcode"
                   placeholder="postcode"
                   label="postcode"
-                />{" "}
+                />
               </Flex>
 
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting} mt={10}>
                 Update
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

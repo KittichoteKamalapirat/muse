@@ -34,6 +34,8 @@ router.post("/scb-confirm", async (req, res) => {
           cartItem.quantity,
           cartItem.mealkit.name
         ),
+        detailUrl: `/order/cartItem/${cartItem.id}`,
+        avatarHref: "noti/Paid.png", // checked image
         cartItemId: cartItem.id,
         userId: cartItem.userId,
       }).save();
@@ -45,6 +47,8 @@ router.post("/scb-confirm", async (req, res) => {
           cartItem.mealkit.name,
           cartItem.user.username
         ),
+        detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
+        avatarHref: `noti/${CartItemStatus.ToDeliver}.png`, // box image
         cartItemId: cartItem.id,
         userId: cartItem.mealkit.creatorId,
       }).save();

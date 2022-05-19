@@ -26,7 +26,7 @@ class Mealkit extends BaseEntity {
 
   @Column({ type: "int", nullable: true })
   @Field(() => Int, { nullable: true })
-  price!: number;
+  price: number;
 
   @Column()
   @Field()
@@ -37,9 +37,9 @@ class Mealkit extends BaseEntity {
   @Field(() => [String], { nullable: true })
   items: string[];
 
-  // @Column("text", { nullable: true, array: true })
-  // @Field(() => [String], { nullable: true })
-  // images: string[];
+  @Column({ default: 0 })
+  @Field()
+  deliveryFee: number;
 
   @Column()
   @Field()
@@ -56,7 +56,9 @@ class Mealkit extends BaseEntity {
   creatorId: string;
 
   @Field(() => User) // need to have explicit type
-  @ManyToOne(() => User, (user) => user.mealkits)
+  @ManyToOne(() => User, (user) => user.mealkits, {
+    onDelete: "CASCADE",
+  })
   // user.posts have to be added in the User type
   creator: User;
 
@@ -66,19 +68,19 @@ class Mealkit extends BaseEntity {
   // @JoinColumn()
   // cartItem: CartItem;
 
-  @OneToMany(() => CartItem, (cartItem) => cartItem.mealkit)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.mealkit, {
+    cascade: true,
+  })
   cartItems: CartItem[];
   // @ManyToOne((type) => Mealkit, (mealkit) => mealkit.cartItems)
 
-  @Column({ default: 0 })
-  @Field()
-  deliveryFee: number;
-
-  @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit)
+  @OneToMany(() => MealkitFile, (mealkitFiles) => mealkitFiles.mealkit, {
+    cascade: true,
+  })
   @Field(() => [MealkitFile])
   mealkitFiles: MealkitFile[];
 
-  @OneToMany(() => Review, (reviews) => reviews.mealkit)
+  @OneToMany(() => Review, (reviews) => reviews.mealkit, { cascade: true })
   @Field(() => [Review])
   reviews: Review[];
 
@@ -89,8 +91,6 @@ class Mealkit extends BaseEntity {
   @Column({ type: "int", default: 0 })
   @Field(() => Int)
   reviewsCounter: number;
-
-  // Date
 
   @Field(() => String)
   @CreateDateColumn()

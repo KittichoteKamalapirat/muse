@@ -29,7 +29,7 @@ class Payment extends BaseEntity {
   @Field({ nullable: true })
   slipUrl: string;
 
-  @OneToOne(() => Order, (order) => order.payment)
+  @OneToOne(() => Order, (order) => order.payment, { onDelete: "CASCADE" })
   order: Order;
 
   @CreateDateColumn()

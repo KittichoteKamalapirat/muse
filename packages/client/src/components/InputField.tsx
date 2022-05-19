@@ -15,6 +15,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string;
   textarea?: boolean;
   variant?: string;
+  mt?: number;
   //   placeholder: string;  rmeove cause redundant, already in InputHTMLAttributes
 };
 
@@ -24,40 +25,26 @@ export const InputField: React.FC<InputFieldProps> = ({
   textarea,
   size: _,
   variant,
+  mt = 0,
   ...props
 }) => {
   // somehow props don't like the size in it, so we destructure it out,
 
-  let InputOrTextarea: any = Input;
-  if (textarea) {
-    InputOrTextarea = Textarea;
-  }
+  const InputOrTextarea: any = textarea ? Textarea : Input;
+
   const [field, { error }] = useField(props);
   return (
     <FormControl isInvalid={!!error}>
-      <Flex alignItems="center" position="relative">
+      <Flex alignItems="center" position="relative" mt={mt}>
         <InputOrTextarea
-          //   label cannot bu in props, so have to stick it outside
           className="form-input"
           {...field}
           {...props}
           variant={variant}
           id={field.name}
-          // placeholder={props.placeholder}
           placeholder="    "
           pt="30px"
           pb="20px"
-          // _focus={{
-          //   fontSize: "sm",
-          //   fontWeight: "400",
-          //   color: "inputField",
-          //   top: "4px",
-          //   left: "10px",
-          //   px: "5px",
-          //   // backgroundColor: "white",
-          //   zIndex: 1,
-          //   transition: "all 0.3s ease",
-          // }}
         />
         <FormLabel
           className="form-label"
@@ -66,17 +53,6 @@ export const InputField: React.FC<InputFieldProps> = ({
           color="inputLabel"
           left={4}
           top="14px"
-          // _focus={{
-          //   fontSize: "sm",
-          //   fontWeight: "400",
-          //   color: "inputField",
-          //   top: "4px",
-          //   left: "10px",
-          //   px: "5px",
-          //   // backgroundColor: "white",
-          //   zIndex: 1,
-          //   transition: "all 0.3s ease",
-          // }}
         >
           {label}
         </FormLabel>

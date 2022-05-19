@@ -53,58 +53,84 @@ module.exports = (on, config) => {
 
     async createPostAndMealkit() {
       const options = getConnectionOptions(false);
-      console.log({ options });
+
       typeorm.createConnection(options).then(async (connection) => {
         const userRepository = connection.getRepository("User");
         const addressRepository = connection.getRepository("Address");
+
         const postRepository = connection.getRepository("Post");
+        const videoRepository = connection.getRepository("Video");
+        const imageRepository = connection.getRepository("Image");
+
         const mealkitRepository = connection.getRepository("Mealkit");
+        const mealkitFileRepository = connection.getRepository("MealkitFile");
 
-        userRepository.findOne({ username: "luffy" }).then((user) => {
-          console.log("user is undefined?");
-          console.log({ user });
-          const addressData = {
-            name: "Going Marry",
-            phonenumber: "0900000000",
-            line1: "Line1",
-            line2: "Line2",
-            subdistrict: "subdistrict",
-            district: "district",
-            province: "province",
-            country: "country",
-            postcode: "10101",
-            userId: user.id,
-          };
-          const postData = {
-            title: "Marinara",
-            text: "Marinara Details",
-            instruction: [""],
-            cooktime: "1",
-            portion: 1,
-            advice: [""],
-            videoUrl: "https://cookknow.s3.amazonaws.com/video1.mp4",
-            thumbnailUrl: "https://cookknow.s3.amazonaws.com/thumbnail1.png",
-            ingredients: [{ ingredient: "", amount: "", unit: "" }],
-            creatorId: user.id,
-          };
+        const user = await userRepository.findOne({ username: "luffy" });
 
-          addressRepository.save(addressData);
+        const addressData = {
+          name: "Going Marry",
+          phonenumber: "0900000000",
+          line1: "Line1",
+          line2: "Line2",
+          subdistrict: "subdistrict",
+          district: "district",
+          province: "province",
+          country: "country",
+          postcode: "10101",
+          userId: user.id,
+        };
 
-          postRepository.save(postData).then((post) => {
-            const mealkitInput = {
-              name: "Marinara Mealkit",
-              items: [],
-              images: ["https://cookknow.s3.amazonaws.com/thumbnail1.png"],
-              price: 100,
-              portion: 1,
-              postId: post.id,
-              creatorId: user.id,
-            };
+        const postData = {
+          title: "Marinara",
+          text: "Marinara Details",
+          instruction: [""],
+          cooktime: "1",
+          portion: 1,
+          advice: [""],
+          ingredients: [{ ingredient: "", amount: "", unit: "" }],
+          creatorId: user.id,
+        };
 
-            mealkitRepository.save(mealkitInput);
-          });
-        });
+        await addressRepository.save(addressData);
 
+        const post = await postRepository.save(postData);
+        const videoData = {
+          name: "video1.mp4",
+          fileType: "video/mp4",
+          url: "https://cookknow.s3.amazonaws.com/video1.mp4",
+          postId: post.id,
+        };
+
+        videoRepository.save(videoData);
+
+        const imageData = {
+          name: "thumbnail1.png",
+          fileType: "image/png",
+          url: "https://cookknow.s3.amazonaws.com/thumbnail1.png",
+          postId: post.id,
+        };
+        imageRepository.save(imageData);
+
+        const mealkitInput = {
+          name: "Marinara Mealkit",
+          items: [],
+          images: ["https://cookknow.s3.amazonaws.com/thumbnail1.png"],
+          price: 100,
+          portion: 1,
+          postId: post.id,
+          creatorId: user.id,
+        };
+
+        const mealkit = await mealkitRepository.save(mealkitInput);
+
+        const mealkitFileData = {
+          name: "thumbnail1.png",
+          fileType: "image/png",
+          url: "https://cookknow.s3.amazonaws.com/thumbnail1.png",
+          mealkitId: mealkit.id,
+        };
+
+        await mealkitFileRepository.save(mealkitFileData);
         await connection.close; // cypress wil throw error when rerun if connection is not close
       });
 
@@ -113,7 +139,6 @@ module.exports = (on, config) => {
 
     async buyerMakeAPayment() {
       const options = getConnectionOptions(false);
-      console.log({ options });
 
       typeorm.createConnection(options).then(async (connection) => {
         const cartItemRepository = connection.getRepository("CartItem");

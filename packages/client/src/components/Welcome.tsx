@@ -1,19 +1,20 @@
-import { Button } from "@chakra-ui/button";
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Avatar, Center, Img, Link, useMediaQuery } from "@chakra-ui/react";
-import NextLink from "next/link";
+import { Avatar, Center, Img, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
+import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
+import { Slider2 } from "./Slider2/Slider2";
+import { Slider3 } from "./Slider3/Slider3";
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
 import SvgWhy3 from "./svgComponents/Why3";
 import SvgWhy4 from "./svgComponents/Why4";
 import { WelcomeNav } from "./WelcomeNav";
-import { Wrapper } from "./Wrapper";
+import { Wrapper } from "./Wrapper/Wrapper";
 
 interface WelcomeProps {}
 
@@ -44,17 +45,13 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 <Text>มีวัตถุดิบ มีคลิปสอน </Text>
                 <Text> พร้อมทำอาหาร</Text>
               </Box>
-              <NextLink href="/register" passHref>
-                <Link>
-                  <Button
-                    rightIcon={<ChevronRightIcon />}
-                    variant="solid"
-                    my={8}
-                  >
-                    Create Account
-                  </Button>
-                </Link>
-              </NextLink>
+              <LinkButton
+                href="/register"
+                rightIcon={<ChevronRightIcon />}
+                width="fit-content"
+              >
+                Create Account
+              </LinkButton>
             </Box>
 
             <Img
@@ -136,7 +133,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 </Text>
                 is available on the platform. Learn to cook{" "}
                 <Text fontWeight="600" as="mark">
-                  new and exiting food
+                  new and exciting food
                 </Text>{" "}
                 such as Thai, Japanese, Korean, Italian, or even Indian dishes.
               </Text>
@@ -144,6 +141,8 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
           </Box>
 
           <Slider />
+          {/* <Slider2 /> */}
+          {/* <Slider3 /> */}
         </Box>
 
         {/* How it works section
@@ -162,19 +161,13 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               for your recipe
             </Text>
 
-            <NextLink
-              href={{
-                pathname: "/creator",
-                // query: { isCreator: true },
-              }}
-              passHref
+            <LinkButton
+              href="/register"
+              rightIcon={<ChevronRightIcon />}
+              width="fit-content"
             >
-              <Link>
-                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
-                  Become a creator
-                </Button>
-              </Link>
-            </NextLink>
+              Become a creator
+            </LinkButton>
           </Wrapper>
         </Box>
 

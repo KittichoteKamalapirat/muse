@@ -1,20 +1,17 @@
-import { ChevronRightIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Heading, Text } from "@chakra-ui/layout";
-import { Flex, Link, Button, Img } from "@chakra-ui/react";
+import { Flex, Img } from "@chakra-ui/react";
 import React from "react";
+import LinkButton from "../components/atoms/LinkButton";
 import { Footer } from "../components/Footer";
-import { WelcomeNav } from "../components/WelcomeNav";
-import { withApollo } from "../util/withApollo";
-import NextLink from "next/link";
-import SvgWhy1 from "../components/svgComponents/Why1";
-import SvgWhy2 from "../components/svgComponents/Why2";
-import SvgWhy3 from "../components/svgComponents/Why3";
-import SvgWhy4 from "../components/svgComponents/Why4";
-import { Wrapper } from "../components/Wrapper";
 import SvgCreator1 from "../components/svgComponents/Creator1";
 import SvgCreator2 from "../components/svgComponents/Creator2";
 import SvgCreator3 from "../components/svgComponents/Creator3";
 import SvgCreator4 from "../components/svgComponents/Creator4";
+import { WelcomeNav } from "../components/WelcomeNav";
+import { Wrapper } from "../components/Wrapper/Wrapper";
+
+import { withApollo } from "../util/withApollo";
 
 interface WelcomeCreatorProps {}
 
@@ -26,7 +23,7 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
       <Flex
         flexDirection="column"
         alignItems="center"
-        mt={["0px", "100px"]}
+        mt="100px"
         mb={["5px", "100px"]}
         pb={["10px"]}
       >
@@ -36,7 +33,6 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
           textAlign="center"
         >
           <Box>
-            {" "}
             <Heading>Share your recipe</Heading>
             <Box
               // flexDirection={["column", "row"]}
@@ -46,19 +42,16 @@ const WelcomeCreator: React.FC<WelcomeCreatorProps> = ({}) => {
               <Text>Film your recipe, Provide ingredients</Text>
               <Text>Generate Income</Text>
             </Box>
-            <NextLink
+            <LinkButton
               href={{
                 pathname: "/register",
                 query: { isCreator: true },
               }}
-              passHref
+              mt={10}
+              width="fit-content"
             >
-              <Link>
-                <Button rightIcon={<ChevronRightIcon />} variant="solid" my={4}>
-                  Sign up as Creator
-                </Button>
-              </Link>
-            </NextLink>
+              Sign up as Creator
+            </LinkButton>
           </Box>
 
           <Img

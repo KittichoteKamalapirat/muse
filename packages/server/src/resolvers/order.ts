@@ -11,12 +11,14 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { s3Bucket } from "../constants";
 import { CartItem, CartItemNoti, Order, Payment } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { CartItemsByCreatorInput } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+import getThumbnailFromMealkitFiles from "../utils/getThumbnailFromMealkitFiles";
 import receivedOrderEmail from "../utils/notifications/emailContents/receivedOrderEmail";
 import receivedOrderInApp from "../utils/notifications/inAppMessage/receivedOrderInApp";
 import {
@@ -97,7 +99,13 @@ export class OrderResolver {
 
         const cartItem = await CartItem.findOne({
           where: { id: cartItemId },
-          relations: ["mealkit", "user", "order", "order.user"],
+          relations: [
+            "mealkit",
+            "mealkit.mealkitFiles",
+            "user",
+            "order",
+            "order.user",
+          ],
         });
 
         if (cartItem) {
@@ -108,6 +116,10 @@ export class OrderResolver {
               cartItem.mealkit.name,
               cartItem.order.user.username
             ),
+            detailUrl: `/myshop/order/cartItem/${cartItem.id}`,
+            avatarHref: getThumbnailFromMealkitFiles(
+              cartItem?.mealkit.mealkitFiles
+            )?.url,
             cartItemId: cartItem.id,
             userId: cartItem?.mealkit.creatorId,
           }).save();
@@ -120,6 +132,7 @@ export class OrderResolver {
             "kittichoteshane@gmail.com", // creatorOrders cartItem.mealkit.creator.email later
             "📝 You have received an order",
             receivedOrderEmail(
+              cartItem.id,
               cartItem.quantity,
               cartItem.mealkit.name,
               cartItem.order.user.username
@@ -130,7 +143,7 @@ export class OrderResolver {
         }
       });
     } catch (error) {
-      console.log(error);
+      rollbar.log(error);
     }
 
     return order;
@@ -149,6 +162,7 @@ export class OrderResolver {
         userId: req.session.userId,
         // order: !IsNull(),
       },
+      order: { createdAt: "DESC" },
       relations: [
         "order",
         "user",
@@ -188,7 +202,7 @@ export class OrderResolver {
     });
 
     const mapped = toCreatorOrdersMap(cartItems);
-    // console.log(mapped);
+
     if (mapped) {
       return mapped;
     }

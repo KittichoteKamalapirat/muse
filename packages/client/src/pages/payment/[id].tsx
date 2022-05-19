@@ -4,25 +4,23 @@ import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
+import { Error } from "../../components/skeletons/Error";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 import { UnAuthorized } from "../../components/UnAuthorized";
-import { primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
   useManuallyConfirmPaymentLazyQuery,
   usePaymentQuery,
   useUploadSlipMutation,
 } from "../../generated/graphql";
-import { withApollo } from "../../util/withApollo";
+import { urlResolver } from "../../lib/UrlResolver";
 import useFetch from "../../util/useFetch";
-import UrlResolver from "../../lib/UrlResolver";
+import { withApollo } from "../../util/withApollo";
 
 interface PaymentProps {}
 
 const STARTING_MINUTES = 3;
-
-const urlResolver = new UrlResolver();
 
 const Payment: React.FC<PaymentProps> = ({}) => {
   const router = useRouter();
@@ -96,7 +94,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   }
 
   if (error) {
-    console.log(error);
+    <Error />;
   }
 
   return (
@@ -106,60 +104,50 @@ const Payment: React.FC<PaymentProps> = ({}) => {
     >
       <Box mb={20}>
         <Wrapper>
-          <Flex justifyContent="space-between">
+          {/* <Flex justifyContent="space-between">
             <Text>Total amount</Text>
             <Text>{paymentData?.payment.amount}</Text>
-          </Flex>
-          <Divider mt={2} />
-          <Box mt={5}>
+          </Flex> */}
+          {/* <Divider mt={2} /> */}
+          <Box mt={16}>
             <Text>Siam Commercial bangk (SCB)</Text>
             <Text>Account name: Kittichote Kamalapirat</Text>
             <Box>
-              <Text fontSize="sm" d="inline">
-                Account number
-              </Text>{" "}
-              <Text
-                fontSize="xl"
-                fontWeight="500"
-                d="inline"
-                color={primaryColor}
-              >
+              <Text d="inline">Account number:</Text>{" "}
+              <Text fontSize="xl" fontWeight="700" d="inline" color="#0F3E68">
                 096 148 9047
               </Text>
             </Box>
           </Box>
           <Divider mt={2} />
 
-          <Box width="80%" mx="auto" textAlign="center" my={5}>
-            <Text>Scan the QR code</Text>
-            <Image src={qrSrc} alt="paymentqr" />
+          <Box>
+            <Image
+              src="/promptpayBanner.png"
+              width="100%"
+              style={{ margin: "auto" }}
+              alt="promptpayBanner"
+            />
+            <Image src={qrSrc} alt="paymentqr" width="80%" mx="auto" />
           </Box>
-        </Wrapper>
 
-        <Flex
-          zIndex={1}
-          position="fixed"
-          bottom={0}
-          bg={"white"}
-          p={2}
-          ml={"auto"}
-          align="center"
-          width="100%"
-          flexDirection="column"
-          justifyContent="space-around"
-        >
-          <Box ml="auto">
-            <Text d="inline">Amount: </Text>
-            <Heading
-              fontSize="lg"
-              fontWeight={400}
-              color={primaryColor}
-              d="inline"
-            >
-              {paymentData?.payment.amount}
+          <Flex
+            flexDirection="column"
+            justifyContent="space-between"
+            alignItems="center"
+            mt={6}
+          >
+            <Heading as="h3" size="sm">
+              Total amount
             </Heading>
-          </Box>
-        </Flex>
+            <Flex alignItems="center">
+              <Heading size="lg">฿</Heading>
+              <Heading as="h2" size="xl">
+                {paymentData?.payment.amount.toLocaleString()}
+              </Heading>
+            </Flex>
+          </Flex>
+        </Wrapper>
       </Box>
 
       <Heading>

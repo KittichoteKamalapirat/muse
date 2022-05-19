@@ -9,6 +9,7 @@ import {
   UseMiddleware,
 } from "type-graphql";
 import { getConnection } from "typeorm";
+import { rollbar } from "../config/initializers/rollbar";
 import { PaymentInfo, User } from "../entities";
 import { PaymentInfoInput, PaymentInfoResponse } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
@@ -33,7 +34,10 @@ export class PaymentInfoResolver {
     @Arg("input") input: PaymentInfoInput
   ): Promise<PaymentInfoResponse> {
     const errors = validatePaymentInfo(input);
-    if (errors) return { errors };
+    if (errors) {
+      rollbar.log(errors);
+      return { errors };
+    }
 
     const paymentInfo = await PaymentInfo.create({
       ...input,
@@ -58,7 +62,10 @@ export class PaymentInfoResolver {
     @Arg("input") input: PaymentInfoInput
   ): Promise<PaymentInfoResponse> {
     const errors = validatePaymentInfo(input);
-    if (errors) return { errors };
+    if (errors) {
+      rollbar.log(errors);
+      return { errors };
+    }
 
     const result = await getConnection()
       .createQueryBuilder()

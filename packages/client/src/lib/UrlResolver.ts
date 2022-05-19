@@ -22,4 +22,4 @@ class UrlResolver {
   }
 }
 
-export default UrlResolver;
+export const urlResolver = new UrlResolver();

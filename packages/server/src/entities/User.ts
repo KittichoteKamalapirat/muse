@@ -45,9 +45,9 @@ class User extends BaseEntity {
   @Field()
   isCreator!: boolean;
 
-  @Column({ unique: true })
+  @Column()
   @Field()
-  avatar!: string;
+  avatar: string;
 
   @Column({ unique: true, nullable: true })
   @Field({ nullable: true })
@@ -57,7 +57,9 @@ class User extends BaseEntity {
   @Column()
   password!: string;
 
-  @OneToMany(() => Post, (post) => post.creator)
+  @OneToMany(() => Post, (post) => post.creator, {
+    cascade: true,
+  })
   posts: Post[];
 
   @OneToMany(() => Mealkit, (mealkit) => mealkit.creator)
@@ -76,33 +78,37 @@ class User extends BaseEntity {
 
   // relatioship with profile starts
   @Field(() => Address, { nullable: true })
-  @OneToOne(() => Address, (address) => address.user)
+  @OneToOne(() => Address, (address) => address.user, {
+    cascade: true,
+  })
   // @JoinColumn()
   address: Address;
   // relatioship with account ends -> profileId
 
   // has many carts
-  @OneToMany(() => CartItem, (cartItem) => cartItem.user)
+  @OneToMany(() => CartItem, (cartItem) => cartItem.user, { cascade: true })
   cartItems: CartItem[];
 
   // One user can have many orders
-  @OneToMany(() => Order, (order) => order.user)
+  @OneToMany(() => Order, (order) => order.user, { cascade: true })
   orders: Order[];
 
   // Follow function
-  @OneToMany(() => Follow, (followed) => followed.user)
+  @OneToMany(() => Follow, (followed) => followed.user, { cascade: true })
   followed: Follow[];
 
-  @OneToMany(() => Follow, (following) => following.follower)
+  @OneToMany(() => Follow, (following) => following.follower, { cascade: true })
   following: Follow[];
 
-  @OneToOne(() => PaymentInfo, (paymentInfo) => paymentInfo.user)
+  @OneToOne(() => PaymentInfo, (paymentInfo) => paymentInfo.user, {
+    cascade: true,
+  })
   @JoinColumn()
   @Field(() => PaymentInfo, { nullable: true })
   paymentInfo: PaymentInfo;
 
   // relationshiop with reviews
-  @OneToMany(() => Review, (reviews) => reviews.user)
+  @OneToMany(() => Review, (reviews) => reviews.user, { cascade: true })
   @Field(() => [Review])
   reviews: Review[];
 

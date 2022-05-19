@@ -8,9 +8,6 @@ class MealkitInput {
   @Field(() => [String])
   items: string[];
 
-  @Field(() => [String])
-  images: string[];
-
   @Field()
   price: number;
 

@@ -1,20 +1,24 @@
 import { gql } from "@apollo/client";
-
+import { AddIcon, CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import {
-  AddIcon,
-  CheckCircleIcon,
-  CloseIcon,
-  SmallCloseIcon,
-} from "@chakra-ui/icons";
-import { Box, Center, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import { Avatar, Img, useToast, IconButton, Button } from "@chakra-ui/react";
-import NextLink from "next/link";
+  Avatar,
+  IconButton,
+  Img,
+  useToast,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import router from "next/router";
 import React, { useState } from "react";
 import {
   useCreateCartItemMutation,
   useMealkitsQuery,
+  useMeQuery,
 } from "../generated/graphql";
+import Button from "./atoms/Button";
+import LinkButton from "./atoms/LinkButton";
+import { EditDeleteMealkitButtons } from "./EditDeleteMealkitButtons";
 import { FooterLayout } from "./Layout/FooterLayout";
 import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
@@ -27,17 +31,15 @@ interface MealkitInfoProps {
 }
 
 export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
+  const { data: meData } = useMeQuery();
   const toast = useToast();
   const [createCartItem, { data: cartItemData, loading: cartItemLoading }] =
     useCreateCartItemMutation();
-  console.log("1");
-  console.log(cartItemData);
+
   const [cartLoading, setCartLoading] = useState(false);
   const { data: mealkits, loading } = useMealkitsQuery({
     variables: { postId: postId },
   });
-
-  console.log({ mealkits });
 
   if (loading) {
     return (
@@ -56,37 +58,54 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
 
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
-          <Text>ไม่มีชุดทำอาหาร</Text>
-          <NextLink href="/" as="/" passHref>
-            <Button leftIcon={<AddIcon />}>เพิ่มชุดทำอาหาร</Button>
-          </NextLink>
+          <Text>There are no mealkits for this post</Text>
+          <LinkButton pathname="/" leftIcon={<AddIcon />}>
+            Add a mealkit
+          </LinkButton>
         </Box>
       ) : (
         <Box>
           {mealkits.mealkits.map((mealkit, index) => (
-            <Box key={index}>
-              <Box overflowX="auto" width="90%" margin="auto">
+            <Box key={index} mx={4}>
+              <Wrap spacing="2% " justify="center">
                 {mealkit.mealkitFiles.map((file, index) => (
-                  <Center key={index} m={1} minW="150px">
-                    <Img src={file.url} alt="image" borderRadius="10%" />
-                  </Center>
+                  <WrapItem key={index} m={1} width="48%">
+                    {file.fileType.includes("video") ? (
+                      <video controls>
+                        <source src={file.url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : (
+                      <Img src={file.url} alt="image" borderRadius="10%" />
+                    )}
+                  </WrapItem>
                 ))}
-              </Box>
+              </Wrap>
 
               <ContentWrapper>
-                <Box>
-                  <Heading fontSize="lg"> {mealkit.name} </Heading>
-                  <ReviewStars
-                    reviewScore={4}
-                    reviewsCounter={mealkit.reviewsCounter}
-                  />
+                <Flex justifyContent="space-between" alignItems="baseline">
+                  <Box>
+                    <Heading fontSize="lg"> {mealkit.name} </Heading>
+                    <ReviewStars
+                      reviewScore={4}
+                      reviewsCounter={mealkit.reviewsCounter}
+                    />
 
-                  <Text>
-                    For {mealkit.portion}{" "}
-                    {mealkit.portion > 1 ? "people" : "person"}
-                  </Text>
-                  <Text>฿{mealkit.price}</Text>
-                </Box>
+                    <Text>
+                      For {mealkit.portion}{" "}
+                      {mealkit.portion > 1 ? "people" : "person"}
+                    </Text>
+                    <Text>฿{mealkit.price}</Text>
+                  </Box>
+
+                  {meData?.me?.id === mealkit.creatorId && (
+                    <EditDeleteMealkitButtons
+                      id={mealkit.id}
+                      postId={mealkit.postId}
+                      // isPublished={data.post.isPublished}
+                    />
+                  )}
+                </Flex>
 
                 <Box>
                   <Heading size="md">รายการ</Heading>
@@ -133,11 +152,8 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       <Text>฿{mealkit.price}</Text>
                     </Flex>
                     <Button
-                      width="100%"
-                      mx="auto"
                       leftIcon={<AddIcon />}
                       isLoading={cartLoading}
-                      color="white"
                       onClick={() => {
                         setCartLoading(true);
                         createCartItem({
@@ -209,16 +225,16 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     title: "Added to Cart.",
                     description: `${mealkit.name} has been added to your cart.`,
                     status: "success",
-                    duration: 4000,
+                    duration: 1000 * 4,
                     isClosable: true,
                     position: "top-right",
                     render: ({ id, onClose }) => (
                       <Box
                         key={id}
-                        width="100%"
                         bgColor="white"
-                        p={4}
+                        p={3}
                         boxShadow="lg"
+                        borderRadius="lg"
                       >
                         <Flex alignItems="center">
                           <Box minWidth="-webkit-fill-available">
@@ -252,6 +268,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                               textAlign="center"
                               size="xs"
                               color="white"
+                              width="min-content"
                             >
                               See Cart
                             </Button>

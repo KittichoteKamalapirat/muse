@@ -72,7 +72,9 @@ class Tracking extends BaseEntity {
   timelines: Timeline[];
 
   @Field(() => [CartItem])
-  @OneToMany(() => CartItem, (cartItems) => cartItems.tracking)
+  @OneToMany(() => CartItem, (cartItems) => cartItems.tracking, {
+    onDelete: "CASCADE",
+  })
   cartItems: CartItem[];
 
   // from ETrackings done

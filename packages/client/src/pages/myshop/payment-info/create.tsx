@@ -1,13 +1,11 @@
-import { Button } from "@chakra-ui/button";
-import { Box, Text } from "@chakra-ui/layout";
-import { Select } from "@chakra-ui/select";
+import { Box } from "@chakra-ui/layout";
 import { Field, Form, Formik } from "formik";
-import { BreakingChangeType } from "graphql";
 import { useRouter } from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
-import { Wrapper } from "../../../components/Wrapper";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   PaymentInfoDocument,
   PaymentInfoQuery,
@@ -17,7 +15,6 @@ import {
 import { banksArray } from "../../../util/constants";
 import { toErrorMap } from "../../../util/toErrorMap";
 import { withApollo } from "../../../util/withApollo";
-import SvgScb from "../../../components/svgComponents/Scb";
 
 interface CreatePaymentInfoProps {}
 
@@ -106,8 +103,7 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
                 placeholder="bankAccount"
                 label="Bank Account"
               />
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting}>
                 Add
               </Button>
             </Form>

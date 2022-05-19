@@ -37,7 +37,8 @@ class MealkitFile extends BaseEntity {
 
   @Field(() => Mealkit)
   @ManyToOne(() => Mealkit, (mealkit) => mealkit.mealkitFiles, {
-    nullable: true,
+    nullable: true, // TODO is it nullable?
+    onDelete: "CASCADE",
   })
   mealkit: Mealkit;
 

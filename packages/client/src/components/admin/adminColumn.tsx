@@ -1,10 +1,11 @@
 import { ApolloCache } from "@apollo/client";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { gql } from "urql";
 import {
   AdminCompleteCartItemMutation,
   CartItemStatus,
 } from "../../generated/graphql";
+import Button from "../atoms/Button";
 import { SelectColumnFilter } from "../SelectColumnFilter";
 
 export const adminColumn = (completeCartItem: any) => {

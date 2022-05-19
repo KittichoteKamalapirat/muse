@@ -3,9 +3,7 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 import { createWithApollo } from "./createWithApollo";
 import { PaginatedPosts } from "../generated/graphql";
 import { NextPageContext } from "next";
-import UrlResolver from "../lib/UrlResolver";
-
-const urlResolver = new UrlResolver();
+import { urlResolver } from "../lib/UrlResolver";
 
 const createClient = (ctx: NextPageContext) =>
   new ApolloClient({
@@ -35,16 +33,6 @@ const createClient = (ctx: NextPageContext) =>
                 };
               },
             },
-            // address(existing, { canRead, toReference }) {
-            //   console.log(existing);
-            //   console.log(canRead);
-            //   console.log(toReference);
-            //   // return {
-            //   //   __typename: "address",
-            //   //   address: existing,
-            //   // };
-            //   return existing;
-            // },
           },
         },
       },

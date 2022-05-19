@@ -13,7 +13,6 @@ import {
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
@@ -26,18 +25,18 @@ import {
   useSortBy,
   useTable,
 } from "react-table";
-import { adminColumn } from "../components/admin/adminColumn";
-import { adminData } from "../components/admin/adminData";
-import { Layout } from "../components/Layout/Layout";
-import { Error } from "../components/skeletons/Error";
-import { Loading } from "../components/skeletons/Loading";
-import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { adminColumn } from "../../components/admin/adminColumn";
+import { adminData } from "../../components/admin/adminData";
+import { Layout } from "../../components/Layout/Layout";
+import { Error } from "../../components/skeletons/Error";
+import { Loading } from "../../components/skeletons/Loading";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   useAdminCompleteCartItemMutation,
   useAllCartItemsQuery,
-} from "../generated/graphql";
-import { useIsAdmin } from "../util/useIsAdmin";
-import { withApollo } from "../util/withApollo";
+} from "../../generated/graphql";
+import { useIsAdmin } from "../../util/useIsAdmin";
+import { withApollo } from "../../util/withApollo";
 
 interface AdminProps {}
 

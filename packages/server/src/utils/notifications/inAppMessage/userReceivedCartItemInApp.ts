@@ -5,6 +5,6 @@ const userReceivedCartItemInApp = (
 ) =>
   `${username} has received and confirmed ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""
-  }. You will received the payment soon`;
+  }.<strong> You will receive the payment soon.</strong>`;
 
 export default userReceivedCartItemInApp;

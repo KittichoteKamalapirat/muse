@@ -4,6 +4,8 @@ query orderNotis {
     message
     read
     cartItemId
+    avatarHref
+    detailUrl
     createdAt
     cartItem {
       id

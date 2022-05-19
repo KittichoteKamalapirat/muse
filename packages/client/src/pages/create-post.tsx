@@ -1,6 +1,4 @@
-import { ChevronLeftIcon } from "@chakra-ui/icons";
-import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Button, IconButton } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
@@ -10,16 +8,17 @@ import { CreatePostForm } from "../components/CreatePostForm";
 import { CreateRecipe } from "../components/CreateRecipe";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
+import FormActionButtons from "../components/form/FormActionButtons/FormActionButtons";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Loading } from "../components/skeletons/Loading";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   useCreateMealkitMutation,
   useCreatePostMutation,
 } from "../generated/graphql";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";
@@ -35,14 +34,14 @@ const postValues = {
   videoUrl: "change this later",
 };
 
-const urlResolver = new UrlResolver();
+3;
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState<number>(1);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -71,7 +70,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [mealkitInput, setMealkitInput] = useState({
     name: "",
     price: "",
-    portion: "",
+    mealkitPortion: "",
     items: [],
     images: [""],
   });
@@ -112,20 +111,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       fileType: fileData.type,
       resourceType: ResourceType.POST,
     };
-
-    // axios.post(urlResolver.signS3(), input).then((response) => {
-    //   const options = getRESTOptions(fileData.type);
-
-    //   // save to s3
-    //   axios.put(response.data.sign, fileData, options);
-
-    //   // TODO
-    //   setAutoThumbnailS3UrlAndId({
-    //     id: response.data.id,
-    //     url: response.data.url,
-    //   });
-    //   nextStep();
-    // });
 
     const options = getRESTOptions(fileData.type);
     console.log({ options });
@@ -247,6 +232,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
             ingredients: ingredientsField,
           },
           videoId: videoS3UrlAndID?.id as number,
+          // TODO -> check this about thumbnail error
           // if no thumbnail -> use the auto Thumbnail url instead
           imageId: thumbnailS3UrlAndID
             ? (thumbnailS3UrlAndID?.id as number)
@@ -262,21 +248,22 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
       if (postId) {
         const price = parseInt(mealkitInput.price);
-        const portion = parseInt(mealkitInput.portion);
-        const { data: mealkitResult, errors: mealkitErrors } =
-          await createMealkit({
-            variables: {
-              input: {
-                name: mealkitInput.name,
-                price: price,
-                portion: portion,
-                items: mealkitInput.items,
-                images: [],
-              },
-              postId: postId,
-              fileIds: mealkitS3UrlAndIds.map((item) => item.id),
+        const mealkitPortion = parseInt(mealkitInput.mealkitPortion);
+        const { errors: mealkitErrors } = await createMealkit({
+          variables: {
+            input: {
+              name: mealkitInput.name,
+              price: price,
+              portion: mealkitPortion,
+              items: mealkitInput.items,
             },
-          });
+            postId: postId,
+            mealkitFiles: mealkitS3UrlAndIds.map((item) => ({
+              postId: item.id,
+              fileType: item.fileType as string,
+            })),
+          },
+        });
         if (!errors && !mealkitErrors) {
           router.push("/");
         }
@@ -305,7 +292,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     if (
       mealkitInput.name != "" &&
-      mealkitInput.portion != "" &&
+      mealkitInput.mealkitPortion != "" &&
       mealkitInput.price != ""
       // &&    mealkitInput.images.length > 0
       // mealkitInput.items.length > 0
@@ -356,13 +343,15 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 {
                   <Box display={step === 1 ? "block" : "none"}>
                     <HeadingLayout heading="New Video">
-                      <CreateVideo
-                        nextStep={nextStep}
-                        handleMetadata={handleMetadata}
-                        videoS3UrlAndID={videoS3UrlAndID}
-                        setVideoS3UrlAndID={setVideoS3UrlAndID}
-                        isGeneratingThumbnail={isGeneratingThumbnail}
-                      />
+                      <XWrapper>
+                        <CreateVideo
+                          nextStep={nextStep}
+                          handleMetadata={handleMetadata}
+                          videoS3UrlAndID={videoS3UrlAndID}
+                          setVideoS3UrlAndID={setVideoS3UrlAndID}
+                          isGeneratingThumbnail={isGeneratingThumbnail}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                     {isGeneratingThumbnail && (
                       <Loading text="generating thumbnail" overlay={true} />
@@ -372,24 +361,28 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                 {
                   <Box display={step === 2 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Cover Photo">
-                      <CreateThumbnail
-                        prevStep={prevStep}
-                        nextStep={nextStep}
-                        autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
-                        thumbnailS3UrlAndID={thumbnailS3UrlAndID}
-                        setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
-                      ></CreateThumbnail>
+                      <XWrapper>
+                        <CreateThumbnail
+                          autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
+                          thumbnailS3UrlAndID={thumbnailS3UrlAndID}
+                          setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
+                        ></CreateThumbnail>
+                        <FormActionButtons
+                          primaryText="Next"
+                          primaryAriaLabel="Go to post detail tab"
+                          onPrimaryClick={nextStep}
+                          secondaryText="Back"
+                          onSecondaryClick={prevStep}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
                 {
                   <Box display={step === 3 ? "block" : "none"}>
                     <HeadingLayout back={false} heading="Add Post Detail">
-                      <Box>
-                        <CreatePostForm
-                          nextStep={nextStep}
-                          prevstep={prevStep}
-                        />
+                      <XWrapper>
+                        <CreatePostForm />
                         <CreateRecipe
                           ingredientsField={ingredientsField}
                           instructionField={instructionField}
@@ -405,70 +398,64 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                           }
                         />
 
-                        <Flex
-                          justifyContent="space-between"
-                          alignItems="center"
-                          mt={5}
-                        >
-                          <IconButton
-                            aria-label="Search database"
-                            icon={<ChevronLeftIcon />}
-                            onClick={() => prevStep()}
-                            fontSize="x-large"
-                            color="dark.200"
-                            variant="transparent"
-                          />
-
-                          <Button
-                            variant="transparent"
-                            color="brand"
-                            onClick={() => nextStep()}
-                          >
-                            Next
-                          </Button>
-                        </Flex>
-                      </Box>
+                        <FormActionButtons
+                          primaryText="Next"
+                          primaryAriaLabel="Go to mealkit details tab"
+                          onPrimaryClick={nextStep}
+                          secondaryText="Back"
+                          onSecondaryClick={prevStep}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
                 {
                   <Box display={step === 4 ? "block" : "none"}>
-                    <HeadingLayout heading="Add a mealkit">
-                      <CreateMealkit
-                        ingredientsField={ingredientsField}
-                        input={mealkitInput}
-                        setInput={setMealkitInput}
-                        nextStep={nextStep}
-                        prevStep={prevStep}
-                        mealkitS3UrlAndIds={mealkitS3UrlAndIds}
-                        setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
-                      />
+                    <HeadingLayout heading="Add a Meal Kit" back={false}>
+                      <XWrapper>
+                        <CreateMealkit
+                          ingredientsField={ingredientsField}
+                          input={mealkitInput}
+                          setInput={setMealkitInput}
+                          prevStep={prevStep}
+                          mealkitS3UrlAndIds={mealkitS3UrlAndIds}
+                          setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
+                        />
+
+                        {/* <Flex
+                          flexDirection="column"
+                          mt={10}
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <Button
+                            type="submit"
+                            width="100%"
+                            isLoading={submitting}
+                            disabled={!submittable} //post page (won't be empty), thumbnail page (empty is ok since there's default one),  post details page (only advice can be empty), mealkit page (can't be empty)
+                          >
+                            Create Post
+                          </Button>
+                        </Flex> */}
+                        {!submittable && (
+                          <Text color="alert">
+                            * Some required fields are missing
+                          </Text>
+                        )}
+
+                        <FormActionButtons
+                          primaryText="Create"
+                          primaryIsDisabled={!submittable}
+                          primaryIsLoading={submitting}
+                          primaryButtonType="submit"
+                          onPrimaryClick={nextStep}
+                          secondaryText="Back"
+                          onSecondaryClick={prevStep}
+                        />
+                      </XWrapper>
                     </HeadingLayout>
                   </Box>
                 }
-
-                {step !== 4 ? null : (
-                  <Flex
-                    flexDirection="column"
-                    mt={10}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    {!submittable && (
-                      <Text color="alert">
-                        Some required fields are missing
-                      </Text>
-                    )}
-                    <Button
-                      type="submit"
-                      width="100%"
-                      isLoading={submitting}
-                      disabled={!submittable} //post page (won't be empty), thumbnail page (empty is ok since there's default one),  post details page (only advice can be empty), mealkit page (can't be empty)
-                    >
-                      Create Post
-                    </Button>
-                  </Flex>
-                )}
               </Form>
             </Box>
           )}

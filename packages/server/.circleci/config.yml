@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.10.1
+
 jobs:
   server-test:
     docker:
@@ -70,6 +73,20 @@ jobs:
 
       - store_artifacts:
           path: ~/project/packages/server/src/cypress/screenshots
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
+  server-successful-build-slack-notification:
+    docker:
+      - image: cimg/base:stable
+    resource_class: small
+    steps:
+      - run:
+          name: Success
+          command: |
+            exit 0
 
   server-deploy-test:
     docker:
@@ -149,6 +166,10 @@ jobs:
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh root@139.59.110.114 " docker pull kittishane/cookknow-test:$VERSION && docker tag kittishane/cookknow-test:$VERSION dokku/test-api:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   server-deploy-prod:
     docker:
@@ -240,20 +261,64 @@ jobs:
           name: ssh into dokku, pull from hub, tag, and deploy
           command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
 
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+
 workflows:
   version: 2
   server-workflow:
     jobs:
       - server-test:
           name: 🧪  Run jest and cypress
+          context:
+            - slack-secrets
+
+      - server-successful-build-slack-notification:
+          requires:
+            - 🧪  Run jest and cypress
+          context:
+            - slack-secrets
+          post-steps:
+            - slack/notify:
+                custom: |
+                  {
+                    "text": "",
+                    "blocks": [
+                      {
+                        "type": "section",
+                        "text": {
+                          "type": "mrkdwn",
+                          "text": "✅ *Success*: Build #${CIRCLE_BUILD_NUM} `${CIRCLE_PROJECT_REPONAME}` at `CIRCLE_JOB` on `${CIRCLE_BRANCH}` by `${CIRCLE_USERNAME}`"
+                        }
+                      },
+                      {
+                        "type": "actions",
+                        "elements": [
+                          {
+                            "type": "button",
+                            "text": {
+                              "type": "plain_text",
+                              "text": "View Job"
+                            },
+                            "url": "${CIRCLE_BUILD_URL}"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                event: always
 
       - server-deploy-test:
           name: 🚀 Deploy to test.cookknow
           requires:
             - 🧪  Run jest and cypress
+            # - server-successful-build-slack-notification
           filters:
             branches:
               only: test-master
+          context:
+            - slack-secrets
 
       - server-deploy-prod:
           name: 🚀 Deploy to production!
@@ -262,3 +327,5 @@ workflows:
           filters:
             branches:
               only: master
+          context:
+            - slack-secrets

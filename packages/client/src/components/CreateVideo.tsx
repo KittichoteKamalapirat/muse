@@ -1,26 +1,25 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/react";
 import axios from "axios";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import Button from "./atoms/Button";
+import FormActionButtons from "./form/FormActionButtons/FormActionButtons";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 
 interface CreateVideoProps {
-  nextStep: Function;
+  nextStep: () => void;
   handleMetadata: Function;
   videoS3UrlAndID: FileMetadata | null;
   setVideoS3UrlAndID: React.Dispatch<React.SetStateAction<FileMetadata | null>>;
   isGeneratingThumbnail: boolean;
 }
-
-const urlResolver = new UrlResolver();
 
 export const CreateVideo: React.FC<CreateVideoProps> = ({
   nextStep,
@@ -29,6 +28,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
   setVideoS3UrlAndID,
   isGeneratingThumbnail,
 }) => {
+  const router = useRouter();
   const [videoFile, setVideoFile] = useState({ file: null } as any); // is what uploaded to s3
 
   const handleOnDropVideo = (acceptedFiles: any, rejectedFiles: any) => {
@@ -73,7 +73,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
         onDrop={(acceptedFiles, rejectedFiles) =>
           handleOnDropVideo(acceptedFiles, rejectedFiles)
         }
-        // maxSize={1000 * 1}
+        aria-label="uploadPostVideo"
         multiple={false}
         accept="video/*"
       >
@@ -101,22 +101,20 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                     </Text>
                   </Flex>
                 ) : (
-                  <Box>
-                    <Box justifyContent="center" alignItems="end">
-                      <video
-                        controls
-                        width="90%"
-                        id="preview"
-                        crossOrigin="anonymous"
-                        onLoadedMetadata={() => {
-                          setTimeout(() => {
-                            handleMetadata();
-                            // nextStep();
-                          }, 1000); // 10 doesn't work
-                        }}
-                        src={videoS3UrlAndID.url}
-                      />
-                    </Box>
+                  <Box width="100%">
+                    <video
+                      controls
+                      id="preview"
+                      crossOrigin="anonymous"
+                      onLoadedMetadata={() => {
+                        setTimeout(() => {
+                          handleMetadata();
+                          // nextStep();
+                        }, 1000); // 10 doesn't work
+                      }}
+                      src={videoS3UrlAndID.url}
+                    />
+
                     <Flex
                       direction="row"
                       alignItems="center"
@@ -138,16 +136,13 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
 
       {/* hide if no s3 or is creating auto thumbnail */}
       {!videoS3UrlAndID || isGeneratingThumbnail ? null : (
-        <Flex justifyContent="right">
-          <Button
-            variant="transparent"
-            color="brand"
-            mt="5rem"
-            onClick={() => nextStep()}
-          >
-            Next
-          </Button>
-        </Flex>
+        <FormActionButtons
+          primaryText="Next"
+          primaryAriaLabel="Go to create thumbnail tab"
+          onPrimaryClick={nextStep}
+          secondaryText="Back"
+          onSecondaryClick={() => router.back()}
+        />
       )}
     </Box>
   );

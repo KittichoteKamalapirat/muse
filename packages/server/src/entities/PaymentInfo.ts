@@ -26,16 +26,12 @@ class PaymentInfo extends BaseEntity {
   bankCode: string;
 
   @Field(() => User)
-  @OneToOne(() => User, (user) => user.paymentInfo)
+  @OneToOne(() => User, (user) => user.paymentInfo, { onDelete: "CASCADE" })
   user: User;
 
   @Field(() => String)
   @Column()
   userId: string;
-
-  // relatioship with user ends
-
-  // relatioship with address start
 
   @CreateDateColumn()
   @Field()

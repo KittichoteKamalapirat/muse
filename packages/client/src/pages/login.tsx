@@ -1,16 +1,16 @@
-import React from "react";
-import { Formik, Form } from "formik";
-import { Box, Button, Flex, Link, Text, Heading } from "@chakra-ui/react";
-import { Wrapper } from "../components/Wrapper";
-import { InputField } from "../components/InputField";
-import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
-import { toErrorMap } from "../util/toErrorMap";
+import { Box, Flex, Heading, Link } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
 import { useRouter } from "next/dist/client/router";
 import NextLink from "next/link";
-import { withApollo } from "../util/withApollo";
-import { Layout } from "../components/Layout/Layout";
+import React from "react";
+import Button from "../components/atoms/Button";
+import { InputField } from "../components/InputField";
 import { WelcomeNav } from "../components/WelcomeNav";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
+import { toErrorMap } from "../util/toErrorMap";
+import { withApollo } from "../util/withApollo";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
@@ -91,13 +91,7 @@ export const Login: React.FC<{}> = ({}) => {
                   </NextLink>
                 </Box>
 
-                <Button
-                  mt={4}
-                  width="100%"
-                  type="submit"
-                  isLoading={isSubmitting}
-                >
-                  {" "}
+                <Button type="submit" isLoading={isSubmitting}>
                   Login
                 </Button>
               </Form>

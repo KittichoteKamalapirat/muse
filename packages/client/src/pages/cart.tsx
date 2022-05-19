@@ -1,28 +1,27 @@
-import { Image, Img } from "@chakra-ui/image";
-import { Box, Divider, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Avatar } from "@chakra-ui/avatar";
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import { Image } from "@chakra-ui/image";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { LinkBox, LinkOverlay } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import ButtonLink from "../components/atoms/LinkButton";
+import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import { Button, LinkBox, LinkOverlay } from "@chakra-ui/react";
-import { Wrapper } from "../components/Wrapper";
+import { Layout } from "../components/Layout/Layout";
+import { Loading } from "../components/skeletons/Loading";
+import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../components/Wrapper/Wrapper";
 import {
   CartItem,
   useCartItemsQuery,
   useDeleteCartItemMutation,
   useUpdateCartItemMutation,
 } from "../generated/graphql";
-import { withApollo } from "../util/withApollo";
-import NextLink from "next/link";
-import { EditCartItemAmountButton } from "../components/EditCartItemAmount";
-import { Avatar } from "@chakra-ui/avatar";
-import { ChevronRightIcon } from "@chakra-ui/icons";
 import {
   mappedCartItemsByCreatorResult,
   toCartItemsByCreatorMap,
 } from "../util/toCartItemsByCreatorMap";
-import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
-import { Layout } from "../components/Layout/Layout";
-import { Loading } from "../components/skeletons/Loading";
-import ButtonLink from "../components/atoms/LinkButton";
+import { withApollo } from "../util/withApollo";
 
 interface cartProps {}
 
@@ -74,7 +73,8 @@ const Cart: React.FC<cartProps> = ({}) => {
 
   return (
     <HeadingLayout heading="Cart">
-      <Wrapper>
+      {/* a lot margin otherwise bottom nav hides cartItem */}
+      <Wrapper mb={32}>
         <ContentWrapper>
           <Heading>My cart</Heading>
 
@@ -114,7 +114,7 @@ const Cart: React.FC<cartProps> = ({}) => {
                                 <Image
                                   src={cartItem.mealkit.thumbnail.url}
                                   alt="image"
-                                  fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                  fallbackSrc="oops.png"
                                 />
                               </Box>
 

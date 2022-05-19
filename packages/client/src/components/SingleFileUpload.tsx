@@ -1,31 +1,11 @@
-import { PlusSquareIcon, ChevronLeftIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  Flex,
-  IconButton,
-  Button,
-  Img,
-  Text,
-  Heading,
-  Image,
-} from "@chakra-ui/react";
+import { PlusSquareIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import {
-  Mutation,
-  MutationUpdateAvatarArgs,
-  UpdateAvatarDocument,
-  UpdateAvatarMutation,
-  useManuallyConfirmPaymentLazyQuery,
-  useManuallyConfirmPaymentQuery,
-  useSignSingleFileS3Mutation,
-  useUpdateAvatarMutation,
-  useUploadSlipMutation,
-} from "../generated/graphql";
-import { withApollo } from "../util/withApollo";
+import { useSignSingleFileS3Mutation } from "../generated/graphql";
 
 interface SingleFileUploadProps {
   params?: string;
@@ -209,8 +189,8 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
           <Image
             src={thumbnailPreview}
             alt="image"
-            boxSize="50%"
-            fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+            boxSize={["50%", "30%"]}
+            fallbackSrc="oops.png"
           />
         </Flex>
       )}
@@ -253,7 +233,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                       src={thumbnailPreview}
                       alt="image"
                       boxSize="2rem"
-                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                      fallbackSrc="oops.png"
                     />
                   )}
                   {updateAvatar && (

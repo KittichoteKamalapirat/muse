@@ -6,19 +6,19 @@ export class PostInput {
   @Field()
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   text: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   instruction: string[];
 
-  @Field()
+  @Field({ nullable: true })
   cooktime: string;
 
-  @Field()
+  @Field({ nullable: true })
   portion: number;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   advice: string[];
 
   @Field(() => [IngredientInput])

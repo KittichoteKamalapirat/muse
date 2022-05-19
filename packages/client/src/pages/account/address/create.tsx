@@ -1,10 +1,11 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
-import { Layout } from "../../../components/Layout/Layout";
-import { Wrapper } from "../../../components/Wrapper";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   AddressInput,
   useCreateAddressMutation,
@@ -42,9 +43,8 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
     return;
   };
   return (
-    <Layout>
-      <Wrapper>
-        <h1>สร้างที่อยู่การจัดส่ง</h1>
+    <HeadingLayout heading="Create address">
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             name: "",
@@ -61,24 +61,27 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              <InputField name="name" placeholder="Name" label="Name" />
+              <InputField name="name" placeholder="Name" label="Name" mt={4} />
               <InputField
                 name="phonenumber"
                 type="tel"
                 placeholder="phonenumber"
                 label="phonenumber"
+                mt={4}
               />
               <InputField
                 name="line1"
                 placeholder="Address line 1"
                 label="line1"
+                mt={4}
               />
               <InputField
                 name="line2"
                 placeholder="Address line 2"
                 label="line2"
+                mt={4}
               />
-              <Flex>
+              <Flex mt={4}>
                 <InputField
                   name="subdistrict"
                   placeholder="subdistrict"
@@ -90,37 +93,34 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
                   label="district"
                 />
               </Flex>
-              <Flex>
-                {" "}
+              <Flex mt={4}>
                 <InputField
                   name="province"
                   placeholder="province"
                   label="province"
-                />{" "}
+                />
                 <InputField
                   name="country"
                   placeholder="country"
                   label="country"
                 />
               </Flex>
-              <Flex>
-                {" "}
+              <Flex mt={4}>
                 <InputField
                   name="postcode"
                   placeholder="postcode"
                   label="postcode"
-                />{" "}
+                />
               </Flex>
 
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
-                Update
+              <Button mt={10} type="submit" isLoading={isSubmitting}>
+                Create
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
-    </Layout>
+      </XWrapper>
+    </HeadingLayout>
   );
 };
 

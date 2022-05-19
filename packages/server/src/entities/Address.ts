@@ -63,7 +63,9 @@ class Address extends BaseEntity {
   userId: string;
 
   @Field(() => User)
-  @OneToOne(() => User, (user) => user.address)
+  @OneToOne(() => User, (user) => user.address, {
+    onDelete: "CASCADE",
+  })
   @JoinColumn()
   user: User;
 

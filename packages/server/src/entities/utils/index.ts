@@ -30,6 +30,7 @@ export { default as TimelineDetail } from "./tracking/ObjectType/TimelineDetail"
 // user
 export { default as UserReview } from "./user/ObjectType/UserReview";
 export { default as UserResponse } from "./user/ObjectType/UserResponse";
+export { default as UsernamePasswordInput } from "./user/InputType/UsernamePasswordInput";
 
 export { default as UserInput } from "./user/InputType/UserInput";
 
@@ -48,6 +49,7 @@ export { default as PaymentInfoResponse } from "./paymentInfo/ObjectType/Payment
 
 // mealkit
 export { default as MealkitInput } from "./mealkit/InputType/MealkitInput";
+export { default as MealkitFileInput } from "./mealkit/InputType/MealkitFileInput";
 
 export { default as SignedS3Result } from "./mealkit/ObjectType/SignedS3Result";
 

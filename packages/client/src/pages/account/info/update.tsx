@@ -1,19 +1,18 @@
-import { Button } from "@chakra-ui/button";
-import { Flex, Text } from "@chakra-ui/layout";
-import { Formik, Form } from "formik";
+import { Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
-import { Wrapper } from "../../../components/Wrapper";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   useMeQuery,
   UserInput,
   useUpdateUserMutation,
 } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
-import { Layout } from "../../../components/Layout/Layout";
-import { Loading } from "../../../components/skeletons/Loading";
 
 interface userProps {}
 
@@ -41,7 +40,7 @@ const UpdateUser: React.FC<userProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="Edit Profile">
-      <Wrapper>
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             username: meData?.me?.username!,
@@ -58,27 +57,33 @@ const UpdateUser: React.FC<userProps> = ({}) => {
                 placeholder="username"
                 label="username"
               />{" "}
-              <InputField name="email" placeholder="email" label="email" />{" "}
+              <InputField
+                name="email"
+                placeholder="email"
+                label="email"
+                mt={2}
+              />
               <InputField
                 name="phonenumber"
                 type="tel"
                 placeholder="phonenumber"
                 label="phonenumber"
+                mt={2}
               />
               <InputField
                 name="about"
                 textarea={true}
                 placeholder="about"
                 label="about"
+                mt={2}
               />
-              <Button mt={4} type="submit" isLoading={isSubmitting}>
-                {" "}
+              <Button type="submit" isLoading={isSubmitting} mt={10}>
                 Update
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

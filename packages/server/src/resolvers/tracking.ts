@@ -8,6 +8,7 @@ import {
   Resolver,
   UseMiddleware,
 } from "type-graphql";
+import { rollbar } from "../config/initializers/rollbar";
 import { CartItem, CartItemNoti, Tracking } from "../entities";
 import { CartItemStatus } from "../entities/CartItem";
 import { TrackingInput } from "../entities/utils";
@@ -107,7 +108,6 @@ export class TrackingResolver {
 
       // if not found, create blank tracking and don't update cartItemStatus
       if (response.status !== 200) {
-        console.log("not found");
         const tracking = await Tracking.create({
           trackingNo: input.trackingNo,
           isFound: false,
@@ -179,6 +179,8 @@ export class TrackingResolver {
               cartItem.mealkit.name,
               tracking.courier
             ),
+            detailUrl: `/order/tracking/${tracking.id}`,
+            avatarHref: `noti/${CartItemStatus.OnTheWay}.png`, // running truck image
             cartItemId: cartItem.id,
             userId: cartItem.userId,
           }).save();
@@ -203,7 +205,7 @@ export class TrackingResolver {
 
       return tracking;
     } catch (error) {
-      console.log(error.message);
+      rollbar.log(error.message);
       return error;
     }
   }

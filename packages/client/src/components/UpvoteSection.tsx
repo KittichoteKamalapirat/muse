@@ -36,7 +36,6 @@ const updateAfterVote = (
     `,
   });
 
-  console.log({ data });
   if (data) {
     if (data.voteStatus === value) {
       return;
@@ -52,6 +51,7 @@ const updateAfterVote = (
       `,
       data: { points: newPoints, voteStatus: value },
     });
+    // cache.evict({ fieldName: "votedPosts:{}" });
   }
 };
 
@@ -70,10 +70,12 @@ export const UpvoteSection: React.FC<UpvoteSectionProps> = ({ post }) => {
           await vote({
             variables: {
               postId: post.id,
+              // if already voted, return 0, if not voted yet, return 1
               value: post.voteStatus === 1 ? 0 : 1,
             },
-            update: (cache) =>
-              updateAfterVote(post.voteStatus === 1 ? -1 : 1, post.id, cache),
+            update: (cache) => {
+              updateAfterVote(post.voteStatus === 1 ? -1 : 1, post.id, cache);
+            },
           });
           setLoadingState("not-loading");
         }}

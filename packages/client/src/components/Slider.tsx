@@ -8,6 +8,7 @@ import "swiper/css/effect-coverflow";
 import React from "react";
 import { Img } from "@chakra-ui/image";
 import { Box, Flex } from "@chakra-ui/layout";
+import videosSources from "../types/utils/videoSources";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
@@ -36,67 +37,18 @@ export const Slider: React.FC<SliderProps> = ({}) => {
           clickable: true,
         }}
       >
-        {" "}
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/Vokda_square.mp4"
-            style={{ margin: "auto" }}
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/vodka.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/Tenderloin_square.mp4"
-            style={{ margin: "auto" }}
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/tenderloin.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/Sausage_square.mp4"
-            style={{ margin: "auto" }}
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/norcina.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/Napolitana_square.mp4"
-            style={{ margin: "auto" }}
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/napolitan.png"
-          />
-        </SwiperSlide>
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            style={{ margin: "auto" }}
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mentaiko_square.mp4"
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mentaiko.png"
-          ></video>
-        </SwiperSlide>
-        <SwiperSlide>
-          <video
-            controls
-            width="100%"
-            id="preview"
-            src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/corn+pesto_square.mp4"
-            style={{ margin: "auto" }}
-            poster="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/corn.png"
-          />
-        </SwiperSlide>
+        {videosSources.map((videoSrc) => (
+          <SwiperSlide key={videoSrc.poster}>
+            <video
+              controls
+              width="100%"
+              id="preview"
+              src={videoSrc.src}
+              style={{ margin: "auto" }}
+              poster={videoSrc.poster}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </Flex>
   );

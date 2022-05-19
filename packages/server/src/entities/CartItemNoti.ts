@@ -17,12 +17,6 @@ class CartItemNoti extends BaseEntity {
   @Field()
   id: number;
 
-  // @Column()
-  // @Field((type) => String)
-  // message(): string {
-  //   return `You received an order for ${this.cartItem.quantity} ${this.cartItem.mealkit.name} from ${this.cartItem.user.username}.`;
-  // }
-
   @Field()
   @Column({ default: false })
   read: boolean;
@@ -33,6 +27,14 @@ class CartItemNoti extends BaseEntity {
 
   @Field()
   @Column()
+  avatarHref: string; // could be url or path to icon
+
+  @Field()
+  @Column()
+  detailUrl: string;
+
+  @Field()
+  @Column()
   userId: string; // could be for seller or buyer, so userId instead of  creatorId is preferred
 
   @Field()
@@ -40,7 +42,9 @@ class CartItemNoti extends BaseEntity {
   cartItemId: number;
 
   @Field(() => CartItem)
-  @ManyToOne(() => CartItem, (cartItem) => cartItem.cartItemNotis)
+  @ManyToOne(() => CartItem, (cartItem) => cartItem.cartItemNotis, {
+    onDelete: "CASCADE",
+  })
   cartItem: CartItem;
 
   @CreateDateColumn()

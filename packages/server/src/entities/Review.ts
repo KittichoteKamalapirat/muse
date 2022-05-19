@@ -33,9 +33,7 @@ class Review extends BaseEntity {
   @Field(() => [String], { nullable: true })
   images: string[];
 
-  // relationship with user
-
-  @ManyToOne(() => User, (user) => user.reviews)
+  @ManyToOne(() => User, (user) => user.reviews, { onDelete: "CASCADE" })
   @Field(() => User)
   user: User;
 
@@ -43,9 +41,9 @@ class Review extends BaseEntity {
   @Column()
   userId: string;
 
-  // relationship with mealkit
-
-  @ManyToOne(() => Mealkit, (mealkit) => mealkit.reviews)
+  @ManyToOne(() => Mealkit, (mealkit) => mealkit.reviews, {
+    onDelete: "CASCADE",
+  })
   @Field(() => Mealkit)
   mealkit: Mealkit;
 

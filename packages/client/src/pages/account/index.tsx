@@ -3,7 +3,6 @@ import { Center, Heading } from "@chakra-ui/layout";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Flex,
   Link,
@@ -18,6 +17,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import Button from "../../components/atoms/Button";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { Layout } from "../../components/Layout/Layout";
 import { Loading } from "../../components/skeletons/Loading";
@@ -28,20 +28,21 @@ import SvgRateIcon from "../../components/svgComponents/RateIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
 import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   CartItemStatus,
   useLogoutMutation,
   useMeQuery,
   useSwitchAccountTypeMutation,
+  useUserOrdersQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
+import Badge from "../../components/atoms/Badge";
+import { Error } from "../../components/skeletons/Error";
 
-interface indexProps {}
-
-const Account: React.FC<indexProps> = ({}) => {
-  const { data: meData, loading } = useMeQuery();
+const Account = () => {
+  const { data: meData, loading, error } = useMeQuery();
   const router = useRouter();
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apolloClient = useApolloClient();
@@ -49,14 +50,90 @@ const Account: React.FC<indexProps> = ({}) => {
   const [switchAccountType, { data: isCreator }] =
     useSwitchAccountTypeMutation();
 
+  // PaymentPending
+  const {
+    data: paymentPendingData,
+    loading: paymentPendingLoading,
+    error: paymentPendingError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.PaymentPending },
+  });
+
+  const paymentPendingNum = paymentPendingData?.userOrders.length;
+
+  // ToDeliver
+  const {
+    data: toDeliverData,
+    loading: toDeliverLoading,
+    error: toDeliverError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.ToDeliver },
+  });
+
+  const toDeliverNum = toDeliverData?.userOrders.length;
+
+  // OnTheWay
+  const {
+    data: onTheWayData,
+    loading: onTheWayLoading,
+    error: onTheWayError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.OnTheWay },
+  });
+
+  const onTheWayNum = onTheWayData?.userOrders.length;
+
+  // Delivered
+  const {
+    data: deliveredData,
+    loading: deliveredLoading,
+    error: deliveredError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.Delivered },
+  });
+
+  const deliveredNum = deliveredData?.userOrders.length;
+
+  // Received
+  const {
+    data: receivedData,
+    loading: receivedLoading,
+    error: receivedError,
+  } = useUserOrdersQuery({
+    variables: { status: CartItemStatus.Received },
+  });
+
+  const receivedNum = receivedData?.userOrders.length;
   let body;
-  if (loading) {
+  if (
+    loading ||
+    toDeliverLoading ||
+    onTheWayLoading ||
+    deliveredLoading ||
+    receivedLoading
+  ) {
     return (
       <Layout>
         <Loading />
       </Layout>
     );
-  } else if (!loading && !meData?.me) {
+  }
+
+  if (
+    error ||
+    toDeliverError ||
+    onTheWayError ||
+    deliveredError ||
+    receivedError
+  ) {
+    return (
+      <Layout>
+        <Error />
+      </Layout>
+    );
+  }
+
+  if (!loading && !meData?.me) {
     body = (
       <Flex
         minH="500px"
@@ -64,7 +141,6 @@ const Account: React.FC<indexProps> = ({}) => {
         justifyContent="center"
         alignItems="center"
       >
-        {" "}
         <Box textAlign="center">
           <Text>You are not signed in</Text>
           <Text>Please </Text>
@@ -113,69 +189,98 @@ const Account: React.FC<indexProps> = ({}) => {
         <Box mt={4}>
           <Heading fontSize="md">My orders</Heading>
 
-          <Flex mt={4}>
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.PaymentPending },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgWalletIcon />
-                </Center>
+          <Flex mt={4} justifyContent="space-around">
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.PaymentPending },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Badge
+                    isDisplayed={paymentPendingNum === 0}
+                    badgeContent={paymentPendingNum as number}
+                  >
+                    <Center>
+                      <SvgWalletIcon />
+                    </Center>
+                  </Badge>
 
-                <Text>To pay</Text>
-              </Link>
-            </NextLink>
+                  <Text>To pay</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.ToDeliver },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgBoxIcon />
-                </Center>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.ToDeliver },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Badge
+                    isDisplayed={toDeliverNum === 0}
+                    badgeContent={toDeliverNum as number}
+                  >
+                    <Center>
+                      <SvgBoxIcon />
+                    </Center>
+                  </Badge>
 
-                <Text>To deliver</Text>
-              </Link>
-            </NextLink>
+                  <Text>To deliver</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.OnTheWay },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgTruckIcon fontSize="1.2rem" />
-                </Center>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.OnTheWay },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Badge
+                    isDisplayed={onTheWayNum === 0}
+                    badgeContent={onTheWayNum as number}
+                  >
+                    <Center>
+                      <SvgTruckIcon fontSize="1.2rem" />
+                    </Center>
+                  </Badge>
 
-                <Text>To recieve</Text>
-              </Link>
-            </NextLink>
-            <NextLink
-              href={{
-                pathname: "/order",
-                query: { status: CartItemStatus.PaymentPending },
-              }}
-              passHref
-            >
-              <Link textAlign="center" flex={1}>
-                <Center>
-                  <SvgRateIcon fontSize="1.2rem" />
-                </Center>
+                  <Text>To recieve</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
 
-                <Text>Rate</Text>
-              </Link>
-            </NextLink>
+            <LinkBox>
+              <NextLink
+                href={{
+                  pathname: "/order",
+                  query: { status: CartItemStatus.Received },
+                }}
+                passHref
+              >
+                <LinkOverlay textAlign="center" flex={1}>
+                  <Badge
+                    isDisplayed={receivedNum === 0}
+                    badgeContent={receivedNum as number}
+                  >
+                    <Center>
+                      <SvgRateIcon fontSize="1.2rem" />
+                    </Center>
+                  </Badge>
+
+                  <Text>Rate</Text>
+                </LinkOverlay>
+              </NextLink>
+            </LinkBox>
           </Flex>
           <Divider mt={2} />
 
@@ -233,7 +338,7 @@ const Account: React.FC<indexProps> = ({}) => {
                   passHref
                 >
                   <LinkOverlay>
-                    <Text fontSize="md">My profile</Text>
+                    <Text fontSize="md">Address</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
@@ -248,10 +353,10 @@ const Account: React.FC<indexProps> = ({}) => {
                 m={1}
                 rounded="md"
               >
-                <HeartIcon />
+                <HeartIcon color="#eb5757" />
                 <NextLink href="/like" as="/like" passHref>
                   <LinkOverlay>
-                    <Text fontSize="md">My profile</Text>
+                    <Text fontSize="md">Liked</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
@@ -288,7 +393,6 @@ const Account: React.FC<indexProps> = ({}) => {
                     })
                   }
                 >
-                  {" "}
                   Switch to Creator Account
                 </MenuItem>
                 <MenuItem
@@ -318,17 +422,18 @@ const Account: React.FC<indexProps> = ({}) => {
           <Text fontSize="sm" color={inActiveGray}>
             Current: {meData?.me?.isCreator ? "Creator" : "Personal"} Account
           </Text>
+
           <Flex justifyContent="center">
             <Button
               onClick={async () => {
                 await logout();
                 router.push("/");
                 await apolloClient.resetStore();
-
-                // router.reload();
               }}
               isLoading={logoutLoading}
-              mt={10}
+              variant="outline"
+              color="black"
+              width="min-content"
             >
               logout
             </Button>

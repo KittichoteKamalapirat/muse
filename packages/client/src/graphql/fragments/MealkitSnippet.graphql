@@ -11,6 +11,7 @@ fragment MealkitSnippet on Mealkit {
   deliveryFee
   thumbnail {
     id
+    name
     url
   }
   creator {
@@ -19,6 +20,8 @@ fragment MealkitSnippet on Mealkit {
   }
   mealkitFiles {
     id
+    name
     url
+    fileType
   }
 }

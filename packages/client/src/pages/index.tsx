@@ -1,27 +1,17 @@
-import { PostsDocument, useMeQuery, usePostsQuery } from "../generated/graphql";
-
+import { LinkBox, LinkOverlay } from "@chakra-ui/layout";
+import { Avatar, Box, Flex, Heading, Img, Stack, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { Link, LinkBox, LinkOverlay } from "@chakra-ui/layout";
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  Image,
-  Avatar,
-  Stack,
-  Text,
-  Img,
-} from "@chakra-ui/react";
-import React from "react";
-import { UpvoteSection } from "../components/UpvoteSection";
+import React, { useCallback, useRef } from "react";
+import Button from "../components/atoms/Button";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
-import { withApollo } from "../util/withApollo";
-import { Welcome } from "../components/Welcome";
-
-import { NewsFeedSkeleton } from "../components/skeletons/NewsFeedSkeleton";
 import { Layout } from "../components/Layout/Layout";
 import { ReviewStars } from "../components/ReviewStars";
+import { Error } from "../components/skeletons/Error";
+import { NewsFeedSkeleton } from "../components/skeletons/NewsFeedSkeleton";
+import { UpvoteSection } from "../components/UpvoteSection";
+import { Welcome } from "../components/Welcome";
+import { useMeQuery, usePostsQuery } from "../generated/graphql";
+import { withApollo } from "../util/withApollo";
 
 const Index = () => {
   const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
@@ -32,6 +22,29 @@ const Index = () => {
       cursor: null as null | string,
     },
   });
+
+  const observer = useRef<IntersectionObserver | null>(null);
+
+  const lastPostRef = useCallback(
+    // node is basically the current last post
+    (node) => {
+      if (observer.current) observer.current.disconnect(); // disconnect from the previous last element
+      observer.current = new IntersectionObserver((entries) => {
+        // entries is an array of everything it is watching
+        // in our case, there is just one thing
+        if (data?.posts.hasMore && entries[0].isIntersecting) {
+          fetchMore({
+            variables: {
+              limit: variables?.limit,
+              cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+            },
+          });
+        }
+      });
+      if (node) observer.current.observe(node); // observe our last node
+    },
+    [data?.posts.hasMore]
+  );
 
   // 1. both loading -> retunr skeleton
   // 2. not meLoading && no meData -> redirect to welcome
@@ -46,12 +59,7 @@ const Index = () => {
   }
 
   if (!data) {
-    return (
-      <div>
-        <div>query failed</div>
-        <div>{error?.message}</div>
-      </div>
-    );
+    return <Error text={error?.message} />;
   }
   return (
     <Layout>
@@ -63,11 +71,14 @@ const Index = () => {
         maxW={["none", "none", "30%", " 20%"]}
         mx={["none", "auto"]}
       >
-        {data!.posts.posts.map((post) =>
+        {data!.posts.posts.map((post, index) =>
           !post ? (
             <NewsFeedSkeleton />
           ) : (
-            <Box key={post.id}>
+            <Box
+              key={post.id}
+              ref={data.posts.posts.length === index + 1 ? lastPostRef : null}
+            >
               <Flex alignItems="center" justifyContent="space-between">
                 <LinkBox>
                   <NextLink
@@ -185,7 +196,7 @@ const Index = () => {
             }}
             isLoading={loading}
             bgColor="lightgrey"
-            m="auto"
+            variant="ghost"
             my={8}
           >
             load more

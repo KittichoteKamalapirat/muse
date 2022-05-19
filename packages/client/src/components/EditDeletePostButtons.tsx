@@ -37,9 +37,7 @@ export const EditDeletePostButtons: React.FC<EditDeletePostButtonsProps> = ({
         <MenuList bgColor="white">
           <NextLink href="/post/edit/[id]" as={`/post/edit/${id}`} passHref>
             <MenuItem icon={<EditIcon />} as={Link}>
-              {/* <Button as={Link} aria-label="Edit post" bgColor="white"> */}
               Edit Post
-              {/* </Button> */}
             </MenuItem>
           </NextLink>
 

@@ -1,4 +1,4 @@
-import { ArrowUpIcon, ChevronLeftIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
 import {
   Box,
@@ -6,19 +6,20 @@ import {
   CheckboxGroup,
   Flex,
   Heading,
-  IconButton,
   Image,
+  Img,
   Stack,
   Text,
+  Wrap,
+  WrapItem,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Form } from "formik";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import UrlResolver from "../lib/UrlResolver";
+import { urlResolver } from "../lib/UrlResolver";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
-
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import { InputField } from "./InputField";
@@ -33,18 +34,15 @@ interface CreateMealkitProps {
   input: {
     name: string;
     price: string;
-    portion: string;
+    mealkitPortion: string;
     images: string[];
     items: string[];
   };
   setInput: Function;
-  nextStep: Function;
   prevStep: Function;
   mealkitS3UrlAndIds: FileMetadata[];
   setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;
 }
-
-const urlResolver = new UrlResolver();
 
 export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   ingredientsField,
@@ -90,39 +88,31 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
             fileType: file.type,
           });
 
-          if (index === mealkitFiles.length - 1) {
+          // if last loop, can't use index because it's async (2->4->3->1 could happen)
+          if (fileMetadatas.length === mealkitFiles.length) {
             setMealkitS3UrlAndIds(fileMetadatas);
           }
         });
       });
     }
-  }, [mealkitFiles.length]);
+  }, [mealkitFiles, setMealkitS3UrlAndIds]);
 
   return (
-    <Box>
-      {mealkitS3UrlAndIds.length === 0 ? null : (
-        <Flex overflowX="scroll">
-          {/* if there is file preview */}{" "}
-          {mealkitS3UrlAndIds.map((s3UrlAndId, index: number) => (
-            <Box key={index} mx={2}>
-              {s3UrlAndId.fileType?.includes("video") ? (
-                <video controls width="50%">
-                  <source src={s3UrlAndId.url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <Image
-                  src={s3UrlAndId.url}
-                  alt="meal kit image"
-                  height="200px"
-                  // vh="80%"
-                  borderRadius={10}
-                />
-              )}
-            </Box>
-          ))}
-        </Flex>
-      )}
+    <Box mt={4}>
+      <Wrap spacing="2%" justify="center">
+        {mealkitS3UrlAndIds.map((s3UrlAndId, index) => (
+          <WrapItem key={index} m={1} width="48%">
+            {s3UrlAndId.fileType!.includes("video") ? (
+              <video controls>
+                <source src={s3UrlAndId.url} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <Img src={s3UrlAndId.url} alt="meal kit" borderRadius="10%" />
+            )}
+          </WrapItem>
+        ))}
+      </Wrap>
 
       <Dropzone
         onDrop={(acceptedFiles, rejectedFiles) =>
@@ -172,74 +162,71 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
       </Dropzone>
 
       <Form>
-        {/* <Heading>Create a mealkit</Heading> */}
-
-        <InputField
-          name="name"
-          value={input.name}
-          placeholder="name of the mealkit"
-          onChange={(e) => setInput({ ...input, name: e.target.value })}
-        />
-        <InputGroup>
-          <InputLeftAddon mt={2}>Price</InputLeftAddon>
+        <Box mt={4}>
+          <Heading fontSize="md">Meal Kit Name</Heading>
           <InputField
-            name="price"
-            type="number"
-            value={input.price}
-            placeholder="price"
-            variant="flushed"
-            onChange={(e) => setInput({ ...input, price: e.target.value })}
+            name="name"
+            value={input.name}
+            placeholder="name of the mealkit"
+            onChange={(e) => setInput({ ...input, name: e.target.value })}
           />
-          <InputRightAddon mt={2}>THB</InputRightAddon>
-        </InputGroup>
+        </Box>
 
-        {/* <Heading fontSize="md" whiteSpace="nowrap">
-          Portion for
-        </Heading> */}
-        <Flex alignItems="center">
+        <Box mt={4}>
+          <Heading fontSize="md">Price</Heading>
+
           <InputGroup>
-            <InputLeftAddon mt={2}>Portion for</InputLeftAddon>
-            {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
             <InputField
-              name="portion"
+              name="price"
               type="number"
-              value={input.portion}
-              placeholder="portion"
-              variant="flushed"
-              onChange={(e) => setInput({ ...input, portion: e.target.value })}
-            ></InputField>
-
-            <InputRightAddon mt={2}>people</InputRightAddon>
+              value={input.price}
+              placeholder="price"
+              onChange={(e) => setInput({ ...input, price: e.target.value })}
+            />
+            <InputRightAddon>THB</InputRightAddon>
           </InputGroup>
-        </Flex>
-        {/* <InputField
-          name="items"
-          type="text"
-          value={input.items}
-          placeholder="items"
-          onChange={(e) => setInput({ ...input, items: e.target.value })}
-        ></InputField> */}
-        <Text>items included</Text>
+        </Box>
+
+        <Box mt={4}>
+          <Heading fontSize="md">Portion For</Heading>
+
+          <InputGroup>
+            <InputField
+              name="mealkitPortion"
+              type="number"
+              value={input.mealkitPortion}
+              placeholder="portion"
+              onChange={(e) =>
+                setInput({ ...input, mealkitPortion: e.target.value })
+              }
+            />
+
+            <InputRightAddon>people</InputRightAddon>
+          </InputGroup>
+        </Box>
 
         {/* checkbox */}
         <Box my={4}>
-          {" "}
           <Heading fontSize="lg">Items include</Heading>
-          {ingredientsField.length === 0 ||
-            (ingredientsField.length === 1 &&
-            ingredientsField[0].ingredient === "" ? (
-              <div>You have not added any ingredients</div>
-            ) : (
-              <CheckboxGroup
-                colorScheme="green"
-                // defaultValue={ingredientsField.map(
-                //   (ingredientWithUnit) => ingredientWithUnit.ingredient
-                // )}
-              >
-                {ingredientsField &&
-                  ingredientsField.map((ingredientWitUnit, index) => (
+          {ingredientsField.filter(
+            (ingredientObj) => ingredientObj.ingredient !== ""
+          ).length === 0 ? (
+            <div>
+              You have not added any ingredients. Please add them in the
+              previous page.
+            </div>
+          ) : (
+            <CheckboxGroup
+              colorScheme="green"
+              // defaultValue={ingredientsField.map(
+              //   (ingredientWithUnit) => ingredientWithUnit.ingredient
+              // )}
+            >
+              {ingredientsField &&
+                ingredientsField
+                  .filter((ingredientObj) => ingredientObj.ingredient !== "")
+                  .map((ingredientWitUnit, index) => (
                     <Stack key={index}>
-                      {" "}
                       <Checkbox
                         colorScheme="green"
                         value={ingredientWitUnit.ingredient}
@@ -271,21 +258,10 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                       </Checkbox>
                     </Stack>
                   ))}
-              </CheckboxGroup>
-            ))}
+            </CheckboxGroup>
+          )}
         </Box>
       </Form>
-
-      <Flex justifyContent="space-between">
-        <IconButton
-          aria-label="Search database"
-          icon={<ChevronLeftIcon />}
-          onClick={() => prevStep()}
-          fontSize="x-large"
-          color="dark.200"
-          variant="transparent"
-        />
-      </Flex>
     </Box>
   );
 };

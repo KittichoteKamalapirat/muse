@@ -5,6 +5,6 @@ const creatorCreatedTrackingInApp = (
 ) =>
   `${courierName} is delivering ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""
-  } to you. Track your product.`;
+  } to you. You can track the product here.`;
 
 export default creatorCreatedTrackingInApp;

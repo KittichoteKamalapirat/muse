@@ -11,6 +11,7 @@ mutation createOrder(
     id
     grossOrder
     userId
+    paymentId
     cartItemsByCreator {
       creatorId
       deliveryFee

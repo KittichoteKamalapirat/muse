@@ -1,7 +1,6 @@
-import { Button } from "@chakra-ui/button";
 import { AddIcon } from "@chakra-ui/icons";
 import { Image } from "@chakra-ui/image";
-import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import {
   Accordion,
   AccordionButton,
@@ -11,16 +10,16 @@ import {
   Avatar,
   Divider,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import LinkButton from "../../components/atoms/LinkButton";
 import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 import { AddressComponent } from "../../components/Icons/AddressComponent";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import { primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
   useAddressQuery,
@@ -116,11 +115,9 @@ const Order: React.FC<OrderProps> = ({}) => {
                     </h2>
                     <AccordionPanel pb={4}>
                       <AddressComponent address={address?.address} />
-                      <NextLink href="/account/address/edit" passHref>
-                        <Link>
-                          <Button my="10px">Edit Address</Button>
-                        </Link>
-                      </NextLink>
+                      <LinkButton pathname="/account/address/edit">
+                        Edit Address
+                      </LinkButton>
                     </AccordionPanel>
                   </AccordionItem>
                 </Accordion>
@@ -128,13 +125,13 @@ const Order: React.FC<OrderProps> = ({}) => {
             ) : (
               <Box>
                 <Text>You have not added your address. Please add one</Text>
-                <NextLink
-                  href="/account/address/create"
-                  as="/account/address/create"
-                  passHref
+
+                <LinkButton
+                  pathname="/account/address/create"
+                  leftIcon={<AddIcon />}
                 >
-                  <Button leftIcon={<AddIcon />}>Add address</Button>
-                </NextLink>
+                  Add Address
+                </LinkButton>
               </Box>
             ))}
 
@@ -176,7 +173,7 @@ const Order: React.FC<OrderProps> = ({}) => {
                                     <Image
                                       src={cartItem.mealkit.thumbnail.url}
                                       alt="image"
-                                      fallbackSrc="https://via.placeholder.com/50x500?text=Image+Has+to+be+Square+Ratio"
+                                      fallbackSrc="oops.png"
                                     />
                                   </Box>
 
@@ -254,17 +251,10 @@ const Order: React.FC<OrderProps> = ({}) => {
                       <Text>Gross Order</Text>
                       <Text>{order.grossOrder}</Text>
                     </Flex>
-                    <NextLink
-                      href="/payment/[id]"
-                      as={`/payment/${order.paymentId}`}
-                      passHref
-                    >
-                      <Link>
-                        <Button my="10px" width="100%">
-                          Make a payment
-                        </Button>
-                      </Link>
-                    </NextLink>
+
+                    <LinkButton href={`/payment/${order.paymentId}`}>
+                      Make a payment
+                    </LinkButton>
                   </Box>
                 ))}
               </Box>
