@@ -8,8 +8,6 @@ export default class Document extends NextDocument {
   render() {
     return (
       <Html>
-        {/* <Head /> */}
-
         <Head>
           {/* Rollbar */}
           <script
@@ -31,6 +29,7 @@ var _rollbarConfig = {
           />
 
           <link rel="shortcut icon" href="/favicon.ico" />
+          <meta name="theme-color" content="#3dc795" />
         </Head>
         {/* <link rel="shortcut icon" href="/public/static/favicon.ico" /> */}
         {/* </Head> */}

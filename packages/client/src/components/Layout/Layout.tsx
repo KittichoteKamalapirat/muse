@@ -18,7 +18,6 @@ export const Layout: React.FC<LayoutProps> = ({
     <>
       <Head>
         <title>{`${heading} - Cookknow `} </title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
       <Box mt="60px" mb="80px">
