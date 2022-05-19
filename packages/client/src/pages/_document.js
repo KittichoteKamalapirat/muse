@@ -28,7 +28,7 @@ var _rollbarConfig = {
             }}
           />
 
-          <link rel="shortcut icon" href="icons//favicon.ico" />
+          <link rel="shortcut icon" href="/icons//favicon.ico" />
           <meta name="theme-color" content="#3dc795" />
           <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         </Head>

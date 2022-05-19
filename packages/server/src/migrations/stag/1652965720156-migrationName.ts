@@ -1,10 +1,11 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+/* eslint-disable class-methods-use-this */
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class migrationName1652965720156 implements MigrationInterface {
-    name = 'migrationName1652965720156'
+  name = "migrationName1652965720156";
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "user" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "username" character varying NOT NULL,
@@ -27,7 +28,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "post" (
                 "id" SERIAL NOT NULL,
                 "title" character varying NOT NULL,
@@ -45,7 +46,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_be5fda3aac270b134ff9c21cdee" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "mealkit_file" (
                 "id" SERIAL NOT NULL,
                 "name" character varying NOT NULL,
@@ -57,7 +58,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_f8cdbe58ebc68833f8f7e17e4f0" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "mealkit" (
                 "id" SERIAL NOT NULL,
                 "name" character varying NOT NULL,
@@ -74,7 +75,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_118ea1c984f953411eb9d9d13a6" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "cart_item" (
                 "id" SERIAL NOT NULL,
                 "quantity" integer NOT NULL,
@@ -89,7 +90,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_bd94725aa84f8cf37632bcde997" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "cart_item_noti" (
                 "id" SERIAL NOT NULL,
                 "read" boolean NOT NULL DEFAULT false,
@@ -103,7 +104,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_9c52e7bfe6088fa5ea7396ba005" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "payment" (
                 "id" SERIAL NOT NULL,
                 "amount" integer NOT NULL,
@@ -114,7 +115,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_fcaec7df5adf9cac408c686b2ab" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "payment_info" (
                 "id" SERIAL NOT NULL,
                 "bankAccount" character varying NOT NULL,
@@ -125,7 +126,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_b2ba4f3b3f40c6a37e54fb8b252" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "order" (
                 "id" SERIAL NOT NULL,
                 "grossOrder" integer NOT NULL,
@@ -138,7 +139,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_1031171c13130102495201e3e20" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "follow" (
                 "id" SERIAL NOT NULL,
                 "userId" uuid NOT NULL,
@@ -148,7 +149,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_fda88bc28a84d2d6d06e19df6e5" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "tracking" (
                 "id" SERIAL NOT NULL,
                 "trackingNo" character varying NOT NULL,
@@ -165,7 +166,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_c6d380f3abe9852840e5aff1439" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "upvote" (
                 "value" integer NOT NULL,
                 "userId" uuid NOT NULL,
@@ -175,7 +176,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_802ac6b9099f86aa24eb22d9c05" PRIMARY KEY ("userId", "postId")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "review" (
                 "id" SERIAL NOT NULL,
                 "title" character varying,
@@ -190,7 +191,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_2e4299a343a81574217255c00ca" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "video" (
                 "id" SERIAL NOT NULL,
                 "name" character varying NOT NULL,
@@ -203,7 +204,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_1a2f3856250765d72e7e1636c8e" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "image" (
                 "id" SERIAL NOT NULL,
                 "name" character varying NOT NULL,
@@ -216,7 +217,7 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_d6db1ab4ee9ad9dbe86c64e4cc3" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "address" (
                 "id" SERIAL NOT NULL,
                 "name" character varying NOT NULL,
@@ -235,204 +236,203 @@ export class migrationName1652965720156 implements MigrationInterface {
                 CONSTRAINT "PK_d92de1f82754668b5f5f5dd4fd5" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "user"
             ADD CONSTRAINT "FK_bb525f8673eb9b072f3a063adfc" FOREIGN KEY ("paymentInfoId") REFERENCES "payment_info"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "post"
             ADD CONSTRAINT "FK_9e91e6a24261b66f53971d3f96b" FOREIGN KEY ("creatorId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit_file"
             ADD CONSTRAINT "FK_398128a089657db1b656212010b" FOREIGN KEY ("mealkitId") REFERENCES "mealkit"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit"
             ADD CONSTRAINT "FK_15b13913f42a14ad0784a183e00" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit"
             ADD CONSTRAINT "FK_0b393eeaa23cfc4b57204069c4a" FOREIGN KEY ("creatorId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item"
             ADD CONSTRAINT "FK_158f0325ccf7f68a5b395fa2f6a" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item"
             ADD CONSTRAINT "FK_9c266e5b70cc40392e53069002b" FOREIGN KEY ("mealkitId") REFERENCES "mealkit"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item"
             ADD CONSTRAINT "FK_26a8ff17b49cc3b5dcbdd7d357a" FOREIGN KEY ("orderId") REFERENCES "order"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item"
             ADD CONSTRAINT "FK_33d894493cf66fc7fa54f64153f" FOREIGN KEY ("trackingId") REFERENCES "tracking"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item_noti"
             ADD CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a" FOREIGN KEY ("cartItemId") REFERENCES "cart_item"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "order"
             ADD CONSTRAINT "FK_caabe91507b3379c7ba73637b84" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "order"
             ADD CONSTRAINT "FK_9ad13532f48db4ac5a3b3dd70e5" FOREIGN KEY ("paymentId") REFERENCES "payment"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "follow"
             ADD CONSTRAINT "FK_af9f90ce5e8f66f845ebbcc6f15" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "follow"
             ADD CONSTRAINT "FK_550dce89df9570f251b6af2665a" FOREIGN KEY ("followerId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "upvote"
             ADD CONSTRAINT "FK_3abd9f37a94f8db3c33bda4fdae" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "upvote"
             ADD CONSTRAINT "FK_efc79eb8b81262456adfcb87de1" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "review"
             ADD CONSTRAINT "FK_1337f93918c70837d3cea105d39" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "review"
             ADD CONSTRAINT "FK_c31f613ad239223a717dec8cf3c" FOREIGN KEY ("mealkitId") REFERENCES "mealkit"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "video"
             ADD CONSTRAINT "FK_a38d033e82b1b0b0e6f7de67aad" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "image"
             ADD CONSTRAINT "FK_72da7f42d43f0be3b3ef35692a0" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "address"
             ADD CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             ALTER TABLE "address" DROP CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "image" DROP CONSTRAINT "FK_72da7f42d43f0be3b3ef35692a0"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "video" DROP CONSTRAINT "FK_a38d033e82b1b0b0e6f7de67aad"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "review" DROP CONSTRAINT "FK_c31f613ad239223a717dec8cf3c"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "review" DROP CONSTRAINT "FK_1337f93918c70837d3cea105d39"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "upvote" DROP CONSTRAINT "FK_efc79eb8b81262456adfcb87de1"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "upvote" DROP CONSTRAINT "FK_3abd9f37a94f8db3c33bda4fdae"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "follow" DROP CONSTRAINT "FK_550dce89df9570f251b6af2665a"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "follow" DROP CONSTRAINT "FK_af9f90ce5e8f66f845ebbcc6f15"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "order" DROP CONSTRAINT "FK_9ad13532f48db4ac5a3b3dd70e5"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "order" DROP CONSTRAINT "FK_caabe91507b3379c7ba73637b84"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item_noti" DROP CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item" DROP CONSTRAINT "FK_33d894493cf66fc7fa54f64153f"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item" DROP CONSTRAINT "FK_26a8ff17b49cc3b5dcbdd7d357a"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item" DROP CONSTRAINT "FK_9c266e5b70cc40392e53069002b"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "cart_item" DROP CONSTRAINT "FK_158f0325ccf7f68a5b395fa2f6a"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit" DROP CONSTRAINT "FK_0b393eeaa23cfc4b57204069c4a"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit" DROP CONSTRAINT "FK_15b13913f42a14ad0784a183e00"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "mealkit_file" DROP CONSTRAINT "FK_398128a089657db1b656212010b"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "post" DROP CONSTRAINT "FK_9e91e6a24261b66f53971d3f96b"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE "user" DROP CONSTRAINT "FK_bb525f8673eb9b072f3a063adfc"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "address"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "image"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "video"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "review"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "upvote"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "tracking"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "follow"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "order"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "payment_info"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "payment"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "cart_item_noti"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "cart_item"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "mealkit"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "mealkit_file"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "post"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "user"
         `);
-    }
-
+  }
 }

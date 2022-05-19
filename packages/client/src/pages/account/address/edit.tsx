@@ -53,7 +53,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout heading="loading">
         <Loading />
       </Layout>
     );
@@ -61,7 +61,7 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
 
   if (!loading && !data) {
     return (
-      <Layout>
+      <Layout heading="no address found">
         <div>No address found</div>
       </Layout>
     );
