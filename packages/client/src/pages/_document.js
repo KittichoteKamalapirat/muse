@@ -30,6 +30,7 @@ var _rollbarConfig = {
 
           <link rel="shortcut icon" href="/favicon.ico" />
           <meta name="theme-color" content="#3dc795" />
+          <link rel="apple-touch-icon" href="/180x180.png" />
         </Head>
         {/* <link rel="shortcut icon" href="/public/static/favicon.ico" /> */}
         {/* </Head> */}
