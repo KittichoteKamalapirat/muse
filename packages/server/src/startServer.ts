@@ -76,7 +76,7 @@ export const startServer = async () => {
 
   const conn = await createTypeORMConn(process.env.NODE_ENV);
 
-  rollbar.error("ccc");
+  // rollbar.error("ccc");
 
   // rollbar.log("Hello from server!");
   // await conn.runMigrations();
