@@ -2,6 +2,7 @@ import { Image } from "@chakra-ui/image";
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
+import LinkButton from "../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
@@ -164,6 +165,12 @@ const Payment = ({}) => {
             isPaid={isPaid?.manuallyConfirmPayment}
             paymentId={id}
           />
+
+          <LinkButton
+            href={urlResolver.orderTab(CartItemStatus.PaymentPending)}
+          >
+            Back to my orders
+          </LinkButton>
         </Wrapper>
       </Box>
     </HeadingLayout>

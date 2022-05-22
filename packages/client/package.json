@@ -12,7 +12,7 @@
     "lint": "next lint",
     "start": "next start",
     "gen": "graphql-codegen --config codegen.yml",
-    "svg:gen": "npx @svgr/cli src/components/svg --out-dir src/components/icons --icon --typescript",
+    "svg:gen": "npx @svgr/cli src/components/svg --out-dir src/components/svgComponents --icon --typescript",
     "check-types": "tsc --noemit",
     "postinstall": "expo-yarn-workspaces postinstall",
     "ci:vercel": "vercel --prod --token $VERCEL_TOKEN_FOR_CIRCLECI",

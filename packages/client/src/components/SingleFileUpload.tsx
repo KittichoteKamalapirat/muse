@@ -183,7 +183,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   }, [currentUrl]);
 
   return (
-    <Box mb="70px">
+    <Box>
       {!thumbnailPreview ? (
         <Flex justifyContent="center">
           <Img src={autofileUrl} />

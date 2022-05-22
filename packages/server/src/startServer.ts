@@ -8,7 +8,6 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
-import { rollbar } from "./config/initializers/rollbar";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { CartItemResolver } from "./resolvers/cartItem";
@@ -32,7 +31,6 @@ import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
-
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 
 // determine which .env file to use

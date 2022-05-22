@@ -5,7 +5,8 @@ import React from "react";
 import { useMeQuery, useOrderNotisQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import Badge from "./atoms/Badge";
-import { AccountIcon } from "./Icons/AccountIcon";
+import { AccountIcon } from "./Icons";
+
 import { BellIcon } from "./Icons/BellIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { HomeIcon } from "./Icons/HomeIcon";
