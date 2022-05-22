@@ -293,9 +293,9 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     if (
       mealkitInput.name != "" &&
       mealkitInput.mealkitPortion != "" &&
-      mealkitInput.price != ""
+      mealkitInput.price != "" &&
       // &&    mealkitInput.images.length > 0
-      // mealkitInput.items.length > 0
+      mealkitInput.items.length > 0 // check at least one item
     ) {
       mealkitSubmittable = true;
     }

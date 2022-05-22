@@ -208,6 +208,9 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         {/* checkbox */}
         <Box my={4}>
           <Heading fontSize="lg">Items include</Heading>
+          <Text fontSize="xs" color="alert">
+            * At least 1 ingredient
+          </Text>
           {ingredientsField.filter(
             (ingredientObj) => ingredientObj.ingredient !== ""
           ).length === 0 ? (
