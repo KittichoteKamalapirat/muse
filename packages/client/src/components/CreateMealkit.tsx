@@ -1,12 +1,11 @@
 import { ArrowUpIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import { InputGroup, InputLeftAddon, InputRightAddon } from "@chakra-ui/input";
+import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import {
   Box,
   Checkbox,
   CheckboxGroup,
   Flex,
   Heading,
-  Image,
   Img,
   Stack,
   Text,
@@ -22,7 +21,9 @@ import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import formatFilename from "./formatFilename";
 import { InputField } from "./InputField";
+import { Loading } from "./skeletons/Loading";
 import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
 
 interface CreateMealkitProps {
@@ -39,7 +40,6 @@ interface CreateMealkitProps {
     items: string[];
   };
   setInput: Function;
-  prevStep: Function;
   mealkitS3UrlAndIds: FileMetadata[];
   setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;
 }
@@ -48,13 +48,14 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
   ingredientsField,
   input,
   setInput,
-  prevStep,
   mealkitS3UrlAndIds,
   setMealkitS3UrlAndIds,
 }) => {
   const [mealkitFiles, setMealkitFiles] = useState<any>([]);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const handleOnDropMealkitFiles = (acceptedFiles: any, rejectedFiles: any) => {
+    setIsUploading(true);
     if (rejectedFiles.length > 0) {
       return alert(rejectedFiles[0].errors[0].message);
     }
@@ -71,7 +72,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
       mealkitFiles.forEach((file: any, index: number) => {
         // sign
         const input: FileInput = {
-          name: file.name,
+          name: formatFilename(file.name),
           fileType: file.type,
           resourceType: ResourceType.MEALKIT,
         };
@@ -80,18 +81,19 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
           const options = getRESTOptions(file.type);
 
           // save to s3
-          axios.put(response.data.sign, file, options);
+          axios.put(response.data.sign, file, options).then(() => {
+            fileMetadatas.push({
+              url: response.data.url,
+              id: response.data.id,
+              fileType: file.type,
+            });
 
-          fileMetadatas.push({
-            url: response.data.url,
-            id: response.data.id,
-            fileType: file.type,
+            // if last loop, can't use index because it's async (2->4->3->1 could happen)
+            if (fileMetadatas.length === mealkitFiles.length) {
+              setMealkitS3UrlAndIds(fileMetadatas);
+              setIsUploading(false);
+            }
           });
-
-          // if last loop, can't use index because it's async (2->4->3->1 could happen)
-          if (fileMetadatas.length === mealkitFiles.length) {
-            setMealkitS3UrlAndIds(fileMetadatas);
-          }
         });
       });
     }
@@ -114,52 +116,56 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         ))}
       </Wrap>
 
-      <Dropzone
-        onDrop={(acceptedFiles, rejectedFiles) =>
-          handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
-        }
-        multiple={true}
-        accept={["image/*", "video/*"]}
-      >
-        {({ getRootProps, getInputProps }) => (
-          <Box>
-            <Box {...getRootProps({})}>
-              <input {...getInputProps()} />
+      {isUploading && <Loading text="uploading file" />}
 
-              {mealkitS3UrlAndIds.length === 0 ? (
-                <Flex
-                  direction="column"
-                  alignItems="center"
-                  border="1px"
-                  borderColor="gray.200"
-                  bgColor="gray.50"
-                >
-                  <ArrowUpIcon mt="3rem" />
+      {!isUploading && (
+        <Dropzone
+          onDrop={(acceptedFiles, rejectedFiles) =>
+            handleOnDropMealkitFiles(acceptedFiles, rejectedFiles)
+          }
+          multiple={true}
+          accept={["image/*", "video/*"]}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <Box>
+              <Box {...getRootProps({})}>
+                <input {...getInputProps()} />
 
-                  <SvgUploadMealkitIcon width="10rem" height="10rem" />
-                  <Text textAlign="center" mb="2rem">
-                    Drag and drop a video here, or click to select the file
-                  </Text>
-                </Flex>
-              ) : (
-                <Flex
-                  direction="row"
-                  alignItems="center"
-                  justifyContent="center"
-                  borderColor="gray.400"
-                  border="1px"
-                  borderStyle="dashed"
-                  my={4}
-                >
-                  <PlusSquareIcon mr={2} />
+                {mealkitS3UrlAndIds.length === 0 ? (
+                  <Flex
+                    direction="column"
+                    alignItems="center"
+                    border="1px"
+                    borderColor="gray.200"
+                    bgColor="gray.50"
+                  >
+                    <ArrowUpIcon mt="3rem" />
 
-                  <Text textAlign="center">Replce files</Text>
-                </Flex>
-              )}
+                    <SvgUploadMealkitIcon width="10rem" height="10rem" />
+                    <Text textAlign="center" mb="2rem">
+                      Drag and drop a video here, or click to select the file
+                    </Text>
+                  </Flex>
+                ) : (
+                  <Flex
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    borderColor="gray.400"
+                    border="1px"
+                    borderStyle="dashed"
+                    my={4}
+                  >
+                    <PlusSquareIcon mr={2} />
+
+                    <Text textAlign="center">Replce files</Text>
+                  </Flex>
+                )}
+              </Box>
             </Box>
-          </Box>
-        )}
-      </Dropzone>
+          )}
+        </Dropzone>
+      )}
 
       <Form>
         <Box mt={4}>

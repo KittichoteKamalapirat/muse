@@ -34,14 +34,6 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
     variables: { userId: userId },
   });
 
-  const {
-    data: followerData,
-    loading: followerLoading,
-    error: followerError,
-  } = useFollowersQuery({
-    variables: { userId: userId },
-  });
-
   if (userLoading) {
     return (
       <Layout heading="loading">

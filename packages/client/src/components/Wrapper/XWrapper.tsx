@@ -1,6 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
-import styled from "styled-components";
 
 interface Props {
   children: ReactNode;
@@ -55,7 +54,7 @@ export const XWrapper = ({
   return (
     <Box width="100%" mt={mt} mb={mb} {...props}>
       <Flex flexDirection="column" alignItems="center">
-        <Box maxWidth={["95%", "30%"]} width={width}>
+        <Box maxWidth={["95%", "70%", "40%"]} width={width}>
           {children}
         </Box>
       </Flex>

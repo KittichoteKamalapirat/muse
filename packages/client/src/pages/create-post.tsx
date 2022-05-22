@@ -41,7 +41,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(4);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -113,25 +113,20 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     };
 
     const options = getRESTOptions(fileData.type);
-    console.log({ options });
-    console.log({ input });
+
     const response = await axios.post(urlResolver.signS3(), input);
 
-    console.log({ response });
-    const response2 = await axios.put(response.data.sign, fileData, options);
-    console.log({ response2 });
-
-    // todo add loading indicator
-    // wait for file to be uploaded
-    if (response2) {
-      console.log("got response 2");
+    // save the auto thumbnail
+    await axios.put(response.data.sign, fileData, options).then(() => {
       // -> this one kinda works!, video loaded first!
+      nextStep();
       setAutoThumbnailS3UrlAndId({
         id: response.data.id,
         url: response.data.url,
       });
+
       setIsGeneratingThumbnail(false);
-    }
+    });
   };
 
   // section1 ends: for uploading a video
@@ -309,9 +304,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       postSubmittable = true;
     }
 
-    console.log(mealkitSubmittable);
-    console.log(postSubmittable);
-
     if (mealkitSubmittable && postSubmittable) {
       setSubmittable(true);
     } else {
@@ -320,11 +312,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   }, [mealkitInput]);
 
   // handle autothumbnail show, don't go to next step to fast
-  useEffect(() => {
-    if (autoThumbnailS3UrlAndId) {
-      nextStep();
-    }
-  }, [autoThumbnailS3UrlAndId?.url]);
+  // useEffect(() => {
+  //   if (autoThumbnailS3UrlAndId) {
+  //     nextStep();
+  //   }
+  // }, [autoThumbnailS3UrlAndId?.url]);
   return (
     <Box>
       <Box m="1rem">
@@ -349,13 +341,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                           handleMetadata={handleMetadata}
                           videoS3UrlAndID={videoS3UrlAndID}
                           setVideoS3UrlAndID={setVideoS3UrlAndID}
+                          autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
                           isGeneratingThumbnail={isGeneratingThumbnail}
                         />
                       </XWrapper>
                     </HeadingLayout>
-                    {isGeneratingThumbnail && (
-                      <Loading text="generating thumbnail" overlay={true} />
-                    )}
                   </Box>
                 }
                 {
@@ -417,7 +407,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                           ingredientsField={ingredientsField}
                           input={mealkitInput}
                           setInput={setMealkitInput}
-                          prevStep={prevStep}
                           mealkitS3UrlAndIds={mealkitS3UrlAndIds}
                           setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
                         />

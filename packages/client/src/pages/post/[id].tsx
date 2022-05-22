@@ -1,4 +1,13 @@
-import { Avatar, Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  LinkBox,
+  LinkOverlay,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import IngredientList from "../../components/IngredientList";
@@ -42,26 +51,25 @@ const Post = ({}) => {
     );
   }
   return (
-    // <Box bgColor="gray.100">
     <>
       <HeadingLayout heading={data?.post?.title}>
         <Wrapper>
-          <Box
-            // maxW={["none", "none", "40%"]}
-            mx={["none", "auto"]}
-            bgColor="white"
-          >
+          <Box mx={["none", "auto"]} bgColor="white">
             <Flex justifyContent="space-between">
-              <Flex alignItems="center">
-                <Avatar
-                  m={2}
-                  size="sm"
-                  src={data?.post.creator.avatar}
-                  name="creator avatar"
-                  border={1}
-                />
-                <Text>{data?.post.creator.username}</Text>
-              </Flex>
+              <LinkBox>
+                <Flex alignItems="center">
+                  <Avatar
+                    m={2}
+                    size="sm"
+                    src={data?.post.creator.avatar}
+                    name="creator avatar"
+                    border={1}
+                  />
+                  <LinkOverlay href={`/user/${data.post.creator.id}`}>
+                    <Text>{data?.post.creator.username}</Text>
+                  </LinkOverlay>
+                </Flex>
+              </LinkBox>
 
               {meData?.me?.id !== data.post.creator.id ? null : (
                 <EditDeletePostButtons
@@ -70,6 +78,7 @@ const Post = ({}) => {
                 />
               )}
             </Flex>
+
             <video
               controls
               src={data?.post.video.url}

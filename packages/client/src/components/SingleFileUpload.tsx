@@ -1,18 +1,11 @@
-import { ApolloCache, gql } from "@apollo/client";
 import { PlusSquareIcon } from "@chakra-ui/icons";
-
 import { Box, Button, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
-import moment from "moment";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import {
-  MeDocument,
-  MeQuery,
-  UpdateAvatarMutation,
-  useSignSingleFileS3Mutation,
-} from "../generated/graphql";
+import { useSignSingleFileS3Mutation } from "../generated/graphql";
+import formatFilename from "./formatFilename";
 
 interface SingleFileUploadProps {
   params?: string;
@@ -110,14 +103,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     };
 
     reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
-  };
-
-  const formatFilename = (filename: string) => {
-    const date = moment().format("YYYYMMDD");
-    const randomString = Math.random().toString(36).substring(2, 7);
-    const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-");
-    const newFilename = `images/${date}-${randomString}-${cleanFileName}`;
-    return newFilename.substring(0, 60);
   };
 
   const handleSubmit = async (values: any) => {
