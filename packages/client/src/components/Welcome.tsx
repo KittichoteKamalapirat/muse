@@ -1,12 +1,13 @@
 import { ChevronDownIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
-import { Avatar, Center, useMediaQuery } from "@chakra-ui/react";
-import Image from "next/image";
+import { Avatar, Center, Checkbox, Img, useMediaQuery } from "@chakra-ui/react";
 import React from "react";
 import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { Slider } from "./Slider";
+import { Slider2 } from "./Slider2/Slider2";
+import { Slider3 } from "./Slider3/Slider3";
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
@@ -35,32 +36,47 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             alignItems="center"
             textAlign="center"
           >
-            <Box>
-              {" "}
+            <Box px={4}>
               <Heading color="brand">
                 The Meal Kit {isLargerThan30Em ? null : <br />} Marketplace
               </Heading>
+              <Heading size="md" as="h2">
+                where everything is ready for you
+              </Heading>
               <Box mt={4} fontSize="xl">
-                <Text>มีวัตถุดิบ มีคลิปสอน </Text>
-                <Text> พร้อมทำอาหาร</Text>
+                {/* <Text>มีวัตถุดิบ มีคลิปสอน</Text>
+                <Text> พร้อมทำอาหาร</Text> */}
+
+                <Center>
+                  <Flex flexDirection="column">
+                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                      ingredients
+                    </Checkbox>
+                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                      recipe
+                    </Checkbox>
+                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                      ideas
+                    </Checkbox>
+                  </Flex>
+                </Center>
               </Box>
               <LinkButton
                 href="/register"
                 rightIcon={<ChevronRightIcon />}
                 width="fit-content"
+                mt={10}
               >
                 Create Account
               </LinkButton>
             </Box>
 
-            <Box width={["150px", "300px"]}>
-              <Image
-                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mealkit.webp"
-                alt="mealkit"
-                width={300}
-                height={300}
-              />
-            </Box>
+            <Img
+              src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/mealkit.png"
+              boxSize={["150px", "300px"]}
+              alt="mealkit image"
+              mt={10}
+            />
           </Flex>
           <ChevronDownIcon w={6} h={6} />
         </Flex>
@@ -129,9 +145,9 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             </Heading>
 
             <Wrapper mt={0}>
-              <Text fontSize="lg">
+              <Text fontSize="lg" px={4}>
                 <Text fontWeight="600" as="mark">
-                  A variety of cuisine{" "}
+                  A variety of cuisine
                 </Text>
                 is available on the platform. Learn to cook{" "}
                 <Text fontWeight="600" as="mark">
@@ -183,12 +199,12 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             <Center my={6}>
               <Avatar
                 name="Dan"
-                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/dan.webp"
+                src="https://cookknow.s3.ap-southeast-1.amazonaws.com/assets/dan.png"
                 size="2xl"
               />
             </Center>
 
-            <Text fontStyle="italic" color="gray.600">
+            <Text fontStyle="italic" color="gray.600" px={4}>
               &quot;The ingredients were fresh and came in ready-to-use
               portions. It&apos;s super convenient when I&apos;m too lazy to
               think of a recipe and have to go shop for them.
@@ -206,7 +222,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             <Flex direction={["column", "row"]} textAlign="center">
               <Box mb={["20px", "none"]}>
                 <Heading my={2}>No Food Waste</Heading>
-                <Text>
+                <Text px={4}>
                   Help reduce food waste by cooking the amount we can consume
                 </Text>
               </Box>
