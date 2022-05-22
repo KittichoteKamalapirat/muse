@@ -5,13 +5,15 @@ import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
 import NextLink from "next/link";
 import React from "react";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   useDeletePaymentInfoMutation,
   usePaymentInfoQuery,
 } from "../../../generated/graphql";
 import { banksArray } from "../../../util/constants";
 import { withApollo } from "../../../util/withApollo";
+import { Heading } from "@chakra-ui/react";
+import LinkButton from "../../../components/atoms/LinkButton";
 
 interface PaymentInfoProps {}
 
@@ -21,13 +23,14 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
 
   const [deletePaymentInfo] = useDeletePaymentInfoMutation();
   const noInfo = (
-    <Box mt={2}>
-      <Text>Tou don&apos;t have payment info yet</Text>
-      <NextLink href="/myshop/payment-info/create" passHref>
-        <Link>Add</Link>
-      </NextLink>
-      <Divider mt={2} />
-    </Box>
+    <Flex justifyContent="center" alignItems="center" minH="600px">
+      <Flex direction="column" alignItems="center">
+        <Heading size="md">You don&apos;t have payment info yet</Heading>
+        <LinkButton href="/myshop/payment-info/create" width="fit-content">
+          Add
+        </LinkButton>
+      </Flex>
+    </Flex>
   );
 
   let bankname;
@@ -44,7 +47,7 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="Payment Info">
-      <Wrapper>
+      <XWrapper>
         {!paymentInfo?.paymentInfo ? (
           noInfo
         ) : (
@@ -95,7 +98,7 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
             <Divider />
           </Box>
         )}
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

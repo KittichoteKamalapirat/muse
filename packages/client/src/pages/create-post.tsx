@@ -10,7 +10,6 @@ import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
 import FormActionButtons from "../components/form/FormActionButtons/FormActionButtons";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
-import { Loading } from "../components/skeletons/Loading";
 import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   useCreateMealkitMutation,
@@ -411,21 +410,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                           setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
                         />
 
-                        {/* <Flex
-                          flexDirection="column"
-                          mt={10}
-                          justifyContent="center"
-                          alignItems="center"
-                        >
-                          <Button
-                            type="submit"
-                            width="100%"
-                            isLoading={submitting}
-                            disabled={!submittable} //post page (won't be empty), thumbnail page (empty is ok since there's default one),  post details page (only advice can be empty), mealkit page (can't be empty)
-                          >
-                            Create Post
-                          </Button>
-                        </Flex> */}
                         {!submittable && (
                           <Text color="alert">
                             * Some required fields are missing
