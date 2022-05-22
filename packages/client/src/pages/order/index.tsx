@@ -20,6 +20,7 @@ import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../components/Wrapper/XWrapper";
 import {
   CartItemStatus,
   useAddressQuery,
@@ -91,7 +92,7 @@ const Order: React.FC<OrderProps> = ({}) => {
         cartItemStatus={cartItemStatus}
         setCartItemStatus={setCartItemStatus}
       />
-      <Box bgColor="blackAlpha.50">
+      <XWrapper>
         {/* show address */}
 
         <Box mt={0}>
@@ -112,7 +113,10 @@ const Order: React.FC<OrderProps> = ({}) => {
                     </h2>
                     <AccordionPanel pb={4}>
                       <AddressComponent address={address?.address} />
-                      <LinkButton pathname="/account/address/edit">
+                      <LinkButton
+                        pathname="/account/address/edit"
+                        width="fit-content"
+                      >
                         Edit Address
                       </LinkButton>
                     </AccordionPanel>
@@ -120,16 +124,18 @@ const Order: React.FC<OrderProps> = ({}) => {
                 </Accordion>
               </Box>
             ) : (
-              <Box>
-                <Text>You have not added your address. Please add one</Text>
-
-                <LinkButton
-                  pathname="/account/address/create"
-                  leftIcon={<AddIcon />}
-                >
-                  Add Address
-                </LinkButton>
-              </Box>
+              <Flex justifyContent="center" alignItems="center" minH="600px">
+                <Flex direction="column" alignItems="center">
+                  <Heading size="md">You have not added your address.</Heading>
+                  <LinkButton
+                    href="/account/address/create"
+                    width="fit-content"
+                    leftIcon={<AddIcon />}
+                  >
+                    Add address
+                  </LinkButton>
+                </Flex>
+              </Flex>
             ))}
 
           {/* address end */}
@@ -259,7 +265,7 @@ const Order: React.FC<OrderProps> = ({}) => {
 
           {/* show myorder to be shippepd, shipping, received  use cartItemsbyorderstatus*/}
         </Box>
-      </Box>
+      </XWrapper>
     </HeadingLayout>
   );
 };

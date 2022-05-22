@@ -3,6 +3,7 @@ import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
+import { Layout } from "../../components/Layout/Layout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
 import { Error } from "../../components/skeletons/Error";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
@@ -18,11 +19,9 @@ import { urlResolver } from "../../lib/UrlResolver";
 import useFetch from "../../util/useFetch";
 import { withApollo } from "../../util/withApollo";
 
-interface PaymentProps {}
-
 const STARTING_MINUTES = 3;
 
-const Payment: React.FC<PaymentProps> = ({}) => {
+const Payment = ({}) => {
   const router = useRouter();
   const { id } = router.query;
   const cartItemStatusUrl = urlResolver.paymentStatusAPI(id as string);
@@ -67,9 +66,11 @@ const Payment: React.FC<PaymentProps> = ({}) => {
         setSeconds(seconds - 1);
         if (paymentIsComplete) {
           // TODO change this ?
-          router.push(urlResolver.orderTab(CartItemStatus.PaymentPending)); //TODO push to success page
+          router.push(urlResolver.orderTab(CartItemStatus.ToDeliver)); //TODO push to success page
           setSeconds(0); //To fix error Can't perform a React state update on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in a useEffect cleanup function.
         }
+      } else {
+        router.push(urlResolver.orderTab(CartItemStatus.PaymentPending));
       }
     }, 1000);
 
@@ -94,7 +95,10 @@ const Payment: React.FC<PaymentProps> = ({}) => {
   }
 
   if (error) {
-    <Error />;
+    <Layout heading="error">
+      {" "}
+      <Error />
+    </Layout>;
   }
 
   return (
@@ -102,15 +106,10 @@ const Payment: React.FC<PaymentProps> = ({}) => {
       heading="Payment Detail"
       backUrl="/order?status=PaymentPending"
     >
-      <Box mb={20}>
+      <Box mt={12} mb={20}>
         <Wrapper>
-          {/* <Flex justifyContent="space-between">
-            <Text>Total amount</Text>
-            <Text>{paymentData?.payment.amount}</Text>
-          </Flex> */}
-          {/* <Divider mt={2} /> */}
-          <Box mt={16}>
-            <Text>Siam Commercial bangk (SCB)</Text>
+          <Box>
+            <Text>Siam Commercial bank (SCB)</Text>
             <Text>Account name: Kittichote Kamalapirat</Text>
             <Box>
               <Text d="inline">Account number:</Text>{" "}
@@ -120,6 +119,15 @@ const Payment: React.FC<PaymentProps> = ({}) => {
             </Box>
           </Box>
           <Divider mt={2} />
+
+          <Flex justifyContent="space-between" textAlign="center" color="alert">
+            <Heading as="h3" size="sm">
+              QR Code expired in:
+            </Heading>
+            <Heading as="h3" size="md">
+              {timerMinutes}: {timerSeconds}
+            </Heading>
+          </Flex>
 
           <Box>
             <Image
@@ -135,7 +143,7 @@ const Payment: React.FC<PaymentProps> = ({}) => {
             flexDirection="column"
             justifyContent="space-between"
             alignItems="center"
-            mt={6}
+            mt={2}
           >
             <Heading as="h3" size="sm">
               Total amount
@@ -147,22 +155,17 @@ const Payment: React.FC<PaymentProps> = ({}) => {
               </Heading>
             </Flex>
           </Flex>
+
+          <SingleFileUpload
+            params={id as string}
+            currentUrl={paymentData?.payment.slipUrl as string}
+            uploadSlip={uploadSlip}
+            manuallyConfirmPayment={manuallyConfirmPayment}
+            isPaid={isPaid?.manuallyConfirmPayment}
+            paymentId={id}
+          />
         </Wrapper>
       </Box>
-
-      <Heading>
-        {timerMinutes}: {timerSeconds}
-      </Heading>
-
-      <SingleFileUpload
-        params={id as string}
-        currentUrl={paymentData?.payment.slipUrl as string}
-        uploadSlip={uploadSlip}
-        manuallyConfirmPayment={manuallyConfirmPayment}
-        isPaid={isPaid?.manuallyConfirmPayment}
-        paymentId={id}
-        // isPaidLoading={isPaidLoading}
-      />
     </HeadingLayout>
   );
 };
