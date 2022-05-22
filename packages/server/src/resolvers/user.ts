@@ -400,14 +400,17 @@ export class UserResolver {
   }
 
   @UseMiddleware(isAuth)
-  @Mutation(() => Boolean)
+  @Mutation(() => User)
   async updateAvatar(
     @Ctx() { req }: MyContext,
     @Arg("newAvatar") newAvatar: string
-  ): Promise<boolean | Error> {
+  ): Promise<User | Error | undefined> {
     try {
-      User.update({ id: req.session.userId }, { avatar: newAvatar });
-      return true;
+      await User.update({ id: req.session.userId }, { avatar: newAvatar });
+      const user = await User.findOne(req.session.userId);
+      console.log(user);
+
+      return user;
     } catch (error) {
       rollbar.log(error);
       return Error("cannot update avatar");
