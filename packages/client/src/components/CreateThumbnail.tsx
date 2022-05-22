@@ -1,5 +1,5 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Flex, Image, Img, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
@@ -9,6 +9,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import formatFilename from "./formatFilename";
+import SvgUploadImage from "./Icons/UploadImage";
 import { Loading } from "./skeletons/Loading";
 
 interface CreateThumbnailProps {
@@ -62,9 +63,32 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
   return (
     <Box>
       {thumbnailS3UrlAndID === null ? (
-        <Flex justifyContent="center">
-          <Img src={autoThumbnailS3UrlAndId?.url} alt="auto-thumbnail-url" />
-        </Flex>
+        autoThumbnailS3UrlAndId === null ? (
+          <Flex
+            direction="column"
+            my="1rem"
+            p="2rem"
+            alignItems="center"
+            border="1px"
+            borderColor="gray.400"
+            borderStyle="dashed"
+          >
+            <SvgUploadImage />
+            <Heading fontSize="xl" textAlign="center">
+              Select images or videos
+            </Heading>
+            <Text fontSize="sm" textAlign="center">
+              Or drag and drop here
+            </Text>
+          </Flex>
+        ) : (
+          <Flex justifyContent="center">
+            <Img
+              src={autoThumbnailS3UrlAndId?.url}
+              alt="default humbnail for video"
+            />
+          </Flex>
+        )
       ) : (
         <Flex justifyContent="center">
           {/* <AspectRatio ratio={1}> */}

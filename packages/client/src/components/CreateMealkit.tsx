@@ -22,6 +22,8 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import formatFilename from "./formatFilename";
+import SvgUploadFiles from "./Icons/UploadFiles";
+import SvgUploadImage from "./Icons/UploadImage";
 import { InputField } from "./InputField";
 import { Loading } from "./skeletons/Loading";
 import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
@@ -134,16 +136,19 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                 {mealkitS3UrlAndIds.length === 0 ? (
                   <Flex
                     direction="column"
+                    my="1rem"
+                    p="2rem"
                     alignItems="center"
                     border="1px"
-                    borderColor="gray.200"
-                    bgColor="gray.50"
+                    borderColor="gray.400"
+                    borderStyle="dashed"
                   >
-                    <ArrowUpIcon mt="3rem" />
-
-                    <SvgUploadMealkitIcon width="10rem" height="10rem" />
-                    <Text textAlign="center" mb="2rem">
-                      Drag and drop a video here, or click to select the file
+                    <SvgUploadFiles />
+                    <Heading fontSize="xl" textAlign="center">
+                      Select images or videos
+                    </Heading>
+                    <Text fontSize="sm" textAlign="center">
+                      Or drag and drop here
                     </Text>
                   </Flex>
                 ) : (
