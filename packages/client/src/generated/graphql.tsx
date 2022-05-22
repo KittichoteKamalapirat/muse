@@ -290,7 +290,7 @@ export type Mutation = {
   toggleFollow: Scalars['Boolean'];
   toggleIsPublished: Scalars['Boolean'];
   updateAddress?: Maybe<Address>;
-  updateAvatar: Scalars['Boolean'];
+  updateAvatar: User;
   updateCartItem: CartItem;
   updateMealkit?: Maybe<Mealkit>;
   updatePaymentInfo?: Maybe<PaymentInfoResponse>;
@@ -1152,7 +1152,7 @@ export type UpdateAvatarMutationVariables = Exact<{
 }>;
 
 
-export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: boolean };
+export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: { __typename?: 'User', id: string, avatar: string } };
 
 export type VoteMutationVariables = Exact<{
   value: Scalars['Int'];
@@ -2625,7 +2625,10 @@ export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>
 export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const UpdateAvatarDocument = gql`
     mutation updateAvatar($newAvatar: String!) {
-  updateAvatar(newAvatar: $newAvatar)
+  updateAvatar(newAvatar: $newAvatar) {
+    id
+    avatar
+  }
 }
     `;
 export type UpdateAvatarMutationFn = Apollo.MutationFunction<UpdateAvatarMutation, UpdateAvatarMutationVariables>;

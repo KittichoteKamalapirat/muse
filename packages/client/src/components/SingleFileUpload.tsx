@@ -1,11 +1,18 @@
+import { ApolloCache, gql } from "@apollo/client";
 import { PlusSquareIcon } from "@chakra-ui/icons";
+
 import { Box, Button, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import moment from "moment";
 import router from "next/router";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
-import { useSignSingleFileS3Mutation } from "../generated/graphql";
+import {
+  MeDocument,
+  MeQuery,
+  UpdateAvatarMutation,
+  useSignSingleFileS3Mutation,
+} from "../generated/graphql";
 
 interface SingleFileUploadProps {
   params?: string;
@@ -157,6 +164,18 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
             variables: {
               newAvatar: fileUrl,
             },
+            // update: (cache: ApolloCache<UpdateAvatarMutation>, { data }) => {
+            //   console.log(data);
+            //   cache.writeFragment({
+            //     id: "Me",
+            //     fragment: gql`
+            //       fragment _ on Me {
+            //         avatar
+            //       }
+            //     `,
+            //     data: { avatar: data.updateAvatar },
+            //   });
+            // },
           });
 
           router.push("/account");
@@ -186,12 +205,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
         </Flex>
       ) : (
         <Flex justifyContent="center">
-          <Image
-            src={thumbnailPreview}
-            alt="image"
-            boxSize={["50%", "30%"]}
-            fallbackSrc="oops.png"
-          />
+          <Image src={thumbnailPreview} alt="image" fallbackSrc="/oops.png" />
         </Flex>
       )}
 
@@ -233,7 +247,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
                       src={thumbnailPreview}
                       alt="image"
                       boxSize="2rem"
-                      fallbackSrc="oops.png"
+                      fallbackSrc="/oops.png"
                     />
                   )}
                   {updateAvatar && (
@@ -254,7 +268,6 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
             type="submit"
             isLoading={submitting}
           >
-            {" "}
             {updateAvatar && <Text textAlign="center">Update</Text>}
             {uploadSlip && <Text textAlign="center">Upload</Text>}
           </Button>

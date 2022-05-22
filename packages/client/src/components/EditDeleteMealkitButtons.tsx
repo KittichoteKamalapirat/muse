@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -8,13 +8,9 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { gql } from "@apollo/client";
 import NextLink from "next/link";
 import React from "react";
-import {
-  useDeletePostMutation,
-  useToggleIsPublishedMutation,
-} from "../generated/graphql";
+import { useToggleIsPublishedMutation } from "../generated/graphql";
 
 interface EditDeleteMealkitButtonsProps {
   id: number;

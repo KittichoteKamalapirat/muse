@@ -1,3 +1,6 @@
 mutation updateAvatar($newAvatar: String!) {
-  updateAvatar(newAvatar: $newAvatar)
+  updateAvatar(newAvatar: $newAvatar) {
+    id
+    avatar
+  }
 }
