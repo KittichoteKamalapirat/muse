@@ -16,8 +16,8 @@ const Tab = ({ currentStatus, tabStatus, onClick, children }: Props) => {
     <Box
       flex={1}
       textAlign="center"
-      borderBottom={3}
-      p={2}
+      display="inline-block"
+      whiteSpace="nowrap"
       fontWeight={isActive ? "bold" : ""}
       borderStyle="solid"
       borderColor={isActive ? primaryColor : "white"}
@@ -27,7 +27,9 @@ const Tab = ({ currentStatus, tabStatus, onClick, children }: Props) => {
         cursor: "pointer",
         fontWeight: "bold",
       }}
-      mx={1}
+      borderBottom={3}
+      p={2}
+      mx={2}
       onClick={onClick}
     >
       {children}

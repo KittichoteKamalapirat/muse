@@ -34,7 +34,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
     setCartItemStatus(cartItemStatus);
   };
   return (
-    <Flex width="100%" ml={"auto"} align="center" justifyContent="flex-end">
+    <Flex width="100%" ml={"auto"} align="center" overflowX="scroll">
       {CART_ITEM_STATUS_TABS_DISPLAY.map((item) => (
         <Tab
           key={item.status}
