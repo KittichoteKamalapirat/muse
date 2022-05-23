@@ -8,7 +8,7 @@ const receivedOrderEmail = (
     process.env.CORS_ORIGIN
   }/myshop/order/cartItem/${id}>an order for ${quantity} ${mealkitName}${
     quantity > 1 ? "s" : ""
-  } </strong> </a> from ${username}. Please wait for ${username} to complete the payment.`;
+  } </a> from ${username}. Please wait for ${username} to complete the payment.`;
   return message;
 };
 
