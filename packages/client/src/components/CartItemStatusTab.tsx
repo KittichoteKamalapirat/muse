@@ -1,7 +1,7 @@
-import { Flex, Box, background } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { CartItemStatus, useUserOrdersLazyQuery } from "../generated/graphql";
-import { primaryColor, inActiveGray } from "./Variables";
+import { Flex } from "@chakra-ui/react";
+import React from "react";
+import { CartItemStatus } from "../generated/graphql";
+import Tab from "./atoms/Tab/Tab";
 
 interface CartItemStatusTabProps {
   userOrders: Function;
@@ -9,140 +9,42 @@ interface CartItemStatusTabProps {
   setCartItemStatus: Function;
 }
 
+interface CartItemStatusTabDisplay {
+  status: CartItemStatus;
+  label: string;
+}
+const CART_ITEM_STATUS_TABS_DISPLAY: CartItemStatusTabDisplay[] = [
+  { status: CartItemStatus.PaymentPending, label: "To pay" },
+  { status: CartItemStatus.ToDeliver, label: "Packing" },
+  { status: CartItemStatus.OnTheWay, label: "On the way" },
+  { status: CartItemStatus.Delivered, label: "Delivered" },
+  { status: CartItemStatus.Received, label: "Received" },
+  { status: CartItemStatus.Complete, label: "Complete" },
+];
+
 export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
   userOrders,
   cartItemStatus,
   setCartItemStatus,
 }) => {
-  console.log({ cartItemStatus });
+  const handleClick = (cartItemStatus: CartItemStatus) => {
+    userOrders({
+      variables: { status: cartItemStatus },
+    });
+    setCartItemStatus(cartItemStatus);
+  };
   return (
-    <Flex
-      width="100%"
-      p={2}
-      ml={"auto"}
-      align="center"
-      justifyContent="flex-end"
-    >
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={
-          cartItemStatus === "PaymentPending" ? primaryColor : "white"
-        }
-        color={
-          cartItemStatus === "PaymentPending" ? primaryColor : inActiveGray
-        }
-        mx={1}
-        onClick={() => {
-          userOrders({
-            variables: { status: CartItemStatus.PaymentPending },
-          });
-
-          setCartItemStatus(CartItemStatus.PaymentPending);
-        }}
-      >
-        To pay
-      </Box>
-
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={cartItemStatus === "ToDeliver" ? primaryColor : "white"}
-        color={cartItemStatus === "ToDeliver" ? primaryColor : inActiveGray}
-        mx={1}
-        onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.ToDeliver } });
-          setCartItemStatus(CartItemStatus.ToDeliver);
-        }}
-      >
-        Packing
-      </Box>
-
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={cartItemStatus === "OnTheWay" ? primaryColor : "white"}
-        color={cartItemStatus === "OnTheWay" ? primaryColor : inActiveGray}
-        mx={1}
-        onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.OnTheWay } });
-          setCartItemStatus(CartItemStatus.OnTheWay);
-        }}
-      >
-        On the way
-      </Box>
-
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={
-          cartItemStatus === CartItemStatus.Delivered ? primaryColor : "white"
-        }
-        color={
-          cartItemStatus === CartItemStatus.Delivered
-            ? primaryColor
-            : inActiveGray
-        }
-        mx={1}
-        onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.Delivered } });
-          setCartItemStatus(CartItemStatus.Delivered);
-        }}
-      >
-        Delivered
-      </Box>
-
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={
-          cartItemStatus === CartItemStatus.Received ? primaryColor : "white"
-        }
-        color={
-          cartItemStatus === CartItemStatus.Received
-            ? primaryColor
-            : inActiveGray
-        }
-        mx={1}
-        onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.Received } });
-          setCartItemStatus(CartItemStatus.Received);
-        }}
-      >
-        Received
-      </Box>
-
-      <Box
-        flex={1}
-        textAlign="center"
-        borderBottom={2}
-        borderStyle="solid"
-        borderColor={
-          cartItemStatus === CartItemStatus.Complete ? primaryColor : "white"
-        }
-        color={
-          cartItemStatus === CartItemStatus.Complete
-            ? primaryColor
-            : inActiveGray
-        }
-        mx={1}
-        onClick={() => {
-          userOrders({ variables: { status: CartItemStatus.Complete } });
-          setCartItemStatus(CartItemStatus.Complete);
-        }}
-      >
-        Complete
-      </Box>
+    <Flex width="100%" ml={"auto"} align="center" justifyContent="flex-end">
+      {CART_ITEM_STATUS_TABS_DISPLAY.map((item) => (
+        <Tab
+          key={item.status}
+          currentStatus={cartItemStatus}
+          tabStatus={item.status}
+          onClick={() => handleClick(item.status)}
+        >
+          {item.label}
+        </Tab>
+      ))}
     </Flex>
   );
 };
