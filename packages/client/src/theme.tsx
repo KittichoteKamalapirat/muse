@@ -18,7 +18,7 @@ const breakpoints = createBreakpoints({
 const theme = extendTheme(
   withDefaultColorScheme({
     colorScheme: "brand",
-    components: ["Button", "Badge"],
+    components: ["Button", "Badge", "Checkbox"],
   }),
   {
     //global styles
@@ -48,6 +48,31 @@ const theme = extendTheme(
     colors: {
       black: "#16161D",
       brand: "#3dc795",
+      primary: {
+        50: "#dffcf2",
+        100: "#beefde",
+        200: "#99e3c8",
+        300: "#72d7b3",
+        400: "#4dcc9e",
+        500: "#33b284",
+        600: "#258b67",
+        700: "#176348",
+        800: "#073c2b",
+        900: "#00160c",
+      },
+      secondary: {
+        50: "#ffe5e5",
+        100: "#fbb9ba",
+        200: "#f28c8d",
+        300: "#ec5f5f",
+        400: "#e63333",
+        500: "#cc1a19",
+        600: "#a01313",
+        700: "#730c0d",
+        800: "#460506",
+        900: "#1e0000",
+      },
+
       brandHover: "#26d997",
       brandHoverPale: "#eaf9f4",
       action: "#3dc795",

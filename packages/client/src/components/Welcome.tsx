@@ -49,13 +49,13 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
 
                 <Center>
                   <Flex flexDirection="column">
-                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                    <Checkbox size="lg" colorScheme="primary" defaultChecked>
                       ingredients
                     </Checkbox>
-                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                    <Checkbox size="lg" colorScheme="primary" defaultChecked>
                       recipe
                     </Checkbox>
-                    <Checkbox size="lg" colorScheme="teal" defaultChecked>
+                    <Checkbox size="lg" colorScheme="primary" defaultChecked>
                       ideas
                     </Checkbox>
                   </Flex>
