@@ -4,7 +4,7 @@
   "viewportHeight": 1000,
   "viewportWidth": 1280,
   "retries": {
-    "runMode": 2
+    "runMode": 1
   },
   "env": {
     "clientUrl": "http://localhost:2999",

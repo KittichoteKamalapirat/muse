@@ -21,6 +21,7 @@ const Index = () => {
       limit: 20,
       cursor: null as null | string,
     },
+    fetchPolicy: "no-cache", // without this, somehow pots become duplicate
   });
 
   const observer = useRef<IntersectionObserver | null>(null);
@@ -181,28 +182,6 @@ const Index = () => {
           )
         )}
       </Stack>
-
-      {data && data.posts.hasMore ? (
-        <Flex>
-          <Button
-            onClick={() => {
-              fetchMore({
-                variables: {
-                  limit: variables?.limit,
-                  cursor:
-                    data.posts.posts[data.posts.posts.length - 1].createdAt,
-                },
-              });
-            }}
-            isLoading={loading}
-            bgColor="lightgrey"
-            variant="ghost"
-            my={8}
-          >
-            load more
-          </Button>
-        </Flex>
-      ) : null}
     </Layout>
   );
 };
