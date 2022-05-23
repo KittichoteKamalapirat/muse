@@ -1,112 +1,112 @@
 export const banksArray = [
   {
-    bank: "พร้อมเพย์",
+    bank: "พร้อมเพย์ (Promptpay)",
     bankCode: "Promptpay",
   },
   {
-    bank: "ไทยพาณิชย์",
+    bank: "ไทยพาณิชย์ (SCB)",
     bankCode: "SCB",
   },
 
   {
-    bank: "กสิกรไทย",
+    bank: "กสิกรไทย (KBANK)",
     bankCode: "KBANK",
   },
   {
-    bank: "กรุงไทย",
+    bank: "กรุงไทย (KTB)",
     bankCode: "KTB",
   },
 
   {
-    bank: "กรุงเทพ",
+    bank: "กรุงเทพ (BBL)",
     bankCode: "BBL",
   },
   {
-    bank: "ทีทีบี",
+    bank: "ทีทีบี (TTB)",
     bankCode: "TTB",
   },
   {
-    bank: "ออมสิน",
+    bank: "ออมสิน (GSB)",
     bankCode: "GSB",
   },
   {
-    bank: "กรุงศรี",
+    bank: "กรุงศรี (BAY)",
     bankCode: "BAY",
   },
   {
-    bank: "ธ.ก.ส",
+    bank: "ธ.ก.ส (BAAC)",
     bankCode: "BAAC",
   },
   {
-    bank: "ยูโอบี",
+    bank: "ยูโอบี (UOB)",
     bankCode: "UOB",
   },
   {
-    bank: "อาคารสงเคราะห์",
+    bank: "อาคารสงเคราะห์ (GB Bank)",
     bankCode: "GB Bank",
   },
   {
-    bank: "ซีไอเอ็มบี",
+    bank: "ซีไอเอ็มบี (CIMB)",
     bankCode: "CIMB",
   },
 
   {
-    bank: "ซิตี้แบงก์",
+    bank: "ซิตี้แบงก์ (CITIBANK)",
     bankCode: "CITIBANK",
   },
 
   {
-    bank: "ดอยซ์แบงก์",
+    bank: "ดอยซ์แบงก์ (Deutsche Bank)",
     bankCode: "Deutsche Bank",
   },
 
   {
-    bank: "เอชเอสซีบี",
+    bank: "เอชเอสซีบี (HSCB)",
     bankCode: "HSCB",
   },
 
   {
-    bank: "ไอซีบีซี",
+    bank: "ไอซีบีซี (ICBC)",
     bankCode: "ICBC",
   },
 
   {
-    bank: "ธนาคารอิสลาม",
+    bank: "ธนาคารอิสลาม (Islamic Bank of Thailand)",
     bankCode: "Islamic Bank of Thailand",
   },
 
   {
-    bank: "เกียรตินาคินภัทร",
+    bank: "เกียรตินาคินภัทร (Kiatnakin)",
     bankCode: "Kiatnakin",
   },
 
   {
-    bank: "แลนด์ แอนด์ เฮาส์",
+    bank: "แลนด์ แอนด์ เฮาส์ (LAH)",
     bankCode: "LAH",
   },
 
   {
-    bank: "มิซูโฮะ",
+    bank: "มิซูโฮะ (Mizuho)",
     bankCode: "Mizuho",
   },
 
   {
-    bank: "แสตนดาร์ดชาร์เตอร์ด",
+    bank: "แสตนดาร์ดชาร์เตอร์ด (SCBLTHBX)",
     bankCode: "SCBLTHBX",
   },
 
   {
-    bank: "ซูมิโตโม",
+    bank: "ซูมิโตโม (Sumitomo)",
     bankCode: "Sumitomo",
   },
 
   {
-    bank: "ไทยเครดิต",
+    bank: "ไทยเครดิต (Thai Credit)",
     bankCode: "Thai Credit",
   },
 
   {
-    bank: "ทิสโก้",
+    bank: "ทิสโก้ (TISCO)",
     bankCode: "TISCO",
   },
 ];

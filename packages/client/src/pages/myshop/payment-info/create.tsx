@@ -3,9 +3,14 @@ import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from "../../../components/atoms/Button";
+import FormFieldLabel from "../../../components/form/FormFieldLabel/FormFieldLabel";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Layout } from "../../../components/Layout/Layout";
+import { Error } from "../../../components/skeletons/Error";
+import { Loading } from "../../../components/skeletons/Loading";
 import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   PaymentInfoDocument,
   PaymentInfoQuery,
@@ -19,8 +24,11 @@ import { withApollo } from "../../../util/withApollo";
 interface CreatePaymentInfoProps {}
 
 const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
-  const { data: paymentInfo, loading: paymentInfoLoading } =
-    usePaymentInfoQuery();
+  const {
+    data: paymentInfo,
+    loading: paymentInfoLoading,
+    error: paymentInfoError,
+  } = usePaymentInfoQuery();
   const [createPaymentInfo] = useCreatePaymentInfoMutation();
   const router = useRouter();
 
@@ -28,9 +36,26 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
   if (paymentInfo?.paymentInfo) {
     router.push("/myshop/payment-info");
   }
+
+  if (paymentInfoLoading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (paymentInfoError) {
+    return (
+      <Layout heading="loading">
+        <Error text={paymentInfoError?.message} />
+      </Layout>
+    );
+  }
+
   return (
     <HeadingLayout heading="Add Payment Info">
-      <Wrapper>
+      <XWrapper>
         <Formik
           initialValues={{
             bankCode: "",
@@ -80,36 +105,36 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              {/* <InputField name="bank" placeholder="bank" label="Bank" /> */}
-              <Box>
-                <label>Bank</label>
+              <Box mt={4}>
+                <FormFieldLabel label="Bank Name" required />
+
+                <Field as="select" name="bankCode">
+                  <option value="select">select</option>
+                  {banksArray.map((bank) => (
+                    <option value={bank.bankCode} key={bank.bank}>
+                      {bank.bank}
+                    </option>
+                  ))}
+                </Field>
               </Box>
 
-              {/* <Select placeholder="Select option"> */}
-              <Field as="select" name="bankCode">
-                <option value="select">select</option>
-                {banksArray.map((bank) => (
-                  <option value={bank.bankCode} key={bank.bank}>
-                    {bank.bank}
-                  </option>
+              <Box mt={4}>
+                <FormFieldLabel label="Bank Account" required />
 
-                  // </Box>
-                ))}
-              </Field>
-              {/* </Select> */}
+                <InputField
+                  name="bankAccount"
+                  placeholder="bankAccount"
+                  label=""
+                />
+              </Box>
 
-              <InputField
-                name="bankAccount"
-                placeholder="bankAccount"
-                label="Bank Account"
-              />
               <Button type="submit" isLoading={isSubmitting}>
                 Add
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };

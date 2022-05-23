@@ -14,6 +14,8 @@ import { banksArray } from "../../../util/constants";
 import { withApollo } from "../../../util/withApollo";
 import { Heading } from "@chakra-ui/react";
 import LinkButton from "../../../components/atoms/LinkButton";
+import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
 
 interface PaymentInfoProps {}
 
@@ -43,7 +45,11 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
   }
 
   if (paymentInfoLoading) {
-    return <Text>Loading</Text>;
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
   }
   return (
     <HeadingLayout heading="Payment Info">
@@ -86,12 +92,12 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
             </Flex>
 
             <Flex alignItems="flex-start" justifyContent="space-between">
-              <Box>logo</Box>
+              {/* //todo Add logo <Box>logo</Box>  */}
+
               <Box>
                 <Text d="inline">{bankname}</Text>
-                <Text d="inline"> ({paymentInfo.paymentInfo.bankCode})</Text>
+                {/* <Text d="inline"> ({paymentInfo.paymentInfo.bankCode})</Text> */}
               </Box>
-              <Box textAlign="right"> </Box>
 
               <Text>{paymentInfo.paymentInfo.bankAccount}</Text>
             </Flex>
