@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import React from "react";
 import { CartItemStatus } from "../generated/graphql";
 import Tab from "./atoms/Tab/Tab";
@@ -34,17 +34,34 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
     setCartItemStatus(cartItemStatus);
   };
   return (
-    <Flex width="100%" ml={"auto"} align="center" overflowX="scroll">
-      {CART_ITEM_STATUS_TABS_DISPLAY.map((item) => (
-        <Tab
-          key={item.status}
-          currentStatus={cartItemStatus}
-          tabStatus={item.status}
-          onClick={() => handleClick(item.status)}
-        >
-          {item.label}
-        </Tab>
-      ))}
-    </Flex>
+    <Box
+      // hiding scroll bar
+      height={12}
+      width="100%"
+      overflow="hidden"
+    >
+      <Flex
+        width="100%"
+        ml={"auto"}
+        align="center"
+        overflowY="hidden"
+        overflowX="scroll"
+        // hiding scroll bar
+        height="100%"
+        pb={10} // push to b ottom
+        boxSizing="content-box"
+      >
+        {CART_ITEM_STATUS_TABS_DISPLAY.map((item) => (
+          <Tab
+            key={item.status}
+            currentStatus={cartItemStatus}
+            tabStatus={item.status}
+            onClick={() => handleClick(item.status)}
+          >
+            {item.label}
+          </Tab>
+        ))}
+      </Flex>
+    </Box>
   );
 };
