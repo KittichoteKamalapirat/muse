@@ -145,11 +145,9 @@ const Post = ({}) => {
                   ))}
                 </Box>
               )}
+              <MealkitInfo postId={data.post.id} />
             </ContentWrapper>
           </Box>
-
-          {/* </Box> */}
-          <MealkitInfo postId={data.post.id} />
         </Wrapper>
       </HeadingLayout>
     </>

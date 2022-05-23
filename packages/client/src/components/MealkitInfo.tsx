@@ -8,6 +8,7 @@ import {
   useToast,
   Wrap,
   WrapItem,
+  Divider,
 } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useState } from "react";
@@ -52,11 +53,11 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
 
   return (
     <Box bgColor="white" py="1px">
-      {/* <Wrapper> */}
-      <ContentWrapper>
-        <Heading size="lg">Meal kit</Heading>
-      </ContentWrapper>
+      <Divider />
 
+      <Heading size="lg">Meal kit</Heading>
+
+      {/* Mealkit details component */}
       {!mealkits?.mealkits || mealkits?.mealkits.length === 0 ? (
         <Box>
           <Text>There are no mealkits for this post</Text>
@@ -67,7 +68,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       ) : (
         <Box>
           {mealkits.mealkits.map((mealkit, index) => (
-            <Box key={index} mx={4}>
+            <Box key={index}>
               <Wrap spacing="2% " justify="center">
                 {mealkit.mealkitFiles.map((file, index) => (
                   <WrapItem key={index} m={1} width="48%">
@@ -83,142 +84,140 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                 ))}
               </Wrap>
 
-              <XWrapper>
-                <Flex justifyContent="space-between" alignItems="baseline">
-                  <Box>
-                    <Heading fontSize="lg"> {mealkit.name} </Heading>
-                    <ReviewStars
-                      reviewScore={4}
-                      reviewsCounter={mealkit.reviewsCounter}
-                    />
-
-                    <Text>
-                      For {mealkit.portion}{" "}
-                      {mealkit.portion > 1 ? "people" : "person"}
-                    </Text>
-                    <Text>฿{mealkit.price}</Text>
-                  </Box>
-
-                  {meData?.me?.id === mealkit.creatorId && (
-                    <EditDeleteMealkitButtons
-                      id={mealkit.id}
-                      postId={mealkit.postId}
-                      // isPublished={data.post.isPublished}
-                    />
-                  )}
-                </Flex>
-
+              <Flex justifyContent="space-between" alignItems="baseline">
                 <Box>
-                  <Heading size="md">รายการ</Heading>
-                  {mealkit.items?.map((item, itemIndex) => (
-                    <Text key={itemIndex}>
-                      {itemIndex + 1}. {item}
-                    </Text>
-                  ))}
+                  <Heading fontSize="lg"> {mealkit.name} </Heading>
+                  <ReviewStars
+                    reviewScore={4}
+                    reviewsCounter={mealkit.reviewsCounter}
+                  />
+
+                  <Text>
+                    For {mealkit.portion}{" "}
+                    {mealkit.portion > 1 ? "people" : "person"}
+                  </Text>
+                  <Text>฿{mealkit.price}</Text>
                 </Box>
 
-                <Box
-                  zIndex={1}
-                  position="fixed"
-                  // bottom="0"
-                  // left="0"
-                  width="100%"
-                  bottom={[0, 0, null, null]}
-                  right={[0, 0, 0, 0]}
-                  maxW={[null, null, "30%", "30%"]}
-                  bgColor="white"
-                  boxShadow="xs"
-                >
-                  <Box
-                    width="90%"
-                    mx="auto"
-                    pt={2}
-                    pb={2}
-                    maxW={[null, "40%", "none", "none"]}
-                  >
-                    {" "}
-                    <Flex
-                      justifyContent="space-between"
-                      alignItems="center"
-                      my={2}
-                    >
-                      <Flex alignItems="center">
-                        <Avatar src={mealkit.thumbnail.url} size="sm" />
-                        <Heading fontSize="lg" ml={2}>
-                          {mealkit.name}
-                        </Heading>
-                      </Flex>
+                {meData?.me?.id === mealkit.creatorId && (
+                  <EditDeleteMealkitButtons
+                    id={mealkit.id}
+                    postId={mealkit.postId}
+                    // isPublished={data.post.isPublished}
+                  />
+                )}
+              </Flex>
 
-                      <Text>฿{mealkit.price}</Text>
-                    </Flex>
-                    <Button
-                      leftIcon={<AddIcon />}
-                      isLoading={cartLoading}
-                      onClick={() => {
-                        setCartLoading(true);
-                        createCartItem({
-                          variables: {
-                            input: {
-                              quantity: 1,
-                              mealkitId: mealkit.id,
-                            },
-                          },
-                          update(cache, { data }) {
-                            const id = data?.createCartItem.cartItem.id;
-                            const newItem = data?.createCartItem.newItem;
-                            console.log({ newItem });
-                            // if it's a newItem -> append to an array
-                            //if it's the old one -> do nothing since Apollo automatically update for us
-                            //have to remove mealkit and user, keep only mealkitId and userI since user=null and mealkit=null replace the cache
-                            if (newItem) {
-                              cache.modify({
-                                fields: {
-                                  cartItems(existingCartItems = []) {
-                                    const newCartItemRef = cache.writeFragment({
-                                      data: data.createCartItem.cartItem,
-                                      fragment: gql`
-                                        fragment NewCartItem on CartItem {
-                                          id
-                                          meakitId
-                                          type
-                                        }
-                                      `,
-                                    });
-                                    return [
-                                      ...existingCartItems,
-                                      newCartItemRef,
-                                    ];
-                                  },
-                                },
-                              });
-                            } else {
-                              // existing item
-                              const cached = cache.readFragment({
-                                id: "CartItem:" + id, // The value of the to-do item's cache ID
-                                fragment: gql`
-                                  fragment MyCartItem on CartItem {
-                                    id
-                                    mealkitId
-                                  }
-                                `,
-                              });
-                            }
-                          },
-                        });
-                        setCartLoading(false);
-                        // router.push("/cart");
-                      }}
-                    >
-                      Add to cart
-                    </Button>
-                  </Box>
-                </Box>
-              </XWrapper>
+              <Box>
+                <Heading size="md">รายการ</Heading>
+                {mealkit.items?.map((item, itemIndex) => (
+                  <Text key={itemIndex}>
+                    {itemIndex + 1}. {item}
+                  </Text>
+                ))}
+              </Box>
 
+              {/* Reviews component */}
               <Box my={4}>
                 <Reviews mealkitId={mealkit.id} />
               </Box>
 
+              {/*  Bottom Add to cart component  */}
+              <Box
+                zIndex={1}
+                position="fixed"
+                // bottom="0"
+                // left="0"
+                width="100%"
+                bottom={[0, 0, null, null]}
+                right={[0, 0, 0, 0]}
+                maxW={[null, null, "30%", "30%"]}
+                bgColor="white"
+                boxShadow="xs"
+              >
+                <Box
+                  width="90%"
+                  mx="auto"
+                  pt={2}
+                  pb={2}
+                  maxW={[null, "40%", "none", "none"]}
+                >
+                  {" "}
+                  <Flex
+                    justifyContent="space-between"
+                    alignItems="center"
+                    my={2}
+                  >
+                    <Flex alignItems="center">
+                      <Avatar src={mealkit.thumbnail.url} size="sm" />
+                      <Heading fontSize="lg" ml={2}>
+                        {mealkit.name}
+                      </Heading>
+                    </Flex>
+
+                    <Text>฿{mealkit.price}</Text>
+                  </Flex>
+                  <Button
+                    leftIcon={<AddIcon />}
+                    isLoading={cartLoading}
+                    onClick={() => {
+                      setCartLoading(true);
+                      createCartItem({
+                        variables: {
+                          input: {
+                            quantity: 1,
+                            mealkitId: mealkit.id,
+                          },
+                        },
+                        update(cache, { data }) {
+                          const id = data?.createCartItem.cartItem.id;
+                          const newItem = data?.createCartItem.newItem;
+                          console.log({ newItem });
+                          // if it's a newItem -> append to an array
+                          //if it's the old one -> do nothing since Apollo automatically update for us
+                          //have to remove mealkit and user, keep only mealkitId and userI since user=null and mealkit=null replace the cache
+                          if (newItem) {
+                            cache.modify({
+                              fields: {
+                                cartItems(existingCartItems = []) {
+                                  const newCartItemRef = cache.writeFragment({
+                                    data: data.createCartItem.cartItem,
+                                    fragment: gql`
+                                      fragment NewCartItem on CartItem {
+                                        id
+                                        meakitId
+                                        type
+                                      }
+                                    `,
+                                  });
+                                  return [...existingCartItems, newCartItemRef];
+                                },
+                              },
+                            });
+                          } else {
+                            // existing item
+                            const cached = cache.readFragment({
+                              id: "CartItem:" + id, // The value of the to-do item's cache ID
+                              fragment: gql`
+                                fragment MyCartItem on CartItem {
+                                  id
+                                  mealkitId
+                                }
+                              `,
+                            });
+                          }
+                        },
+                      });
+                      setCartLoading(false);
+                      // router.push("/cart");
+                    }}
+                  >
+                    Add to cart
+                  </Button>
+                </Box>
+              </Box>
+
+              {/* toast */}
               <Box display="none">
                 {cartItemData &&
                   toast({
@@ -285,7 +284,6 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
       )}
 
       <FooterLayout mb="130px" />
-      {/* </Wrapper> */}
     </Box>
   );
 };
