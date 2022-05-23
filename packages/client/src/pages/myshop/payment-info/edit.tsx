@@ -5,6 +5,8 @@ import React from "react";
 import Button from "../../../components/atoms/Button";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Layout } from "../../../components/Layout/Layout";
+import { Loading } from "../../../components/skeletons/Loading";
 import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import {
   usePaymentInfoQuery,
@@ -23,7 +25,11 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
     usePaymentInfoQuery();
 
   if (paymentInfoLoading) {
-    return <Text>Loading</Text>;
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
   }
   return (
     <HeadingLayout heading="Add Payment Info">
