@@ -107,7 +107,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           <Box mt={4}>
             <Heading fontSize="md">My orders</Heading>
 
-            <Flex mt={4} justifyContent="space-around">
+            <Flex mt={4} justifyContent="space-around" alignItems="end">
               <LinkBox>
                 <NextLink
                   href={{
