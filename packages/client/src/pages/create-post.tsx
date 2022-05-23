@@ -42,7 +42,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(3);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -216,17 +216,20 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
+      const postInput = {
+        title: values.title,
+        text: values.text,
+        instruction: instructionField,
+        cooktime: values.cooktime,
+        portion: parseInt(values.portion as string),
+        advice: [values.advice],
+        ingredients: ingredientsField,
+      };
+
+      console.log({ postInput });
       const { data, errors } = await createPost({
         variables: {
-          input: {
-            title: values.title,
-            text: values.text,
-            instruction: instructionField,
-            cooktime: values.cooktime,
-            portion: values.portion,
-            advice: [values.advice],
-            ingredients: ingredientsField,
-          },
+          input: postInput,
           videoId: videoS3UrlAndID?.id as number,
           // TODO -> check this about thumbnail error
           // if no thumbnail -> use the auto Thumbnail url instead
@@ -287,6 +290,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     let postSubmittable: boolean = false;
 
     if (
+      // TODO rethink about what fields are required (also update backend entity)
       mealkitInput.name != "" &&
       mealkitInput.mealkitPortion != "" &&
       mealkitInput.price != "" &&
@@ -297,10 +301,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
 
     if (
-      formRef.current?.values.title != "" &&
-      formRef.current?.values.text != "" &&
-      formRef.current?.values.cooktime != "" &&
-      formRef.current?.values.portion != ""
+      formRef.current?.values.title != ""
+      // formRef.current?.values.text != "" &&
+      // formRef.current?.values.cooktime != "" &&
+      // formRef.current?.values.portion != ""
     ) {
       postSubmittable = true;
     }

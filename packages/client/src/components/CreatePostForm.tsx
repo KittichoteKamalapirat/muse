@@ -1,7 +1,8 @@
 import { InputGroup, InputRightAddon } from "@chakra-ui/input";
-import { Box, Divider, Flex, Heading } from "@chakra-ui/layout";
+import { Box, Flex } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import React from "react";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 import { InputField } from "./InputField";
 
 interface CreatePostFormProps {}
@@ -10,12 +11,12 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
   return (
     <Box mt={4}>
       <Box>
-        <Heading fontSize="md">Menu</Heading>
+        <FormFieldLabel label="Menu" required />
         <InputField name="title" placeholder="Menu Name" label="" />
       </Box>
 
       <Box mt={4}>
-        <Heading fontSize="md">Details</Heading>
+        <FormFieldLabel label="Details" />
         <InputField
           textarea={true}
           name="text"
@@ -26,7 +27,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
       </Box>
 
       <Box mt={4}>
-        <Heading fontSize="md">Cooking time</Heading>
+        <FormFieldLabel label="Cooking time" />
 
         <Flex justifyContent="left">
           <Box mr={2}>
@@ -46,9 +47,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
       </Box>
 
       <Box mt={4}>
-        <Heading fontSize="md" whiteSpace="nowrap">
-          Portion for
-        </Heading>
+        <FormFieldLabel label="Portion for" />
         <InputGroup>
           <InputField name="portion" placeholder="2" type="number" />
 
@@ -57,7 +56,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
       </Box>
 
       <Box mt={4}>
-        <Heading fontSize="md">Tip/Advice</Heading>
+        <FormFieldLabel label="Tip/Advice" />
         <InputField
           textarea={true}
           name="advice"

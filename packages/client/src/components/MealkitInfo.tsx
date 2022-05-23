@@ -25,6 +25,7 @@ import { Reviews } from "./Reviews";
 import { ReviewStars } from "./ReviewStars";
 import { Loading } from "./skeletons/Loading";
 import { ContentWrapper } from "./Wrapper/ContentWrapper";
+import { XWrapper } from "./Wrapper/XWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -82,7 +83,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                 ))}
               </Wrap>
 
-              <ContentWrapper>
+              <XWrapper>
                 <Flex justifyContent="space-between" alignItems="baseline">
                   <Box>
                     <Heading fontSize="lg"> {mealkit.name} </Heading>
@@ -144,8 +145,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                       <Flex alignItems="center">
                         <Avatar src={mealkit.thumbnail.url} size="sm" />
                         <Heading fontSize="lg" ml={2}>
-                          {" "}
-                          {mealkit.name}{" "}
+                          {mealkit.name}
                         </Heading>
                       </Flex>
 
@@ -213,7 +213,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                     </Button>
                   </Box>
                 </Box>
-              </ContentWrapper>
+              </XWrapper>
 
               <Box my={4}>
                 <Reviews mealkitId={mealkit.id} />

@@ -21,6 +21,7 @@ import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import SvgUploadFiles from "./Icons/UploadFiles";
 import SvgUploadImage from "./Icons/UploadImage";
@@ -144,9 +145,10 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                     borderStyle="dashed"
                   >
                     <SvgUploadFiles />
-                    <Heading fontSize="xl" textAlign="center">
-                      Select images or videos
-                    </Heading>
+                    <FormFieldLabel
+                      label="Select images or videos"
+                      fontSize="xl"
+                    />
                     <Text fontSize="sm" textAlign="center">
                       Or drag and drop here
                     </Text>
@@ -174,7 +176,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
       <Form>
         <Box mt={4}>
-          <Heading fontSize="md">Meal Kit Name</Heading>
+          <FormFieldLabel label="Meal Kit Name" required />
           <InputField
             name="name"
             value={input.name}
@@ -184,7 +186,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         </Box>
 
         <Box mt={4}>
-          <Heading fontSize="md">Price</Heading>
+          <FormFieldLabel label="Price" required />
 
           <InputGroup>
             <InputField
@@ -199,7 +201,7 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         </Box>
 
         <Box mt={4}>
-          <Heading fontSize="md">Portion For</Heading>
+          <FormFieldLabel label="Portion For" required />
 
           <InputGroup>
             <InputField
@@ -218,17 +220,17 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
         {/* checkbox */}
         <Box my={4}>
-          <Heading fontSize="lg">Items include</Heading>
-          <Text fontSize="xs" color="alert">
+          <FormFieldLabel label="Items include" required />
+          {/* <Text fontSize="xs" color="alert">
             * At least 1 ingredient
-          </Text>
+          </Text> */}
           {ingredientsField.filter(
             (ingredientObj) => ingredientObj.ingredient !== ""
           ).length === 0 ? (
-            <div>
+            <Text fontSize="sm">
               You have not added any ingredients. Please add them in the
               previous page.
-            </div>
+            </Text>
           ) : (
             <CheckboxGroup
               colorScheme="green"

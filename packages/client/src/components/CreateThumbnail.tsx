@@ -8,6 +8,7 @@ import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import SvgUploadImage from "./Icons/UploadImage";
 import { Loading } from "./skeletons/Loading";
@@ -74,9 +75,13 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
             borderStyle="dashed"
           >
             <SvgUploadImage />
-            <Heading fontSize="xl" textAlign="center">
-              Select images or videos
-            </Heading>
+
+            <FormFieldLabel
+              label="Select images or videos"
+              required
+              fontSize="xl"
+            />
+
             <Text fontSize="sm" textAlign="center">
               Or drag and drop here
             </Text>

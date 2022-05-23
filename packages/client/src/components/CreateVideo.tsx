@@ -11,6 +11,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import FormActionButtons from "./form/FormActionButtons/FormActionButtons";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 import { Loading } from "./skeletons/Loading";
@@ -103,9 +104,13 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                       borderStyle="dashed"
                     >
                       <UploadVideoIcon />
-                      <Heading fontSize="xl" textAlign="center">
-                        Select a video
-                      </Heading>
+
+                      <FormFieldLabel
+                        label="Select a video"
+                        required
+                        fontSize="xl"
+                      />
+
                       <Text fontSize="sm" textAlign="center">
                         Or drag and drop here
                       </Text>

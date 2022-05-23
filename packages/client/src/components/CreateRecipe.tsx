@@ -5,6 +5,7 @@ import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { Form } from "formik";
 import React from "react";
 import { IngredientInput } from "../generated/graphql";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 
 interface CreateRecipeProps {
   ingredientsField: IngredientInput[];
@@ -30,7 +31,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
   return (
     <Box mt={4}>
       <Form>
-        <Heading fontSize="lg">Ingredient need</Heading>
+        <FormFieldLabel label="Ingredients" required />
 
         <Flex justifyContent="space-between">
           <Text
@@ -115,7 +116,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
       </Form>
       <Divider my={2} />
       <Form>
-        <Heading fontSize="md">Instruction</Heading>
+        <FormFieldLabel label="Instruction" />
         {/* <Heading fontSize="md">ขั้นตอน</Heading> */}
         {instructionField.map((inputField, index) => (
           <Flex key={index} m={1} alignItems="center">
