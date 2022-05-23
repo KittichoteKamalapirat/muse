@@ -179,9 +179,9 @@ const DropzoneField = ({
       {label ? (
         <FormFieldLabel
           label={label}
-          fontColour={labelFontColour}
+          // fontColour={labelFontColour}
           displayOptionalLabel={displayOptionalLabel}
-          extraClass={labelClass}
+          // extraClass={labelClass}
         />
       ) : null}
 
