@@ -31,9 +31,6 @@ export const Slider: React.FC<SliderProps> = ({}) => {
           modifier: 1,
           slideShadows: true,
         }}
-        pagination={{
-          clickable: true,
-        }}
       >
         {videosSources.map((videoSrc) => (
           <SwiperSlide key={videoSrc.poster}>
