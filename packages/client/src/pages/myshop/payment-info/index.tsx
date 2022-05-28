@@ -52,7 +52,7 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
     );
   }
   return (
-    <HeadingLayout heading="Payment Info">
+    <HeadingLayout heading="Payment Info" backUrl="/myshop">
       <XWrapper>
         {!paymentInfo?.paymentInfo ? (
           noInfo
