@@ -122,6 +122,7 @@ const Index = () => {
                     poster={post.image.url}
                     autoPlay
                     muted
+                    playsInline
                   />
 
                   <Flex justifyContent="space-between">
