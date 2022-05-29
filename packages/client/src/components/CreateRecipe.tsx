@@ -79,7 +79,6 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
 
               <Flex
                 alignItems={["start", "start", "center"]}
-                justifyContent="revert"
                 flexDirection={["column", "column", "row"]}
                 width="100%"
               >
@@ -139,22 +138,22 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                   pl={1}
                 />
 
-                <IconButton
-                  onClick={() => handleAddField(index)}
-                  aria-label="Add ingredient"
-                  bgColor="white"
-                  size={buttonSizes}
-                  // size="sm"
-                  icon={<AddIcon width={3} color="gray.600" />}
-                />
-                <IconButton
-                  onClick={() => handleRemoveField(index)}
-                  aria-label="Remove ingredient"
-                  bgColor="white"
-                  size={buttonSizes}
-                  // size="sm"
-                  icon={<MinusIcon width={3} color="gray.600" />}
-                />
+                <Flex flexDirection="row">
+                  <IconButton
+                    onClick={() => handleAddField(index)}
+                    aria-label="Add ingredient"
+                    bgColor="white"
+                    size={buttonSizes}
+                    icon={<AddIcon width={3} color="gray.600" />}
+                  />
+                  <IconButton
+                    onClick={() => handleRemoveField(index)}
+                    aria-label="Remove ingredient"
+                    bgColor="white"
+                    size={buttonSizes}
+                    icon={<MinusIcon width={3} color="gray.600" />}
+                  />
+                </Flex>
               </Flex>
             </Flex>
           </Box>
