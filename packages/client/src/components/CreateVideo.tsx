@@ -127,7 +127,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
                             // nextStep();
                           }, 1000); // 10 doesn't work
                         }}
-                        src={videoS3UrlAndID.url}
+                        src={`${videoS3UrlAndID.url}#t=0.1`}
                       />
 
                       <Flex

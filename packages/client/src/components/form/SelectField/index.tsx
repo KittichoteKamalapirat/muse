@@ -18,10 +18,10 @@ const SelectField = ({ options, placeholder, onChange, name }: Props) => {
       placeholder={placeholder}
       onChange={onChange}
       styles={useStyles(false)}
-      components={{
-        DropdownIndicator: () => null,
-        IndicatorSeparator: () => null,
-      }}
+      //   components={{
+      //     DropdownIndicator: () => null,
+      //     IndicatorSeparator: () => null,
+      //   }}
     />
   );
 };

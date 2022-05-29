@@ -9,6 +9,13 @@ export const useStyles = (
   const currentColour = displayError ? "#ef4444" : "#E4E7EB";
 
   return {
+    container: (provided) => ({
+      ...provided,
+      flex: 1,
+      width: "100%",
+      margin: "4px",
+      fontFamily: "Mulish', monospace",
+    }),
     valueContainer: (provided) => ({
       ...provided,
       // height: "2rem",
@@ -57,9 +64,10 @@ export const useStyles = (
     }),
     placeholder: (provided) => ({
       ...provided,
-      // color: "#8b8b8b",
+      color: "#718096",
       // fontSize: "10px",
       fontWeight: "300",
+
       overflow: "hidden",
     }),
     input: (provided) => ({

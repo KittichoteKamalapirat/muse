@@ -39,7 +39,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
       <Form>
         <FormFieldLabel label="Ingredients" required />
 
-        <Flex justifyContent="space-between">
+        <Box justifyContent="space-between" display={["none", "flex"]}>
           <Text
             flex={2}
             m={1}
@@ -70,25 +70,33 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
           </Text>
           <Text flex={1}></Text>
           <Text flex={1}></Text>
-        </Flex>
+        </Box>
         {ingredientsField.map((inputField, index) => (
           <Box key={index}>
-            <Flex alignItems="center">
+            {/* flex for number and others (input, plus, minus) */}
+            <Flex alignItems={["start", "start", "center"]}>
               <Text mr={2}>{index + 1}. </Text>
-              <Input
-                name="ingredient"
-                type="text"
-                m={1}
-                borderColor="gray.300"
-                value={inputField.ingredient}
-                // placeholder="วัตถุดิบ"
-                placeholder="ex. tomato, salt"
-                onChange={(event) => handleChangeInput(index, event)}
-                flex={1}
-                pl={1}
-              />
 
-              <Box flex={1}>
+              <Flex
+                alignItems={["start", "start", "center"]}
+                justifyContent="revert"
+                flexDirection={["column", "column", "row"]}
+                width="100%"
+              >
+                <Input
+                  name="ingredient"
+                  type="text"
+                  borderColor="gray.300"
+                  value={inputField.ingredient}
+                  // placeholder="วัตถุดิบ"
+                  placeholder="ex. tomato, salt"
+                  onChange={(event) => handleChangeInput(index, event)}
+                  flex={1}
+                  pl={1}
+                  flexBasis={["35px", "35px", null]}
+                  m={1}
+                />
+
                 <SelectField
                   options={unitOptions(inputField.ingredient)}
                   name="unit"
@@ -105,9 +113,8 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                     handleChangeInput(index, event);
                   }}
                 />
-              </Box>
 
-              {/* <Input
+                {/* <Input
                 name="unit"
                 type="text"
                 m={1}
@@ -117,36 +124,38 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 value={inputField.unit}
                 onChange={(event) => handleChangeInput(index, event)}
               /> */}
-              <Input
-                name="amount"
-                type="number"
-                m={1}
-                borderColor="gray.300"
-                value={inputField.amount}
-                // placeholder="ปริมาณ"
-                placeholder="ex. 20, 0.5"
-                onChange={(event) => handleChangeInput(index, event)}
-                disabled={inputField.unit === "eyeball"}
-                flex={1}
-                pl={1}
-              />
+                <Input
+                  name="amount"
+                  type="number"
+                  m={1}
+                  borderColor="gray.300"
+                  value={inputField.amount}
+                  // placeholder="ปริมาณ"
+                  placeholder="ex. 20, 0.5"
+                  onChange={(event) => handleChangeInput(index, event)}
+                  disabled={inputField.unit === "eyeball"}
+                  flex={1}
+                  flexBasis={["35px", "35px", null]}
+                  pl={1}
+                />
 
-              <IconButton
-                onClick={() => handleAddField(index)}
-                aria-label="Add ingredient"
-                bgColor="white"
-                size={buttonSizes}
-                // size="sm"
-                icon={<AddIcon width={3} color="gray.600" />}
-              />
-              <IconButton
-                onClick={() => handleRemoveField(index)}
-                aria-label="Remove ingredient"
-                bgColor="white"
-                size={buttonSizes}
-                // size="sm"
-                icon={<MinusIcon width={3} color="gray.600" />}
-              />
+                <IconButton
+                  onClick={() => handleAddField(index)}
+                  aria-label="Add ingredient"
+                  bgColor="white"
+                  size={buttonSizes}
+                  // size="sm"
+                  icon={<AddIcon width={3} color="gray.600" />}
+                />
+                <IconButton
+                  onClick={() => handleRemoveField(index)}
+                  aria-label="Remove ingredient"
+                  bgColor="white"
+                  size={buttonSizes}
+                  // size="sm"
+                  icon={<MinusIcon width={3} color="gray.600" />}
+                />
+              </Flex>
             </Flex>
           </Box>
         ))}
