@@ -275,6 +275,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
           </Box>
 
           {/* show create button or just link with text */}
+          {/*           
           {isLargerThan30Em ? (
             <Box textAlign="left" mt={4}>
               <LinkButton pathname="/create-post" leftIcon={<AddIcon />}>
@@ -291,6 +292,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               width="2rem"
               padding-top="100%"
               boxShadow="lg"
+              zIndex={10}
             >
               <NextLink href="/create-post" passHref>
                 <Text as={Link}>
@@ -298,7 +300,13 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
                 </Text>
               </NextLink>
             </Button>
-          )}
+          )} */}
+
+          <Box textAlign="left" mt={4}>
+            <LinkButton pathname="/create-post" leftIcon={<AddIcon />}>
+              Create a new video with meal kit
+            </LinkButton>
+          </Box>
         </ContentWrapper>
       </Wrapper>
     </Layout>
