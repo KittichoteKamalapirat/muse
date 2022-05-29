@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import SwiperCore, { EffectCoverflow, Navigation, Pagination } from "swiper";
 import { motion } from "framer-motion";
-import videosSources from "../../types/utils/videoSources";
+
 import styles from "./Slider2.module.css";
+import videosSources from "../../../constants/videoSources";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 

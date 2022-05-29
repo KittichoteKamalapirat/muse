@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import SwiperCore, { EffectCoverflow, Navigation, Pagination } from "swiper";
-import videosSources from "../../types/utils/videoSources";
+import videosSources from "../../../constants/videoSources";
+
 import styles from "./Slider3.module.css";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);

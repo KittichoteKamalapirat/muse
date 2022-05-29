@@ -11,7 +11,6 @@ import { CreateVideo } from "../components/CreateVideo";
 import FormActionButtons from "../components/form/FormActionButtons/FormActionButtons";
 import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import PostBreadcrumb from "../components/post/PostBreadcrumb";
-import PostBreadCrumb from "../components/post/PostBreadcrumb";
 import { XWrapper } from "../components/Wrapper/XWrapper";
 import {
   useCreateMealkitMutation,
@@ -42,7 +41,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(3);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 

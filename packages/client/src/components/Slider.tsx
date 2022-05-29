@@ -6,7 +6,7 @@ import "swiper/css/effect-coverflow";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Swiper, SwiperSlide } from "swiper/react";
-import videosSources from "../types/utils/videoSources";
+import videosSources from "../../constants/videoSources";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
