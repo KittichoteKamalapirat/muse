@@ -120,6 +120,8 @@ const Index = () => {
                     controls
                     src={post.video.url}
                     poster={post.image.url}
+                    autoPlay
+                    muted
                   />
 
                   <Flex justifyContent="space-between">
