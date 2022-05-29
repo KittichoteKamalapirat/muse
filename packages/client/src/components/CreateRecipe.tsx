@@ -99,7 +99,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                 <SelectField
                   options={unitOptions(inputField.ingredient)}
                   name="unit"
-                  placeholder="ex. gram, milliliter xxxxxxx"
+                  placeholder="ex. gram, milliliter"
                   onChange={(option, action) => {
                     // first argument -> label and value object, second argument has name
                     // TODO this might break due to react select type mistake
