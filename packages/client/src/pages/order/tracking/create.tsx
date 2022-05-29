@@ -7,7 +7,7 @@ import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { useCreateTrackingMutation } from "../../../generated/graphql";
-import { courierList } from "../../../util/constants/courierList";
+import { courierList } from "../../../../constants/courierList";
 import { withApollo } from "../../../util/withApollo";
 
 interface CreateTrackingProps {}
