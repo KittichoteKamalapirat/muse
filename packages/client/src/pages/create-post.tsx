@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, ListItem, Text, Heading, UnorderedList } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
@@ -424,9 +424,38 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         />
 
                         {!submittable && (
-                          <Text color="alert">
-                            * Some required fields are missing
-                          </Text>
+                          <Box color="alert">
+                            <Heading fontSize="md">
+                              * Some required fields are missing
+                            </Heading>
+                            <UnorderedList>
+                              {formRef.current?.values.title === "" && (
+                                <ListItem>
+                                  Post&apos;s name cannot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.name === "" && (
+                                <ListItem>
+                                  Meal kit&apos;s name cannot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.mealkitPortion === "" && (
+                                <ListItem>
+                                  Meal kit&apos;s portion cannot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.price === "" && (
+                                <ListItem>
+                                  Meal kit&apos;s price canot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.items.length === 0 && (
+                                <ListItem>
+                                  Meal kit&apos;s items have to be at at least 1
+                                </ListItem>
+                              )}
+                            </UnorderedList>
+                          </Box>
                         )}
 
                         <FormActionButtons

@@ -1,16 +1,15 @@
 import { IconButton } from "@chakra-ui/button";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
-import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Divider, Flex, Text } from "@chakra-ui/layout";
+import { useBreakpointValue } from "@chakra-ui/react";
 import { Form } from "formik";
 import React from "react";
-import { IngredientInput } from "../generated/graphql";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
-
 import unitOptions from "../../constants/unitOptions";
+import { IngredientInput } from "../generated/graphql";
 import { SelectOption } from "../types/utils/SelectOption";
+import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
 import SelectField from "./form/SelectField";
-import { useBreakpointValue } from "@chakra-ui/react";
 
 interface CreateRecipeProps {
   ingredientsField: IngredientInput[];
