@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { usePostQuery } from "../generated/graphql";
 import { useGetPostId } from "./useGetPostId";
 

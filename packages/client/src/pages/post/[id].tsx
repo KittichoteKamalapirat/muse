@@ -20,9 +20,11 @@ import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { Ingredient, useMeQuery } from "../../generated/graphql";
 import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
+import { useIsAuth } from "../../util/useIsAuth";
 import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
+  useIsAuth();
   const { data, loading, error } = useGetPostFromUrl();
   const { data: meData } = useMeQuery();
 

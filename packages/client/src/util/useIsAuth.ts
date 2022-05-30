@@ -12,7 +12,7 @@ export const useIsAuth = () => {
     // if not log in, do this`
     if (!loading && !data?.me) {
       // replace => can't go back to login page
-      router.replace("login?next=" + router.pathname);
+      router.replace("/login?next=" + router.pathname);
     }
   }, [loading, data, router]);
 };
