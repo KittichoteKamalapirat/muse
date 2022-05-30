@@ -41,6 +41,8 @@ export const Slider: React.FC<SliderProps> = ({}) => {
               src={videoSrc.src}
               style={{ margin: "auto" }}
               poster={videoSrc.poster}
+              playsInline
+              muted
             />
           </SwiperSlide>
         ))}
