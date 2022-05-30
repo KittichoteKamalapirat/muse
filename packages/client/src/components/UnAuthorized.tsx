@@ -9,7 +9,7 @@ interface UnAuthorizedProps {}
 export const UnAuthorized: React.FC<UnAuthorizedProps> = ({}) => {
   return (
     <Box>
-      <HeadingLayout heading="Not Authorized"></HeadingLayout>
+      <HeadingLayout heading="Not Authorized" />
 
       <Flex
         flexDirection="column"
@@ -26,7 +26,7 @@ export const UnAuthorized: React.FC<UnAuthorizedProps> = ({}) => {
         <Text>You are not authorized to view this page</Text>
       </Flex>
 
-      <MainNav></MainNav>
+      <MainNav />
     </Box>
   );
 };
