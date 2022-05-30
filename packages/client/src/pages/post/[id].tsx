@@ -8,6 +8,7 @@ import {
   LinkOverlay,
   Text,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { EditDeletePostButtons } from "../../components/EditDeletePostButtons";
 import IngredientList from "../../components/IngredientList";
@@ -24,6 +25,7 @@ import { useIsAuth } from "../../util/useIsAuth";
 import { withApollo } from "../../util/withApollo";
 
 const Post = ({}) => {
+  const router = useRouter();
   useIsAuth();
   const { data, loading, error } = useGetPostFromUrl();
   const { data: meData, loading: meLoading, error: meError } = useMeQuery();
@@ -54,7 +56,14 @@ const Post = ({}) => {
   }
   return (
     <>
-      <HeadingLayout heading={data?.post?.title}>
+      <HeadingLayout
+        heading={data?.post?.title}
+        backUrl={
+          router.query.from === "login" || router.query.from === "register"
+            ? "/"
+            : undefined
+        }
+      >
         <Wrapper>
           <Box mx={["none", "auto"]} bgColor="white">
             <Flex justifyContent="space-between">

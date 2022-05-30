@@ -38,7 +38,7 @@ export const Login: React.FC<{}> = ({}) => {
   if (data?.me) {
     // without the following line, push to / even when there is next param
     if (typeof router.query.next === "string") {
-      router.push(router.query.next);
+      router.push(`${router.query.next}?from=login`);
     } else {
       router.push("/");
     }
@@ -77,17 +77,19 @@ export const Login: React.FC<{}> = ({}) => {
               // └ has to match what defined in graphqlmutation
               if (response.data?.login.errors) {
                 setErrors(toErrorMap(response.data.login.errors));
-              } else if (response.data?.login.user) {
-                // work we get the user!
-                // If login, push to the previoius page
-                if (typeof router.query.next === "string") {
-                  router.push(router.query.next);
-                  return;
-                } else {
-                  router.push("/");
-                  return;
-                }
               }
+              // important note: do nothing since the data?.me ablove will take care the redirect
+              // else if (response.data?.login.user) {
+              //   // work we get the user!
+              //   // If login, push to the previoius page
+              //   if (typeof router.query.next === "string") {
+              //     router.push(router.query.next);
+              //     return;
+              //   } else {
+              //     router.push("/");
+              //     return;
+              //   }
+              // }
             }}
           >
             {({ isSubmitting }) => (

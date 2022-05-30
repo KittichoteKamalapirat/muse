@@ -39,7 +39,12 @@ export const Register: React.FC<registerProps> = ({}) => {
   }
 
   if (data?.me) {
-    router.push("/");
+    if (typeof router.query.next === "string") {
+      router.push(`${router.query.next}?from=register`);
+    } else {
+      // work we get the user!
+      router.push("/");
+    }
   }
 
   return (
@@ -83,15 +88,7 @@ export const Register: React.FC<registerProps> = ({}) => {
               if (response.data?.register.errors) {
                 // instead of setErrors({username: "error message"}) we do
                 setErrors(toErrorMap(response.data.register.errors));
-              } else if (response.data?.register.user) {
-                if (typeof router.query.next === "string") {
-                  router.push(router.query.next);
-                } else {
-                  // work we get the user!
-                  router.push("/");
-                }
-              }
-              // response.data.register will return an error will data is undefined
+              } // response.data.register will return an error will data is undefined
               // response.data?.register will return undefined if there is no data -> false
             }}
           >
