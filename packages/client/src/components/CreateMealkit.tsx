@@ -108,8 +108,8 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         {mealkitS3UrlAndIds.map((s3UrlAndId, index) => (
           <WrapItem key={index} m={1} width="48%">
             {s3UrlAndId.fileType!.includes("video") ? (
-              <video controls>
-                <source src={s3UrlAndId.url} type="video/mp4" />
+              <video controls playsInline>
+                <source src={`${s3UrlAndId.url}#t=0.1`} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             ) : (

@@ -33,6 +33,7 @@ export const Slider2: React.FC<Slider2Props> = ({}) => {
               src={videoSrc.src}
               style={{ margin: "auto" }}
               poster={videoSrc.poster}
+              playsInline
             />
           </motion.div>
         ))}

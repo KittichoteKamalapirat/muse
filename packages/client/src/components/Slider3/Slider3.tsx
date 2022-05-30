@@ -20,6 +20,7 @@ export const Slider3: React.FC<Slider3Props> = ({}) => {
               src={videoSrc.src}
               style={{ margin: "auto" }}
               poster={videoSrc.poster}
+              playsInline
             />
           </div>
         ))}

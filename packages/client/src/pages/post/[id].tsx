@@ -83,6 +83,9 @@ const Post = ({}) => {
               controls
               src={data?.post.video.url}
               poster={data?.post.image.url}
+              autoPlay
+              muted
+              playsInline
             />
 
             <ContentWrapper>

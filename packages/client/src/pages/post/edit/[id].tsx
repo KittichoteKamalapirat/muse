@@ -175,8 +175,8 @@ const EditPost = ({}) => {
             </GridItem>
 
             <GridItem colSpan={6}>
-              <video controls>
-                <source src={data.post.video.url} type="video/mp4" />
+              <video controls playsInline>
+                <source src={`${data.post.video.url}#t=0.1`} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
               <Center color="red.500">
