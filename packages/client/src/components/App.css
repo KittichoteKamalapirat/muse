@@ -1,3 +1,22 @@
+/* for floating form */
+
+/* if placeholder is not shown (means the form not empty) or when it is focus */
+/* also :-webkit-autofill helps when it alto fills and placeholder-shown is not updated */
+
+.form-input:not(:placeholder-shown) + .form-label,
+.form-input:-webkit-autofill + .form-label,
+.form-input:focus .form-label:focus {
+  font-size: "small";
+  font-weight: 400;
+  color: "#3dc795";
+  top: 4px;
+  left: 10px;
+  padding: 0 5px 0 5px;
+  transition: all 0.3s ease;
+}
+
+/* for swiper */
+
 .swiper-slide {
   background-position: center;
   background-size: cover;
@@ -9,32 +28,8 @@
   color: black !important;
 }
 
-/* video::-webkit-media-controls-overlay-play-button {
-  display: none;
-} */
-
-/* this one hide the control panel that has play, sound, full screen etc */
-/* .welcome video::-webkit-media-controls-panel {
-  display: none;
-}
-
-.welcome video::-webkit-media-controls-play-button {
-  display: none;
-}
-
-.welcome video::-webkit-media-controls-overlay-play-button {
-  display: none;
-} */
-
 .swiper-button-prev {
   color: black !important;
-}
-
-@media (max-width: 768px) {
-  .swiper-slide {
-    width: 250px;
-    height: auto;
-  }
 }
 
 .swiper-slide video {
@@ -64,13 +59,6 @@
   padding-bottom: 3vw;
 }
 
-@media (max-width: 768px) {
-  .container .swiper-container {
-    bottom: -58vw;
-    padding-bottom: 8vw;
-  }
-}
-
 .title_wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -83,23 +71,10 @@
   padding: 3vw 0 2vw 0;
 }
 
-@media (max-width: 768px) {
-  .title_wrapper {
-    padding-top: 13vw;
-  }
-}
-
 .title_wrapper .reactLogo {
   width: 5vw;
   height: 5vw;
   margin-right: 1vw;
-}
-
-@media (max-width: 768px) {
-  .title_wrapper .reactLogo {
-    width: 25vw;
-    height: 25vw;
-  }
 }
 
 .title_wrapper .reactLogo img {
@@ -113,12 +88,6 @@
   color: #fff;
   text-align: left;
   font-size: 2vw;
-}
-
-@media (max-width: 768px) {
-  .title_wrapper .title_ {
-    font-size: 7vw;
-  }
 }
 
 .swiper-pagination {
@@ -135,19 +104,25 @@
   border-radius: 5px;
 }
 
-/* for floating form */
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 250px;
+    height: auto;
+  }
 
-/* if placeholder is not shown (means the form not empty) or when it is focus */
-/* also :-webkit-autofill helps when it alto fills and placeholder-shown is not updated */
+  .container .swiper-container {
+    bottom: -58vw;
+    padding-bottom: 8vw;
+  }
+  .title_wrapper {
+    padding-top: 13vw;
+  }
+  .title_wrapper .reactLogo {
+    width: 25vw;
+    height: 25vw;
+  }
 
-.form-input:not(:placeholder-shown) + .form-label,
-.form-input:-webkit-autofill + .form-label,
-.form-input:focus .form-label:focus {
-  font-size: "small";
-  font-weight: 400;
-  color: "#3dc795";
-  top: 4px;
-  left: 10px;
-  padding: 0 5px 0 5px;
-  transition: all 0.3s ease;
+  .title_wrapper .title_ {
+    font-size: 7vw;
+  }
 }

@@ -5,14 +5,16 @@ import React from "react";
 import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
-import { Slider } from "./Slider";
+import { ScrollSlider } from "./ScrollSlider";
+
 import { Slider2 } from "./Slider2/Slider2";
-import { Slider3 } from "./Slider3/Slider3";
+
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
 import SvgWhy3 from "./svgComponents/Why3";
 import SvgWhy4 from "./svgComponents/Why4";
+import { SwiperSlider } from "./SwiperSlider";
 import { WelcomeNav } from "./WelcomeNav";
 import { Wrapper } from "./Wrapper/Wrapper";
 
@@ -158,9 +160,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
             </Wrapper>
           </Box>
 
-          <Slider />
-          {/* <Slider2 /> */}
-          {/* <Slider3 /> */}
+          {isLargerThan30Em ? <SwiperSlider /> : <ScrollSlider />}
         </Box>
 
         {/* How it works section

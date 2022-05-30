@@ -48,7 +48,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
         overflowX="scroll"
         // hiding scroll bar
         height="100%"
-        pb={10} // push to b ottom
+        pb={10} // push to bottom
         boxSizing="content-box"
       >
         {CART_ITEM_STATUS_TABS_DISPLAY.map((item) => (

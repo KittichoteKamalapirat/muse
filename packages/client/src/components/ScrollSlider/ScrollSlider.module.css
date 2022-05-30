@@ -1,0 +1,26 @@
+.parent {
+  width: 100%;
+  height: 360px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.child {
+  display: flex;
+  overflow-x: scroll;
+  /* hiding scroll bar */
+  width: 100%;
+  height: 100%;
+  padding-bottom: 50px;
+  box-sizing: content-box;
+}
+
+.parent .child div {
+  /* min-width: 22rem; */
+  min-width: 85%;
+  margin-left: 5%;
+}
+
+.parent .child div:last-of-type {
+  margin-right: 30px;
+}
