@@ -26,9 +26,9 @@ import { withApollo } from "../../util/withApollo";
 const Post = ({}) => {
   useIsAuth();
   const { data, loading, error } = useGetPostFromUrl();
-  const { data: meData } = useMeQuery();
+  const { data: meData, loading: meLoading, error: meError } = useMeQuery();
 
-  if (loading) {
+  if (loading || meLoading) {
     return (
       <Layout heading="loading">
         <Loading />
@@ -36,10 +36,10 @@ const Post = ({}) => {
     );
   }
 
-  if (error) {
+  if (error || meError) {
     return (
       <Layout heading="error">
-        <Error text={error.message} />
+        <Error text={error?.message || meError?.message} />
       </Layout>
     );
   }

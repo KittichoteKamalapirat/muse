@@ -6,10 +6,17 @@ import NextLink from "next/link";
 import React from "react";
 import Button from "../components/atoms/Button";
 import { InputField } from "../components/InputField";
+import { Layout } from "../components/Layout/Layout";
+import { Loading } from "../components/skeletons/Loading";
 import { WelcomeNav } from "../components/WelcomeNav";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../components/Wrapper/Wrapper";
-import { MeDocument, MeQuery, useRegisterMutation } from "../generated/graphql";
+import {
+  MeDocument,
+  MeQuery,
+  useMeQuery,
+  useRegisterMutation,
+} from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { withApollo } from "../util/withApollo";
 
@@ -17,9 +24,23 @@ interface registerProps {}
 
 export const Register: React.FC<registerProps> = ({}) => {
   const router = useRouter();
+  const { isCreator } = router.query;
+
+  const { data, loading: loading } = useMeQuery();
+
   const [register] = useRegisterMutation();
 
-  const { isCreator } = router.query;
+  if (loading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (data?.me) {
+    router.push("/");
+  }
 
   return (
     <WelcomeNav>
@@ -63,8 +84,12 @@ export const Register: React.FC<registerProps> = ({}) => {
                 // instead of setErrors({username: "error message"}) we do
                 setErrors(toErrorMap(response.data.register.errors));
               } else if (response.data?.register.user) {
-                // work we get the user!
-                router.push("/");
+                if (typeof router.query.next === "string") {
+                  router.push(router.query.next);
+                } else {
+                  // work we get the user!
+                  router.push("/");
+                }
               }
               // response.data.register will return an error will data is undefined
               // response.data?.register will return undefined if there is no data -> false
@@ -116,7 +141,15 @@ export const Register: React.FC<registerProps> = ({}) => {
 
                 <Box textAlign="center" mt={5}>
                   Already have an account?{" "}
-                  <NextLink href="/login" passHref>
+                  <NextLink
+                    href={{
+                      pathname: "/login",
+                      query: {
+                        next: router.query.next,
+                      },
+                    }}
+                    passHref
+                  >
                     <Link fontWeight="700" color="red.400">
                       Log in
                     </Link>

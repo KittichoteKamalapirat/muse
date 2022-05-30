@@ -8,14 +8,42 @@ import { InputField } from "../components/InputField";
 import { WelcomeNav } from "../components/WelcomeNav";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
-import { MeDocument, MeQuery, useLoginMutation } from "../generated/graphql";
+import {
+  MeDocument,
+  MeQuery,
+  useLoginMutation,
+  useMeQuery,
+} from "../generated/graphql";
 import { toErrorMap } from "../util/toErrorMap";
 import { withApollo } from "../util/withApollo";
 import Head from "next/head";
+import { Layout } from "../components/Layout/Layout";
+import { Loading } from "../components/skeletons/Loading";
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();
+  const { data, loading: loading } = useMeQuery();
+
   const [login] = useLoginMutation();
+
+  if (loading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
+
+  // redirect if already logged in
+  if (data?.me) {
+    // without the following line, push to / even when there is next param
+    if (typeof router.query.next === "string") {
+      router.push(router.query.next);
+    } else {
+      router.push("/");
+    }
+  }
+
   return (
     <WelcomeNav>
       <Head>
@@ -33,8 +61,6 @@ export const Login: React.FC<{}> = ({}) => {
               password: "",
             }}
             onSubmit={async (values, { setErrors }) => {
-              console.log("login");
-              console.log(values.usernameOrEmailOrPhonenumber);
               const response = await login({
                 variables: values,
                 update: (cache, { data }) => {
@@ -56,8 +82,10 @@ export const Login: React.FC<{}> = ({}) => {
                 // If login, push to the previoius page
                 if (typeof router.query.next === "string") {
                   router.push(router.query.next);
+                  return;
                 } else {
                   router.push("/");
+                  return;
                 }
               }
             }}
@@ -88,7 +116,15 @@ export const Login: React.FC<{}> = ({}) => {
 
                 <Box textAlign="center" mt={5}>
                   Don&apos;t have an account?{" "}
-                  <NextLink href="/register" passHref>
+                  <NextLink
+                    href={{
+                      pathname: "/register",
+                      query: {
+                        next: router.query.next,
+                      },
+                    }}
+                    passHref
+                  >
                     <Link fontWeight="700" color="red.400">
                       Register
                     </Link>
