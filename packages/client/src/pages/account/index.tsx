@@ -303,34 +303,20 @@ const Account = () => {
         <Box textAlign="left" mt={4}>
           <Heading fontSize="md">Account Info</Heading>
 
-          <Flex>
-            <LinkBox flex={1}>
-              <Flex
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={4}
-                m={1}
-                rounded="md"
-              >
+          <Flex alignItems="stretch">
+            <LinkBox flex={1} boxShadow="xs" rounded="md" m={1}>
+              <Flex flexDirection="column" alignItems="center" p={4}>
                 <SvgAccountIcon />
                 <NextLink href="/account/info/" as="/account/info" passHref>
                   <LinkOverlay>
-                    <Text fontSize="md">My profile</Text>
+                    <Text fontSize={["sm", "md"]}>Profile</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
             </LinkBox>
 
-            <LinkBox flex={1}>
-              <Flex
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={4}
-                m={1}
-                rounded="md"
-              >
+            <LinkBox flex={1} boxShadow="xs" rounded="md" m={1}>
+              <Flex flexDirection="column" alignItems="center" p={4}>
                 <SvgPinIcon />
                 <NextLink
                   href="/account/address/"
@@ -338,25 +324,18 @@ const Account = () => {
                   passHref
                 >
                   <LinkOverlay>
-                    <Text fontSize="md">Address</Text>
+                    <Text fontSize={["sm", "md"]}>Address</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
             </LinkBox>
 
-            <LinkBox flex={1}>
-              <Flex
-                flexDirection="column"
-                alignItems="center"
-                boxShadow="xs"
-                p={4}
-                m={1}
-                rounded="md"
-              >
+            <LinkBox flex={1} boxShadow="xs" rounded="md" m={1}>
+              <Flex flexDirection="column" alignItems="center" p={4}>
                 <HeartIcon color="#eb5757" />
                 <NextLink href="/like" as="/like" passHref>
                   <LinkOverlay>
-                    <Text fontSize="md">Liked</Text>
+                    <Text fontSize={["sm", "md"]}>Liked</Text>
                   </LinkOverlay>
                 </NextLink>
               </Flex>
