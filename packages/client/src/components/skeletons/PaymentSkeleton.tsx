@@ -1,12 +1,13 @@
 import { Box, Center, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
 import { Wrapper } from "../Wrapper/Wrapper";
+import { XWrapper } from "../Wrapper/XWrapper";
 
 interface PaymentSkeletonProps {}
 
 export const PaymentSkeleton: React.FC<PaymentSkeletonProps> = ({}) => {
   return (
-    <Wrapper>
+    <XWrapper>
       <Box>
         <Stack>
           <Flex justifyContent="space-between" alignItems="center">
@@ -25,6 +26,6 @@ export const PaymentSkeleton: React.FC<PaymentSkeletonProps> = ({}) => {
           <Skeleton height="300px" />
         </Stack>
       </Box>
-    </Wrapper>
+    </XWrapper>
   );
 };

@@ -1,6 +1,8 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 
+// Wrapper just add maxW for larger screen so it's not too wide
+// use when I want max width like in index page
 export type WrapperVariant = "small" | "regular";
 
 interface WrapperProps {

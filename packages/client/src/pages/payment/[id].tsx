@@ -9,6 +9,7 @@ import { SingleFileUpload } from "../../components/SingleFileUpload";
 import { Error } from "../../components/skeletons/Error";
 import { PaymentSkeleton } from "../../components/skeletons/PaymentSkeleton";
 import { UnAuthorized } from "../../components/UnAuthorized";
+import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
@@ -86,11 +87,7 @@ const Payment = ({}) => {
     //  paymentIsCompleteLoading ||
     qrSrcLoading
   ) {
-    return (
-      <Wrapper>
-        <PaymentSkeleton />
-      </Wrapper>
-    );
+    return <PaymentSkeleton />;
   } else if (!paymentData) {
     return <UnAuthorized />;
   }
@@ -109,27 +106,33 @@ const Payment = ({}) => {
     >
       <Box mt={12} mb={20}>
         <Wrapper>
-          <Box>
-            <Text>Siam Commercial bank (SCB)</Text>
-            <Text>Account name: Kittichote Kamalapirat</Text>
+          <ContentWrapper mb={0} pb={0}>
             <Box>
-              <Text d="inline">Account number:</Text>{" "}
-              <Text fontSize="xl" fontWeight="700" d="inline" color="#0F3E68">
-                096 148 9047
-              </Text>
+              <Text>Siam Commercial bank (SCB)</Text>
+              <Text>Account name: Kittichote Kamalapirat</Text>
+              <Box>
+                <Text d="inline">Account number:</Text>{" "}
+                <Text fontSize="xl" fontWeight="700" d="inline" color="#0F3E68">
+                  096 148 9047
+                </Text>
+              </Box>
             </Box>
-          </Box>
-          <Divider mt={2} />
+            <Divider mt={2} />
 
-          <Flex justifyContent="space-between" textAlign="center" color="alert">
-            <Heading as="h3" size="sm">
-              QR Code expired in:
-            </Heading>
-            <Heading as="h3" size="md">
-              {timerMinutes}: {timerSeconds}
-            </Heading>
-          </Flex>
-
+            <Flex
+              justifyContent="space-between"
+              textAlign="center"
+              color="alert"
+              mt={4}
+            >
+              <Heading as="h3" size="sm">
+                QR Code expired in:
+              </Heading>
+              <Heading as="h3" size="md">
+                {timerMinutes}: {timerSeconds}
+              </Heading>
+            </Flex>
+          </ContentWrapper>
           <Box>
             <Image
               src="/promptpayBanner.png"
@@ -140,37 +143,39 @@ const Payment = ({}) => {
             <Image src={qrSrc} alt="paymentqr" width="80%" mx="auto" />
           </Box>
 
-          <Flex
-            flexDirection="column"
-            justifyContent="space-between"
-            alignItems="center"
-            mt={2}
-          >
-            <Heading as="h3" size="sm">
-              Total amount
-            </Heading>
-            <Flex alignItems="center">
-              <Heading size="lg">฿</Heading>
-              <Heading as="h2" size="xl">
-                {paymentData?.payment.amount.toLocaleString()}
+          <ContentWrapper>
+            <Flex
+              flexDirection="column"
+              justifyContent="space-between"
+              alignItems="center"
+              mt={2}
+            >
+              <Heading as="h3" size="sm">
+                Total amount
               </Heading>
+              <Flex alignItems="center">
+                <Heading size="lg">฿</Heading>
+                <Heading as="h2" size="xl">
+                  {paymentData?.payment.amount.toLocaleString()}
+                </Heading>
+              </Flex>
             </Flex>
-          </Flex>
 
-          <SingleFileUpload
-            params={id as string}
-            currentUrl={paymentData?.payment.slipUrl as string}
-            uploadSlip={uploadSlip}
-            manuallyConfirmPayment={manuallyConfirmPayment}
-            isPaid={isPaid?.manuallyConfirmPayment}
-            paymentId={id}
-          />
+            <SingleFileUpload
+              params={id as string}
+              currentUrl={paymentData?.payment.slipUrl as string}
+              uploadSlip={uploadSlip}
+              manuallyConfirmPayment={manuallyConfirmPayment}
+              isPaid={isPaid?.manuallyConfirmPayment}
+              paymentId={id}
+            />
 
-          <LinkButton
-            href={urlResolver.orderTab(CartItemStatus.PaymentPending)}
-          >
-            Back to my orders
-          </LinkButton>
+            <LinkButton
+              href={urlResolver.orderTab(CartItemStatus.PaymentPending)}
+            >
+              Back to my orders
+            </LinkButton>
+          </ContentWrapper>
         </Wrapper>
       </Box>
     </HeadingLayout>

@@ -66,12 +66,14 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
                 </MenuButton>
                 <MenuList bgColor="white">
                   <NextLink href="/myshop/payment-info/edit" passHref>
-                    <MenuItem icon={<EditIcon />} as={Link}>
-                      Update the account
+                    <MenuItem icon={<EditIcon color="brand" />} as={Link}>
+                      Update this payment method
                     </MenuItem>
                   </NextLink>
-                  <MenuItem
-                    icon={<DeleteIcon />}
+
+                  {/* <MenuItem
+                  //TODO hide this cause can't deelte error
+                    icon={<DeleteIcon color="alert" />}
                     onClick={() => {
                       deletePaymentInfo({
                         variables: { id: paymentInfo.paymentInfo!.id },
@@ -85,8 +87,8 @@ const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
                       });
                     }}
                   >
-                    Delete this account
-                  </MenuItem>
+                    Delete this payment method
+                  </MenuItem> */}
                 </MenuList>
               </Menu>
             </Flex>

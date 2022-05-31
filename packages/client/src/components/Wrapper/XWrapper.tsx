@@ -1,6 +1,8 @@
 import { Box, Flex } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 
+// XWRapper adds maxW too all screen and also center them
+
 interface Props {
   children: ReactNode;
   width?: string;

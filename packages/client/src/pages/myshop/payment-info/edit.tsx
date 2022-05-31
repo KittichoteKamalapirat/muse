@@ -1,4 +1,3 @@
-import { Text } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
@@ -7,7 +6,7 @@ import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   usePaymentInfoQuery,
   useUpdatePaymentInfoMutation,
@@ -15,6 +14,8 @@ import {
 import { banksArray } from "../../../util/constants";
 import { toErrorMap } from "../../../util/toErrorMap";
 import { withApollo } from "../../../util/withApollo";
+import FormFieldLabel from "../../../components/form/FormFieldLabel";
+import { Box } from "@chakra-ui/react";
 
 interface EditPaymentInfoProps {}
 
@@ -32,8 +33,8 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
     );
   }
   return (
-    <HeadingLayout heading="Add Payment Info">
-      <Wrapper>
+    <HeadingLayout heading="Change Payment Info">
+      <XWrapper mt={20}>
         <Formik
           initialValues={{
             bankCode: paymentInfo?.paymentInfo?.bankCode,
@@ -64,30 +65,35 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
         >
           {({ isSubmitting }) => (
             <Form>
-              {/* <InputField name="bank" placeholder="bank" label="Bank" /> */}
-              <label>Bank</label>
+              <Box>
+                <FormFieldLabel label="Bank Name" />
 
-              {/* <Select placeholder="Select option"> */}
-              <Field as="select" name="bankCode">
-                {banksArray.map((bank) => (
-                  <option value={bank.bankCode} key={bank.bankCode}>
-                    {bank.bank} ({bank.bankCode}){" "}
-                  </option>
-                ))}
-              </Field>
+                <Field as="select" name="bankCode">
+                  {banksArray.map((bank) => (
+                    <option value={bank.bankCode} key={bank.bankCode}>
+                      {bank.bank}
+                    </option>
+                  ))}
+                </Field>
+              </Box>
 
-              <InputField
-                name="bankAccount"
-                placeholder="bankAccount"
-                label="Bank Account"
-              />
+              <Box mt={4}>
+                <FormFieldLabel label="Bank Account" />
+
+                <InputField
+                  name="bankAccount"
+                  placeholder="bankAccount"
+                  label=""
+                />
+              </Box>
+
               <Button type="submit" isLoading={isSubmitting}>
                 Update
               </Button>
             </Form>
           )}
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };
