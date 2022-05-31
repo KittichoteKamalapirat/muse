@@ -2,6 +2,7 @@ import {
   extendTheme,
   withDefaultColorScheme,
   theme as baseTheme,
+  ThemeConfig,
 } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 
@@ -15,12 +16,14 @@ const breakpoints = createBreakpoints({
   xl: "80em",
 });
 
-const theme = extendTheme(
+const theme: ThemeConfig = extendTheme(
   withDefaultColorScheme({
     colorScheme: "brand",
     components: ["Button", "Badge", "Checkbox"],
   }),
   {
+    initialColorMode: "light",
+    useSystemColorMode: false,
     //global styles
     styles: {
       a: {

@@ -12,6 +12,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Tag,
   Text,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -40,6 +41,8 @@ import {
 import { withApollo } from "../../util/withApollo";
 import Badge from "../../components/atoms/Badge";
 import { Error } from "../../components/skeletons/Error";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { dataURItoBlob } from "dropzone";
 
 const Account = () => {
   const { data: meData, loading, error } = useMeQuery();
@@ -348,13 +351,19 @@ const Account = () => {
               <MenuButton
                 // as={Button}
                 // rightIcon={<ChevronDownIcon />}
-                _focus={{ boxShadow: "outline" }}
-                textColor={primaryColor}
+                px={4}
+                py={2}
+                borderRadius="md"
+                borderWidth="1px"
+                borderColor="brand"
+                _hover={{ bg: "gray.100" }}
+                _expanded={{ bg: "primary.100" }}
               >
-                Switch Account type
+                Switch Account type <ChevronDownIcon />
               </MenuButton>
               <MenuList bgColor="white">
                 <MenuItem
+                  color={meData?.me?.isCreator ? "brand" : undefined}
                   onClick={() =>
                     switchAccountType({
                       variables: { becomeCreator: true },
@@ -372,9 +381,11 @@ const Account = () => {
                     })
                   }
                 >
-                  Switch to Creator Account
+                  {/* Switch to Creator Account */}
+                  Become a creator
                 </MenuItem>
                 <MenuItem
+                  color={!meData?.me?.isCreator ? "brand" : undefined}
                   onClick={() =>
                     switchAccountType({
                       variables: { becomeCreator: false },
@@ -398,9 +409,10 @@ const Account = () => {
             </Menu>
             {/* <Text>{meData?.me?.isCreator ? "Creator" : "Personal"}</Text> */}
           </Box>
-          <Text fontSize="sm" color={inActiveGray}>
+
+          <Tag size="sm" variant="solid" bgColor="primary.400" my={1}>
             Current: {meData?.me?.isCreator ? "Creator" : "Personal"} Account
-          </Text>
+          </Tag>
 
           <Flex justifyContent="center">
             <Button
