@@ -1,5 +1,5 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/react";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -11,7 +11,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import FormActionButtons from "./form/FormActionButtons/FormActionButtons";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "./form/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 import { Loading } from "./skeletons/Loading";

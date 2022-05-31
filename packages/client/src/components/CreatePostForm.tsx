@@ -2,7 +2,7 @@ import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Flex } from "@chakra-ui/layout";
 import { Select } from "@chakra-ui/react";
 import React from "react";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "./form/FormFieldLabel";
 import { InputField } from "./InputField";
 
 interface CreatePostFormProps {}

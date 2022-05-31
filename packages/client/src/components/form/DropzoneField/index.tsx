@@ -11,7 +11,7 @@ import { urlResolver } from "../../../lib/UrlResolver";
 import { FileInput } from "../../../types/utils/FileInput";
 import { ResourceType } from "../../../types/utils/ResourceType";
 import getRESTOptions from "../../../util/getRESTOptions";
-import FormFieldLabel from "../FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "../FormFieldLabel";
 import FormHelperText from "../FormHelperText/FormHelperText";
 import FileUploader from "./FileUploads";
 import UploaderPlaceholder from "./UploaderPlaceholder";
