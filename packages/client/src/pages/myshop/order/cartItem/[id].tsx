@@ -20,6 +20,7 @@ import {
   elabUserCartItemStatus,
 } from "../../../../util/elabCartItemStatus";
 import { withApollo } from "../../../../util/withApollo";
+import { XWrapper } from "../../../../components/Wrapper/XWrapper";
 
 interface Props {}
 
@@ -39,13 +40,13 @@ const OrderCartItemDetail = ({}: Props) => {
   if (loading) return <Loading />;
   if (error) return <Error />;
   return (
-    <Box>
-      <HeadingLayout heading="Order Summary">
-        <MainNav />
+    <HeadingLayout heading="Order Summary">
+      <MainNav />
+      <XWrapper>
         <ContentWrapper>
           <Box>
             <Heading size="sm" as="h3">
-              Status
+              Current Status
             </Heading>
             <Text color="brand" fontWeight="bold">
               {elabCreatorCartItemStatus(
@@ -85,8 +86,8 @@ const OrderCartItemDetail = ({}: Props) => {
             </LinkButton>
           )}
         </ContentWrapper>
-      </HeadingLayout>
-    </Box>
+      </XWrapper>
+    </HeadingLayout>
   );
 };
 

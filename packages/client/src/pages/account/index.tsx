@@ -291,7 +291,7 @@ const Account = () => {
             <NextLink
               href={{
                 pathname: "/order",
-                query: { status: CartItemStatus.Cancelled },
+                query: { status: CartItemStatus.Complete },
               }}
               passHref
             >
@@ -303,7 +303,7 @@ const Account = () => {
           <Divider mt={2} />
         </Box>
 
-        <Box textAlign="left" mt={4}>
+        <Box textAlign="left" mt={12}>
           <Heading fontSize="md">Account Info</Heading>
 
           <Flex alignItems="stretch">

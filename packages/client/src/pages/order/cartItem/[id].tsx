@@ -10,6 +10,7 @@ import { MainNav } from "../../../components/MainNav";
 import { Error } from "../../../components/skeletons/Error";
 import { Loading } from "../../../components/skeletons/Loading";
 import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   CartItem,
   CartItemStatus,
@@ -37,72 +38,75 @@ const UserCartItemDetail = () => {
   return (
     <HeadingLayout heading="Order Summary">
       <MainNav />
-      <ContentWrapper>
-        <Box>
-          <Heading size="sm" as="h3">
-            Status
-          </Heading>
-          <Text color="brand" fontWeight="bold">
-            {elabUserCartItemStatus(data?.cartItem.status as CartItemStatus)}
-          </Text>
-          {tracking && <TrackingDetail tracking={tracking} />}
-        </Box>
+      <XWrapper>
+        <ContentWrapper>
+          <Box>
+            <Heading size="sm" as="h3">
+              Current Status
+            </Heading>
+            <Text color="brand" fontWeight="bold">
+              {elabUserCartItemStatus(data?.cartItem.status as CartItemStatus)}
+            </Text>
+            {tracking && <TrackingDetail tracking={tracking} />}
+          </Box>
 
-        <Divider variant="solid" my={2} />
+          <Divider variant="solid" my={2} />
 
-        <Box>
-          <Heading size="sm" as="h3">
-            Address
-          </Heading>
-          <AddressComponent address={address!} />
-        </Box>
+          <Box>
+            <Heading size="sm" as="h3">
+              Address
+            </Heading>
+            <AddressComponent address={address!} />
+          </Box>
 
-        <Divider variant="solid" my={2} />
+          <Divider variant="solid" my={2} />
 
-        <Box>
-          <Heading size="sm" as="h3">
-            Product
-          </Heading>
-          <CartItemDetail cartItem={data?.cartItem as CartItem} />
-        </Box>
+          <Box>
+            <Heading size="sm" as="h3">
+              Product
+            </Heading>
+            <CartItemDetail cartItem={data?.cartItem as CartItem} />
+          </Box>
 
-        {/* dynamic  part */}
-        {data?.cartItem.status === CartItemStatus.PaymentPending && (
-          <LinkButton href={`/payment/${data.cartItem.order.paymentId}`}>
-            Make a payment
-          </LinkButton>
-        )}
-        {data?.cartItem.status === CartItemStatus.Delivered && (
-          <LinkButton
-            onClick={async () => {
-              const result = await receivedCartItem({
-                variables: { id: data.cartItem.id },
-                update: (cache) => cache.evict({ fieldName: "userOrders:{}" }),
-              });
+          {/* dynamic  part */}
+          {data?.cartItem.status === CartItemStatus.PaymentPending && (
+            <LinkButton href={`/payment/${data.cartItem.order.paymentId}`}>
+              Make a payment
+            </LinkButton>
+          )}
+          {data?.cartItem.status === CartItemStatus.Delivered && (
+            <LinkButton
+              onClick={async () => {
+                const result = await receivedCartItem({
+                  variables: { id: data.cartItem.id },
+                  update: (cache) =>
+                    cache.evict({ fieldName: "userOrders:{}" }),
+                });
 
-              if (result.data?.receivedCartItem) {
-                router.push("/order?status=Received");
-              }
-            }}
-          >
-            Received an item
-          </LinkButton>
-        )}
+                if (result.data?.receivedCartItem) {
+                  router.push("/order?status=Received");
+                }
+              }}
+            >
+              Received an item
+            </LinkButton>
+          )}
 
-        {data?.cartItem.status === CartItemStatus.Complete && (
-          <LinkButton
-            href={{
-              pathname: "/review/create",
-              query: {
-                cartItemId: data.cartItem.id,
-                mealkitId: data.cartItem.mealkitId,
-              },
-            }}
-          >
-            Leave a Review
-          </LinkButton>
-        )}
-      </ContentWrapper>
+          {data?.cartItem.status === CartItemStatus.Complete && (
+            <LinkButton
+              href={{
+                pathname: "/review/create",
+                query: {
+                  cartItemId: data.cartItem.id,
+                  mealkitId: data.cartItem.mealkitId,
+                },
+              }}
+            >
+              Leave a Review
+            </LinkButton>
+          )}
+        </ContentWrapper>
+      </XWrapper>
     </HeadingLayout>
   );
 };
