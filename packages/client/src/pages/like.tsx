@@ -2,12 +2,14 @@ import { Box, Flex, Heading, Image, Link, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Layout } from "../components/Layout/Layout";
 import { Error } from "../components/skeletons/Error";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
 import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../components/Wrapper/Wrapper";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
@@ -39,7 +41,7 @@ const Like = () => {
     router.push("/");
   }
 
-  const body = (() => {
+  const content = (() => {
     if (data?.votedPosts.posts.length === 0)
       return <Text>You don&apos;t have a favorite recipe</Text>;
 
@@ -71,15 +73,19 @@ const Like = () => {
     );
   })();
 
-  return (
-    <Layout heading="like">
-      <Wrapper>
-        <ContentWrapper>
-          <Heading fontSize="2xl">My Likes</Heading>
-          <Box>{body}</Box>
-        </ContentWrapper>
-      </Wrapper>
-    </Layout>
+  const body = (
+    <XWrapper>
+      <ContentWrapper>
+        <Heading fontSize="2xl">My Likes</Heading>
+        <Box>{content}</Box>
+      </ContentWrapper>
+    </XWrapper>
+  );
+
+  return router.query.from ? (
+    <HeadingLayout heading="like">{body}</HeadingLayout>
+  ) : (
+    <Layout heading="like">{body}</Layout>
   );
 };
 

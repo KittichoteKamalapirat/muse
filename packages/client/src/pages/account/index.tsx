@@ -333,7 +333,7 @@ const Account = () => {
             <LinkBox flex={1} boxShadow="xs" rounded="md" m={1}>
               <Flex flexDirection="column" alignItems="center" p={4}>
                 <HeartIcon color="#eb5757" />
-                <NextLink href="/like" as="/like" passHref>
+                <NextLink href="/like?from=account" passHref>
                   <LinkOverlay>
                     <Text fontSize={["sm", "md"]}>Liked</Text>
                   </LinkOverlay>

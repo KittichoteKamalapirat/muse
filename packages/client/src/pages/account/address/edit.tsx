@@ -1,13 +1,16 @@
-import { Flex } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
+import { Flex, Heading } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from "../../../components/atoms/Button";
+import LinkButton from "../../../components/atoms/LinkButton";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
+import XYWrapper from "../../../components/Wrapper/XYWrapper";
 import {
   AddressInput,
   useAddressQuery,
@@ -62,7 +65,12 @@ const EditAddress: React.FC<EditAddressProps> = ({}) => {
   if (!loading && !data) {
     return (
       <Layout heading="no address found">
-        <div>No address found</div>
+        <XYWrapper>
+          <Heading size="h2">No address found</Heading>
+          <LinkButton pathname="/account/address/create" leftIcon={<AddIcon />}>
+            Add address
+          </LinkButton>
+        </XYWrapper>
       </Layout>
     );
   }

@@ -108,10 +108,10 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
       bottom={0}
       bg={"white"}
       p={2}
-      alignItems="end"
+      alignItems={["end", "end", "center"]}
+      justifyContent="space-around"
       width={["100%", "100%", "80px"]}
       height={[null, null, "100%"]}
-      justifyContent="space-around"
       borderRight="solid"
       borderRightColor="gray.200"
       borderRightWidth="1px"

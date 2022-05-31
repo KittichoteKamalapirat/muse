@@ -94,7 +94,7 @@ const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
                   label="district"
                 />
               </Flex>
-              <Flex mt={4}>
+              <Flex mt={4} gap={4}>
                 <InputField
                   name="province"
                   placeholder="province"
