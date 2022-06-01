@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
+import LinkButton from "./atoms/LinkButton";
 import { primaryColor } from "./Variables";
 
 interface NavDrawerProps {}

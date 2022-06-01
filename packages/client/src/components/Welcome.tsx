@@ -69,7 +69,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
                 width="fit-content"
                 mt={10}
               >
-                Create Account
+                Get started - it&apos;s free
               </LinkButton>
             </Box>
 
