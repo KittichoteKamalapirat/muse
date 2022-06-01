@@ -6,6 +6,14 @@ import Button from "./Button";
 type Props = ChakraButtonProps & {
   children: ReactNode;
   pathname?: string;
+  variant?:
+    | "outline"
+    | "solid"
+    | "unstyled"
+    | "link"
+    | "ghost"
+    | (string & {})
+    | undefined;
   href?: any;
   leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
   width?: "100%" | "fit-content" | "min-content";
@@ -17,6 +25,7 @@ const LinkButton = ({
   pathname,
   leftIcon,
   width = "100%",
+  variant,
   ...props
 }: Props) => {
   return (
@@ -26,14 +35,7 @@ const LinkButton = ({
           textDecoration: "none",
         }}
       >
-        <Button
-          _hover={{
-            backgroundColor: "brandHover",
-          }}
-          leftIcon={leftIcon}
-          width={width}
-          {...props}
-        >
+        <Button leftIcon={leftIcon} width={width} variant={variant} {...props}>
           {children}
         </Button>
       </Link>

@@ -64,9 +64,9 @@ export const NavDrawer: React.FC<NavDrawerProps> = ({}) => {
                 </NextLink>
               </Box>
 
-              <Box my={2}>
+              <Box my={2} color="brand" fontWeight="bold">
                 <NextLink href="/creator" passHref>
-                  <Link> Seller Center</Link>
+                  <Link>Creator Center</Link>
                 </NextLink>
               </Box>
             </Flex>

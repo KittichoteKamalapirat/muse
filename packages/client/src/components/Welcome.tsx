@@ -184,7 +184,7 @@ export const Welcome: React.FC<WelcomeProps> = ({}) => {
               rightIcon={<ChevronRightIcon />}
               width="fit-content"
             >
-              Become a creator
+              Become a Creator
             </LinkButton>
           </Wrapper>
         </Box>

@@ -34,19 +34,21 @@ import {
   Text,
 } from "@chakra-ui/react";
 import * as React from "react";
-import { Logo } from "./Logo";
+import LinkButton from "./atoms/LinkButton";
+import Logo from "./Icons/Logo";
+import { XWrapper } from "./Wrapper/XWrapper";
 
-export const App = () => (
-  <Container as="footer" role="contentinfo">
+export const Footer = () => (
+  <Container as="footer" role="contentinfo" maxWidth="95%">
     <Stack
       spacing="8"
       direction={{ base: "column", md: "row" }}
       justify="space-between"
-      py={{ base: "12", md: "16" }}
+      py={{ base: "12", md: "8" }}
     >
       <Stack spacing={{ base: "6", md: "8" }} align="start">
         <Logo />
-        <Text color="muted">Create beautiful websites remarkably fast.</Text>
+        <Text color="muted">Cook your favorite menu faster and easier.</Text>
       </Stack>
       <Stack
         direction={{ base: "column-reverse", md: "column", lg: "row" }}
@@ -54,28 +56,43 @@ export const App = () => (
       >
         <Stack direction="row" spacing="8">
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="subtle">
+            <Text fontSize="sm" fontWeight="semibold" color="gray.500">
               Product
             </Text>
             <Stack spacing="3" shouldWrapChildren>
-              <Button variant="link">How it works</Button>
-              <Button variant="link">Pricing</Button>
-              <Button variant="link">Use Cases</Button>
+              <LinkButton
+                pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
+                variant="unstyled"
+              >
+                How it works
+              </LinkButton>
+              <LinkButton
+                pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
+                variant="unstyled"
+              >
+                Support
+              </LinkButton>
+              <LinkButton
+                pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
+                variant="unstyled"
+              >
+                FAQs
+              </LinkButton>
             </Stack>
           </Stack>
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="subtle">
+            <Text fontSize="sm" fontWeight="semibold" color="gray.500">
               Legal
             </Text>
             <Stack spacing="3" shouldWrapChildren>
-              <Button variant="link">Privacy</Button>
-              <Button variant="link">Terms</Button>
-              <Button variant="link">License</Button>
+              <Button variant="unstyled">Privacy</Button>
+              <Button variant="unstyled">Terms</Button>
+              <Button variant="unstyled">License</Button>
             </Stack>
           </Stack>
         </Stack>
         <Stack spacing="4">
-          <Text fontSize="sm" fontWeight="semibold" color="subtle">
+          <Text fontSize="sm" fontWeight="semibold" color="gray.500">
             Stay up to date
           </Text>
           <Stack
@@ -99,10 +116,10 @@ export const App = () => (
       direction={{ base: "column-reverse", md: "row" }}
       align="center"
     >
-      <Text fontSize="sm" color="subtle">
-        &copy; {new Date().getFullYear()} Chakra UI Pro, Inc. All rights
-        reserved.
+      <Text fontSize="sm" color="gray.500">
+        &copy; {new Date().getFullYear()} Cookknow, Inc. All rights reserved.
       </Text>
+
       <ButtonGroup variant="ghost">
         <IconButton
           as="a"

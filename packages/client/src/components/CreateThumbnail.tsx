@@ -90,18 +90,22 @@ export const CreateThumbnail: React.FC<CreateThumbnailProps> = ({
           <Flex justifyContent="center">
             <Img
               src={autoThumbnailS3UrlAndId?.url}
-              alt="default humbnail for video"
+              alt="default thumbnail for video"
             />
           </Flex>
         )
       ) : (
+        // show uploading
         <Flex justifyContent="center">
           {/* <AspectRatio ratio={1}> */}
-          <Image
+          <Img
             src={thumbnailS3UrlAndID.url}
             alt="image"
             boxSize="90%"
-            fallbackSrc="oops.png"
+            // TODO Image has fallback but Img no?
+            // fallbackSrc="oops.png"
+            // fallback={<SvgUploadImage />}
+            // fallbackStrategy="onError"
           />
         </Flex>
       )}

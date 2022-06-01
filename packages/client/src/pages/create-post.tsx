@@ -51,10 +51,12 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const nextStep = () => {
     setStep(step + 1);
+    window.scrollTo(0, 0);
   };
 
   const prevStep = () => {
     setStep(step - 1);
+    window.scrollTo(0, 0);
   };
 
   //graphql hooks

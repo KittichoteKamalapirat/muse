@@ -40,7 +40,8 @@ const unitOptions = (ingredientName: string) => [
   {
     label: "Others",
     options: [
-      { label: "piece", value: "piece" },
+      { label: "pieces", value: "piece" },
+      { label: "cloves", value: "clove" },
       { label: "proper amount", value: "eyeball" },
       { label: ingredientName + "s", value: ingredientName },
     ],
