@@ -23,8 +23,8 @@
 // };
 
 import { BellIcon } from "@chakra-ui/icons";
+import Script from "next/script";
 import {
-  Button,
   ButtonGroup,
   Container,
   Divider,
@@ -37,6 +37,7 @@ import * as React from "react";
 import LinkButton from "./atoms/LinkButton";
 import Logo from "./Icons/Logo";
 import { XWrapper } from "./Wrapper/XWrapper";
+import Button from "./atoms/Button";
 
 export const Footer = () => (
   <Container as="footer" role="contentinfo" maxWidth="95%">
@@ -63,18 +64,30 @@ export const Footer = () => (
               <LinkButton
                 pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
                 variant="unstyled"
+                isExternal={true}
               >
                 How it works
               </LinkButton>
               <LinkButton
                 pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
                 variant="unstyled"
+                isExternal={true}
               >
                 Support
               </LinkButton>
+
+              <LinkButton
+                pathname="https://kamalapirat.typeform.com/to/BGp4g61k"
+                variant="unstyled"
+                isExternal={true}
+              >
+                Contact us
+              </LinkButton>
+
               <LinkButton
                 pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
                 variant="unstyled"
+                isExternal={true}
               >
                 FAQs
               </LinkButton>
@@ -84,10 +97,25 @@ export const Footer = () => (
             <Text fontSize="sm" fontWeight="semibold" color="gray.500">
               Legal
             </Text>
+
             <Stack spacing="3" shouldWrapChildren>
-              <Button variant="unstyled">Privacy</Button>
-              <Button variant="unstyled">Terms</Button>
-              <Button variant="unstyled">License</Button>
+              <LinkButton
+                pathname="https://kittishane.notion.site/Cookknow-Privacy-Policy-29b39fedf4e541588ecfa7e15cd24f61"
+                variant="unstyled"
+                isExternal={true}
+              >
+                Privacy
+              </LinkButton>
+
+              <LinkButton
+                pathname="https://kittishane.notion.site/Cookknow-Terms-and-Conditions-1051c45d5a4546179296cc19fa521356"
+                variant="unstyled"
+                isExternal={true}
+              >
+                Terms
+              </LinkButton>
+
+              {/* <Button variant="unstyled">License</Button> */}
             </Stack>
           </Stack>
         </Stack>
@@ -100,8 +128,12 @@ export const Footer = () => (
             direction={{ base: "column", sm: "row" }}
             maxW={{ lg: "360px" }}
           >
-            <Input placeholder="Enter your email" type="email" required />
-            <Button variant="primary" type="submit" flexShrink={0}>
+            <Script src="//embed.typeform.com/next/embed.js" />
+            <Button
+              data-tf-popup="uJchTjFZ"
+              data-tf-iframe-props="title=Cookknow: subscribe"
+              data-tf-medium="snippet"
+            >
               Subscribe
             </Button>
           </Stack>
@@ -120,7 +152,7 @@ export const Footer = () => (
         &copy; {new Date().getFullYear()} Cookknow, Inc. All rights reserved.
       </Text>
 
-      <ButtonGroup variant="ghost">
+      {/* <ButtonGroup variant="ghost">
         <IconButton
           as="a"
           href="#"
@@ -139,7 +171,7 @@ export const Footer = () => (
           aria-label="Twitter"
           icon={<BellIcon fontSize="1.25rem" />}
         />
-      </ButtonGroup>
+      </ButtonGroup> */}
     </Stack>
   </Container>
 );

@@ -27,6 +27,7 @@ var _rollbarConfig = {
 `,
             }}
           />
+          <script src="//embed.typeform.com/next/embed.js" />
 
           <link rel="shortcut icon" href="/icons//favicon.ico" />
           <meta name="theme-color" content="#3dc795" />

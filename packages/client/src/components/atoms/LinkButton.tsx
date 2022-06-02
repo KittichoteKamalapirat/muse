@@ -17,6 +17,7 @@ type Props = ChakraButtonProps & {
   href?: any;
   leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
   width?: "100%" | "fit-content" | "min-content";
+  isExternal?: boolean;
 };
 
 const LinkButton = ({
@@ -26,11 +27,13 @@ const LinkButton = ({
   leftIcon,
   width = "100%",
   variant,
+  isExternal = false,
   ...props
 }: Props) => {
   return (
     <NextLink href={href || { pathname }} passHref>
       <Link
+        isExternal={isExternal}
         _hover={{
           textDecoration: "none",
         }}
