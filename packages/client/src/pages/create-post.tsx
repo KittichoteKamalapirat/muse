@@ -25,6 +25,7 @@ import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";
 import { useIsAuth } from "../util/useIsAuth";
 import { withApollo } from "../util/withApollo";
+import { IngredientFieldInput } from "./post/edit/[id]";
 
 export enum PostDetailsFormNames {
   TITLE = "title",
@@ -171,11 +172,13 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   // ingredient zone start
-  const [ingredientsField, setIngredientsField] = useState([
+  const [ingredientsField, setIngredientsField] = useState<
+    IngredientFieldInput[]
+  >([
     {
       ingredient: "",
-      amount: "",
-      unit: "",
+      amount: "0",
+      unit: null,
     },
   ]);
 
@@ -195,8 +198,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     const values = [...ingredientsField];
     values.splice(index + 1, 0, {
       ingredient: "",
-      amount: "",
-      unit: "",
+      amount: "0",
+      unit: null,
     });
     setIngredientsField(values);
   };
@@ -244,7 +247,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
         },
         portion: values.portion,
         advice: [values.advice],
-        ingredients: ingredientsField,
+        ingredients: ingredientsField.map((ingredient) => ({
+          ingredient: ingredient.ingredient,
+          amount: parseFloat(ingredient.amount), // make float for backend
+          unit: ingredient.unit?.value as string,
+        })),
       };
 
       console.log({ postInput });

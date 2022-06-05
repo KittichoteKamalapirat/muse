@@ -6,13 +6,14 @@ import { useBreakpointValue } from "@chakra-ui/react";
 import { Form } from "formik";
 import React from "react";
 import unitOptions from "../../constants/unitOptions";
-import { IngredientInput } from "../generated/graphql";
+import { IngredientFieldInput } from "../pages/post/edit/[id]";
 import { SelectOption } from "../types/utils/SelectOption";
+import { UnitSelectOption } from "../types/utils/UnitEnum";
 import FormFieldLabel from "./form/FormFieldLabel";
 import SelectField from "./form/SelectField";
 
 interface CreateRecipeProps {
-  ingredientsField: IngredientInput[];
+  ingredientsField: IngredientFieldInput[];
   instructionField: string[];
   handleChangeInput: Function;
   handleAddField: Function;
@@ -32,7 +33,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
   handleAddInstructionField,
   handleRemoveInstructionField,
 }) => {
-  console.log(ingredientsField);
+  console.log({ ingredientsField });
   const buttonSizes = useBreakpointValue(["xs", "md"]);
   return (
     <Box mt={4}>
@@ -98,16 +99,25 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
 
                 <SelectField
                   options={unitOptions(inputField.ingredient)}
+                  // defaultValue={inputField.amount}
+                  // initialValue={inputField.unit as SelectOption}
+                  value={inputField.unit as SelectOption}
                   name="unit"
                   placeholder="ex. gram, milliliter"
-                  onChange={(option, action) => {
+                  onChange={(option: SelectOption, action) => {
+                    console.log({ option });
+                    console.log({ action });
                     // first argument -> label and value object, second argument has name
                     // TODO this might break due to react select type mistake
                     const target = {
                       name: action.name,
-                      value: (option as unknown as SelectOption).value,
+                      value:
+                        UnitSelectOption[
+                          option.value as keyof typeof UnitSelectOption
+                        ],
                     };
                     const event = { target };
+                    console.log(target);
                     // so handleChangeInput can read event.target.name and event.target.value
                     handleChangeInput(index, event);
                   }}
@@ -132,7 +142,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                   // placeholder="ปริมาณ"
                   placeholder="ex. 20, 0.5"
                   onChange={(event) => handleChangeInput(index, event)}
-                  disabled={inputField.unit === "eyeball"}
+                  disabled={inputField.unit?.value === "eyeball"}
                   flex={1}
                   flexBasis={["35px", "35px", null]}
                   pl={1}

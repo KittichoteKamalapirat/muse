@@ -1,6 +1,5 @@
 import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Flex } from "@chakra-ui/layout";
-import { Select } from "@chakra-ui/react";
 import { Field } from "formik";
 import React from "react";
 import { PostDetailsFormNames } from "../pages/create-post";
@@ -50,7 +49,7 @@ export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
           <Field
             as="select"
             name={PostDetailsFormNames.COOKTIME_UNIT}
-            component={Select}
+            // component={Select} // TODO not working with this Chakra's select some how
             // placeholder={CooktimeUnitEnum.MINUTES}
             width="6rem"
             variant="outline"

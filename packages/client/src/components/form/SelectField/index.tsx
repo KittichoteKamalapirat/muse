@@ -8,7 +8,9 @@ interface Props {
   options: OptionsOrGroups<any, GroupBase<SelectOption>> | undefined;
   placeholder: React.ReactNode;
   name: string | undefined;
-  defaultValue?: SelectOption;
+  // defaultValue?: SelectOption;
+  initialValue?: SelectOption;
+  value?: SelectOption;
   onChange: ((newValue: any, actionMeta: ActionMeta<any>) => void) | undefined;
 }
 
@@ -17,17 +19,20 @@ const SelectField = ({
   placeholder,
   onChange,
   name,
-  defaultValue,
+  value,
+  // defaultValue,
+  initialValue,
 }: Props) => {
   return (
     <Select
-      // defaultInputValue="xx"
-      defaultValue={defaultValue}
+      // defaultInputValue={initialValue}
+      defaultValue={initialValue}
       options={options}
       name={name}
       placeholder={placeholder}
       onChange={onChange}
       styles={useStyles(false)}
+      value={value}
       //   components={{
       //     DropdownIndicator: () => null,
       //     IndicatorSeparator: () => null,

@@ -5,7 +5,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  Select,
   Text,
   useToast,
 } from "@chakra-ui/react";
@@ -30,6 +29,7 @@ import {
 import { CooktimeUnitEnum } from "../../../types/utils/CooktimeUnitEnum";
 import { ResourceType } from "../../../types/utils/ResourceType";
 import { SelectOption } from "../../../types/utils/SelectOption";
+import { UnitEnum, UnitSelectOption } from "../../../types/utils/UnitEnum";
 import getSelectOption from "../../../util/getSelectOption";
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
@@ -37,7 +37,7 @@ import { PostDetailsFormNames, PostDetailsFormValues } from "../../create-post";
 
 export interface IngredientFieldInput {
   ingredient: string;
-  amount: string;
+  amount: string; // because frontend is string (html has no concept of number input), paseFloat when submit
   unit: SelectOption | null;
 }
 
@@ -70,8 +70,8 @@ const EditPost = ({}) => {
   >([
     {
       ingredient: "",
-      amount: "",
-      unit: getSelectOption("g", "gram"),
+      amount: "0",
+      unit: null,
     },
   ]);
   const [instructionField, setInstructionField] = useState([""]);
@@ -91,7 +91,7 @@ const EditPost = ({}) => {
     const values = [...ingredientsField];
     values.splice(index + 1, 0, {
       ingredient: "",
-      amount: "",
+      amount: "0",
       unit: getSelectOption("g", "gram"),
     });
     setIngredientsField(values);
@@ -130,13 +130,51 @@ const EditPost = ({}) => {
   };
   // recipe zone ends
 
+  const onSubmit = async (values: PostDetailsFormValues) => {
+    const input = {
+      title: values.title,
+      text: values.text,
+      instruction: instructionField,
+      cooktime: {
+        length: values.cooktimeLength,
+        unit: values.cooktimeUnit,
+      },
+
+      portion: values.portion,
+      advice: [values.advice],
+      ingredients: ingredientsField.map((ingredient) => ({
+        ingredient: ingredient.ingredient,
+        amount: parseFloat(ingredient.amount), // turn to float for backend
+        unit: ingredient.unit?.value as string,
+      })),
+    };
+    const post = await updatePost({
+      variables: {
+        input,
+        id: postId,
+        newImageUrl: imageUploads[0].url, // update url of existing image id
+      },
+    });
+
+    if (post) {
+      toast({
+        title: "Post successfully updated",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      router.push(`/post/${post.data?.updatePost?.id}`);
+    }
+  };
+
   useEffect(() => {
-    console.log({ data });
     if (data?.post) {
       const ingredients = data.post.ingredients?.map((ingredient) => ({
         ingredient: ingredient.ingredient,
-        amount: ingredient.amount,
-        unit: getSelectOption(ingredient.unit, ingredient.unit),
+        amount: ingredient.amount.toString(), // make string for frontend
+        unit: Object.values(UnitEnum).includes(ingredient.unit as UnitEnum)
+          ? UnitSelectOption[ingredient.unit as UnitEnum]
+          : getSelectOption(ingredient.unit, ingredient.unit),
       }));
       const { instruction, image } = data.post;
 
@@ -148,7 +186,7 @@ const EditPost = ({}) => {
       setInstructionField(instruction as string[]);
       setImageUploads(images);
     }
-  }, [data?.post]);
+  }, [data]);
 
   if (loading) {
     return (
@@ -205,43 +243,10 @@ const EditPost = ({}) => {
             </GridItem>
           </Grid>
 
-          <Formik
-            initialValues={initialValues}
-            onSubmit={async (values) => {
-              const input = {
-                title: values.title,
-                text: values.text,
-                instruction: instructionField,
-                cooktime: {
-                  length: values.cooktimeLength,
-                  unit: values.cooktimeUnit,
-                },
-
-                portion: values.portion,
-                advice: [values.advice],
-                ingredients: ingredientsField,
-              };
-              const post = await updatePost({
-                variables: {
-                  input,
-                  id: postId,
-                  newImageUrl: imageUploads[0].url, // update url of existing image id
-                },
-              });
-
-              if (post) {
-                toast({
-                  title: "Post successfully updated",
-                  status: "success",
-                  duration: 3000,
-                  isClosable: true,
-                });
-                router.push(`/post/${post.data?.updatePost?.id}`);
-              }
-            }}
-          >
-            {({ isSubmitting }) => (
+          <Formik initialValues={initialValues} onSubmit={onSubmit}>
+            {({ isSubmitting, values }) => (
               <Form>
+                {console.log({ values })}
                 {/* post */}
                 <Box mt={4}>
                   <InputField
@@ -266,13 +271,12 @@ const EditPost = ({}) => {
                     name={PostDetailsFormNames.COOKTIME_LENGTH}
                     placeholder="30"
                     label="cooktime"
+                    type="number"
                   />
 
                   <Field
                     as="select"
                     name={PostDetailsFormNames.COOKTIME_UNIT}
-                    component={Select}
-                    // placeholder={CooktimeUnitEnum.MINUTES}
                     width="6rem"
                     variant="outline"
                   >

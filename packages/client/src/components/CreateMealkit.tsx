@@ -16,6 +16,7 @@ import { Form } from "formik";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { urlResolver } from "../lib/UrlResolver";
+import { IngredientFieldInput } from "../pages/post/edit/[id]";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -27,11 +28,7 @@ import { InputField } from "./InputField";
 import { Loading } from "./skeletons/Loading";
 
 interface CreateMealkitProps {
-  ingredientsField: {
-    ingredient: string;
-    amount: string;
-    unit: string;
-  }[];
+  ingredientsField: IngredientFieldInput[];
   input: {
     name: string;
     price: string;
