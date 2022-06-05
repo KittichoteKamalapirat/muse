@@ -74,6 +74,8 @@ export const startServer = async () => {
 
   const conn = await createTypeORMConn(process.env.NODE_ENV);
 
+  console.log("1");
+
   // rollbar.error("ccc");
 
   // rollbar.log("Hello from server!");
@@ -97,10 +99,14 @@ export const startServer = async () => {
       extended: true,
     })
   );
+
+  console.log("2");
   app.use(express.json());
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
+
+  console.log("3");
 
   app.set("trust proxy", 1); // make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
@@ -114,6 +120,8 @@ export const startServer = async () => {
       credentials: true,
     })
   );
+
+  console.log("4");
 
   app.use("/api/payment", paymentRouter);
   app.use("/api/tracking", trackingRouter);
@@ -140,56 +148,64 @@ export const startServer = async () => {
       resave: false,
     })
   );
+  console.log("5");
 
-  const schema = await buildSchema({
-    resolvers: [
-      UserResolver,
-      PostResolver,
-      AddressResolver,
-      MealkitResolver,
-      CartItemResolver,
-      CartItemNotiResolver,
-      PaymentResolver,
-      OrderResolver,
-      FollowResolver,
-      PaymentInfoResolver,
-      TrackingResolver,
-      S3Resolver,
-      ReviewResolver,
-      PostResolver,
-      VideoResolver,
-      ImageResolver,
-    ],
-    validate: false,
-  });
+  try {
+    const schema = await buildSchema({
+      resolvers: [
+        UserResolver,
+        PostResolver,
+        AddressResolver,
+        MealkitResolver,
+        CartItemResolver,
+        CartItemNotiResolver,
+        PaymentResolver,
+        OrderResolver,
+        FollowResolver,
+        PaymentInfoResolver,
+        TrackingResolver,
+        S3Resolver,
+        ReviewResolver,
+        PostResolver,
+        VideoResolver,
+        ImageResolver,
+      ],
+      validate: false,
+    });
 
-  const apolloServer = new ApolloServer({
-    schema,
-    context: ({ req, res }): MyContext => ({
-      req,
-      res,
-      redis,
-      userLoader: createUserLoader(),
-      // upvoteLoader: createUpvoteLoader(),
-      upvoteLoader: upvoteLoader(),
-    }), // so that we can access session because session is stick with request
-  });
+    const apolloServer = new ApolloServer({
+      schema,
+      context: ({ req, res }): MyContext => ({
+        req,
+        res,
+        redis,
+        userLoader: createUserLoader(),
+        // upvoteLoader: createUpvoteLoader(),
+        upvoteLoader: upvoteLoader(),
+      }), // so that we can access session because session is stick with request
+    });
 
-  // const apolloServer = new ApolloServer({
-  //     schema: await buildSchema({
-  //         resolvers: [HelloResolver],
-  //         validate: false,
-  //     })
-  // })
+    console.log("graphql path");
 
-  apolloServer.applyMiddleware({ app, cors: false });
-  // console.log(process.memoryUsage());
+    console.log(apolloServer.graphqlPath);
+    // const apolloServer = new ApolloServer({
+    //     schema: await buildSchema({
+    //         resolvers: [HelloResolver],
+    //         validate: false,
+    //     })
+    // })
 
-  //   const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
-  const PORT = parseInt(process.env.PORT, 10);
-  const server = app.listen(PORT, () => {
-    console.log(`server started on port ${PORT}`);
-  });
+    apolloServer.applyMiddleware({ app, cors: false });
+    // console.log(process.memoryUsage());
 
-  return { server, connection: conn };
+    //   const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
+    const PORT = parseInt(process.env.PORT, 10);
+    const server = app.listen(PORT, () => {
+      console.log(`server started on port ${PORT}`);
+    });
+    return { server, connection: conn };
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };

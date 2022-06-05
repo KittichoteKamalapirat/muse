@@ -11,6 +11,7 @@ import {
   OneToOne,
 } from "typeorm";
 import { Mealkit, Upvote, User, Ingredient, Video, Image } from ".";
+import Cooktime from "./utils/post/ObjectType/Cooktime";
 
 @ObjectType()
 @Entity()
@@ -35,9 +36,9 @@ class Post extends BaseEntity {
   @Field(() => [String], { nullable: true })
   advice: string[];
 
-  @Column({ nullable: true })
-  @Field({ nullable: true })
-  cooktime: string;
+  @Column("jsonb", { nullable: true })
+  @Field(() => Cooktime, { nullable: true })
+  cooktime: Cooktime;
 
   @Column({ type: "int", nullable: true })
   @Field(() => Int, { nullable: true })

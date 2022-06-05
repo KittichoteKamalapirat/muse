@@ -11,7 +11,7 @@ import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
 import FormActionButtons from "./form/FormActionButtons/FormActionButtons";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "./form/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import { UploadVideoIcon } from "./Icons/UploadVideoIcon";
 import { Loading } from "./skeletons/Loading";

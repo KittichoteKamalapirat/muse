@@ -159,6 +159,17 @@ export type ConfirmationResponse = {
   status: Status;
 };
 
+export type Cooktime = {
+  __typename?: 'Cooktime';
+  length: Scalars['Float'];
+  unit: Scalars['String'];
+};
+
+export type CooktimeInput = {
+  length: Scalars['Float'];
+  unit: Scalars['String'];
+};
+
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -570,7 +581,7 @@ export type Person = {
 export type Post = {
   __typename?: 'Post';
   advice?: Maybe<Array<Scalars['String']>>;
-  cooktime?: Maybe<Scalars['String']>;
+  cooktime?: Maybe<Cooktime>;
   createdAt: Scalars['String'];
   creator: User;
   creatorId: Scalars['String'];
@@ -592,7 +603,7 @@ export type Post = {
 
 export type PostInput = {
   advice?: Maybe<Array<Scalars['String']>>;
-  cooktime?: Maybe<Scalars['String']>;
+  cooktime?: Maybe<CooktimeInput>;
   ingredients: Array<IngredientInput>;
   instruction?: Maybe<Array<Scalars['String']>>;
   portion?: Maybe<Scalars['Float']>;
@@ -954,7 +965,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, points: number, creatorId: string, createdAt: string, updatedAt: string, instruction?: Maybe<Array<string>>, advice?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number> } };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', id: number, title: string, text: string, points: number, creatorId: string, createdAt: string, updatedAt: string, instruction?: Maybe<Array<string>>, advice?: Maybe<Array<string>>, portion?: Maybe<number>, cooktime?: Maybe<{ __typename?: 'Cooktime', length: number, unit: string }> } };
 
 export type DeleteAddressMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -1262,7 +1273,7 @@ export type PostQueryVariables = Exact<{
 }>;
 
 
-export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, cooktime?: Maybe<string>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, name: string, url: string }, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', name: string, price?: Maybe<number>, portion: number, items?: Maybe<Array<string>> }>> }> };
+export type PostQuery = { __typename?: 'Query', post?: Maybe<{ __typename?: 'Post', id: number, title: string, text: string, instruction?: Maybe<Array<string>>, portion?: Maybe<number>, advice?: Maybe<Array<string>>, createdAt: string, updatedAt: string, points: number, voteStatus?: Maybe<number>, isPublished: boolean, cooktime?: Maybe<{ __typename?: 'Cooktime', length: number, unit: string }>, ingredients: Array<{ __typename?: 'Ingredient', ingredient: string, amount: string, unit: string }>, creator: { __typename?: 'User', id: string, username: string, avatar: string }, video: { __typename?: 'Video', id: number, url: string }, image: { __typename?: 'Image', id: number, name: string, url: string }, mealkits?: Maybe<Array<{ __typename?: 'Mealkit', name: string, price?: Maybe<number>, portion: number, items?: Maybe<Array<string>> }>> }> };
 
 export type PostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -1667,7 +1678,10 @@ export const CreatePostDocument = gql`
     updatedAt
     instruction
     advice
-    cooktime
+    cooktime {
+      length
+      unit
+    }
     portion
   }
 }
@@ -3408,7 +3422,10 @@ export const PostDocument = gql`
     title
     text
     instruction
-    cooktime
+    cooktime {
+      length
+      unit
+    }
     portion
     advice
     createdAt

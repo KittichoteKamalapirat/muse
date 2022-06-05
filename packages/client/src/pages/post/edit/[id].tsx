@@ -1,13 +1,15 @@
 import {
   Box,
   Center,
+  Flex,
   Grid,
   GridItem,
   Heading,
+  Select,
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/atoms/Button";
@@ -25,14 +27,18 @@ import {
   usePostQuery,
   useUpdatePostMutation,
 } from "../../../generated/graphql";
+import { CooktimeUnitEnum } from "../../../types/utils/CooktimeUnitEnum";
 import { ResourceType } from "../../../types/utils/ResourceType";
+import { SelectOption } from "../../../types/utils/SelectOption";
+import getSelectOption from "../../../util/getSelectOption";
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
+import { PostDetailsFormNames, PostDetailsFormValues } from "../../create-post";
 
-interface Ingredient {
+export interface IngredientFieldInput {
   ingredient: string;
   amount: string;
-  unit: string;
+  unit: SelectOption | null;
 }
 
 const EditPost = ({}) => {
@@ -44,15 +50,28 @@ const EditPost = ({}) => {
       id: postId,
     },
   });
+
+  const initialValues: PostDetailsFormValues & { instruction: string[] } = {
+    title: data?.post?.title as string,
+    text: data?.post?.text as string,
+    instruction: data?.post?.instruction as string[],
+    advice: data?.post?.advice![0] as string, // TODO
+    cooktimeLength: data?.post?.cooktime?.length as number,
+    cooktimeUnit: data?.post?.cooktime?.unit as string,
+    portion: data?.post?.portion as number,
+  };
+
   const [updatePost] = useUpdatePostMutation();
   const toast = useToast();
 
   // recipe zone
-  const [ingredientsField, setIngredientsField] = useState<Ingredient[]>([
+  const [ingredientsField, setIngredientsField] = useState<
+    IngredientFieldInput[]
+  >([
     {
       ingredient: "",
       amount: "",
-      unit: "",
+      unit: getSelectOption("g", "gram"),
     },
   ]);
   const [instructionField, setInstructionField] = useState([""]);
@@ -73,7 +92,7 @@ const EditPost = ({}) => {
     values.splice(index + 1, 0, {
       ingredient: "",
       amount: "",
-      unit: "",
+      unit: getSelectOption("g", "gram"),
     });
     setIngredientsField(values);
   };
@@ -112,11 +131,12 @@ const EditPost = ({}) => {
   // recipe zone ends
 
   useEffect(() => {
+    console.log({ data });
     if (data?.post) {
       const ingredients = data.post.ingredients?.map((ingredient) => ({
         ingredient: ingredient.ingredient,
         amount: ingredient.amount,
-        unit: ingredient.unit,
+        unit: getSelectOption(ingredient.unit, ingredient.unit),
       }));
       const { instruction, image } = data.post;
 
@@ -124,7 +144,7 @@ const EditPost = ({}) => {
         { name: image.name, url: image.url, id: image.id, type: "image" },
       ];
 
-      setIngredientsField(ingredients as Ingredient[]);
+      setIngredientsField(ingredients as IngredientFieldInput[]);
       setInstructionField(instruction as string[]);
       setImageUploads(images);
     }
@@ -186,27 +206,24 @@ const EditPost = ({}) => {
           </Grid>
 
           <Formik
-            initialValues={{
-              title: data?.post?.title,
-              text: data?.post?.text,
-              instruction: data?.post?.instruction,
-              advice: data?.post?.advice,
-              cooktime: data?.post?.cooktime,
-              portion: data?.post?.portion,
-            }}
+            initialValues={initialValues}
             onSubmit={async (values) => {
               const input = {
                 title: values.title,
                 text: values.text,
                 instruction: instructionField,
-                cooktime: values.cooktime,
+                cooktime: {
+                  length: values.cooktimeLength,
+                  unit: values.cooktimeUnit,
+                },
+
                 portion: values.portion,
-                advice: values.advice as string[],
+                advice: [values.advice],
                 ingredients: ingredientsField,
               };
               const post = await updatePost({
                 variables: {
-                  input: input,
+                  input,
                   id: postId,
                   newImageUrl: imageUploads[0].url, // update url of existing image id
                 },
@@ -226,23 +243,58 @@ const EditPost = ({}) => {
             {({ isSubmitting }) => (
               <Form>
                 {/* post */}
-                <InputField name="title" placeholder="title" label="title" />
+                <Box mt={4}>
+                  <InputField
+                    name={PostDetailsFormNames.TITLE}
+                    placeholder="title"
+                    label="title"
+                  />
+                </Box>
 
-                <InputField
-                  textarea={true}
-                  name="text"
-                  placeholder="text..."
-                  label="Body"
-                />
+                <Box mt={4}>
+                  {" "}
+                  <InputField
+                    textarea={true}
+                    name={PostDetailsFormNames.TEXT}
+                    placeholder="text..."
+                    label="Body"
+                  />
+                </Box>
 
-                <InputField name="cooktime" placeholder="30" label="cooktime" />
-                <InputField name="portion" placeholder="3" label="portion" />
+                <Flex justifyContent="left" mt={4} gap={2}>
+                  <InputField
+                    name={PostDetailsFormNames.COOKTIME_LENGTH}
+                    placeholder="30"
+                    label="cooktime"
+                  />
 
-                <Box mt={2}>
+                  <Field
+                    as="select"
+                    name={PostDetailsFormNames.COOKTIME_UNIT}
+                    component={Select}
+                    // placeholder={CooktimeUnitEnum.MINUTES}
+                    width="6rem"
+                    variant="outline"
+                  >
+                    <option value={CooktimeUnitEnum.MINUTES}>mins</option>
+                    <option value={CooktimeUnitEnum.HOURS}>hrs</option>
+                  </Field>
+                </Flex>
+
+                <Box mt={4}>
+                  {" "}
+                  <InputField
+                    name={PostDetailsFormNames.PORTION}
+                    placeholder="3"
+                    label="portion"
+                  />
+                </Box>
+
+                <Box mt={4}>
                   <Heading fontSize="md">Tips</Heading>
                   <InputField
                     textarea={true}
-                    name="advice"
+                    name={PostDetailsFormNames.ADVICE}
                     placeholder="any advice?"
                     label=""
                   />

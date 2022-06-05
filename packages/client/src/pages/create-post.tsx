@@ -1,4 +1,4 @@
-import { Box, ListItem, Text, Heading, UnorderedList } from "@chakra-ui/layout";
+import { Box, Heading, ListItem, UnorderedList } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
@@ -17,6 +17,7 @@ import {
   useCreatePostMutation,
 } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
+import { CooktimeUnitEnum } from "../types/utils/CooktimeUnitEnum";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -25,23 +26,39 @@ import getRESTOptions from "../util/getRESTOptions";
 import { useIsAuth } from "../util/useIsAuth";
 import { withApollo } from "../util/withApollo";
 
-const postValues = {
-  title: "",
-  text: "",
-  portion: "",
-  cooktime: "",
-  advice: "",
-  videoUrl: "change this later",
-};
+export enum PostDetailsFormNames {
+  TITLE = "title",
+  TEXT = "text",
+  PORTION = "portion",
+  COOKTIME_LENGTH = "cooktimeLength",
+  COOKTIME_UNIT = "cooktimeUnit",
+  ADVICE = "advice",
+}
 
-3;
+export interface PostDetailsFormValues {
+  [PostDetailsFormNames.TITLE]: string;
+  [PostDetailsFormNames.TEXT]: string;
+  [PostDetailsFormNames.PORTION]: number;
+  [PostDetailsFormNames.COOKTIME_LENGTH]: number;
+  [PostDetailsFormNames.COOKTIME_UNIT]: string;
+  [PostDetailsFormNames.ADVICE]: string;
+}
+
+const postValues: PostDetailsFormValues = {
+  [PostDetailsFormNames.TITLE]: "",
+  [PostDetailsFormNames.TEXT]: "",
+  [PostDetailsFormNames.PORTION]: 2,
+  [PostDetailsFormNames.COOKTIME_LENGTH]: 0,
+  [PostDetailsFormNames.COOKTIME_UNIT]: CooktimeUnitEnum.MINUTES,
+  [PostDetailsFormNames.ADVICE]: "",
+};
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
   const router = useRouter();
 
   //useState Hooks
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(3);
 
   const [submittable, setSubmittable] = useState<boolean>(false);
 
@@ -184,13 +201,13 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setIngredientsField(values);
   };
 
-  const handleAddInstructionField = (index: any) => {
+  const handleAddInstructionField = (index: number) => {
     const values = [...instructionField];
     values.splice(index + 1, 0, "");
     setInstructionField(values);
   };
 
-  const handleRemoveField = (index: any) => {
+  const handleRemoveField = (index: number) => {
     const values = [...ingredientsField];
     if (values.length > 1) {
       values.splice(index, 1);
@@ -198,7 +215,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
   };
 
-  const handleRemoveInstructionField = (index: any) => {
+  const handleRemoveInstructionField = (index: number) => {
     const values = [...instructionField];
     if (values.length > 1) {
       values.splice(index, 1);
@@ -212,15 +229,20 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   // section4 ends: mealkit zone
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: PostDetailsFormValues) => {
     setSubmitting(true);
+    console.log("--------------------");
+    console.log({ values });
     try {
       const postInput = {
         title: values.title,
         text: values.text,
         instruction: instructionField,
-        cooktime: values.cooktime,
-        portion: parseInt(values.portion as string),
+        cooktime: {
+          length: values.cooktimeLength,
+          unit: values.cooktimeUnit,
+        },
+        portion: values.portion,
         advice: [values.advice],
         ingredients: ingredientsField,
       };
@@ -273,16 +295,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   // const formRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const formRef = useRef() as RefObject<
-    FormikProps<{
-      title: string;
-      text: string;
-      portion: string;
-      cooktime: string;
-      advice: string;
-      videoUrl: string;
-    }>
-  >;
+  const formRef = useRef() as RefObject<FormikProps<PostDetailsFormValues>>;
 
   useEffect(() => {
     let mealkitSubmittable: boolean = false;
@@ -336,6 +349,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           initialValues={postValues}
           innerRef={formRef}
           onSubmit={async (values) => {
+            console.log({ values });
             handleSubmit(values);
 
             // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
@@ -460,7 +474,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
                         <FormActionButtons
                           primaryText="Create"
-                          primaryIsDisabled={!submittable}
+                          // primaryIsDisabled={!submittable}
                           primaryIsLoading={submitting}
                           primaryButtonType="submit"
                           onPrimaryClick={nextStep}

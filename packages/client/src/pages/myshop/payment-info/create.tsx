@@ -3,7 +3,7 @@ import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React from "react";
 import Button from "../../../components/atoms/Button";
-import FormFieldLabel from "../../../components/form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "../../../components/form/FormFieldLabel";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";

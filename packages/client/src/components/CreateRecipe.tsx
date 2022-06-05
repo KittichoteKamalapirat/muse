@@ -8,7 +8,7 @@ import React from "react";
 import unitOptions from "../../constants/unitOptions";
 import { IngredientInput } from "../generated/graphql";
 import { SelectOption } from "../types/utils/SelectOption";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "./form/FormFieldLabel";
 import SelectField from "./form/SelectField";
 
 interface CreateRecipeProps {

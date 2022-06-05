@@ -8,7 +8,7 @@ import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
 import getRESTOptions from "../util/getRESTOptions";
-import FormFieldLabel from "./form/FormFieldLabel/FormFieldLabel";
+import FormFieldLabel from "./form/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import SvgUploadImage from "./Icons/UploadImage";
 import { Loading } from "./skeletons/Loading";

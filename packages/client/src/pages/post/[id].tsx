@@ -105,7 +105,10 @@ const Post = ({}) => {
                 About this dish
               </Heading>
               {!data?.post?.cooktime ? null : (
-                <Text mb={4}> เวลาในการทำ: {data.post.cooktime}</Text>
+                <Text mb={4}>
+                  เวลาในการทำ: {data.post.cooktime.length}{" "}
+                  {data.post.cooktime.unit}
+                </Text>
               )}
               <Text mb={4}> {data?.post?.text}</Text>
 

@@ -4,7 +4,10 @@ query Post($id: Int!) {
     title
     text
     instruction
-    cooktime
+    cooktime {
+      length
+      unit
+    }
     portion
     advice
     createdAt
