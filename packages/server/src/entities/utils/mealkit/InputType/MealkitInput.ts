@@ -13,6 +13,9 @@ class MealkitInput {
 
   @Field()
   portion: number;
+
+  @Field()
+  deliveryFee: number;
 }
 
 export default MealkitInput;

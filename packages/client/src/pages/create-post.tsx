@@ -1,10 +1,18 @@
-import { Box, ListItem, Text, Heading, UnorderedList } from "@chakra-ui/layout";
+import { Box, Heading, ListItem, UnorderedList } from "@chakra-ui/layout";
 import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import React, { RefObject, useEffect, useRef, useState } from "react";
-import { CreateMealkit } from "../components/CreateMealkit";
-import { CreatePostForm } from "../components/CreatePostForm";
+import {
+  CreateMealkit,
+  MealkitFormNames,
+  MealkitFormValues,
+} from "../components/CreateMealkit";
+import {
+  CreatePostForm,
+  PostDetailsFormNames,
+  PostDetailsFormValues,
+} from "../components/CreatePostForm";
 import { CreateRecipe } from "../components/CreateRecipe";
 import { CreateThumbnail } from "../components/CreateThumbnail";
 import { CreateVideo } from "../components/CreateVideo";
@@ -17,6 +25,7 @@ import {
   useCreatePostMutation,
 } from "../generated/graphql";
 import { urlResolver } from "../lib/UrlResolver";
+import { CooktimeUnitEnum } from "../types/utils/CooktimeUnitEnum";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -24,17 +33,16 @@ import { dataURItoFile } from "../util/dataURItoFile";
 import getRESTOptions from "../util/getRESTOptions";
 import { useIsAuth } from "../util/useIsAuth";
 import { withApollo } from "../util/withApollo";
+import { IngredientFieldInput } from "./post/edit/[id]";
 
-const postValues = {
+const postValues: PostDetailsFormValues = {
   title: "",
   text: "",
-  portion: "",
-  cooktime: "",
+  portion: 2,
+  cooktimeLength: 0,
+  cooktimeUnit: CooktimeUnitEnum.MINUTES,
   advice: "",
-  videoUrl: "change this later",
 };
-
-3;
 
 const CreatePost: React.FC<{}> = ({ children }) => {
   useIsAuth();
@@ -68,13 +76,14 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   // 1) method = signMealkitS3, input = name and type, return = signedRequest and Url where = (in onSubmit)
   // 2) upload to S3 with (axios) using signedRequest and file
 
+  console.log([MealkitFormNames]);
   // local state
-  const [mealkitInput, setMealkitInput] = useState({
-    name: "",
+  const [mealkitInput, setMealkitInput] = useState<MealkitFormValues>({
+    mealkitName: "",
     price: "",
     mealkitPortion: "",
+    deliveryFee: "",
     items: [],
-    images: [""],
   });
 
   // section1 starts: for uploading a video
@@ -156,11 +165,13 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   // ingredient zone start
-  const [ingredientsField, setIngredientsField] = useState([
+  const [ingredientsField, setIngredientsField] = useState<
+    IngredientFieldInput[]
+  >([
     {
       ingredient: "",
-      amount: "",
-      unit: "",
+      amount: "0",
+      unit: null,
     },
   ]);
 
@@ -180,19 +191,19 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     const values = [...ingredientsField];
     values.splice(index + 1, 0, {
       ingredient: "",
-      amount: "",
-      unit: "",
+      amount: "0",
+      unit: null,
     });
     setIngredientsField(values);
   };
 
-  const handleAddInstructionField = (index: any) => {
+  const handleAddInstructionField = (index: number) => {
     const values = [...instructionField];
     values.splice(index + 1, 0, "");
     setInstructionField(values);
   };
 
-  const handleRemoveField = (index: any) => {
+  const handleRemoveField = (index: number) => {
     const values = [...ingredientsField];
     if (values.length > 1) {
       values.splice(index, 1);
@@ -200,7 +211,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
   };
 
-  const handleRemoveInstructionField = (index: any) => {
+  const handleRemoveInstructionField = (index: number) => {
     const values = [...instructionField];
     if (values.length > 1) {
       values.splice(index, 1);
@@ -214,17 +225,26 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   // section4 ends: mealkit zone
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: PostDetailsFormValues) => {
     setSubmitting(true);
+    console.log("--------------------");
+    console.log({ values });
     try {
       const postInput = {
         title: values.title,
         text: values.text,
         instruction: instructionField,
-        cooktime: values.cooktime,
-        portion: parseInt(values.portion as string),
+        cooktime: {
+          length: values.cooktimeLength,
+          unit: values.cooktimeUnit,
+        },
+        portion: values.portion,
         advice: [values.advice],
-        ingredients: ingredientsField,
+        ingredients: ingredientsField.map((ingredient) => ({
+          ingredient: ingredient.ingredient,
+          amount: parseFloat(ingredient.amount), // make float for backend
+          unit: ingredient.unit?.value as string,
+        })),
       };
 
       console.log({ postInput });
@@ -247,15 +267,14 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       const postId = data?.createPost.id;
 
       if (postId) {
-        const price = parseInt(mealkitInput.price);
-        const mealkitPortion = parseInt(mealkitInput.mealkitPortion);
         const { errors: mealkitErrors } = await createMealkit({
           variables: {
             input: {
-              name: mealkitInput.name,
-              price: price,
-              portion: mealkitPortion,
+              name: mealkitInput.mealkitName,
+              price: parseFloat(mealkitInput.price),
+              portion: parseFloat(mealkitInput.mealkitPortion),
               items: mealkitInput.items,
+              deliveryFee: parseFloat(mealkitInput.deliveryFee),
             },
             postId: postId,
             mealkitFiles: mealkitS3UrlAndIds.map((item) => ({
@@ -275,16 +294,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   };
 
   // const formRef = useRef() as MutableRefObject<HTMLInputElement>;
-  const formRef = useRef() as RefObject<
-    FormikProps<{
-      title: string;
-      text: string;
-      portion: string;
-      cooktime: string;
-      advice: string;
-      videoUrl: string;
-    }>
-  >;
+  const formRef = useRef() as RefObject<FormikProps<PostDetailsFormValues>>;
 
   useEffect(() => {
     let mealkitSubmittable: boolean = false;
@@ -292,9 +302,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
     if (
       // TODO rethink about what fields are required (also update backend entity)
-      mealkitInput.name != "" &&
+      mealkitInput.mealkitName != "" &&
       mealkitInput.mealkitPortion != "" &&
       mealkitInput.price != "" &&
+      mealkitInput.deliveryFee != "" &&
       // &&    mealkitInput.images.length > 0
       mealkitInput.items.length > 0 // check at least one item
     ) {
@@ -338,6 +349,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           initialValues={postValues}
           innerRef={formRef}
           onSubmit={async (values) => {
+            console.log({ values });
             handleSubmit(values);
 
             // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
@@ -436,7 +448,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                                   Post&apos;s name cannot be blank
                                 </ListItem>
                               )}
-                              {mealkitInput.name === "" && (
+                              {mealkitInput.mealkitName === "" && (
                                 <ListItem>
                                   Meal kit&apos;s name cannot be blank
                                 </ListItem>
@@ -444,6 +456,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                               {mealkitInput.mealkitPortion === "" && (
                                 <ListItem>
                                   Meal kit&apos;s portion cannot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.deliveryFee === "" && (
+                                <ListItem>
+                                  Meal kit&apos;s delivery fee cannot be blank
                                 </ListItem>
                               )}
                               {mealkitInput.price === "" && (
@@ -462,7 +479,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
                         <FormActionButtons
                           primaryText="Create"
-                          primaryIsDisabled={!submittable}
+                          // primaryIsDisabled={!submittable}
                           primaryIsLoading={submitting}
                           primaryButtonType="submit"
                           onPrimaryClick={nextStep}

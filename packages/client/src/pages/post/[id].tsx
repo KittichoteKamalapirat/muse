@@ -105,7 +105,11 @@ const Post = ({}) => {
                 About this dish
               </Heading>
               {!data?.post?.cooktime ? null : (
-                <Text mb={4}> เวลาในการทำ: {data.post.cooktime}</Text>
+                <Text mb={4}>
+                  {/* เวลาในการทำ: {data.post.cooktime.length}{" "} */}
+                  cook time: {data.post.cooktime.length}{" "}
+                  {data.post.cooktime.unit}
+                </Text>
               )}
               <Text mb={4}> {data?.post?.text}</Text>
 
@@ -114,7 +118,8 @@ const Post = ({}) => {
                 Ingredients
               </Heading>
               {!data.post.portion ? null : (
-                <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
+                // <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
+                <Text fontSize="sm">(For {data.post.portion} คน)</Text>
               )}
 
               {!data.post.ingredients ? null : (

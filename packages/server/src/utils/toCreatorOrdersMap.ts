@@ -25,7 +25,6 @@ export const toCreatorOrdersMap = (cartItems: CartItem[]) => {
   const mappedArray: MappedCreatorOrders[] = [];
 
   cartItems.forEach((item) => {
-    console.log("=================");
     console.log({ item });
 
     if (mappedArray.length > 0) {

@@ -1,4 +1,5 @@
 import { InputType, Field } from "type-graphql";
+import { UnitEnum } from "../../../Ingredient";
 
 @InputType()
 class IngredientInput {
@@ -6,10 +7,10 @@ class IngredientInput {
   ingredient: string;
 
   @Field()
-  amount: string;
+  amount: number;
 
   @Field()
-  unit: string;
+  unit: UnitEnum;
 }
 
 export default IngredientInput;

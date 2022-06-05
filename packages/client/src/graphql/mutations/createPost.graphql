@@ -9,7 +9,10 @@ mutation createPost($input: PostInput!, $videoId: Int!, $imageId: Int!) {
     updatedAt
     instruction
     advice
-    cooktime
+    cooktime {
+      length
+      unit
+    }
     portion
   }
 }

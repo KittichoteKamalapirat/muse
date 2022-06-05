@@ -1,5 +1,22 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
 import { Field, ObjectType } from "type-graphql";
 import { Column } from "typeorm";
+
+export enum UnitEnum {
+  GRAM = "gram",
+  KILOGRAM = "kilogram",
+
+  MILLILITER = "milliliter",
+  LITER = "liter",
+  PINCH = "pinch",
+  TABLESPOON = "tablespoon",
+  TEASPOON = "teaspoon",
+  CUP = "cup",
+
+  PIECE = "piece",
+  EYEBALL = "eyeball",
+}
 
 @ObjectType()
 class Ingredient {
@@ -13,23 +30,14 @@ class Ingredient {
 
   @Column()
   @Field()
-  amount!: string;
+  amount!: number;
 
-  @Column()
+  @Column({
+    type: "enum",
+    enum: UnitEnum,
+  })
   @Field()
-  unit!: string;
-
-  // @Field()
-  // @Column()
-  // postId: number;
-
-  // @Field(() => String)
-  // @CreateDateColumn()
-  // createdAt: Date;
-
-  // @Field(() => String)
-  // @UpdateDateColumn()
-  // updatedAt: Date;
+  unit!: UnitEnum;
 }
 
 export default Ingredient;

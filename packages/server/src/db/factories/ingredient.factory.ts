@@ -5,7 +5,7 @@ import { Ingredient } from "../../entities";
 define(Ingredient, (faker: typeof Faker) => {
   const ingredient = new Ingredient();
   ingredient.ingredient = faker.commerce.productName();
-  ingredient.amount = Math.floor(Math.random() * 30).toString();
+  ingredient.amount = Math.floor(Math.random() * 30);
   ingredient.unit = faker.commerce.productName();
 
   return ingredient;

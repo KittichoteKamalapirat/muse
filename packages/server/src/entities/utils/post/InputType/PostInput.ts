@@ -1,5 +1,6 @@
 import { InputType, Field } from "type-graphql";
 import { IngredientInput } from "../..";
+import CooktimeInput from "./CooktimeInput";
 
 @InputType()
 export class PostInput {
@@ -12,8 +13,8 @@ export class PostInput {
   @Field(() => [String], { nullable: true })
   instruction: string[];
 
-  @Field({ nullable: true })
-  cooktime: string;
+  @Field(() => CooktimeInput, { nullable: true })
+  cooktime: CooktimeInput;
 
   @Field({ nullable: true })
   portion: number;

@@ -3,46 +3,61 @@
 //   { value: "gram", label: "g" },
 //   { value: "kilogram", label: "kg" },
 
-//   // volume
-//   { value: "milliliter", label: "ml" },
-//   { value: "liter", label: "l" },
-//   { value: "pinch", label: "pinch" },
-//   { value: "teaspoon", label: "tsp" },
-//   { value: "tablespoon", label: "tbsp" },
-//   { value: "cup", label: "cup" },
-
-//   // by ingredient
-//   { value: "piece", label: "piece" },
-
-//   // others
-//   { value: "eyeball", label: "proper amount" },
-// ];
+import { UnitEnum } from "../src/types/utils/UnitEnum";
+import { UnitSelectOption } from "./unitSelectOption";
 
 const unitOptions = (ingredientName: string) => [
   {
     label: "Weight",
     options: [
-      { label: "g", value: "gram" },
-      { label: "kg", value: "kilogram" },
+      {
+        label: UnitSelectOption.gram.label,
+        value: UnitSelectOption.gram.value,
+      },
+      {
+        label: UnitSelectOption.kilogram.label,
+        value: UnitSelectOption.kilogram.value,
+      },
     ],
   },
   {
     label: "Volume",
     options: [
-      { label: "ml", value: "milliliter" },
-      { label: "l", value: "liter" },
-      { label: "pinch", value: "pinch" },
-      { label: "tsp", value: "teaspoon" },
-      { label: "tbsp", value: "tablespoon" },
-      { label: "cup", value: "cup" },
+      {
+        label: UnitSelectOption.milliliter.label,
+        value: UnitSelectOption.milliliter.value,
+      },
+      {
+        label: UnitSelectOption.liter.label,
+        value: UnitSelectOption.liter.value,
+      },
+      {
+        label: UnitSelectOption.pinch.label,
+        value: UnitSelectOption.pinch.value,
+      },
+
+      {
+        label: UnitSelectOption.teaspoon.label,
+        value: UnitSelectOption.teaspoon.value,
+      },
+      {
+        label: UnitSelectOption.tablespoon.label,
+        value: UnitSelectOption.tablespoon.value,
+      },
+      { label: UnitSelectOption.cup.label, value: UnitSelectOption.cup.value },
     ],
   },
   {
     label: "Others",
     options: [
-      { label: "pieces", value: "piece" },
-      { label: "cloves", value: "clove" },
-      { label: "proper amount", value: "eyeball" },
+      {
+        label: UnitSelectOption.piece.label,
+        value: UnitSelectOption.piece.value,
+      },
+      {
+        label: UnitSelectOption.eyeball.label,
+        value: UnitSelectOption.eyeball.value,
+      },
       { label: ingredientName + "s", value: ingredientName },
     ],
   },

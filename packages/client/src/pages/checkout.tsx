@@ -233,11 +233,12 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
                   {/* summary of each creator */}
                   <Box py={4}>
                     <ContentWrapper>
-                      <Heading fontSize="md">Delivery</Heading>
+                      {/* <Heading fontSize="md">Delivery Fee</Heading> */}
                       <Flex justifyContent="space-between">
                         <Box>
-                          <Text>By Inter Express</Text>
-                          <Text color="gray.600"> arrive on tomorrow</Text>
+                          <Heading fontSize="md">Delivery Fee</Heading>
+                          {/* // TODO <Text>By Inter Express</Text> */}
+                          {/* <Text color="gray.600"> arrive on tomorrow</Text> */}
                         </Box>
                         <Text>฿ {item.deliveryFee}</Text>
                       </Flex>

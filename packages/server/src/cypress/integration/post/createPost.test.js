@@ -58,11 +58,13 @@ describe("post", () => {
     // fill in post details
     const title = "Marinara";
     const text = "Marinara Details";
-    const cooktime = "1";
+    const cooktimeLength = 1;
+    const cooktimeUnit = "mins";
     const postPortion = "1";
     cy.get('input[name="title"]').type(title);
     cy.get('textarea[name="text"]').type(text);
-    cy.get('input[name="cooktime"]').type(cooktime);
+    cy.get('input[name="cooktimeLength"]').type(cooktimeLength);
+    cy.get('input[name="cooktimeUnit"]').type(cooktimeUnit);
     cy.get('input[name="portion"]').type(postPortion);
     cy.get('button[aria-label="Go to mealkit details tab"]')
       .should("be.visible")

@@ -1,11 +1,10 @@
-import { ArrowUpIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { PlusSquareIcon } from "@chakra-ui/icons";
 import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import {
   Box,
   Checkbox,
   CheckboxGroup,
   Flex,
-  Heading,
   Img,
   Stack,
   Text,
@@ -17,6 +16,7 @@ import { Form } from "formik";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import { urlResolver } from "../lib/UrlResolver";
+import { IngredientFieldInput } from "../pages/post/edit/[id]";
 import { FileInput } from "../types/utils/FileInput";
 import { FileMetadata } from "../types/utils/FileMetadata";
 import { ResourceType } from "../types/utils/ResourceType";
@@ -24,30 +24,34 @@ import getRESTOptions from "../util/getRESTOptions";
 import FormFieldLabel from "./form/FormFieldLabel";
 import formatFilename from "./formatFilename";
 import SvgUploadFiles from "./Icons/UploadFiles";
-import SvgUploadImage from "./Icons/UploadImage";
 import { InputField } from "./InputField";
 import { Loading } from "./skeletons/Loading";
-import SvgUploadMealkitIcon from "./svgComponents/UploadMealkitIcon";
 
-interface CreateMealkitProps {
-  ingredientsField: {
-    ingredient: string;
-    amount: string;
-    unit: string;
-  }[];
-  input: {
-    name: string;
-    price: string;
-    mealkitPortion: string;
-    images: string[];
-    items: string[];
-  };
+export enum MealkitFormNames {
+  MEALKIT_NAME = "mealkitName",
+  PRICE = "price",
+  MEALKIT_PORTION = "mealkitPortion",
+  ITEMS = "items",
+  DELIVERY_FEE = "deliveryFee",
+}
+
+export interface MealkitFormValues {
+  mealkitName: string;
+  price: string; // string for frontend
+  mealkitPortion: string; // string for frontend
+  items: string[];
+  deliveryFee: string; // string for frontend
+}
+
+interface Props {
+  ingredientsField: IngredientFieldInput[];
+  input: MealkitFormValues;
   setInput: Function;
   mealkitS3UrlAndIds: FileMetadata[];
   setMealkitS3UrlAndIds: React.Dispatch<React.SetStateAction<FileMetadata[]>>;
 }
 
-export const CreateMealkit: React.FC<CreateMealkitProps> = ({
+export const CreateMealkit: React.FC<Props> = ({
   ingredientsField,
   input,
   setInput,
@@ -178,10 +182,15 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
         <Box mt={4}>
           <FormFieldLabel label="Meal Kit Name" required />
           <InputField
-            name="name"
-            value={input.name}
+            name={MealkitFormNames.MEALKIT_NAME}
+            value={input.mealkitName}
             placeholder="name of the mealkit"
-            onChange={(e) => setInput({ ...input, name: e.target.value })}
+            onChange={(e) =>
+              setInput({
+                ...input,
+                [MealkitFormNames.MEALKIT_NAME]: e.target.value,
+              })
+            }
           />
         </Box>
 
@@ -190,11 +199,13 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
           <InputGroup>
             <InputField
-              name="price"
+              name={MealkitFormNames.PRICE}
               type="number"
               value={input.price}
               placeholder="price"
-              onChange={(e) => setInput({ ...input, price: e.target.value })}
+              onChange={(e) =>
+                setInput({ ...input, [MealkitFormNames.PRICE]: e.target.value })
+              }
             />
             <InputRightAddon>THB</InputRightAddon>
           </InputGroup>
@@ -205,16 +216,39 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
 
           <InputGroup>
             <InputField
-              name="mealkitPortion"
+              name={MealkitFormNames.MEALKIT_PORTION}
               type="number"
               value={input.mealkitPortion}
               placeholder="portion"
               onChange={(e) =>
-                setInput({ ...input, mealkitPortion: e.target.value })
+                setInput({
+                  ...input,
+                  [MealkitFormNames.MEALKIT_PORTION]: e.target.value,
+                })
               }
             />
 
             <InputRightAddon>people</InputRightAddon>
+          </InputGroup>
+        </Box>
+
+        <Box mt={4}>
+          <FormFieldLabel label="Delivery Fee" required />
+
+          <InputGroup>
+            <InputField
+              name={MealkitFormNames.DELIVERY_FEE}
+              type="number"
+              value={input.deliveryFee}
+              placeholder="delivery fee"
+              onChange={(e) =>
+                setInput({
+                  ...input,
+                  [MealkitFormNames.DELIVERY_FEE]: e.target.value,
+                })
+              }
+            />
+            <InputRightAddon>THB</InputRightAddon>
           </InputGroup>
         </Box>
 
@@ -254,18 +288,22 @@ export const CreateMealkit: React.FC<CreateMealkitProps> = ({
                             if (input.items.length === 0) {
                               setInput({
                                 ...input,
-                                items: [e.target.value],
+                                [MealkitFormNames.ITEMS]: [e.target.value],
                               });
                             } else {
                               setInput({
                                 ...input,
-                                items: input.items.concat(e.target.value),
+                                [MealkitFormNames.ITEMS]: input.items.concat(
+                                  e.target.value
+                                ),
                               });
                             }
                           } else {
                             setInput({
                               ...input,
-                              items: input.items.filter((_, i) => index !== i),
+                              [MealkitFormNames.ITEMS]: input.items.filter(
+                                (_, i) => index !== i
+                              ),
                             });
                           }
                         }}

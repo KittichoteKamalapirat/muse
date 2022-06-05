@@ -108,8 +108,9 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                 )}
               </Flex>
 
-              <Box>
-                <Heading size="md">รายการ</Heading>
+              <Box mt={4}>
+                {/* <Heading size="md">รายการ</Heading> */}
+                <Heading size="sm">items include</Heading>
                 {mealkit.items?.map((item, itemIndex) => (
                   <Text key={itemIndex}>
                     {itemIndex + 1}. {item}
