@@ -33,6 +33,7 @@ import { Loading } from "../../components/skeletons/Loading";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   useAdminCompleteCartItemMutation,
+  useAdminUpdateCartItemStatusMutation,
   useAllCartItemsQuery,
 } from "../../generated/graphql";
 import { useIsAdmin } from "../../util/useIsAdmin";
@@ -43,7 +44,7 @@ interface AdminProps {}
 const Admin: React.FC<AdminProps> = ({}) => {
   useIsAdmin();
   const { data: cartItems, loading, error } = useAllCartItemsQuery();
-  const [completeCartItem] = useAdminCompleteCartItemMutation();
+  const [adminUpdateCartItemStatus] = useAdminUpdateCartItemStatusMutation();
 
   const data = useMemo<any>(
     () => adminData(loading, cartItems),
@@ -51,8 +52,8 @@ const Admin: React.FC<AdminProps> = ({}) => {
   );
 
   const columns = useMemo<Column[]>(
-    () => adminColumn(completeCartItem),
-    [completeCartItem]
+    () => adminColumn(adminUpdateCartItemStatus),
+    [adminUpdateCartItemStatus]
   );
 
   const {
@@ -102,14 +103,14 @@ const Admin: React.FC<AdminProps> = ({}) => {
 
   return (
     <Layout heading="loading">
-      <ContentWrapper m={20}>
+      <ContentWrapper m={24}>
         <Heading fontSize="2xl">Admin Dashboard</Heading>
         <Table {...getTableProps()}>
           <Thead>
             {headerGroups.map((headerGroup, index) => (
               <Tr {...headerGroup.getHeaderGroupProps()} key={index}>
                 {headerGroup.headers.map((column: any, index) => (
-                  <Th key={index}>
+                  <Th key={index} textAlign="right">
                     <Box
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                       isNumeric={column.isNumeric}

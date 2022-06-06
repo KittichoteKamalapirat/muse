@@ -225,6 +225,22 @@ export class CartItemResolver {
     return true;
   }
 
+  @Mutation(() => CartItem)
+  @UseMiddleware(isAdmin)
+  async adminUpdateCartItemStatus(
+    @Arg("id", () => Int) id: number,
+    @Arg("status", () => CartItemStatus) status: CartItemStatus
+  ): Promise<CartItem | Error | undefined> {
+    try {
+      await CartItem.update({ id }, { status });
+      const cartItem = await CartItem.findOne(id);
+
+      return cartItem;
+    } catch (error) {
+      return Error("cannot update status");
+    }
+  }
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAdmin)
   async adminCompleteCartItem(

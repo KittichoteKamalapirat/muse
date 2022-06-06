@@ -274,6 +274,7 @@ export type MealkitInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   adminCompleteCartItem: Scalars['Boolean'];
+  adminUpdateCartItemStatus: CartItem;
   changePassword: UserResponse;
   createAddress: Address;
   createCartItem: AddToCart;
@@ -316,6 +317,12 @@ export type Mutation = {
 
 export type MutationAdminCompleteCartItemArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationAdminUpdateCartItemStatusArgs = {
+  id: Scalars['Int'];
+  status: CartItemStatus;
 };
 
 
@@ -912,6 +919,14 @@ export type AdminCompleteCartItemMutationVariables = Exact<{
 
 export type AdminCompleteCartItemMutation = { __typename?: 'Mutation', adminCompleteCartItem: boolean };
 
+export type AdminUpdateCartItemStatusMutationVariables = Exact<{
+  id: Scalars['Int'];
+  status: CartItemStatus;
+}>;
+
+
+export type AdminUpdateCartItemStatusMutation = { __typename?: 'Mutation', adminUpdateCartItemStatus: { __typename?: 'CartItem', id: number, status: string } };
+
 export type ReceivedCartItemMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1435,6 +1450,41 @@ export function useAdminCompleteCartItemMutation(baseOptions?: Apollo.MutationHo
 export type AdminCompleteCartItemMutationHookResult = ReturnType<typeof useAdminCompleteCartItemMutation>;
 export type AdminCompleteCartItemMutationResult = Apollo.MutationResult<AdminCompleteCartItemMutation>;
 export type AdminCompleteCartItemMutationOptions = Apollo.BaseMutationOptions<AdminCompleteCartItemMutation, AdminCompleteCartItemMutationVariables>;
+export const AdminUpdateCartItemStatusDocument = gql`
+    mutation adminUpdateCartItemStatus($id: Int!, $status: CartItemStatus!) {
+  adminUpdateCartItemStatus(id: $id, status: $status) {
+    id
+    status
+  }
+}
+    `;
+export type AdminUpdateCartItemStatusMutationFn = Apollo.MutationFunction<AdminUpdateCartItemStatusMutation, AdminUpdateCartItemStatusMutationVariables>;
+
+/**
+ * __useAdminUpdateCartItemStatusMutation__
+ *
+ * To run a mutation, you first call `useAdminUpdateCartItemStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAdminUpdateCartItemStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [adminUpdateCartItemStatusMutation, { data, loading, error }] = useAdminUpdateCartItemStatusMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      status: // value for 'status'
+ *   },
+ * });
+ */
+export function useAdminUpdateCartItemStatusMutation(baseOptions?: Apollo.MutationHookOptions<AdminUpdateCartItemStatusMutation, AdminUpdateCartItemStatusMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AdminUpdateCartItemStatusMutation, AdminUpdateCartItemStatusMutationVariables>(AdminUpdateCartItemStatusDocument, options);
+      }
+export type AdminUpdateCartItemStatusMutationHookResult = ReturnType<typeof useAdminUpdateCartItemStatusMutation>;
+export type AdminUpdateCartItemStatusMutationResult = Apollo.MutationResult<AdminUpdateCartItemStatusMutation>;
+export type AdminUpdateCartItemStatusMutationOptions = Apollo.BaseMutationOptions<AdminUpdateCartItemStatusMutation, AdminUpdateCartItemStatusMutationVariables>;
 export const ReceivedCartItemDocument = gql`
     mutation receivedCartItem($id: Int!) {
   receivedCartItem(id: $id)

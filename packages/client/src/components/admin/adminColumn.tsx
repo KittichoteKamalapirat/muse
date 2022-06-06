@@ -1,14 +1,20 @@
 import { ApolloCache } from "@apollo/client";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { Box, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { gql } from "urql";
 import {
-  AdminCompleteCartItemMutation,
+  AdminUpdateCartItemStatusMutation,
   CartItemStatus,
 } from "../../generated/graphql";
-import Button from "../atoms/Button";
 import { SelectColumnFilter } from "../SelectColumnFilter";
 
-export const adminColumn = (completeCartItem: any) => {
+export const adminColumn = (adminUpdateCartItemStatus: any) => {
+  const handleOnClick = (id: number, status: CartItemStatus) => {
+    adminUpdateCartItemStatus({
+      variables: { id, status },
+    });
+  };
+
   return [
     {
       Header: "id",
@@ -22,39 +28,33 @@ export const adminColumn = (completeCartItem: any) => {
       Filter: SelectColumnFilter,
       filter: "includes",
       Cell: ({ value, row }: { value: string; row: any }) => {
-        if (value === CartItemStatus.Received) {
-          return (
-            <>
-              <Flex alignItems={"center"} justifyContent="space-between">
-                <Text>{value}</Text>
-                <Button
+        return (
+          <Menu>
+            <MenuButton
+              px={4}
+              py={2}
+              borderRadius="md"
+              borderWidth="1px"
+              borderColor="brand"
+              _hover={{ bg: "gray.100" }}
+              _expanded={{ bg: "primary.100" }}
+            >
+              {value} <ChevronDownIcon />
+            </MenuButton>
+            <MenuList bgColor="white">
+              {Object.values(CartItemStatus).map((status, index) => (
+                <MenuItem
+                  key={index}
                   onClick={() => {
-                    // console.log({ row });
-                    completeCartItem({
-                      variables: { id: row.original.cartItemId },
-                      update: (
-                        cache: ApolloCache<AdminCompleteCartItemMutation>
-                      ) => {
-                        cache.writeFragment({
-                          id: "CartItem:" + row.original.cartItemId,
-                          fragment: gql`
-                            fragment __ on CartItem {
-                              status
-                            }
-                          `,
-                          data: { status: CartItemStatus.Complete },
-                        });
-                      },
-                    });
+                    handleOnClick(row.original.cartItemId, status);
                   }}
                 >
-                  Update
-                </Button>
-              </Flex>
-            </>
-          );
-        }
-        return value;
+                  {status}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+        );
       },
     },
     {
