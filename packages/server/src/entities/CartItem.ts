@@ -18,7 +18,8 @@ export enum CartItemStatus {
   ToDeliver = "ToDeliver", // user: to be delivered, creator: to deliver. User paid and waiting for the creator to deliver
   OnTheWay = "OnTheWay", // user and creator: the products are being delivered. waiting for the courrier to deliver
   Delivered = "Delivered", // courier delivered (webhook)
-  Received = "Received", // user confirmed
+  Received = "Received", // buyer confirmed
+  // Reviewed = "Reviewed" // no need because reviewed is in isReviewed and is not a bound to timeline
   Complete = "Complete", // admin transfered money to seller
   Cancelled = "Cancelled", // user and creator: cancelled. A user cancelled an order- > has to asked for permission before TO_DELIVER
   Refunded = "Refunded", // user: waiting for refund, creator: to refund
