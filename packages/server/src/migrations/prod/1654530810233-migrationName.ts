@@ -1,7 +1,7 @@
 import {MigrationInterface, QueryRunner} from "typeorm";
 
-export class migrationName1652982260707 implements MigrationInterface {
-    name = 'migrationName1652982260707'
+export class migrationName1654530810233 implements MigrationInterface {
+    name = 'migrationName1654530810233'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -28,13 +28,32 @@ export class migrationName1652982260707 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
+            CREATE TABLE "address" (
+                "id" SERIAL NOT NULL,
+                "name" character varying NOT NULL,
+                "phonenumber" character varying NOT NULL,
+                "line1" character varying,
+                "line2" character varying,
+                "subdistrict" character varying,
+                "district" character varying,
+                "province" character varying,
+                "country" character varying,
+                "postcode" character varying,
+                "userId" uuid NOT NULL,
+                "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
+                "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
+                CONSTRAINT "REL_d25f1ea79e282cc8a42bd616aa" UNIQUE ("userId"),
+                CONSTRAINT "PK_d92de1f82754668b5f5f5dd4fd5" PRIMARY KEY ("id")
+            )
+        `);
+        await queryRunner.query(`
             CREATE TABLE "post" (
                 "id" SERIAL NOT NULL,
                 "title" character varying NOT NULL,
                 "text" character varying,
                 "instruction" text array,
                 "advice" text array,
-                "cooktime" character varying,
+                "cooktime" jsonb,
                 "portion" integer,
                 "points" integer NOT NULL DEFAULT '0',
                 "isPublished" boolean NOT NULL DEFAULT true,
@@ -87,20 +106,6 @@ export class migrationName1652982260707 implements MigrationInterface {
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
                 CONSTRAINT "PK_bd94725aa84f8cf37632bcde997" PRIMARY KEY ("id")
-            )
-        `);
-        await queryRunner.query(`
-            CREATE TABLE "cart_item_noti" (
-                "id" SERIAL NOT NULL,
-                "read" boolean NOT NULL DEFAULT false,
-                "message" character varying NOT NULL,
-                "avatarHref" character varying NOT NULL,
-                "detailUrl" character varying NOT NULL,
-                "userId" character varying NOT NULL,
-                "cartItemId" integer NOT NULL,
-                "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
-                "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
-                CONSTRAINT "PK_9c52e7bfe6088fa5ea7396ba005" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
@@ -217,27 +222,26 @@ export class migrationName1652982260707 implements MigrationInterface {
             )
         `);
         await queryRunner.query(`
-            CREATE TABLE "address" (
+            CREATE TABLE "cart_item_noti" (
                 "id" SERIAL NOT NULL,
-                "name" character varying NOT NULL,
-                "phonenumber" character varying NOT NULL,
-                "line1" character varying,
-                "line2" character varying,
-                "subdistrict" character varying,
-                "district" character varying,
-                "province" character varying,
-                "country" character varying,
-                "postcode" character varying,
-                "userId" uuid NOT NULL,
+                "read" boolean NOT NULL DEFAULT false,
+                "message" character varying NOT NULL,
+                "avatarHref" character varying NOT NULL,
+                "detailUrl" character varying NOT NULL,
+                "userId" character varying NOT NULL,
+                "cartItemId" integer NOT NULL,
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
-                CONSTRAINT "REL_d25f1ea79e282cc8a42bd616aa" UNIQUE ("userId"),
-                CONSTRAINT "PK_d92de1f82754668b5f5f5dd4fd5" PRIMARY KEY ("id")
+                CONSTRAINT "PK_9c52e7bfe6088fa5ea7396ba005" PRIMARY KEY ("id")
             )
         `);
         await queryRunner.query(`
             ALTER TABLE "user"
             ADD CONSTRAINT "FK_bb525f8673eb9b072f3a063adfc" FOREIGN KEY ("paymentInfoId") REFERENCES "payment_info"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
+        `);
+        await queryRunner.query(`
+            ALTER TABLE "address"
+            ADD CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "post"
@@ -270,10 +274,6 @@ export class migrationName1652982260707 implements MigrationInterface {
         await queryRunner.query(`
             ALTER TABLE "cart_item"
             ADD CONSTRAINT "FK_33d894493cf66fc7fa54f64153f" FOREIGN KEY ("trackingId") REFERENCES "tracking"("id") ON DELETE NO ACTION ON UPDATE NO ACTION
-        `);
-        await queryRunner.query(`
-            ALTER TABLE "cart_item_noti"
-            ADD CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a" FOREIGN KEY ("cartItemId") REFERENCES "cart_item"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
             ALTER TABLE "order"
@@ -316,14 +316,14 @@ export class migrationName1652982260707 implements MigrationInterface {
             ADD CONSTRAINT "FK_72da7f42d43f0be3b3ef35692a0" FOREIGN KEY ("postId") REFERENCES "post"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
         await queryRunner.query(`
-            ALTER TABLE "address"
-            ADD CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3" FOREIGN KEY ("userId") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE NO ACTION
+            ALTER TABLE "cart_item_noti"
+            ADD CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a" FOREIGN KEY ("cartItemId") REFERENCES "cart_item"("id") ON DELETE CASCADE ON UPDATE NO ACTION
         `);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
-            ALTER TABLE "address" DROP CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3"
+            ALTER TABLE "cart_item_noti" DROP CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a"
         `);
         await queryRunner.query(`
             ALTER TABLE "image" DROP CONSTRAINT "FK_72da7f42d43f0be3b3ef35692a0"
@@ -356,9 +356,6 @@ export class migrationName1652982260707 implements MigrationInterface {
             ALTER TABLE "order" DROP CONSTRAINT "FK_caabe91507b3379c7ba73637b84"
         `);
         await queryRunner.query(`
-            ALTER TABLE "cart_item_noti" DROP CONSTRAINT "FK_c3d62aa1c3401c0b03fee60c90a"
-        `);
-        await queryRunner.query(`
             ALTER TABLE "cart_item" DROP CONSTRAINT "FK_33d894493cf66fc7fa54f64153f"
         `);
         await queryRunner.query(`
@@ -383,10 +380,13 @@ export class migrationName1652982260707 implements MigrationInterface {
             ALTER TABLE "post" DROP CONSTRAINT "FK_9e91e6a24261b66f53971d3f96b"
         `);
         await queryRunner.query(`
+            ALTER TABLE "address" DROP CONSTRAINT "FK_d25f1ea79e282cc8a42bd616aa3"
+        `);
+        await queryRunner.query(`
             ALTER TABLE "user" DROP CONSTRAINT "FK_bb525f8673eb9b072f3a063adfc"
         `);
         await queryRunner.query(`
-            DROP TABLE "address"
+            DROP TABLE "cart_item_noti"
         `);
         await queryRunner.query(`
             DROP TABLE "image"
@@ -416,9 +416,6 @@ export class migrationName1652982260707 implements MigrationInterface {
             DROP TABLE "payment"
         `);
         await queryRunner.query(`
-            DROP TABLE "cart_item_noti"
-        `);
-        await queryRunner.query(`
             DROP TABLE "cart_item"
         `);
         await queryRunner.query(`
@@ -429,6 +426,9 @@ export class migrationName1652982260707 implements MigrationInterface {
         `);
         await queryRunner.query(`
             DROP TABLE "post"
+        `);
+        await queryRunner.query(`
+            DROP TABLE "address"
         `);
         await queryRunner.query(`
             DROP TABLE "user"
