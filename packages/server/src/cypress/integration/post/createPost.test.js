@@ -2,7 +2,7 @@
 
 describe("post", () => {
   Cypress.on("uncaught:exception", () => false);
-  it("creator can create a post", () => {
+  xit("creator can create a post", () => {
     // login a user and redirect to homepage
     // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);

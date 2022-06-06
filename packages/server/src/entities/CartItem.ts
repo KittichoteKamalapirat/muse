@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable no-unused-vars */
 import { Field, Int, ObjectType } from "type-graphql";
 import {

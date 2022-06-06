@@ -9,6 +9,7 @@ const typeorm = require("typeorm");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 const { CartItemStatus } = require("../../entities/CartItem");
+const { UnitEnum } = require("../../entities/Ingredient");
 
 const getConnectionOptions = (dropSchema) => ({
   name: Math.random().toString(), // has to be random everytime
@@ -87,7 +88,9 @@ module.exports = (on, config) => {
           cooktime: "1",
           portion: 1,
           advice: [""],
-          ingredients: [{ ingredient: "", amount: "", unit: "" }],
+          ingredients: [
+            { ingredient: "tomato", amount: 100, unit: UnitEnum.GRAM },
+          ],
           creatorId: user.id,
         };
 
@@ -119,6 +122,7 @@ module.exports = (on, config) => {
           portion: 1,
           postId: post.id,
           creatorId: user.id,
+          deliveryFee: 120,
         };
 
         const mealkit = await mealkitRepository.save(mealkitInput);
