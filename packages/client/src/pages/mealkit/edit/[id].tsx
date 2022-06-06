@@ -2,22 +2,21 @@ import {
   Box,
   Checkbox,
   CheckboxGroup,
-  Flex,
   Heading,
   InputGroup,
-  InputLeftAddon,
   InputRightAddon,
   Stack,
-  Text,
   useToast,
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import Button from "../../../components/atoms/Button";
+import { MealkitFormNames } from "../../../components/CreateMealkit";
 import DropzoneField, {
   UploadedFile,
 } from "../../../components/form/DropzoneField";
+import FormFieldLabel from "../../../components/form/FormFieldLabel";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
@@ -64,7 +63,13 @@ const Mealkit = () => {
 
   useEffect(() => {
     if (postData?.post) {
-      setIngredientsField(postData.post?.ingredients);
+      setIngredientsField(
+        postData.post?.ingredients.map((ingredient) => ({
+          ingredient: ingredient.ingredient,
+          amount: String(ingredient.amount),
+          unit: ingredient.unit,
+        }))
+      );
     }
   }, [postData]);
 
@@ -109,17 +114,19 @@ const Mealkit = () => {
 
           <Formik
             initialValues={{
-              name: data?.mealkit?.name,
+              mealkitName: data?.mealkit?.name,
               price: data?.mealkit?.price,
-              portion: data?.mealkit?.portion,
+              mealkitPortion: data?.mealkit?.portion,
               items: data?.mealkit?.items,
+              deliveryFee: data?.mealkit?.deliveryFee,
             }}
             onSubmit={async (values) => {
               const input = {
                 items,
-                name: values.name as string,
+                name: values.mealkitName as string,
                 price: values.price as number,
-                portion: values.portion as number,
+                portion: values.mealkitPortion as number,
+                deliveryFee: values.deliveryFee as number,
               };
               const mealkit = await updateMealkit({
                 variables: {
@@ -136,45 +143,58 @@ const Mealkit = () => {
                   duration: 3000,
                   isClosable: true,
                 });
-                router.push(`/mealkit/${mealkit.data?.updateMealkit?.id}`);
+                // router.push(`/mealkit/${mealkit.data?.updateMealkit?.id}`);
+                router.push(`/post/${postId}`);
               }
             }}
           >
             {({ isSubmitting }) => (
               <Form>
-                {/* <Heading>Create a mealkit</Heading> */}
-
-                <InputField name="name" placeholder="name of the mealkit" />
-                <InputGroup>
-                  <InputLeftAddon mt={2}>Price</InputLeftAddon>
+                <Box mt={4}>
+                  <FormFieldLabel label="Meal Kit Name" required />
                   <InputField
-                    name="price"
-                    type="number"
-                    placeholder="price"
-                    variant="flushed"
+                    name={MealkitFormNames.MEALKIT_NAME}
+                    placeholder="name of the mealkit"
                   />
-                  <InputRightAddon mt={2}>THB</InputRightAddon>
-                </InputGroup>
+                </Box>
 
-                {/* <Heading fontSize="md" whiteSpace="nowrap">
-          Portion for
-        </Heading> */}
-                <Flex alignItems="center">
+                <Box mt={4}>
+                  <FormFieldLabel label="Price" required />
                   <InputGroup>
-                    <InputLeftAddon mt={2}>Portion for</InputLeftAddon>
-                    {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
                     <InputField
-                      name="portion"
+                      name={MealkitFormNames.PRICE}
+                      type="number"
+                      placeholder="price"
+                    />
+                    <InputRightAddon mt={2}>THB</InputRightAddon>
+                  </InputGroup>{" "}
+                </Box>
+
+                <Box mt={4}>
+                  <FormFieldLabel label="Portion For" required />
+                  {/* <InputLeftAddon children="ปริมาณสำหรับ" mt={2} /> */}
+                  <InputGroup>
+                    <InputField
+                      name={MealkitFormNames.MEALKIT_PORTION}
                       type="number"
                       placeholder="portion"
-                      variant="flushed"
-                    ></InputField>
-
+                    />
                     <InputRightAddon mt={2}>people</InputRightAddon>
                   </InputGroup>
-                </Flex>
+                </Box>
 
-                <Text>items included</Text>
+                <Box mt={4}>
+                  <FormFieldLabel label="Delivery Fee" required />
+
+                  <InputGroup>
+                    <InputField
+                      name={MealkitFormNames.DELIVERY_FEE}
+                      type="number"
+                      placeholder="delivery fee"
+                    />
+                    <InputRightAddon>THB</InputRightAddon>
+                  </InputGroup>
+                </Box>
 
                 {/* checkbox */}
                 <Box my={4}>
