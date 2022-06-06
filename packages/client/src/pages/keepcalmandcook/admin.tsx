@@ -5,6 +5,7 @@ import {
   TriangleUpIcon,
 } from "@chakra-ui/icons";
 import {
+  Badge,
   Box,
   Button,
   Center,
@@ -29,12 +30,14 @@ import {
 } from "react-table";
 import { adminColumn } from "../../components/admin/adminColumn";
 import { adminData } from "../../components/admin/adminData";
+import AdminSummaryBox from "../../components/AdminSummaryBox";
 import CartItemDetail from "../../components/Icons/CartItemDetail";
 import { Layout } from "../../components/Layout/Layout";
 import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
+  CartItem,
   CartItemStatus,
   useAdminCompleteCartItemMutation,
   useAdminUpdateCartItemStatusMutation,
@@ -189,21 +192,7 @@ const Admin: React.FC<AdminProps> = ({}) => {
           </Button>
         </Center>
 
-        <Box>
-          <Heading size="h2" as="h3">
-            Summary
-          </Heading>
-          <Box>
-            <Flex>
-              <Text>{String(CartItemStatus.Received)}: </Text>
-              {
-                cartItems?.allCartItems.filter(
-                  (item) => item.status === CartItemStatus.Received
-                ).length
-              }
-            </Flex>
-          </Box>
-        </Box>
+        <AdminSummaryBox cartItems={cartItems?.allCartItems as CartItem[]} />
       </ContentWrapper>
     </Layout>
   );
