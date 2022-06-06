@@ -9,10 +9,12 @@ import {
   Button,
   Center,
   chakra,
+  Flex,
   Heading,
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
@@ -27,11 +29,13 @@ import {
 } from "react-table";
 import { adminColumn } from "../../components/admin/adminColumn";
 import { adminData } from "../../components/admin/adminData";
+import CartItemDetail from "../../components/Icons/CartItemDetail";
 import { Layout } from "../../components/Layout/Layout";
 import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
+  CartItemStatus,
   useAdminCompleteCartItemMutation,
   useAdminUpdateCartItemStatusMutation,
   useAllCartItemsQuery,
@@ -102,7 +106,7 @@ const Admin: React.FC<AdminProps> = ({}) => {
   }
 
   return (
-    <Layout heading="loading">
+    <Layout heading="Admin Dashboard">
       <ContentWrapper m={24}>
         <Heading fontSize="2xl">Admin Dashboard</Heading>
         <Table {...getTableProps()}>
@@ -184,6 +188,22 @@ const Admin: React.FC<AdminProps> = ({}) => {
             Next
           </Button>
         </Center>
+
+        <Box>
+          <Heading size="h2" as="h3">
+            Summary
+          </Heading>
+          <Box>
+            <Flex>
+              <Text>{String(CartItemStatus.Received)}: </Text>
+              {
+                cartItems?.allCartItems.filter(
+                  (item) => item.status === CartItemStatus.Received
+                ).length
+              }
+            </Flex>
+          </Box>
+        </Box>
       </ContentWrapper>
     </Layout>
   );
