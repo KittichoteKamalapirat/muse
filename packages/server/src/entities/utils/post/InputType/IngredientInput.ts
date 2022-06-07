@@ -1,4 +1,5 @@
 import { Field, InputType } from "type-graphql";
+import { UnitEnum } from "../../../Ingredient";
 
 @InputType()
 class IngredientInput {
@@ -9,7 +10,7 @@ class IngredientInput {
   amount: number;
 
   @Field()
-  unit: string; // TODO actuall UnitEnum but cause error in either cypress or backend somehow
+  unit: UnitEnum; // TODO this cause error in cypress somehow
 }
 
 export default IngredientInput;
