@@ -63,10 +63,10 @@ jobs:
             yarn start:ci
           background: true
 
-      - run:
-          name: run cypress
-          working_directory: packages/server
-          command: yarn cypress:run
+      # - run:
+      #     name: run cypress
+      #     working_directory: packages/server
+      #     command: yarn cypress:run
 
       - store_artifacts:
           path: /root/project/packages/server/src/cypress/videos
