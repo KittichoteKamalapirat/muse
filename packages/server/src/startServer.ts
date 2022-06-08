@@ -32,7 +32,7 @@ import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 import { S3Resolver } from "./utils/resolvers/s3";
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
-// comment to tigger circleci
+//// comment to tigger circleci
 
 // determine which .env file to use
 // if production -> dockerfile copy and put in .env
