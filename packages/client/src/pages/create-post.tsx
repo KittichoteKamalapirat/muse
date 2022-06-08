@@ -36,12 +36,12 @@ import { withApollo } from "../util/withApollo";
 import { IngredientFieldInput } from "./post/edit/[id]";
 
 const postValues: PostDetailsFormValues = {
-  title: "",
-  text: "",
-  portion: 2,
-  cooktimeLength: 0,
+  title: null,
+  text: null,
+  portion: null,
+  cooktimeLength: null,
   cooktimeUnit: CooktimeUnitEnum.MINUTES,
-  advice: "",
+  advice: null,
 };
 
 const CreatePost: React.FC<{}> = ({ children }) => {
@@ -231,15 +231,15 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     console.log({ values });
     try {
       const postInput = {
-        title: values.title,
-        text: values.text,
+        title: values.title as string,
+        text: values.text as string,
         instruction: instructionField,
         cooktime: {
-          length: values.cooktimeLength,
-          unit: values.cooktimeUnit,
+          length: values.cooktimeLength as number,
+          unit: values.cooktimeUnit as CooktimeUnitEnum,
         },
-        portion: values.portion,
-        advice: [values.advice],
+        portion: values.portion as number,
+        advice: [values.advice] as string[],
         ingredients: ingredientsField.map((ingredient) => ({
           ingredient: ingredient.ingredient,
           amount: parseFloat(ingredient.amount), // make float for backend
@@ -438,11 +438,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                         />
 
                         {!submittable && (
-                          <Box color="alert">
-                            <Heading fontSize="md">
+                          <Box>
+                            <Heading fontSize="md" color="alert">
                               * Some required fields are missing
                             </Heading>
-                            <UnorderedList>
+                            <UnorderedList fontSize="sm" color="gray.600">
                               {formRef.current?.values.title === "" && (
                                 <ListItem>
                                   Post&apos;s name cannot be blank
@@ -451,6 +451,11 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                               {mealkitInput.mealkitName === "" && (
                                 <ListItem>
                                   Meal kit&apos;s name cannot be blank
+                                </ListItem>
+                              )}
+                              {mealkitInput.price === "" && (
+                                <ListItem>
+                                  Meal kit&apos;s price canot be blank
                                 </ListItem>
                               )}
                               {mealkitInput.mealkitPortion === "" && (
@@ -463,11 +468,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
                                   Meal kit&apos;s delivery fee cannot be blank
                                 </ListItem>
                               )}
-                              {mealkitInput.price === "" && (
-                                <ListItem>
-                                  Meal kit&apos;s price canot be blank
-                                </ListItem>
-                              )}
+
                               {mealkitInput.items.length === 0 && (
                                 <ListItem>
                                   Meal kit&apos;s items have to be at at least 1
@@ -479,10 +480,10 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
                         <FormActionButtons
                           primaryText="Create"
-                          // primaryIsDisabled={!submittable}
+                          primaryIsDisabled={!submittable}
                           primaryIsLoading={submitting}
                           primaryButtonType="submit"
-                          onPrimaryClick={nextStep}
+                          onPrimaryClick={() => console.log("hi")}
                           secondaryText="Back"
                           onSecondaryClick={prevStep}
                         />
