@@ -3,14 +3,9 @@ import axios from "axios";
 import { Form, Formik, FormikProps } from "formik";
 import { useRouter } from "next/router";
 import React, { RefObject, useEffect, useRef, useState } from "react";
-import {
-  CreateMealkit,
-  MealkitFormNames,
-  MealkitFormValues,
-} from "../components/CreateMealkit";
+import { CreateMealkit, MealkitFormValues } from "../components/CreateMealkit";
 import {
   CreatePostForm,
-  PostDetailsFormNames,
   PostDetailsFormValues,
 } from "../components/CreatePostForm";
 import { CreateRecipe } from "../components/CreateRecipe";
@@ -36,12 +31,12 @@ import { withApollo } from "../util/withApollo";
 import { IngredientFieldInput } from "./post/edit/[id]";
 
 const postValues: PostDetailsFormValues = {
-  title: null,
-  text: null,
+  title: "",
+  text: "",
   portion: null,
   cooktimeLength: null,
   cooktimeUnit: CooktimeUnitEnum.MINUTES,
-  advice: null,
+  advice: "",
 };
 
 const CreatePost: React.FC<{}> = ({ children }) => {
@@ -76,7 +71,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   // 1) method = signMealkitS3, input = name and type, return = signedRequest and Url where = (in onSubmit)
   // 2) upload to S3 with (axios) using signedRequest and file
 
-  console.log([MealkitFormNames]);
   // local state
   const [mealkitInput, setMealkitInput] = useState<MealkitFormValues>({
     mealkitName: "",
@@ -170,7 +164,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   >([
     {
       ingredient: "",
-      amount: "0",
+      amount: "",
       unit: null,
     },
   ]);
@@ -227,19 +221,18 @@ const CreatePost: React.FC<{}> = ({ children }) => {
 
   const handleSubmit = async (values: PostDetailsFormValues) => {
     setSubmitting(true);
-    console.log("--------------------");
-    console.log({ values });
+
     try {
       const postInput = {
-        title: values.title as string,
-        text: values.text as string,
+        title: values.title,
+        text: values.text,
         instruction: instructionField,
         cooktime: {
           length: values.cooktimeLength as number,
           unit: values.cooktimeUnit as CooktimeUnitEnum,
         },
         portion: values.portion as number,
-        advice: [values.advice] as string[],
+        advice: [values.advice],
         ingredients: ingredientsField.map((ingredient) => ({
           ingredient: ingredient.ingredient,
           amount: parseFloat(ingredient.amount), // make float for backend
@@ -247,7 +240,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
         })),
       };
 
-      console.log({ postInput });
       const { data, errors } = await createPost({
         variables: {
           input: postInput,
@@ -293,7 +285,6 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     setSubmitting(false);
   };
 
-  // const formRef = useRef() as MutableRefObject<HTMLInputElement>;
   const formRef = useRef() as RefObject<FormikProps<PostDetailsFormValues>>;
 
   useEffect(() => {
@@ -312,12 +303,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
       mealkitSubmittable = true;
     }
 
-    if (
-      formRef.current?.values.title != ""
-      // formRef.current?.values.text != "" &&
-      // formRef.current?.values.cooktime != "" &&
-      // formRef.current?.values.portion != ""
-    ) {
+    if (formRef.current?.values.title != "") {
       postSubmittable = true;
     }
 
@@ -328,174 +314,162 @@ const CreatePost: React.FC<{}> = ({ children }) => {
     }
   }, [mealkitInput]);
 
-  // handle autothumbnail show, don't go to next step to fast
-  // useEffect(() => {
-  //   if (autoThumbnailS3UrlAndId) {
-  //     nextStep();
-  //   }
-  // }, [autoThumbnailS3UrlAndId?.url]);
   return (
-    <Box>
-      <Box m="1rem">
-        <XWrapper>
-          <PostBreadcrumb
-            step={step}
-            setStep={setStep}
-            videoS3UrlAndID={videoS3UrlAndID}
-          />
-        </XWrapper>
+    <Box mb="2rem">
+      <PostBreadcrumb
+        step={step}
+        setStep={setStep}
+        videoS3UrlAndID={videoS3UrlAndID}
+      />
 
-        <Formik
-          initialValues={postValues}
-          innerRef={formRef}
-          onSubmit={async (values) => {
-            console.log({ values });
-            handleSubmit(values);
+      <Formik
+        initialValues={postValues}
+        innerRef={formRef}
+        onSubmit={async (values) => {
+          handleSubmit(values);
 
-            // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
-          }}
-        >
-          {({ isSubmitting }) => (
-            <Box>
-              <Form>
-                {
-                  <Box display={step === 1 ? "block" : "none"}>
-                    <HeadingLayout heading="New Video">
-                      <XWrapper>
-                        <CreateVideo
-                          nextStep={nextStep}
-                          handleMetadata={handleMetadata}
-                          videoS3UrlAndID={videoS3UrlAndID}
-                          setVideoS3UrlAndID={setVideoS3UrlAndID}
-                          autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
-                          isGeneratingThumbnail={isGeneratingThumbnail}
-                        />
-                      </XWrapper>
-                    </HeadingLayout>
-                  </Box>
-                }
-                {
-                  <Box display={step === 2 ? "block" : "none"}>
-                    <HeadingLayout back={false} heading="Cover Photo">
-                      <XWrapper>
-                        <CreateThumbnail
-                          autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
-                          thumbnailS3UrlAndID={thumbnailS3UrlAndID}
-                          setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
-                        ></CreateThumbnail>
-                        <FormActionButtons
-                          primaryText="Next"
-                          primaryAriaLabel="Go to post detail tab"
-                          onPrimaryClick={nextStep}
-                          secondaryText="Back"
-                          onSecondaryClick={prevStep}
-                        />
-                      </XWrapper>
-                    </HeadingLayout>
-                  </Box>
-                }
-                {
-                  <Box display={step === 3 ? "block" : "none"}>
-                    <HeadingLayout back={false} heading="Add Post Detail">
-                      <XWrapper>
-                        <CreatePostForm />
-                        <CreateRecipe
-                          ingredientsField={ingredientsField}
-                          instructionField={instructionField}
-                          handleChangeInput={handleChangeInput}
-                          handleAddField={handleAddField}
-                          handleRemoveField={handleRemoveField}
-                          handleInstructionChangeInput={
-                            handleInstructionChangeInput
-                          }
-                          handleAddInstructionField={handleAddInstructionField}
-                          handleRemoveInstructionField={
-                            handleRemoveInstructionField
-                          }
-                        />
+          // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Box>
+            <Form>
+              {
+                <Box display={step === 1 ? "block" : "none"}>
+                  <HeadingLayout heading="New Video">
+                    <XWrapper>
+                      <CreateVideo
+                        nextStep={nextStep}
+                        handleMetadata={handleMetadata}
+                        videoS3UrlAndID={videoS3UrlAndID}
+                        setVideoS3UrlAndID={setVideoS3UrlAndID}
+                        autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
+                        isGeneratingThumbnail={isGeneratingThumbnail}
+                      />
+                    </XWrapper>
+                  </HeadingLayout>
+                </Box>
+              }
+              {
+                <Box display={step === 2 ? "block" : "none"}>
+                  <HeadingLayout back={false} heading="Cover Photo">
+                    <XWrapper>
+                      <CreateThumbnail
+                        autoThumbnailS3UrlAndId={autoThumbnailS3UrlAndId}
+                        thumbnailS3UrlAndID={thumbnailS3UrlAndID}
+                        setThumbnailS3UrlAndID={setThumbnailS3UrlAndID}
+                      ></CreateThumbnail>
+                      <FormActionButtons
+                        primaryText="Next"
+                        primaryAriaLabel="Go to post detail tab"
+                        onPrimaryClick={nextStep}
+                        secondaryText="Back"
+                        onSecondaryClick={prevStep}
+                      />
+                    </XWrapper>
+                  </HeadingLayout>
+                </Box>
+              }
+              {
+                <Box display={step === 3 ? "block" : "none"}>
+                  <HeadingLayout back={false} heading="Add Post Detail">
+                    <XWrapper>
+                      <CreatePostForm />
+                      <CreateRecipe
+                        ingredientsField={ingredientsField}
+                        instructionField={instructionField}
+                        handleChangeInput={handleChangeInput}
+                        handleAddField={handleAddField}
+                        handleRemoveField={handleRemoveField}
+                        handleInstructionChangeInput={
+                          handleInstructionChangeInput
+                        }
+                        handleAddInstructionField={handleAddInstructionField}
+                        handleRemoveInstructionField={
+                          handleRemoveInstructionField
+                        }
+                      />
 
-                        <FormActionButtons
-                          primaryText="Next"
-                          primaryAriaLabel="Go to mealkit details tab"
-                          onPrimaryClick={nextStep}
-                          secondaryText="Back"
-                          onSecondaryClick={prevStep}
-                        />
-                      </XWrapper>
-                    </HeadingLayout>
-                  </Box>
-                }
-                {
-                  <Box display={step === 4 ? "block" : "none"}>
-                    <HeadingLayout heading="Add a Meal Kit" back={false}>
-                      <XWrapper>
-                        <CreateMealkit
-                          ingredientsField={ingredientsField}
-                          input={mealkitInput}
-                          setInput={setMealkitInput}
-                          mealkitS3UrlAndIds={mealkitS3UrlAndIds}
-                          setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
-                        />
+                      <FormActionButtons
+                        primaryText="Next"
+                        primaryAriaLabel="Go to mealkit details tab"
+                        onPrimaryClick={nextStep}
+                        secondaryText="Back"
+                        onSecondaryClick={prevStep}
+                      />
+                    </XWrapper>
+                  </HeadingLayout>
+                </Box>
+              }
+              {
+                <Box display={step === 4 ? "block" : "none"}>
+                  <HeadingLayout heading="Add a Meal Kit" back={false}>
+                    <XWrapper>
+                      <CreateMealkit
+                        ingredientsField={ingredientsField}
+                        input={mealkitInput}
+                        setInput={setMealkitInput}
+                        mealkitS3UrlAndIds={mealkitS3UrlAndIds}
+                        setMealkitS3UrlAndIds={setMealkitS3UrlAndIds}
+                      />
 
-                        {!submittable && (
-                          <Box>
-                            <Heading fontSize="md" color="alert">
-                              * Some required fields are missing
-                            </Heading>
-                            <UnorderedList fontSize="sm" color="gray.600">
-                              {formRef.current?.values.title === "" && (
-                                <ListItem>
-                                  Post&apos;s name cannot be blank
-                                </ListItem>
-                              )}
-                              {mealkitInput.mealkitName === "" && (
-                                <ListItem>
-                                  Meal kit&apos;s name cannot be blank
-                                </ListItem>
-                              )}
-                              {mealkitInput.price === "" && (
-                                <ListItem>
-                                  Meal kit&apos;s price canot be blank
-                                </ListItem>
-                              )}
-                              {mealkitInput.mealkitPortion === "" && (
-                                <ListItem>
-                                  Meal kit&apos;s portion cannot be blank
-                                </ListItem>
-                              )}
-                              {mealkitInput.deliveryFee === "" && (
-                                <ListItem>
-                                  Meal kit&apos;s delivery fee cannot be blank
-                                </ListItem>
-                              )}
+                      {!submittable && (
+                        <Box>
+                          <Heading fontSize="md" color="alert">
+                            * Some required fields are missing
+                          </Heading>
+                          <UnorderedList fontSize="sm" color="gray.600">
+                            {formRef.current?.values.title === "" && (
+                              <ListItem>
+                                Post&apos;s name cannot be blank
+                              </ListItem>
+                            )}
+                            {mealkitInput.mealkitName === "" && (
+                              <ListItem>
+                                Meal kit&apos;s name cannot be blank
+                              </ListItem>
+                            )}
+                            {mealkitInput.price === "" && (
+                              <ListItem>
+                                Meal kit&apos;s price canot be blank
+                              </ListItem>
+                            )}
+                            {mealkitInput.mealkitPortion === "" && (
+                              <ListItem>
+                                Meal kit&apos;s portion cannot be blank
+                              </ListItem>
+                            )}
+                            {mealkitInput.deliveryFee === "" && (
+                              <ListItem>
+                                Meal kit&apos;s delivery fee cannot be blank
+                              </ListItem>
+                            )}
 
-                              {mealkitInput.items.length === 0 && (
-                                <ListItem>
-                                  Meal kit&apos;s items have to be at at least 1
-                                </ListItem>
-                              )}
-                            </UnorderedList>
-                          </Box>
-                        )}
+                            {mealkitInput.items.length === 0 && (
+                              <ListItem>
+                                Meal kit&apos;s items have to be at at least 1
+                              </ListItem>
+                            )}
+                          </UnorderedList>
+                        </Box>
+                      )}
 
-                        <FormActionButtons
-                          primaryText="Create"
-                          primaryIsDisabled={!submittable}
-                          primaryIsLoading={submitting}
-                          primaryButtonType="submit"
-                          onPrimaryClick={() => console.log("hi")}
-                          secondaryText="Back"
-                          onSecondaryClick={prevStep}
-                        />
-                      </XWrapper>
-                    </HeadingLayout>
-                  </Box>
-                }
-              </Form>
-            </Box>
-          )}
-        </Formik>
-      </Box>
+                      <FormActionButtons
+                        primaryText="Create"
+                        primaryIsDisabled={!submittable}
+                        primaryIsLoading={submitting}
+                        primaryButtonType="submit"
+                        secondaryText="Back"
+                        onSecondaryClick={prevStep}
+                      />
+                    </XWrapper>
+                  </HeadingLayout>
+                </Box>
+              }
+            </Form>
+          </Box>
+        )}
+      </Formik>
     </Box>
   );
 };

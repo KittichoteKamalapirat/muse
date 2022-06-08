@@ -18,12 +18,12 @@ export enum PostDetailsFormNames {
 }
 
 export interface PostDetailsFormValues {
-  [PostDetailsFormNames.TITLE]: string | null;
-  [PostDetailsFormNames.TEXT]: string | null;
+  [PostDetailsFormNames.TITLE]: string;
+  [PostDetailsFormNames.TEXT]: string;
   [PostDetailsFormNames.PORTION]: number | null;
   [PostDetailsFormNames.COOKTIME_LENGTH]: number | null;
-  [PostDetailsFormNames.COOKTIME_UNIT]: string | null;
-  [PostDetailsFormNames.ADVICE]: string | null;
+  [PostDetailsFormNames.COOKTIME_UNIT]: string;
+  [PostDetailsFormNames.ADVICE]: string;
 }
 
 export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {

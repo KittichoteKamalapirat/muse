@@ -159,7 +159,7 @@ export const CreateVideo: React.FC<CreateVideoProps> = ({
             primaryText="Next"
             primaryAriaLabel="Go to create thumbnail tab"
             onPrimaryClick={nextStep}
-            secondaryText="Back"
+            secondaryText="Cancel"
             onSecondaryClick={() => router.back()}
           />
         )}
