@@ -119,7 +119,10 @@ const Post = ({}) => {
               </Heading>
               {!data.post.portion ? null : (
                 // <Text fontSize="sm">(สำหรับ {data.post.portion} คน)</Text>
-                <Text fontSize="sm">(For {data.post.portion} คน)</Text>
+                <Text fontSize="sm">
+                  (For {data.post.portion}{" "}
+                  {data.post.portion > 1 ? "people" : "person"})
+                </Text>
               )}
 
               {!data.post.ingredients ? null : (
