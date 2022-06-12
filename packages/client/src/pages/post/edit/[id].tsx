@@ -141,7 +141,7 @@ const EditPost = ({}) => {
       text: values.text,
       instruction: instructionField,
       cooktime: {
-        length: values.cooktimeLength,
+        length: values.cooktimeLength as number, // TODO
         unit: values.cooktimeUnit,
       },
 
