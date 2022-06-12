@@ -1,46 +1,13 @@
-// import { Box, Flex, Text } from "@chakra-ui/layout";
-// import React from "react";
-// import SvgThflag from "./svgComponents/Thflag";
-
-// interface FooterProps {}
-
-// export const Footer: React.FC<FooterProps> = ({}) => {
-//   return (
-//     <>
-//       <Box textAlign="center" bgColor="gray.600" color="white" py={4}>
-//         <Text>Copyright &copy; 2021 Cookknow</Text>
-
-//         {/* add terms and privary */}
-//         <Flex justifyContent="center" alignItems="center">
-//           <Text d="inline" mr={2}>
-//             Thailand
-//           </Text>
-//           <SvgThflag />
-//         </Flex>
-//       </Box>
-//     </>
-//   );
-// };
-
-import { BellIcon } from "@chakra-ui/icons";
+import { Container, Divider, Stack, Text } from "@chakra-ui/react";
 import Script from "next/script";
-import {
-  ButtonGroup,
-  Container,
-  Divider,
-  IconButton,
-  Input,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
 import * as React from "react";
+import Button from "./atoms/Button";
 import LinkButton from "./atoms/LinkButton";
 import Logo from "./Icons/Logo";
-import { XWrapper } from "./Wrapper/XWrapper";
-import Button from "./atoms/Button";
 
 export const Footer = () => (
   <Container as="footer" role="contentinfo" maxWidth="95%">
+    <Script src="//embed.typeform.com/next/embed.js" />;
     <Stack
       spacing="8"
       direction={{ base: "column", md: "row" }}
@@ -76,13 +43,14 @@ export const Footer = () => (
                 Support
               </LinkButton>
 
-              <LinkButton
-                pathname="https://kamalapirat.typeform.com/to/BGp4g61k"
+              <Button
                 variant="unstyled"
-                isExternal={true}
+                data-tf-popup="BGp4g61k"
+                data-tf-iframe-props="title=Cookknow: subscribe"
+                data-tf-medium="snippet"
               >
                 Contact us
-              </LinkButton>
+              </Button>
 
               <LinkButton
                 pathname="https://kittishane.notion.site/Cookknow-01e3d3b599c448908aa2b7e50b88e5af"
@@ -128,7 +96,6 @@ export const Footer = () => (
             direction={{ base: "column", sm: "row" }}
             maxW={{ lg: "360px" }}
           >
-            <Script src="//embed.typeform.com/next/embed.js" />
             <Button
               data-tf-popup="uJchTjFZ"
               data-tf-iframe-props="title=Cookknow: subscribe"

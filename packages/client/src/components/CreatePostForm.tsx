@@ -20,8 +20,8 @@ export enum PostDetailsFormNames {
 export interface PostDetailsFormValues {
   [PostDetailsFormNames.TITLE]: string;
   [PostDetailsFormNames.TEXT]: string;
-  [PostDetailsFormNames.PORTION]: number;
-  [PostDetailsFormNames.COOKTIME_LENGTH]: number;
+  [PostDetailsFormNames.PORTION]: number | null;
+  [PostDetailsFormNames.COOKTIME_LENGTH]: number | null;
   [PostDetailsFormNames.COOKTIME_UNIT]: string;
   [PostDetailsFormNames.ADVICE]: string;
 }

@@ -103,12 +103,12 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   return (
     <Flex
       direction={["row", "row", "column"]}
+      alignItems={["end", "end", "center"]}
       zIndex={10}
       position="fixed"
       bottom={0}
-      bg={"white"}
+      bg="white"
       p={2}
-      alignItems={["end", "end", "center"]}
       justifyContent="space-around"
       width={["100%", "100%", "80px"]}
       height={[null, null, "100%"]}

@@ -58,8 +58,9 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
             fontSize="sm"
             textAlign="center"
           >
-            Unit
+            Amount
           </Text>
+
           <Text
             flex={2}
             m={1}
@@ -67,7 +68,7 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
             fontSize="sm"
             textAlign="center"
           >
-            Amount
+            Unit
           </Text>
           <Text flex={1}></Text>
           <Text flex={1}></Text>
@@ -97,6 +98,20 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                   m={1}
                 />
 
+                <Input
+                  name="amount"
+                  type="number"
+                  m={1}
+                  borderColor="gray.300"
+                  value={inputField.amount}
+                  // placeholder="ปริมาณ"
+                  placeholder="ex. 20, 0.5"
+                  onChange={(event) => handleChangeInput(index, event)}
+                  disabled={inputField.unit?.value === "eyeball"}
+                  flex={1}
+                  flexBasis={["35px", "35px", null]}
+                  pl={1}
+                />
                 <SelectField
                   options={unitOptions(inputField.ingredient)}
                   value={inputField.unit as SelectOption}
@@ -119,21 +134,6 @@ export const CreateRecipe: React.FC<CreateRecipeProps> = ({
                     // so handleChangeInput can read event.target.name and event.target.value
                     handleChangeInput(index, event);
                   }}
-                />
-
-                <Input
-                  name="amount"
-                  type="number"
-                  m={1}
-                  borderColor="gray.300"
-                  value={inputField.amount}
-                  // placeholder="ปริมาณ"
-                  placeholder="ex. 20, 0.5"
-                  onChange={(event) => handleChangeInput(index, event)}
-                  disabled={inputField.unit?.value === "eyeball"}
-                  flex={1}
-                  flexBasis={["35px", "35px", null]}
-                  pl={1}
                 />
 
                 <Flex flexDirection="row">
