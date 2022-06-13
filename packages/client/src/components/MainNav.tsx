@@ -6,22 +6,20 @@ import { useMeQuery, useOrderNotisQuery } from "../generated/graphql";
 import { isServer } from "../util/isServer";
 import Badge from "./atoms/Badge";
 import { AccountIcon } from "./Icons";
-
 import { BellIcon } from "./Icons/BellIcon";
 import { HeartIcon } from "./Icons/HeartIcon";
 import { HomeIcon } from "./Icons/HomeIcon";
 import { ShopIcon } from "./Icons/ShopIcon";
+import { Error } from "./skeletons/Error";
 import { inActiveGray, primaryColor } from "./Variables";
 
-interface MainNavProps {}
-
-export const MainNav: React.FC<MainNavProps> = ({}) => {
+export const MainNav = () => {
   const router = useRouter();
 
   const {
     data: orderNoti,
     loading: orderNotiLoading,
-    error: errorNori,
+    error: errorNoti,
   } = useOrderNotisQuery();
 
   const { data, loading } = useMeQuery({
@@ -70,7 +68,9 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
   // data is loading
   if (loading || orderNotiLoading) {
     return null;
-  } else if (!data?.me) {
+  }
+
+  if (!data?.me) {
     // this can return undefined, then ! turn it to "true"
     // user not logged in
 
@@ -98,6 +98,10 @@ export const MainNav: React.FC<MainNavProps> = ({}) => {
 
   if (!data) {
     return <Text>no data</Text>; //without this line -> icon messedup
+  }
+
+  if (errorNoti) {
+    <Error text={errorNoti.message} />;
   }
 
   return (

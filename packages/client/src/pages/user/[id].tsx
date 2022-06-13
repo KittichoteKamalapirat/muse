@@ -7,10 +7,9 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
 import { Error } from "../../components/skeletons/Error";
-import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
-  useFollowersQuery,
   usePostsByCreatorQuery,
   User,
   useUserQuery,
@@ -18,9 +17,7 @@ import {
 import { useGetUserId } from "../../util/useGetUserId";
 import { withApollo } from "../../util/withApollo";
 
-interface PublicProfileProps {}
-
-const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
+const PublicProfile = () => {
   const userId = useGetUserId();
   const {
     data: userData,
@@ -34,7 +31,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
     variables: { userId: userId },
   });
 
-  if (userLoading) {
+  if (userLoading || postLoading) {
     return (
       <Layout heading="loading">
         <div>loading ...</div>
@@ -51,7 +48,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
   }
   return (
     <HeadingLayout
-      heading={userLoading || !userData ? "" : userData.user!.username}
+      heading={userLoading || !userData ? "" : userData.user.username}
     >
       <Wrapper>
         <ContentWrapper>
@@ -82,7 +79,9 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
                 <Text>{userData?.user.userReview.reviewScore}</Text>{" "}
                 <Flex fontSize="sm">
                   <ReviewStars
-                    reviewScore={userData?.user.userReview.reviewScore!}
+                    reviewScore={
+                      userData?.user.userReview.reviewScore as number
+                    }
                     reviewsCounter={userData?.user.userReview.reviewCounter}
                     flexDirection="column"
                   />
@@ -121,7 +120,7 @@ const PublicProfile: React.FC<PublicProfileProps> = ({}) => {
                       <Text>{post.title}</Text>
                       <Text>{post.text.slice(0, 60)} ...</Text>
                       <Flex alignItems="center">
-                        <HeartIcon isactive={true ? "true" : undefined} />
+                        <HeartIcon isactive="true" />
                         <Text ml={2}>{post.points}</Text>
                       </Flex>
                     </Box>

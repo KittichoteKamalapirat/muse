@@ -1,12 +1,6 @@
 import { Icon } from "@chakra-ui/react";
 import React from "react";
 
-interface UploadVideoIconProps {}
-
-{
-  /* <style>.cls-1{fill:#fac5cc;}.cls-2{fill:none;stroke:#8e8e8e;stroke-miterlimit:10;}</style> */
-}
-
 export const UploadVideoIcon = (props: any) => (
   <Icon viewBox="00 0 51.95 49.46" boxSize="5rem" fill="blue.200" {...props}>
     <path d="M45.38,29v0H32.84a1.67,1.67,0,0,1-1.67-1.67V22.86h4a1,1,0,0,0,.76-1.7L26.73,11a1,1,0,0,0-1.51,0L16,21.16a1,1,0,0,0,.75,1.7h4v4.52a1.67,1.67,0,0,1-1.67,1.67H8.66a8.79,8.79,0,1,1,.41-17.58l.43,0A11.73,11.73,0,0,1,31.47,6a8.8,8.8,0,0,1,13.78,7.32,9.71,9.71,0,0,1-.1,1.21A7.26,7.26,0,0,1,45.38,29Z" />

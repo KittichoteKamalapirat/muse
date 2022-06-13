@@ -42,8 +42,8 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
   const [thumbnailPreview, setThumbnailPreview] = useState<string>(
     currentUrl as string
   );
-  const [autofileUrl, setAutofileUrl] = useState<string>("");
-  const [autoThumbnailBlob, setAutoThumbnailBlob] = useState<any>(null);
+  const [autofileUrl] = useState<string>("");
+  const [autoThumbnailBlob] = useState<any>(null);
   const [thumbnailFile, setThumbnailFile] = useState<{
     file: UploadedFileType;
   }>({
@@ -105,7 +105,7 @@ export const SingleFileUpload: React.FC<SingleFileUploadProps> = ({
     reader.readAsDataURL((e.target as HTMLInputElement).files![0]);
   };
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
     setSubmitting(true);
     try {
       // S3 Video and images starts

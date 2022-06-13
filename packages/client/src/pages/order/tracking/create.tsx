@@ -10,9 +10,7 @@ import { useCreateTrackingMutation } from "../../../generated/graphql";
 import { courierList } from "../../../../constants/courierList";
 import { withApollo } from "../../../util/withApollo";
 
-interface CreateTrackingProps {}
-
-const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
+const CreateTracking = () => {
   const router = useRouter();
   const { id, cartItemIds } = router.query;
 
@@ -25,7 +23,7 @@ const CreateTracking: React.FC<CreateTrackingProps> = ({}) => {
             trackingNo: "",
             courier: "",
           }}
-          onSubmit={async (values, { setErrors }) => {
+          onSubmit={async (values) => {
             const response = await createTracking({
               variables: {
                 input: {

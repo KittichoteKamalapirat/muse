@@ -14,9 +14,7 @@ import {
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 
-interface CreateAddressProps {}
-
-const CreateAddress: React.FC<CreateAddressProps> = ({}) => {
+const CreateAddress = () => {
   const [createAddress] = useCreateAddressMutation();
   const router = useRouter();
   useIsAuth();

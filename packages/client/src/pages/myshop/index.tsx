@@ -1,4 +1,4 @@
-import { AddIcon, SmallAddIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import { Center } from "@chakra-ui/layout";
 import {
   Avatar,
@@ -10,12 +10,10 @@ import {
   LinkBox,
   LinkOverlay,
   Text,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
 import Badge from "../../components/atoms/Badge";
-import Button from "../../components/atoms/Button";
 import LinkButton from "../../components/atoms/LinkButton";
 import { Layout } from "../../components/Layout/Layout";
 import { ReviewStars } from "../../components/ReviewStars";
@@ -36,11 +34,8 @@ import {
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
-interface MyShopProps {}
-
-const MyShop: React.FC<MyShopProps> = ({}) => {
+const MyShop = () => {
   const { data: meData, loading: meLoading, error: meError } = useMeQuery();
-  const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
 
   // ToDeliver
   const {
@@ -96,7 +91,7 @@ const MyShop: React.FC<MyShopProps> = ({}) => {
               <Flex alignItems="center">
                 <Flex>
                   <ReviewStars
-                    reviewScore={meData?.me?.userReview.reviewScore!}
+                    reviewScore={meData?.me?.userReview.reviewScore as number}
                     reviewsCounter={meData?.me?.userReview.reviewCounter}
                   />
                 </Flex>

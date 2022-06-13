@@ -6,8 +6,6 @@ import { CooktimeUnitEnum } from "../types/utils/CooktimeUnitEnum";
 import FormFieldLabel from "./form/FormFieldLabel";
 import { InputField } from "./InputField";
 
-interface CreatePostFormProps {}
-
 export enum PostDetailsFormNames {
   TITLE = "title",
   TEXT = "text",
@@ -26,7 +24,7 @@ export interface PostDetailsFormValues {
   [PostDetailsFormNames.ADVICE]: string;
 }
 
-export const CreatePostForm: React.FC<CreatePostFormProps> = ({}) => {
+export const CreatePostForm = () => {
   return (
     <Box mt={4}>
       <Box>

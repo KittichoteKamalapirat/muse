@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Box, Flex } from "@chakra-ui/react";
 import React from "react";
 import { CartItemStatus } from "../generated/graphql";

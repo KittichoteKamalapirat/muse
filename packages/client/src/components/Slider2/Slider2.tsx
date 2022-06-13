@@ -7,9 +7,7 @@ import videosSources from "../../../constants/videoSources";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
-interface Slider2Props {}
-
-export const Slider2: React.FC<Slider2Props> = ({}) => {
+export const Slider2 = () => {
   const [width, setWidth] = useState(0);
 
   const carousel = useRef<HTMLHeadingElement>(null);

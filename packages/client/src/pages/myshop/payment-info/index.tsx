@@ -1,29 +1,24 @@
 import { Button } from "@chakra-ui/button";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 import { Box, Divider, Flex, Link, Text } from "@chakra-ui/layout";
 import { Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/menu";
+import { Heading } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
-import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
-import { XWrapper } from "../../../components/Wrapper/XWrapper";
-import {
-  useDeletePaymentInfoMutation,
-  usePaymentInfoQuery,
-} from "../../../generated/graphql";
-import { banksArray } from "../../../util/constants";
-import { withApollo } from "../../../util/withApollo";
-import { Heading } from "@chakra-ui/react";
 import LinkButton from "../../../components/atoms/LinkButton";
+import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
+import { usePaymentInfoQuery } from "../../../generated/graphql";
+import { banksArray } from "../../../util/constants";
+import { withApollo } from "../../../util/withApollo";
 
-interface PaymentInfoProps {}
-
-const PaymentInfo: React.FC<PaymentInfoProps> = ({}) => {
+const PaymentInfo = () => {
   const { data: paymentInfo, loading: paymentInfoLoading } =
     usePaymentInfoQuery();
 
-  const [deletePaymentInfo] = useDeletePaymentInfoMutation();
+  // const [deletePaymentInfo] = useDeletePaymentInfoMutation();
   const noInfo = (
     <Flex justifyContent="center" alignItems="center" minH="600px">
       <Flex direction="column" alignItems="center">

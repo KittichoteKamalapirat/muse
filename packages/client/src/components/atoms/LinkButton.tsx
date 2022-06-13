@@ -12,7 +12,8 @@ type Props = ChakraButtonProps & {
     | "unstyled"
     | "link"
     | "ghost"
-    | (string & {})
+    // | (string & {})
+    | string
     | undefined;
   href?: any;
   leftIcon?: React.ReactElement<any, string | React.JSXElementConstructor<any>>;

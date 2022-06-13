@@ -5,17 +5,14 @@ import {
   TriangleUpIcon,
 } from "@chakra-ui/icons";
 import {
-  Badge,
   Box,
   Button,
   Center,
   chakra,
-  Flex,
   Heading,
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
@@ -31,24 +28,19 @@ import {
 import { adminColumn } from "../../components/admin/adminColumn";
 import { adminData } from "../../components/admin/adminData";
 import AdminSummaryBox from "../../components/AdminSummaryBox";
-import CartItemDetail from "../../components/Icons/CartItemDetail";
 import { Layout } from "../../components/Layout/Layout";
 import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
 import {
   CartItem,
-  CartItemStatus,
-  useAdminCompleteCartItemMutation,
   useAdminUpdateCartItemStatusMutation,
   useAllCartItemsQuery,
 } from "../../generated/graphql";
 import { useIsAdmin } from "../../util/useIsAdmin";
 import { withApollo } from "../../util/withApollo";
 
-interface AdminProps {}
-
-const Admin: React.FC<AdminProps> = ({}) => {
+const Admin = () => {
   useIsAdmin();
   const { data: cartItems, loading, error } = useAllCartItemsQuery();
   const [adminUpdateCartItemStatus] = useAdminUpdateCartItemStatusMutation();

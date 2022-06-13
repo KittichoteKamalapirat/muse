@@ -1,15 +1,23 @@
 import React from "react";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
+import { Layout } from "../../components/Layout/Layout";
 import { SingleFileUpload } from "../../components/SingleFileUpload";
+import { Loading } from "../../components/skeletons/Loading";
 import { XWrapper } from "../../components/Wrapper/XWrapper";
 import { useMeQuery, useUpdateAvatarMutation } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
-interface AvatarProps {}
-
-const Avatar: React.FC<AvatarProps> = ({}) => {
+const Avatar = () => {
   const [updateAvatar] = useUpdateAvatarMutation();
   const { data: meData, loading } = useMeQuery();
+
+  if (loading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
   return (
     <HeadingLayout heading="Update my avatar">
       <XWrapper>

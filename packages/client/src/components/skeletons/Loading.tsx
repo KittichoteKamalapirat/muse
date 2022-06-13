@@ -1,4 +1,4 @@
-import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Flex, Spinner, Text } from "@chakra-ui/react";
 import React from "react";
 
 interface LoadingProps {
@@ -6,18 +6,13 @@ interface LoadingProps {
   overlay?: boolean;
 }
 
-export const Loading: React.FC<LoadingProps> = ({ text, overlay = false }) => {
+export const Loading: React.FC<LoadingProps> = ({ text }) => {
   return (
     <Flex
       flexDirection="row"
       justifyContent="center"
       alignItems="center"
       height="70vh"
-      // position={overlay ? "absolute" : "static"}
-      // marginX={overlay ? "auto" : "static"}
-      // right={overlay ? 0 : "none"}
-      // left={overlay ? 0 : "none"}
-      // textAlign="center"
     >
       <Flex flexDirection="column" justifyContent="center" alignItems="center">
         <Spinner

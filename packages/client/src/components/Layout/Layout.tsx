@@ -9,11 +9,7 @@ interface LayoutProps {
   heading: string;
 }
 
-export const Layout: React.FC<LayoutProps> = ({
-  children,
-  heading,
-  variant,
-}) => {
+export const Layout: React.FC<LayoutProps> = ({ children, heading }) => {
   return (
     <>
       <Head>

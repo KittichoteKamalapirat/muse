@@ -1,14 +1,13 @@
 import {
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  FormErrorMessage,
   Textarea,
-  Flex,
 } from "@chakra-ui/react";
 import { useField } from "formik";
-import React from "react";
-import { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes } from "react";
 
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string; //name has to be required

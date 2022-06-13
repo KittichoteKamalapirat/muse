@@ -14,8 +14,8 @@ import React, { useEffect, useState } from "react";
 import { UnitSelectOption } from "../../../../constants/unitSelectOption";
 import Button from "../../../components/atoms/Button";
 import {
-  PostDetailsFormValues,
   PostDetailsFormNames,
+  PostDetailsFormValues,
 } from "../../../components/CreatePostForm";
 import { CreateRecipe } from "../../../components/CreateRecipe";
 import DropzoneField, {
@@ -35,7 +35,6 @@ import { CooktimeUnitEnum } from "../../../types/utils/CooktimeUnitEnum";
 import { ResourceType } from "../../../types/utils/ResourceType";
 import { SelectOption } from "../../../types/utils/SelectOption";
 import { UnitEnum } from "../../../types/utils/UnitEnum";
-
 import getSelectOption from "../../../util/getSelectOption";
 import { useGetPostId } from "../../../util/useGetPostId";
 import { withApollo } from "../../../util/withApollo";
@@ -46,7 +45,7 @@ export interface IngredientFieldInput {
   unit: SelectOption | null;
 }
 
-const EditPost = ({}) => {
+const EditPost = () => {
   const router = useRouter();
   const postId = useGetPostId();
   const { data, loading } = usePostQuery({

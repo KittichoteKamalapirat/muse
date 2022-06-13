@@ -19,9 +19,7 @@ import {
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 
-interface EditAddressProps {}
-
-const EditAddress: React.FC<EditAddressProps> = ({}) => {
+const EditAddress = () => {
   const { data, loading } = useAddressQuery();
   const [updateAddress] = useUpdateAddressMutation();
 

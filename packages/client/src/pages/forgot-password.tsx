@@ -1,18 +1,23 @@
-import { Box, Button, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
+import Button from "../components/atoms/Button";
 import { InputField } from "../components/InputField";
 import { Layout } from "../components/Layout/Layout";
-import { Wrapper } from "../components/Wrapper/Wrapper";
+import { XWrapper } from "../components/Wrapper/XWrapper";
 import { useForgotPasswordMutation } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
-const ForgotPassword: React.FC<{}> = ({}) => {
+const ForgotPassword = () => {
   const [complete, setComplete] = useState(false);
   const [forgotPassword] = useForgotPasswordMutation();
   return (
     <Layout heading="forgot password">
-      <Wrapper variant="small">
+      <XWrapper>
+        <Box textAlign="center" m={10}>
+          <Heading fontSize="xl">Forgot password</Heading>
+        </Box>
+
         <Formik
           initialValues={{
             email: "",
@@ -48,7 +53,7 @@ const ForgotPassword: React.FC<{}> = ({}) => {
             )
           }
         </Formik>
-      </Wrapper>
+      </XWrapper>
     </Layout>
   );
 };

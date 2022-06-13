@@ -9,13 +9,10 @@ import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { LikeSkeleton } from "../../components/skeletons/LikeSkeleton";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { XWrapper } from "../../components/Wrapper/XWrapper";
-
 import { useMeQuery, usePostsByCreatorQuery } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
-interface MyPostsProps {}
-
-const MyPosts: React.FC<MyPostsProps> = ({}) => {
+const MyPosts = () => {
   const { data: meData, loading: meLoading } = useMeQuery();
 
   const {
@@ -26,8 +23,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
     variables: { userId: meData?.me?.id as string },
   });
 
-  console.log({ posts });
-  if (loading) {
+  if (loading || meLoading) {
     return (
       <Wrapper>
         <LikeSkeleton />
@@ -76,7 +72,7 @@ const MyPosts: React.FC<MyPostsProps> = ({}) => {
                   <Text>{post.title}</Text>
                   <Text>{post.text.slice(0, 60)} ...</Text>
                   <Flex alignItems="center">
-                    <HeartIcon isactive={true ? "true" : undefined} />
+                    <HeartIcon isactive="true" />
                     <Text ml={2}>{post.points}</Text>
                   </Flex>
                 </Box>

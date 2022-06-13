@@ -6,33 +6,28 @@ import CartItemDetail from "../../../../components/Icons/CartItemDetail";
 import { TrackingDetail } from "../../../../components/Icons/TrackingDetail";
 import { HeadingLayout } from "../../../../components/Layout/HeadingLayout";
 import { MainNav } from "../../../../components/MainNav";
-import { Loading } from "../../../../components/skeletons/Loading";
 import { Error } from "../../../../components/skeletons/Error";
+import { Loading } from "../../../../components/skeletons/Loading";
 import { ContentWrapper } from "../../../../components/Wrapper/ContentWrapper";
+import { XWrapper } from "../../../../components/Wrapper/XWrapper";
 import {
   CartItem,
   CartItemStatus,
   useCartItemQuery,
-  useReceivedCartItemMutation,
 } from "../../../../generated/graphql";
 import {
   elabCreatorCartItemStatus,
   elabUserCartItemStatus,
 } from "../../../../util/elabCartItemStatus";
 import { withApollo } from "../../../../util/withApollo";
-import { XWrapper } from "../../../../components/Wrapper/XWrapper";
 
-interface Props {}
-
-const OrderCartItemDetail = ({}: Props) => {
+const OrderCartItemDetail = () => {
   const router = useRouter();
   const { id } = router.query;
 
   const { data, loading, error } = useCartItemQuery({
     variables: { id: parseInt(id as string) },
   });
-  const [receivedCartItem, { data: itemReceived }] =
-    useReceivedCartItemMutation();
 
   const tracking = data?.cartItem.tracking;
   const address = data?.cartItem.user?.address;

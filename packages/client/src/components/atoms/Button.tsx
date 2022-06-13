@@ -1,10 +1,9 @@
-import React, { ReactNode } from "react";
 import {
   Button as ChakraButton,
   ButtonProps,
   ComponentWithAs,
 } from "@chakra-ui/react";
-import { whiten } from "@chakra-ui/theme-tools";
+import React from "react";
 
 type Props = ButtonProps & {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -15,7 +14,7 @@ type Props = ButtonProps & {
     | "unstyled"
     | "link"
     | "ghost"
-    | (string & {})
+    | string
     | undefined;
 };
 
@@ -57,6 +56,7 @@ const Button: ComponentWithAs<"button", Props> = ({
       onClick={onClick}
       variant={variant}
       color={color}
+      // eslint-disable-next-line no-constant-condition
       textAlign={(variant = "unstyled" ? "left" : "center")}
       _hover={{
         backgroundColor: hoverColor,

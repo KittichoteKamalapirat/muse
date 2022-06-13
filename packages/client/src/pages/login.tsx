@@ -20,7 +20,7 @@ import Head from "next/head";
 import { Layout } from "../components/Layout/Layout";
 import { Loading } from "../components/skeletons/Loading";
 
-export const Login: React.FC<{}> = ({}) => {
+export const Login = () => {
   const router = useRouter();
   const { data, loading: loading } = useMeQuery();
 

@@ -1,11 +1,8 @@
 import { Box, Center, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
-import { Wrapper } from "../Wrapper/Wrapper";
 import { XWrapper } from "../Wrapper/XWrapper";
 
-interface PaymentSkeletonProps {}
-
-export const PaymentSkeleton: React.FC<PaymentSkeletonProps> = ({}) => {
+export const PaymentSkeleton = () => {
   return (
     <XWrapper>
       <Box>

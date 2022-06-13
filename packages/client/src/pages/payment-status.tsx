@@ -9,9 +9,7 @@ import SvgSuccess from "../components/svgComponents/Success";
 import { CartItemStatus } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
-interface PaymentStatusProps {}
-
-const PaymentStatus: React.FC<PaymentStatusProps> = ({}) => {
+const PaymentStatus = () => {
   const router = useRouter();
   const { status } = router.query;
   console.log(status);

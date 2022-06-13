@@ -1,11 +1,6 @@
-import { ApolloCache } from "@apollo/client";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Box, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
-import { gql } from "urql";
-import {
-  AdminUpdateCartItemStatusMutation,
-  CartItemStatus,
-} from "../../generated/graphql";
+import { CartItemStatus } from "../../generated/graphql";
 import { SelectColumnFilter } from "../SelectColumnFilter";
 
 export const adminColumn = (adminUpdateCartItemStatus: any) => {

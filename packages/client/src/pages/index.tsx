@@ -2,7 +2,6 @@ import { LinkBox, LinkOverlay } from "@chakra-ui/layout";
 import { Avatar, Box, Flex, Heading, Img, Stack, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React, { useCallback, useRef } from "react";
-import Button from "../components/atoms/Button";
 import { EditDeletePostButtons } from "../components/EditDeletePostButtons";
 import { Layout } from "../components/Layout/Layout";
 import { ReviewStars } from "../components/ReviewStars";

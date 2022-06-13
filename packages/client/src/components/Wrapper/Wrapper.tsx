@@ -19,7 +19,7 @@ export const Wrapper: React.FC<WrapperProps> = ({
   py,
   mb,
   mt,
-  variant = "regular",
+
   ...props
 }) => {
   return (

@@ -3,18 +3,35 @@ import { Heading } from "@chakra-ui/react";
 import React from "react";
 import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Layout } from "../../../components/Layout/Layout";
+import { Error } from "../../../components/skeletons/Error";
+import { Loading } from "../../../components/skeletons/Loading";
 import { ContentWrapper } from "../../../components/Wrapper/ContentWrapper";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import { useMeQuery } from "../../../generated/graphql";
 import { isServer } from "../../../util/isServer";
 import { withApollo } from "../../../util/withApollo";
 
-interface infoProps {}
-
-const Info: React.FC<infoProps> = ({}) => {
-  const { data, loading } = useMeQuery({
+const Info = () => {
+  const { data, loading, error } = useMeQuery({
     skip: isServer(),
   });
+
+  if (loading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout heading="error">
+        <Error text={error.message} />
+      </Layout>
+    );
+  }
 
   return (
     <HeadingLayout heading="My Account Information">

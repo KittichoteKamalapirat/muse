@@ -17,6 +17,7 @@ import { CartItemStatusTab } from "../../components/CartItemStatusTab";
 import { AddressComponent } from "../../components/Icons/AddressComponent";
 import { HeadingLayout } from "../../components/Layout/HeadingLayout";
 import { NotPaymentPending } from "../../components/orders/NotPaymentPending";
+import { Error } from "../../components/skeletons/Error";
 import { OrderArraySkeleton } from "../../components/skeletons/OrderArraySkeleton";
 import { primaryColor } from "../../components/Variables";
 import { Wrapper } from "../../components/Wrapper/Wrapper";
@@ -26,12 +27,9 @@ import {
   useAddressQuery,
   useUserOrdersLazyQuery,
 } from "../../generated/graphql";
-import { mappedCartItemsByCreatorResult } from "../../util/toCartItemsByCreatorMap";
 import { withApollo } from "../../util/withApollo";
 
-interface OrderProps {}
-
-const Order: React.FC<OrderProps> = ({}) => {
+const Order = () => {
   const router = useRouter();
   const { status: statusParam } = router.query;
 
@@ -40,9 +38,6 @@ const Order: React.FC<OrderProps> = ({}) => {
     // CartItemStatus.PaymentPending
     statusParam as CartItemStatus
   );
-
-  const [mappedCartItems, setMappedCartItems] =
-    useState<mappedCartItemsByCreatorResult[]>();
 
   //apollo hooks
   const { data: address, loading: addressLoading } = useAddressQuery();
@@ -83,6 +78,10 @@ const Order: React.FC<OrderProps> = ({}) => {
         ]}
       </Wrapper>
     );
+  }
+
+  if (userOrderError) {
+    <Error text={userOrderError.message} />;
   }
 
   return (

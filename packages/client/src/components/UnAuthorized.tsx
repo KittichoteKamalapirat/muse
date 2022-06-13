@@ -1,12 +1,10 @@
-import { Box, Center, Flex, Heading, Text } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import React from "react";
 import { HeadingLayout } from "./Layout/HeadingLayout";
 import { MainNav } from "./MainNav";
 import SvgFail from "./svgComponents/Fail";
 
-interface UnAuthorizedProps {}
-
-export const UnAuthorized: React.FC<UnAuthorizedProps> = ({}) => {
+export const UnAuthorized = () => {
   return (
     <Box>
       <HeadingLayout heading="Not Authorized" />

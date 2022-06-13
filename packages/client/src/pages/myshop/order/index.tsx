@@ -8,11 +8,10 @@ import { CartItemStatusTab } from "../../../components/CartItemStatusTab";
 import { AddressComponent } from "../../../components/Icons/AddressComponent";
 import { TrackingDetail } from "../../../components/Icons/TrackingDetail";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
+import { Error } from "../../../components/skeletons/Error";
 import { OrderArraySkeleton } from "../../../components/skeletons/OrderArraySkeleton";
-import { inActiveGray, primaryColor } from "../../../components/Variables";
 import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
-
 import {
   CartItemStatus,
   useCreatorOrdersLazyQuery,
@@ -23,9 +22,7 @@ import { withApollo } from "../../../util/withApollo";
 // by orderId
 // then by creator inside
 
-interface OrderProps {}
-
-const Order: React.FC<OrderProps> = ({}) => {
+const Order = () => {
   const router = useRouter();
   const { status: statusParam } = router.query;
 
@@ -63,6 +60,11 @@ const Order: React.FC<OrderProps> = ({}) => {
       </Wrapper>
     );
   }
+
+  if (error) {
+    <Error text={error.message} />;
+  }
+
   return (
     <HeadingLayout heading="My order" mt={"40px"}>
       <CartItemStatusTab

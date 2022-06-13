@@ -24,7 +24,7 @@ import { useGetPostFromUrl } from "../../util/useGetPostFromUrl";
 import { useIsAuth } from "../../util/useIsAuth";
 import { withApollo } from "../../util/withApollo";
 
-const Post = ({}) => {
+const Post = () => {
   const router = useRouter();
   useIsAuth();
   const { data, loading, error } = useGetPostFromUrl();

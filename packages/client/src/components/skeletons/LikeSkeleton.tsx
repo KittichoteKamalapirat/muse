@@ -1,9 +1,7 @@
 import { Box, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
 
-interface LikeSkeletonProps {}
-
-export const LikeSkeleton: React.FC<LikeSkeletonProps> = ({}) => {
+export const LikeSkeleton = () => {
   return (
     <Box>
       <Stack>

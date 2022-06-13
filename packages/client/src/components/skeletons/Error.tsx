@@ -9,7 +9,7 @@ interface Props {
   overlay?: boolean;
 }
 
-export const Error = ({ text, overlay = false }: Props) => {
+export const Error = ({ text }: Props) => {
   const homeUrl = urlResolver.index();
   return (
     <Flex

@@ -1,7 +1,5 @@
 import { StarIcon } from "@chakra-ui/icons";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Field, Formik } from "formik";
-import { values } from "lodash";
 import React from "react";
 
 interface ReviewStarsProps {

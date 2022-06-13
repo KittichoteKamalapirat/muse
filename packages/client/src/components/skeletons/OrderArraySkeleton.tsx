@@ -1,9 +1,7 @@
 import { Box, Flex, Skeleton, Stack } from "@chakra-ui/react";
 import React from "react";
 
-interface OrderArraySkeletonProps {}
-
-export const OrderArraySkeleton: React.FC<OrderArraySkeletonProps> = ({}) => {
+export const OrderArraySkeleton = () => {
   return (
     <Box>
       <Stack>

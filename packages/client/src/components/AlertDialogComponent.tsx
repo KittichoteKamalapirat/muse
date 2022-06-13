@@ -1,22 +1,17 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import {
-  Button,
   AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
 } from "@chakra-ui/react";
-
 import { FocusableElement } from "@chakra-ui/utils";
-import React, {
-  LegacyRef,
-  MouseEventHandler,
-  RefObject,
-  useState,
-} from "react";
+import React, { LegacyRef, RefObject } from "react";
 
-interface AlertDialogComponentProps {
+interface Props {
   //   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   // MyAlertDialogProps: {
   //   isOpen: boolean;
@@ -35,16 +30,16 @@ interface AlertDialogComponentProps {
   onClose: () => void;
 }
 
-export const AlertDialogComponent: React.FC<AlertDialogComponentProps> = ({
+export const AlertDialogComponent = ({
   //   setIsOpen,
   // MyAlertDialogProps,
   isOpen,
-  leastDestructiveRef,
+
   cartItemId,
   deleteCartItem,
   cancelRef,
   onClose,
-}) => {
+}: Props) => {
   return (
     <>
       <AlertDialog
@@ -71,8 +66,6 @@ export const AlertDialogComponent: React.FC<AlertDialogComponentProps> = ({
               <Button
                 colorScheme="red"
                 onClick={async () => {
-                  console.log("hi");
-                  console.log(cartItemId);
                   deleteCartItem({
                     variables: { id: cartItemId },
                     update: (cache: any) => {

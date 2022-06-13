@@ -3,9 +3,7 @@ import React from "react";
 import { MainNav } from "./MainNav";
 import { TopNav } from "./TopNav";
 
-interface NavbarProps {}
-
-export const Navbar: React.FC<NavbarProps> = ({}) => {
+export const Navbar = () => {
   return (
     <Box>
       <TopNav />
