@@ -1,6 +1,5 @@
 import { Select } from "@chakra-ui/react";
 import React from "react";
-import { CartItemStatus } from "../generated/graphql";
 
 interface SelectColumnFilterProps {
   column: any;

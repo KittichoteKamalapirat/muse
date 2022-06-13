@@ -1,9 +1,4 @@
-import { IconButton } from "@chakra-ui/react";
 import React from "react";
-import { UploadedFile } from ".";
-import TrashIcon from "../../atoms/icons/TrashIcon";
-
-interface Props {}
 
 const baseStyle = {
   flex: 1,
@@ -24,7 +19,7 @@ const baseStyle = {
   cursor: "pointer",
 };
 
-const UploaderPlaceholder = ({}: Props) => (
+const UploaderPlaceholder = () => (
   <div style={baseStyle}>
     <p className="font-nunito text-11px text-grey-420">
       Drag and drop or{" "}

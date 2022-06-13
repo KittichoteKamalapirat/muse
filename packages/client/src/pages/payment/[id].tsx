@@ -23,7 +23,7 @@ import { withApollo } from "../../util/withApollo";
 
 const STARTING_MINUTES = 3;
 
-const Payment = ({}) => {
+const Payment = () => {
   const router = useRouter();
   const { id } = router.query;
   const cartItemStatusUrl = urlResolver.paymentStatusAPI(id as string);
@@ -85,6 +85,8 @@ const Payment = ({}) => {
   if (
     loading ||
     //  paymentIsCompleteLoading ||
+    paymentIsCompleteLoading ||
+    isPaidLoading ||
     qrSrcLoading
   ) {
     return <PaymentSkeleton />;

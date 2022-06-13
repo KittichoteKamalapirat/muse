@@ -1,11 +1,13 @@
-import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
-import React from "react";
-import NextLink from "next/link";
-import { NavDrawer } from "./NavDrawer";
+import { Box, Flex, Heading, Link } from "@chakra-ui/layout";
 import { useMediaQuery } from "@chakra-ui/react";
+import NextLink from "next/link";
+import React, { ReactNode } from "react";
+import { NavDrawer } from "./NavDrawer";
 import { NavNoDrawer } from "./NavNotDrawer";
 
-interface WelcomeNavProps {}
+interface WelcomeNavProps {
+  children: ReactNode;
+}
 
 export const WelcomeNav: React.FC<WelcomeNavProps> = ({ children }) => {
   const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");

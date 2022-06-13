@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { PlusSquareIcon } from "@chakra-ui/icons";
 import { InputGroup, InputRightAddon } from "@chakra-ui/input";
 import {
@@ -76,7 +77,7 @@ export const CreateMealkit: React.FC<Props> = ({
     if (mealkitFiles.length > 0) {
       const fileMetadatas: FileMetadata[] = [];
 
-      mealkitFiles.forEach((file: any, index: number) => {
+      mealkitFiles.forEach((file: any) => {
         // sign
         const input: FileInput = {
           name: formatFilename(file.name),

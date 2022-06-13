@@ -20,6 +20,7 @@ import FormFieldLabel from "../../../components/form/FormFieldLabel";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
+import { Error } from "../../../components/skeletons/Error";
 import { Loading } from "../../../components/skeletons/Loading";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
@@ -87,10 +88,18 @@ const Mealkit = () => {
     }
   }, [data, postData]);
 
-  if (loading) {
+  if (loading || postLoading) {
     return (
       <Layout heading="loading">
         <Loading />
+      </Layout>
+    );
+  }
+
+  if (error || postError) {
+    return (
+      <Layout heading="error">
+        <Error text={error?.message || postError?.message} />
       </Layout>
     );
   }

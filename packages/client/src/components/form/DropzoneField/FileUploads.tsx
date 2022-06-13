@@ -28,7 +28,11 @@ interface Props {
   onRemoval: (fileKey: string) => void;
 }
 
-const FileUploads = ({ files, isMultiple, onRemoval }: Props) => (
+const FileUploads = ({
+  files,
+  // isMultiple,
+  onRemoval,
+}: Props) => (
   <>
     {/* {isMultiple ? (
       <p className="font-nunito text-xs text-grey-250 text-opacity-70">

@@ -20,9 +20,7 @@ import {
 import { toErrorMap } from "../util/toErrorMap";
 import { withApollo } from "../util/withApollo";
 
-interface registerProps {}
-
-export const Register: React.FC<registerProps> = ({}) => {
+export const Register = () => {
   const router = useRouter();
   const { isCreator } = router.query;
 

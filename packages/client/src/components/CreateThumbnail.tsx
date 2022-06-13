@@ -1,5 +1,5 @@
 import { PlusSquareIcon } from "@chakra-ui/icons";
-import { Box, Flex, Heading, Image, Img, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Img, Text } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";

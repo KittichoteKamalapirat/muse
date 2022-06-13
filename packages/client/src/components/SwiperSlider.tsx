@@ -10,9 +10,7 @@ import videosSources from "../../constants/videoSources";
 
 SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
-interface Props {}
-
-export const SwiperSlider: React.FC<Props> = ({}) => {
+export const SwiperSlider = () => {
   return (
     <Flex mx="auto" maxW={[null, null, "60%"]} zIndex={-1} className="welcome">
       <Swiper

@@ -1,7 +1,9 @@
+import { Box } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import router from "next/router";
 import React from "react";
 import Button from "../../../components/atoms/Button";
+import FormFieldLabel from "../../../components/form/FormFieldLabel";
 import { InputField } from "../../../components/InputField";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
@@ -14,12 +16,8 @@ import {
 import { banksArray } from "../../../util/constants";
 import { toErrorMap } from "../../../util/toErrorMap";
 import { withApollo } from "../../../util/withApollo";
-import FormFieldLabel from "../../../components/form/FormFieldLabel";
-import { Box } from "@chakra-ui/react";
 
-interface EditPaymentInfoProps {}
-
-export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
+export const EditPaymentInfo = () => {
   const [updatePaymentInfo] = useUpdatePaymentInfoMutation();
 
   const { data: paymentInfo, loading: paymentInfoLoading } =
@@ -44,10 +42,10 @@ export const EditPaymentInfo: React.FC<EditPaymentInfoProps> = ({}) => {
             const response = await updatePaymentInfo({
               variables: {
                 input: {
-                  bankCode: values.bankCode!,
-                  bankAccount: values.bankAccount!,
+                  bankCode: values.bankCode as string,
+                  bankAccount: values.bankAccount as string,
                 },
-                id: paymentInfo?.paymentInfo?.id!,
+                id: paymentInfo?.paymentInfo?.id as number,
               },
             });
 

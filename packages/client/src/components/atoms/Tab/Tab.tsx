@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { ReactNode } from "react";
 import { CartItemStatus } from "../../../generated/graphql";
-import { primaryColor, inActiveGray } from "../../Variables";
+import { primaryColor } from "../../Variables";
 
 interface Props {
   currentStatus: CartItemStatus;

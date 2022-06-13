@@ -27,14 +27,13 @@ const UserCartItemDetail = () => {
   const { data, loading, error } = useCartItemQuery({
     variables: { id: parseInt(id as string) },
   });
-  const [receivedCartItem, { data: itemReceived }] =
-    useReceivedCartItemMutation();
+  const [receivedCartItem] = useReceivedCartItemMutation();
 
   const tracking = data?.cartItem.tracking;
   const address = data?.cartItem.user?.address;
   console.log(elabUserCartItemStatus(data?.cartItem.status as CartItemStatus));
   if (loading) return <Loading />;
-  if (error) return <Error />;
+  if (error) return <Error text={error.message} />;
   return (
     <HeadingLayout heading="Order Summary">
       <MainNav />

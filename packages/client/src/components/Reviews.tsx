@@ -1,13 +1,12 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Flex, Box, Text, Heading } from "@chakra-ui/layout";
+import { Box, Flex, Heading, Text } from "@chakra-ui/layout";
 import moment from "moment";
 import React from "react";
-import { useMealkitsQuery, useReviewsQuery } from "../generated/graphql";
+import { useReviewsQuery } from "../generated/graphql";
 import { Layout } from "./Layout/Layout";
 import { ReviewStars } from "./ReviewStars";
 import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
-import { ContentWrapper } from "./Wrapper/ContentWrapper";
 
 interface ReviewsProps {
   mealkitId: number;

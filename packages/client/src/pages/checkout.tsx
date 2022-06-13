@@ -22,15 +22,13 @@ import {
 } from "../util/toCartItemsByCreatorMap";
 import { withApollo } from "../util/withApollo";
 
-interface checkoutProps {}
-
 interface CartItemsByCreatorInput {
   creatorId: string;
   deliveryFee: number;
   mealkitsFee: number;
 }
 
-const Checkout: React.FC<checkoutProps> = ({}) => {
+const Checkout = () => {
   const [gross, setGross] = useState(0);
   console.log({ gross });
 
@@ -58,7 +56,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
       console.log({ mappedArray });
       setMappedCartItems(mappedArray);
 
-      let gross: number = mappedArray.reduce(
+      const gross = mappedArray.reduce(
         (acc, obj) => acc + obj.totalByCreator + obj.deliveryFee,
         0
       );
@@ -113,7 +111,7 @@ const Checkout: React.FC<checkoutProps> = ({}) => {
     );
   }
 
-  if (orderLoading) {
+  if (orderLoading || addressLoading) {
     return <PaymentSkeleton />;
   }
   if (orderData) {

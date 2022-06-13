@@ -1,14 +1,12 @@
-import { StarIcon } from "@chakra-ui/icons";
-import { background, Flex, IconButton } from "@chakra-ui/react";
+import { ApolloCache } from "@apollo/client";
+import { Flex, IconButton } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { gql } from "urql";
 import {
   PostSnippetFragment,
-  PostsQuery,
   useVoteMutation,
   VoteMutation,
 } from "../generated/graphql";
-import { ApolloCache } from "@apollo/client";
 import { HeartIcon } from "./Icons/HeartIcon";
 
 interface UpvoteSectionProps {

@@ -11,7 +11,6 @@ import {
 } from "../../generated/graphql";
 import Button from "../atoms/Button";
 import LinkButton from "../atoms/LinkButton";
-import { XWrapper } from "../Wrapper/XWrapper";
 interface NotPaymentPendingProps {
   userOrderData: UserOrdersQuery | undefined;
   cartItemStatus: CartItemStatus;

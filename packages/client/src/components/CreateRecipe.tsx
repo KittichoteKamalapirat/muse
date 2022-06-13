@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { IconButton } from "@chakra-ui/button";
 import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import { Input } from "@chakra-ui/input";
@@ -18,7 +19,7 @@ interface CreateRecipeProps {
   handleChangeInput: Function;
   handleAddField: Function;
   handleRemoveField: Function;
-  handleInstructionChangeInput: Function;
+  handleInstructionChangeInput: Function; // TODO
   handleAddInstructionField: Function;
   handleRemoveInstructionField: Function;
 }

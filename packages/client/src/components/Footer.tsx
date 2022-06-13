@@ -7,7 +7,7 @@ import Logo from "./Icons/Logo";
 
 export const Footer = () => (
   <Container as="footer" role="contentinfo" maxWidth="95%">
-    <Script src="//embed.typeform.com/next/embed.js" />;
+    <Script src="//embed.typeform.com/next/embed.js" />
     <Stack
       spacing="8"
       direction={{ base: "column", md: "row" }}

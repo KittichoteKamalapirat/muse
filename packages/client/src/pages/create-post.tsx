@@ -39,7 +39,7 @@ const postValues: PostDetailsFormValues = {
   advice: "",
 };
 
-const CreatePost: React.FC<{}> = ({ children }) => {
+const CreatePost = () => {
   useIsAuth();
   const router = useRouter();
 
@@ -84,7 +84,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const [autoThumbnailS3UrlAndId, setAutoThumbnailS3UrlAndId] =
     useState<FileMetadata | null>(null);
 
-  const [autoThumbnailFile, setAutoThumbnailFile] = useState<any>(null);
+  const [, setAutoThumbnailFile] = useState<any>(null);
 
   // automatically create image from video upload
 
@@ -288,8 +288,8 @@ const CreatePost: React.FC<{}> = ({ children }) => {
   const formRef = useRef() as RefObject<FormikProps<PostDetailsFormValues>>;
 
   useEffect(() => {
-    let mealkitSubmittable: boolean = false;
-    let postSubmittable: boolean = false;
+    let mealkitSubmittable = false;
+    let postSubmittable = false;
 
     if (
       // TODO rethink about what fields are required (also update backend entity)
@@ -331,7 +331,7 @@ const CreatePost: React.FC<{}> = ({ children }) => {
           // if there is error, the global error in craeteUrqlclient will handle it, so no need to handle here
         }}
       >
-        {({ isSubmitting }) => (
+        {() => (
           <Box>
             <Form>
               {

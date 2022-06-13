@@ -1,4 +1,5 @@
 import { gql, useApolloClient } from "@apollo/client";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Center, Heading } from "@chakra-ui/layout";
 import {
   Avatar,
@@ -18,9 +19,11 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import Badge from "../../components/atoms/Badge";
 import Button from "../../components/atoms/Button";
 import { HeartIcon } from "../../components/Icons/HeartIcon";
 import { Layout } from "../../components/Layout/Layout";
+import { Error } from "../../components/skeletons/Error";
 import { Loading } from "../../components/skeletons/Loading";
 import SvgAccountIcon from "../../components/svgComponents/AccountIcon";
 import SvgBoxIcon from "../../components/svgComponents/BoxIcon";
@@ -28,9 +31,8 @@ import SvgPinIcon from "../../components/svgComponents/PinIcon";
 import SvgRateIcon from "../../components/svgComponents/RateIcon";
 import SvgTruckIcon from "../../components/svgComponents/TruckIcon";
 import SvgWalletIcon from "../../components/svgComponents/WalletIcon";
-import { inActiveGray, primaryColor } from "../../components/Variables";
-import { Wrapper } from "../../components/Wrapper/Wrapper";
 import { ContentWrapper } from "../../components/Wrapper/ContentWrapper";
+import { Wrapper } from "../../components/Wrapper/Wrapper";
 import {
   CartItemStatus,
   useLogoutMutation,
@@ -39,10 +41,6 @@ import {
   useUserOrdersQuery,
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
-import Badge from "../../components/atoms/Badge";
-import { Error } from "../../components/skeletons/Error";
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import { dataURItoBlob } from "dropzone";
 
 const Account = () => {
   const { data: meData, loading, error } = useMeQuery();
@@ -50,8 +48,7 @@ const Account = () => {
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
   const apolloClient = useApolloClient();
 
-  const [switchAccountType, { data: isCreator }] =
-    useSwitchAccountTypeMutation();
+  const [switchAccountType] = useSwitchAccountTypeMutation();
 
   // PaymentPending
   const {
@@ -87,15 +84,15 @@ const Account = () => {
   const onTheWayNum = onTheWayData?.userOrders.length;
 
   // Delivered
-  const {
-    data: deliveredData,
-    loading: deliveredLoading,
-    error: deliveredError,
-  } = useUserOrdersQuery({
-    variables: { status: CartItemStatus.Delivered },
-  });
+  // const {
+  //   data: deliveredData,
+  //   loading: deliveredLoading,
+  //   error: deliveredError,
+  // } = useUserOrdersQuery({
+  //   variables: { status: CartItemStatus.Delivered },
+  // });
 
-  const deliveredNum = deliveredData?.userOrders.length;
+  // const deliveredNum = deliveredData?.userOrders.length;
 
   // Received
   const {
@@ -112,8 +109,9 @@ const Account = () => {
     loading ||
     toDeliverLoading ||
     onTheWayLoading ||
-    deliveredLoading ||
-    receivedLoading
+    // deliveredLoading ||
+    receivedLoading ||
+    paymentPendingLoading
   ) {
     return (
       <Layout heading="loading">
@@ -126,8 +124,9 @@ const Account = () => {
     error ||
     toDeliverError ||
     onTheWayError ||
-    deliveredError ||
-    receivedError
+    // deliveredError ||
+    receivedError ||
+    paymentPendingError
   ) {
     return (
       <Layout heading="error">
@@ -367,7 +366,7 @@ const Account = () => {
                   onClick={() =>
                     switchAccountType({
                       variables: { becomeCreator: true },
-                      update: (cache, { data }) => {
+                      update: (cache) => {
                         cache.writeFragment({
                           id: "User:" + meData?.me?.id,
                           fragment: gql`
@@ -389,7 +388,7 @@ const Account = () => {
                   onClick={() =>
                     switchAccountType({
                       variables: { becomeCreator: false },
-                      update: (cache, { data }) => {
+                      update: (cache) => {
                         cache.writeFragment({
                           id: "User:" + meData?.me?.id,
                           fragment: gql`

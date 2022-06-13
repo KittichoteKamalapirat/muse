@@ -15,9 +15,7 @@ import { Error } from "../components/skeletons/Error";
 import { Loading } from "../components/skeletons/Loading";
 import { primaryColor } from "../components/Variables";
 import { Wrapper } from "../components/Wrapper/Wrapper";
-
 import {
-  CartItemNoti,
   ReadOrderNotisMutation,
   useMeQuery,
   useOrderNotisQuery,
@@ -25,14 +23,13 @@ import {
 } from "../generated/graphql";
 import formatRelativeDate from "../util/formatRelativeDate";
 import { withApollo } from "../util/withApollo";
-interface Props {}
 
 export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
   cache.modify({
     fields: {
       orderNotis(existingNotis = []) {
         console.log({ existingNotis });
-        return existingNotis.map((noti: CartItemNoti) => {
+        return existingNotis.map(() => {
           return { read: true }; //somehow this works
         });
       },
@@ -40,7 +37,7 @@ export const updateAfterRead = (cache: ApolloCache<ReadOrderNotisMutation>) => {
   });
 };
 
-const Notification = ({}: Props) => {
+const Notification = () => {
   const { data: meData, loading: meLoading, error: meError } = useMeQuery();
   const router = useRouter();
 

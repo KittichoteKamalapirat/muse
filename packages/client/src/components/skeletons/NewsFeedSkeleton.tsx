@@ -2,9 +2,7 @@ import { Box, Flex, Skeleton, SkeletonCircle, Stack } from "@chakra-ui/react";
 import React from "react";
 import { Wrapper } from "../Wrapper/Wrapper";
 
-interface NewsFeedSkeletonProps {}
-
-export const NewsFeedSkeleton: React.FC<NewsFeedSkeletonProps> = ({}) => {
+export const NewsFeedSkeleton = () => {
   return (
     <Wrapper>
       <Box>

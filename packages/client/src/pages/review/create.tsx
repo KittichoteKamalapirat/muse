@@ -16,9 +16,7 @@ import {
 } from "../../generated/graphql";
 import { withApollo } from "../../util/withApollo";
 
-interface WriteReviewProps {}
-
-const WriteReview: React.FC<WriteReviewProps> = ({}) => {
+const WriteReview = () => {
   const router = useRouter();
   const { mealkitId, cartItemId } = router.query;
 
@@ -85,9 +83,9 @@ const WriteReview: React.FC<WriteReviewProps> = ({}) => {
               title: "",
               text: "",
             }}
-            onSubmit={async (values, { setErrors }) => {
+            onSubmit={async (values) => {
               try {
-                const response = await createReview({
+                await createReview({
                   variables: {
                     input: {
                       score: parseInt(values.score as unknown as string),

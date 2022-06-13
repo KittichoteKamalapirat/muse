@@ -6,7 +6,6 @@ import { HeadingLayout } from "../components/Layout/HeadingLayout";
 import { Layout } from "../components/Layout/Layout";
 import { Error } from "../components/skeletons/Error";
 import { LikeSkeleton } from "../components/skeletons/LikeSkeleton";
-import { Loading } from "../components/skeletons/Loading";
 import { ContentWrapper } from "../components/Wrapper/ContentWrapper";
 import { Wrapper } from "../components/Wrapper/Wrapper";
 import { XWrapper } from "../components/Wrapper/XWrapper";
@@ -14,14 +13,14 @@ import { useMeQuery, useVotedPostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
 const Like = () => {
-  const { data, error, loading, fetchMore, variables } = useVotedPostsQuery({
+  const { data, error, loading } = useVotedPostsQuery({
     variables: { limit: 10, cursor: null as null | string },
     fetchPolicy: "cache-and-network",
   });
   const { data: meData, loading: meLoading } = useMeQuery();
   const router = useRouter();
 
-  if (loading) {
+  if (loading || meLoading) {
     return (
       <Wrapper>
         {[...Array(10)].map((x, index) => (

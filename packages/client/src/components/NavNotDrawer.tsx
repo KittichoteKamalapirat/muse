@@ -1,17 +1,11 @@
-import { useDisclosure } from "@chakra-ui/hooks";
-import { Flex, Text } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import { Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
 import LinkButton from "./atoms/LinkButton";
 import { primaryColor } from "./Variables";
 
-interface NavNoDrawerProps {}
-
-export const NavNoDrawer: React.FC<NavNoDrawerProps> = ({}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef() as React.MutableRefObject<HTMLButtonElement>;
-
+export const NavNoDrawer = () => {
   return (
     <Flex alignItems="flex-end">
       <Flex
@@ -20,13 +14,6 @@ export const NavNoDrawer: React.FC<NavNoDrawerProps> = ({}) => {
         my={2}
         alignItems="center"
       >
-        {/* <NextLink href="/creator" passHref>
-          <Link mx={5}>
-            {" "}
-            <Text whiteSpace="nowrap"> Creator Center</Text>{" "}
-          </Link>
-        </NextLink> */}
-
         <LinkButton href="/creator" variant="outline">
           Creator Center
         </LinkButton>

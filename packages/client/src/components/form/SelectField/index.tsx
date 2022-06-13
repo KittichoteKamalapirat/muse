@@ -1,7 +1,6 @@
 import React from "react";
 import Select, { ActionMeta, GroupBase, OptionsOrGroups } from "react-select";
 import { SelectOption } from "../../../types/utils/SelectOption";
-import getSelectOption from "../../../util/getSelectOption";
 import { useStyles } from "./useStyles";
 
 interface Props {

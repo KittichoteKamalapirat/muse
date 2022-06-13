@@ -14,9 +14,7 @@ import {
 } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
 
-interface userProps {}
-
-const UpdateUser: React.FC<userProps> = ({}) => {
+const UpdateUser = () => {
   const { data: meData, loading } = useMeQuery();
   const [updateUser] = useUpdateUserMutation();
 
@@ -43,10 +41,10 @@ const UpdateUser: React.FC<userProps> = ({}) => {
       <XWrapper mt={20}>
         <Formik
           initialValues={{
-            username: meData?.me?.username!,
-            email: meData?.me?.email!,
-            phonenumber: meData?.me?.phonenumber!,
-            about: meData?.me?.about!,
+            username: meData?.me?.username as string,
+            email: meData?.me?.email as string,
+            phonenumber: meData?.me?.phonenumber as string,
+            about: meData?.me?.about as string,
           }}
           onSubmit={(values: UserInput) => handleOnSubmit(values)}
         >

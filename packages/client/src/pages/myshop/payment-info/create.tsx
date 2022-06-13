@@ -9,7 +9,6 @@ import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Error } from "../../../components/skeletons/Error";
 import { Loading } from "../../../components/skeletons/Loading";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import {
   PaymentInfoDocument,
@@ -21,9 +20,7 @@ import { banksArray } from "../../../util/constants";
 import { toErrorMap } from "../../../util/toErrorMap";
 import { withApollo } from "../../../util/withApollo";
 
-interface CreatePaymentInfoProps {}
-
-const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
+const CreatePaymentInfo = () => {
   const {
     data: paymentInfo,
     loading: paymentInfoLoading,
@@ -71,13 +68,15 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
                   data: {
                     paymentInfo: {
                       __typename: "PaymentInfo",
-                      id: data.data?.createPaymentInfo.paymentInfo?.id!,
-                      // id: data.data?.createPaymentInfo.id!,
-                      userId: data.data?.createPaymentInfo.paymentInfo?.userId!,
-                      bankCode:
-                        data.data?.createPaymentInfo.paymentInfo?.bankCode!,
-                      bankAccount:
-                        data.data?.createPaymentInfo.paymentInfo?.bankAccount!,
+                      id: data.data?.createPaymentInfo.paymentInfo
+                        ?.id as number,
+                      // id: data.data?.createPaymentInfo.id,
+                      userId: data.data?.createPaymentInfo.paymentInfo
+                        ?.userId as string,
+                      bankCode: data.data?.createPaymentInfo.paymentInfo
+                        ?.bankCode as string,
+                      bankAccount: data.data?.createPaymentInfo.paymentInfo
+                        ?.bankAccount as string,
                     },
                   },
                   variables: {
@@ -95,11 +94,6 @@ const CreatePaymentInfo: React.FC<CreatePaymentInfoProps> = ({}) => {
               router.push("/myshop/payment-info");
             }
 
-            // if (errors) {
-            //   throw new Error();
-            // } else {
-            //   router.back();
-            // }
             return;
           }}
         >

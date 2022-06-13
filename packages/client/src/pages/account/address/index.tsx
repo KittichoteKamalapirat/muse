@@ -1,5 +1,5 @@
 import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,8 +8,6 @@ import LinkButton from "../../../components/atoms/LinkButton";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { Layout } from "../../../components/Layout/Layout";
 import { Loading } from "../../../components/skeletons/Loading";
-import { primaryColor } from "../../../components/Variables";
-import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { XWrapper } from "../../../components/Wrapper/XWrapper";
 import XYWrapper from "../../../components/Wrapper/XYWrapper";
 import {
@@ -20,9 +18,7 @@ import {
 import { useIsAuth } from "../../../util/useIsAuth";
 import { withApollo } from "../../../util/withApollo";
 
-interface addressProps {}
-
-const Address: React.FC<addressProps> = ({}) => {
+const Address = () => {
   useIsAuth();
   const { data, loading } = useAddressQuery();
   const { data: meData } = useMeQuery();

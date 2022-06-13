@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
-import { useToggleIsPublishedMutation } from "../generated/graphql";
 
 interface EditDeleteMealkitButtonsProps {
   id: number;
@@ -21,7 +20,7 @@ export const EditDeleteMealkitButtons: React.FC<
   EditDeleteMealkitButtonsProps
 > = ({ id, postId }) => {
   // const [deleteMealkit] = useDeletePostMutation();
-  const [toggleIsPublished] = useToggleIsPublishedMutation();
+
   return (
     <Box m={2}>
       <Menu>

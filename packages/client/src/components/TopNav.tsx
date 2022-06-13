@@ -1,19 +1,34 @@
-import { Flex, Link, Heading } from "@chakra-ui/react";
-import React from "react";
-import { BasketIcon } from "./Icons/BasketIcon";
+import { Flex, Heading, Link } from "@chakra-ui/react";
 import NextLink from "next/link";
+import React from "react";
 import { useCartItemsQuery } from "../generated/graphql";
 import Badge from "./atoms/Badge";
-interface TopNavProps {}
+import { BasketIcon } from "./Icons/BasketIcon";
+import { Layout } from "./Layout/Layout";
+import { Error } from "./skeletons/Error";
+import { Loading } from "./skeletons/Loading";
 
-export const TopNav: React.FC<TopNavProps> = ({}) => {
+export const TopNav = () => {
   const {
     data: cartItems,
     loading: cartItemsLoading,
     error: cartItemsError,
   } = useCartItemsQuery();
 
-  console.log({ cartItems });
+  if (cartItemsLoading) {
+    return (
+      <Layout heading="loading">
+        <Loading />
+      </Layout>
+    );
+  }
+  if (cartItemsError) {
+    return (
+      <Layout heading="error">
+        <Error text={cartItemsError.message} />
+      </Layout>
+    );
+  }
 
   const cartItemsNum = cartItems?.cartItems.length;
   return (

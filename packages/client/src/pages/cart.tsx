@@ -24,9 +24,7 @@ import {
 } from "../util/toCartItemsByCreatorMap";
 import { withApollo } from "../util/withApollo";
 
-interface cartProps {}
-
-const Cart: React.FC<cartProps> = ({}) => {
+const Cart = () => {
   // useupdate
   const { data: cartItems, loading, error } = useCartItemsQuery();
   const [mappedCartItems, setMappedCartItems] =
@@ -47,7 +45,7 @@ const Cart: React.FC<cartProps> = ({}) => {
   //run everytime when re-render
   useEffect(() => {
     if (cartItems) {
-      let gross: number = 0;
+      let gross = 0;
       cartItems?.cartItems.map((cartItem) => {
         gross = gross + cartItem.fieldTotal;
       });

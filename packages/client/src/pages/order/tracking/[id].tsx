@@ -11,9 +11,7 @@ import { Wrapper } from "../../../components/Wrapper/Wrapper";
 import { useTrackingQuery } from "../../../generated/graphql";
 import { withApollo } from "../../../util/withApollo";
 
-interface TrackingProps {}
-
-const Tracking: React.FC<TrackingProps> = ({}) => {
+const Tracking = () => {
   const router = useRouter();
   const { id } = router.query; // trackingId
 

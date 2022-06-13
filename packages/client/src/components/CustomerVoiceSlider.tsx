@@ -1,5 +1,4 @@
-import { Img } from "@chakra-ui/image";
-import { Flex, Box } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import Image from "next/image";
 import React from "react";
 import SwiperCore, { EffectCoverflow, Navigation, Pagination } from "swiper";
@@ -13,9 +12,7 @@ SwiperCore.use([EffectCoverflow, Pagination, Navigation]);
 
 // Swiper.use([Navigation, Pagination]);
 
-interface CustomerVoiceSliderProps {}
-
-export const CustomerVoiceSlider: React.FC<CustomerVoiceSliderProps> = ({}) => {
+export const CustomerVoiceSlider = () => {
   return (
     <Flex mx="auto" maxW={[null, null, "60%"]} zIndex={-1}>
       <Swiper

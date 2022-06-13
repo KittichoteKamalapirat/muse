@@ -21,8 +21,7 @@ query userOrders($status: CartItemStatus!) {
         user {
           username
           address {
-            id
-            line1
+            ...AddressSnippet
           }
         }
         mealkit {

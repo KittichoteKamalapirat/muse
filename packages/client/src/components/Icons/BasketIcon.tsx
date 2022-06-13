@@ -1,12 +1,7 @@
 import { Icon } from "@chakra-ui/react";
 import React from "react";
-import { primaryColor, inActiveGray } from "../Variables";
 
-interface BasketIconProps {
-  isactive?: string;
-}
-
-export const BasketIcon = (props: BasketIconProps) => (
+export const BasketIcon = () => (
   <Icon
     viewBox="0 0 22.61 20.83"
     // fill={props.isactive ? primaryColor : "none"}

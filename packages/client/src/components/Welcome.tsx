@@ -6,9 +6,6 @@ import LinkButton from "./atoms/LinkButton";
 import { CustomerVoiceSlider } from "./CustomerVoiceSlider";
 import { Footer } from "./Footer";
 import { ScrollSlider } from "./ScrollSlider";
-
-import { Slider2 } from "./Slider2/Slider2";
-
 import SvgSdg12 from "./svgComponents/Sdg12";
 import SvgWhy1 from "./svgComponents/Why1";
 import SvgWhy2 from "./svgComponents/Why2";
@@ -18,9 +15,7 @@ import { SwiperSlider } from "./SwiperSlider";
 import { WelcomeNav } from "./WelcomeNav";
 import { Wrapper } from "./Wrapper/Wrapper";
 
-interface WelcomeProps {}
-
-export const Welcome: React.FC<WelcomeProps> = ({}) => {
+export const Welcome = () => {
   const [isLargerThan30Em] = useMediaQuery("(min-width: 30em)");
 
   return (

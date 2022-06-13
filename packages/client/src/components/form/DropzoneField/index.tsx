@@ -53,11 +53,11 @@ interface Props {
 }
 
 const DropzoneField = ({
-  children,
+  // children,
   label,
   ariaLabel,
-  labelFontColour,
-  labelClass,
+  // labelFontColour,
+  // labelClass,
   helperText,
   isError,
   displayOptionalLabel,

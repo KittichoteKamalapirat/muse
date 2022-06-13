@@ -3,12 +3,12 @@ import { AddIcon, CheckCircleIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { Box, Flex, Heading, Link, Text } from "@chakra-ui/layout";
 import {
   Avatar,
+  Divider,
   IconButton,
   Img,
   useToast,
   Wrap,
   WrapItem,
-  Divider,
 } from "@chakra-ui/react";
 import router from "next/router";
 import React, { useState } from "react";
@@ -25,8 +25,6 @@ import { Layout } from "./Layout/Layout";
 import { Reviews } from "./Reviews";
 import { ReviewStars } from "./ReviewStars";
 import { Loading } from "./skeletons/Loading";
-import { ContentWrapper } from "./Wrapper/ContentWrapper";
-import { XWrapper } from "./Wrapper/XWrapper";
 
 interface MealkitInfoProps {
   postId: number;
@@ -43,7 +41,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
     variables: { postId: postId },
   });
 
-  if (loading) {
+  if (loading || cartItemLoading) {
     return (
       <Layout heading="loading">
         <Loading />
@@ -197,7 +195,7 @@ export const MealkitInfo: React.FC<MealkitInfoProps> = ({ postId }) => {
                             });
                           } else {
                             // existing item
-                            const cached = cache.readFragment({
+                            cache.readFragment({
                               id: "CartItem:" + id, // The value of the to-do item's cache ID
                               fragment: gql`
                                 fragment MyCartItem on CartItem {
