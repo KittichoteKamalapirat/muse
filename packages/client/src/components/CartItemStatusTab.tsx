@@ -7,25 +7,52 @@ interface CartItemStatusTabProps {
   userOrders: Function;
   cartItemStatus: CartItemStatus;
   setCartItemStatus: Function;
+  isForCreator: boolean;
 }
 
 interface CartItemStatusTabDisplay {
   status: CartItemStatus;
-  label: string;
+  labelForUser: string;
+  labelForCreator: string;
 }
 const CART_ITEM_STATUS_TABS_DISPLAY: CartItemStatusTabDisplay[] = [
-  { status: CartItemStatus.PaymentPending, label: "To pay" },
-  { status: CartItemStatus.ToDeliver, label: "Packing" },
-  { status: CartItemStatus.OnTheWay, label: "On the way" },
-  { status: CartItemStatus.Delivered, label: "Delivered" },
-  { status: CartItemStatus.Received, label: "Received" },
-  { status: CartItemStatus.Complete, label: "Complete" },
+  {
+    status: CartItemStatus.PaymentPending,
+    labelForUser: "To pay",
+    labelForCreator: "Not paid",
+  },
+  {
+    status: CartItemStatus.ToDeliver,
+    labelForUser: "Packing",
+    labelForCreator: "To deliver",
+  },
+  {
+    status: CartItemStatus.OnTheWay,
+    labelForUser: "On the way",
+    labelForCreator: "Shipping",
+  },
+  {
+    status: CartItemStatus.Delivered,
+    labelForUser: "Delivered",
+    labelForCreator: "Delivered",
+  },
+  {
+    status: CartItemStatus.Received,
+    labelForUser: "Received",
+    labelForCreator: "Received",
+  },
+  {
+    status: CartItemStatus.Complete,
+    labelForUser: "Complete",
+    labelForCreator: "Complete",
+  },
 ];
 
 export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
   userOrders,
   cartItemStatus,
   setCartItemStatus,
+  isForCreator,
 }) => {
   const handleClick = (cartItemStatus: CartItemStatus) => {
     userOrders({
@@ -58,7 +85,7 @@ export const CartItemStatusTab: React.FC<CartItemStatusTabProps> = ({
             tabStatus={item.status}
             onClick={() => handleClick(item.status)}
           >
-            {item.label}
+            {isForCreator ? item.labelForCreator : item.labelForUser}
           </Tab>
         ))}
       </Flex>

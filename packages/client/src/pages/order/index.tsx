@@ -91,6 +91,7 @@ const Order: React.FC<OrderProps> = ({}) => {
         userOrders={userOrders}
         cartItemStatus={cartItemStatus}
         setCartItemStatus={setCartItemStatus}
+        isForCreator={false}
       />
       <XWrapper>
         {/* show address */}

@@ -1,15 +1,5 @@
 query address {
   address {
-    name
-    phonenumber
-    id
-    userId
-    line1
-    line2
-    subdistrict
-    district
-    province
-    country
-    postcode
+    ...AddressSnippet
   }
 }

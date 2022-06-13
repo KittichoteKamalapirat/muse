@@ -4,12 +4,14 @@ import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/layout";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import LinkButton from "../../../components/atoms/LinkButton";
+import { CartItemStatusTab } from "../../../components/CartItemStatusTab";
 import { AddressComponent } from "../../../components/Icons/AddressComponent";
 import { TrackingDetail } from "../../../components/Icons/TrackingDetail";
 import { HeadingLayout } from "../../../components/Layout/HeadingLayout";
 import { OrderArraySkeleton } from "../../../components/skeletons/OrderArraySkeleton";
 import { inActiveGray, primaryColor } from "../../../components/Variables";
 import { Wrapper } from "../../../components/Wrapper/Wrapper";
+import { XWrapper } from "../../../components/Wrapper/XWrapper";
 
 import {
   CartItemStatus,
@@ -24,10 +26,12 @@ import { withApollo } from "../../../util/withApollo";
 interface OrderProps {}
 
 const Order: React.FC<OrderProps> = ({}) => {
-  const [cartItemStatus, setCartItemStatus] = useState<CartItemStatus>();
-
   const router = useRouter();
   const { status: statusParam } = router.query;
+
+  const [cartItemStatus, setCartItemStatus] = useState<CartItemStatus>(
+    statusParam as CartItemStatus
+  );
 
   const [creatorOrders, { loading, error, data: creatorOrdersData }] =
     useCreatorOrdersLazyQuery();
@@ -61,221 +65,147 @@ const Order: React.FC<OrderProps> = ({}) => {
   }
   return (
     <HeadingLayout heading="My order" mt={"40px"}>
-      <Flex
-        width="100%"
-        p={2}
-        ml={"auto"}
-        align="center"
-        justifyContent="flex-end"
-        overflowX="scroll"
-      >
-        <Box
-          flex={1}
-          textAlign="center"
-          borderBottom={1}
-          borderStyle="solid"
-          borderColor={
-            cartItemStatus === "PaymentPending" ? primaryColor : "white"
-          }
-          color={
-            cartItemStatus === "PaymentPending" ? primaryColor : inActiveGray
-          }
-          mx={1}
-          onClick={() => {
-            creatorOrders({
-              variables: {
-                status: CartItemStatus.PaymentPending,
-              },
-            });
-            setCartItemStatus(CartItemStatus.PaymentPending);
-          }}
-        >
-          Not paid
-        </Box>
+      <CartItemStatusTab
+        userOrders={creatorOrders}
+        cartItemStatus={cartItemStatus}
+        setCartItemStatus={setCartItemStatus}
+        isForCreator={true}
+      />
 
-        <Box
-          flex={1}
-          textAlign="center"
-          borderBottom={1}
-          borderStyle="solid"
-          borderColor={cartItemStatus === "ToDeliver" ? primaryColor : "white"}
-          color={cartItemStatus === "ToDeliver" ? primaryColor : inActiveGray}
-          mx={1}
-          onClick={() => {
-            creatorOrders({
-              variables: {
-                status: CartItemStatus.ToDeliver,
-              },
-            });
-            setCartItemStatus(CartItemStatus.ToDeliver);
-          }}
-        >
-          To deliver
-        </Box>
+      <XWrapper>
+        {/* address */}
 
-        <Box
-          flex={1}
-          textAlign="center"
-          borderBottom={1}
-          borderStyle="solid"
-          borderColor={cartItemStatus === "OnTheWay" ? primaryColor : "white"}
-          color={cartItemStatus === "OnTheWay" ? primaryColor : inActiveGray}
-          mx={1}
-          onClick={() => {
-            creatorOrders({
-              variables: {
-                status: CartItemStatus.OnTheWay,
-              },
-            });
+        {!creatorOrdersData ? (
+          <Text>No data</Text>
+        ) : (
+          <Box bgColor="gray.200">
+            {creatorOrdersData.creatorOrders.map((orderItem, index) => (
+              <Box bgColor="white" key={index}>
+                <Flex m="10px">
+                  <Box>
+                    {orderItem.cartItems.map((cartItem, subindex) => (
+                      <Box key={subindex} my="6px">
+                        <Flex>
+                          <Box flex={1}>
+                            <Image
+                              src={cartItem.mealkit.thumbnail.url}
+                              alt="image"
+                              fallbackSrc="oops.png"
+                            />
+                          </Box>
 
-            setCartItemStatus(CartItemStatus.OnTheWay);
-          }}
-        >
-          Shipping
-        </Box>
+                          <Box flex={3} m={1} textAlign="left">
+                            <Heading size="md">
+                              {cartItem.mealkit?.name}
+                            </Heading>
 
-        <Box
-          flex={1}
-          textAlign="center"
-          borderBottom={1}
-          borderStyle="solid"
-          borderColor={cartItemStatus === "Delivered" ? primaryColor : "white"}
-          color={cartItemStatus === "Delivered" ? primaryColor : inActiveGray}
-          mx={1}
-          onClick={() => {
-            creatorOrders({
-              variables: {
-                status: CartItemStatus.Delivered,
-              },
-            });
+                            <Text>{cartItem.user?.username}</Text>
 
-            setCartItemStatus(CartItemStatus.Delivered);
-          }}
-        >
-          Delivered
-        </Box>
-      </Flex>
+                            <Flex justifyContent="space-between" fontSize="sm">
+                              <Text>Unit price</Text>
+                              <Text color="gray.700" fontWeight="normal">
+                                {cartItem.mealkit?.price}
+                              </Text>
+                            </Flex>
 
-      {!creatorOrdersData ? (
-        <Text>No data</Text>
-      ) : (
-        <Box bgColor="gray.200">
-          {creatorOrdersData.creatorOrders.map((orderItem, index) => (
-            <Box bgColor="white" key={index}>
-              <Flex m="10px">
-                <Box>
-                  {orderItem.cartItems.map((cartItem, subindex) => (
-                    <Box key={subindex} my="6px">
-                      <Flex>
-                        <Box flex={1}>
-                          <Image
-                            src={cartItem.mealkit.thumbnail.url}
-                            alt="image"
-                            fallbackSrc="oops.png"
-                          />
-                        </Box>
-
-                        <Box flex={3} m={1} textAlign="left">
-                          <Heading size="md">{cartItem.mealkit?.name}</Heading>
-
-                          <Text>{cartItem.user?.username}</Text>
-
-                          <Flex justifyContent="space-between" fontSize="sm">
-                            <Text>Unit price</Text>
-                            <Text color="gray.700" fontWeight="normal">
-                              {cartItem.mealkit?.price}
-                            </Text>
-                          </Flex>
-
-                          <Flex justifyContent="space-between" fontSize="sm">
-                            <Text>Quantity</Text>
-                            <Text color="gray.700" fontWeight="normal">
-                              x {cartItem.quantity}
-                            </Text>
-                          </Flex>
-                          <Divider />
-                          <Flex justifyContent="space-between" fontSize="sm">
-                            <Text>Total</Text>
-                            <Text> {cartItem.total} </Text>
-                          </Flex>
-                          <Divider />
-                        </Box>
-                      </Flex>
-                    </Box>
-                  ))}
-                </Box>
-              </Flex>
-
-              {/* show delivery info and action */}
-
-              <Flex justifyContent="space-between" fontSize="sm">
-                <Text>Delivery Fee</Text>
-                <Text color="gray.700" fontWeight="normal">
-                  {orderItem.deliveryFee}
-                </Text>
-              </Flex>
-
-              <Divider />
-              <Flex justifyContent="space-between" fontSize="sm">
-                <Text>Gross</Text>
-
-                <Text>{orderItem.deliveryFee!} </Text>
-              </Flex>
-
-              {cartItemStatus !== CartItemStatus.ToDeliver ? null : (
-                <Box>
-                  <Box p="10px">
-                    <Flex alignItems="center">
-                      <Avatar
-                        margin="auto"
-                        m={2}
-                        size="xs"
-                        src={orderItem.avatar}
-                        name="creator avatar"
-                      />
-                      <Text>{orderItem.username}</Text>
-                    </Flex>
-
-                    {/* delivery info */}
-                    <Box>
-                      <Heading fontSize="md">Address Info</Heading>
-                      {orderItem.address ? (
-                        <AddressComponent address={orderItem.address} />
-                      ) : null}
-                    </Box>
-
-                    <Box>Delivery Fee: {orderItem.deliveryFee}</Box>
-
-                    <LinkButton
-                      href={{
-                        pathname: "/order/tracking/create",
-                        query: {
-                          cartItemIds: orderItem.cartItems.map(
-                            (cartItem) => cartItem.id
-                          ),
-
-                          ...(orderItem.tracking?.id && {
-                            id: orderItem.tracking?.id,
-                          }),
-                        },
-                      }}
-                    >
-                      {orderItem.tracking
-                        ? "Update tracking"
-                        : `Deliver to ${orderItem.username}`}
-                    </LinkButton>
+                            <Flex justifyContent="space-between" fontSize="sm">
+                              <Text>Quantity</Text>
+                              <Text color="gray.700" fontWeight="normal">
+                                x {cartItem.quantity}
+                              </Text>
+                            </Flex>
+                            <Divider />
+                            <Flex justifyContent="space-between" fontSize="sm">
+                              <Text>Total</Text>
+                              <Text> {cartItem.total} </Text>
+                            </Flex>
+                            <Divider />
+                          </Box>
+                        </Flex>
+                      </Box>
+                    ))}
                   </Box>
-                </Box>
-              )}
+                </Flex>
 
-              {cartItemStatus !== CartItemStatus.OnTheWay &&
-                orderItem.tracking && (
-                  <TrackingDetail tracking={orderItem.tracking} />
+                {/* show delivery info and action */}
+
+                <Flex justifyContent="space-between" fontSize="sm">
+                  <Text>Delivery Fee</Text>
+                  <Text color="gray.700" fontWeight="normal">
+                    {orderItem.deliveryFee}
+                  </Text>
+                </Flex>
+
+                <Divider />
+                <Flex justifyContent="space-between" fontSize="sm">
+                  <Text>Gross</Text>
+
+                  <Text>
+                    {orderItem.deliveryFee +
+                      orderItem.cartItems.reduce(
+                        (prev, curr) => prev + curr.total,
+                        0
+                      )}{" "}
+                  </Text>
+                </Flex>
+
+                {[
+                  CartItemStatus.PaymentPending,
+                  CartItemStatus.ToDeliver,
+                  CartItemStatus.OnTheWay,
+                ].includes(cartItemStatus!) && (
+                  <Box>
+                    <Box p="10px">
+                      <Flex alignItems="center">
+                        <Avatar
+                          margin="auto"
+                          m={2}
+                          size="xs"
+                          src={orderItem.avatar}
+                          name="creator avatar"
+                        />
+                        <Text>{orderItem.username}</Text>
+                      </Flex>
+
+                      {/* delivery info */}
+                      <Box>
+                        <Heading fontSize="md">Address Info</Heading>
+                        {orderItem.address ? (
+                          <AddressComponent address={orderItem.address} />
+                        ) : null}
+                      </Box>
+
+                      <LinkButton
+                        href={{
+                          pathname: "/order/tracking/create",
+                          query: {
+                            cartItemIds: orderItem.cartItems.map(
+                              (cartItem) => cartItem.id
+                            ),
+
+                            ...(orderItem.tracking?.id && {
+                              id: orderItem.tracking?.id,
+                            }),
+                          },
+                        }}
+                      >
+                        {orderItem.tracking
+                          ? "Update tracking"
+                          : `Deliver to ${orderItem.username}`}
+                      </LinkButton>
+                    </Box>
+                  </Box>
                 )}
-            </Box>
-          ))}
-        </Box>
-      )}
+
+                {cartItemStatus !== CartItemStatus.OnTheWay &&
+                  orderItem.tracking && (
+                    <TrackingDetail tracking={orderItem.tracking} />
+                  )}
+              </Box>
+            ))}
+          </Box>
+        )}
+      </XWrapper>
     </HeadingLayout>
   );
 };
