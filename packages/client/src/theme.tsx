@@ -1,7 +1,6 @@
 import {
   extendTheme,
   withDefaultColorScheme,
-  theme as baseTheme,
   ThemeConfig,
 } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
@@ -41,7 +40,7 @@ const theme: ThemeConfig = extendTheme(
           color: "white",
         },
         variants: {
-          transparent: (props: any) => ({
+          transparent: () => ({
             bg: "transparent",
             color: "black",
           }),

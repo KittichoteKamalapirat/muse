@@ -1,9 +1,3 @@
-// const unitOptions = [
-//   // weight
-//   { value: "gram", label: "g" },
-//   { value: "kilogram", label: "kg" },
-
-import { UnitEnum } from "../src/types/utils/UnitEnum";
 import { UnitSelectOption } from "./unitSelectOption";
 
 const unitOptions = (ingredientName: string) => [

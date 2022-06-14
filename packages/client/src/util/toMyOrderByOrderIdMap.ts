@@ -1,4 +1,4 @@
-import { Address, CartItem, Tracking } from "../generated/graphql";
+import { Address, CartItem } from "../generated/graphql";
 
 //format = array by orderId
 //format = array of creator,avatar cartItems
@@ -14,23 +14,20 @@ export type mappedCartItemsByOrderResult = {
   // tracking: Tracking;
 };
 
-const reformat = (item: CartItem): mappedCartItemsByOrderResult => {
-  const cartItemByOrder = {
-    orderId: item.orderId!,
-    username: item.user?.username!,
-    avatar: item.user?.avatar!,
-    cartItems: [item]!,
-    address: item.user?.address!,
-    deliveryFee: item.mealkit?.deliveryFee!,
-    // tracking: item.tracking!,
-  };
-  return cartItemByOrder;
-};
+const reformat = (item: CartItem): mappedCartItemsByOrderResult => ({
+  orderId: item.orderId,
+  username: item.user?.username as string,
+  avatar: item.user?.avatar as string,
+  cartItems: [item],
+  address: item.user?.address as Address,
+  deliveryFee: item.mealkit?.deliveryFee,
+  // tracking: item.tracking,
+});
 
 export const toMyOrderByOrderIdMap = (cartItems: CartItem[]) => {
   const mappedArray: mappedCartItemsByOrderResult[] = [];
 
-  cartItems.map((item, index) => {
+  cartItems.map((item) => {
     if (mappedArray.length > 0) {
       const repeatedIndex = mappedArray
         .map((obj) => obj.orderId)
@@ -43,7 +40,7 @@ export const toMyOrderByOrderIdMap = (cartItems: CartItem[]) => {
         //deadling with delivery Fee
 
         const currentDeliveryFee = mappedArray[repeatedIndex].deliveryFee;
-        const newDeliveryFee = item.mealkit?.deliveryFee!;
+        const newDeliveryFee = item.mealkit?.deliveryFee;
         //get the delivery fee from the mealkit with the highest delivery fee
         if (currentDeliveryFee < newDeliveryFee) {
           mappedArray[repeatedIndex].deliveryFee = newDeliveryFee;
