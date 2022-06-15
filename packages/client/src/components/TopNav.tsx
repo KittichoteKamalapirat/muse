@@ -4,7 +4,6 @@ import React from "react";
 import { useCartItemsQuery } from "../generated/graphql";
 import Badge from "./atoms/Badge";
 import { BasketIcon } from "./Icons/BasketIcon";
-import { Layout } from "./Layout/Layout";
 import { Error } from "./skeletons/Error";
 import { Loading } from "./skeletons/Loading";
 
@@ -16,18 +15,10 @@ export const TopNav = () => {
   } = useCartItemsQuery();
 
   if (cartItemsLoading) {
-    return (
-      <Layout heading="loading">
-        <Loading />
-      </Layout>
-    );
+    return <Loading />; // IMPORTANT: don't add layout because it will result in infinite loop navbar calling layout calling navbart
   }
   if (cartItemsError) {
-    return (
-      <Layout heading="error">
-        <Error text={cartItemsError.message} />
-      </Layout>
-    );
+    return <Error text={cartItemsError.message} />;
   }
 
   const cartItemsNum = cartItems?.cartItems.length;

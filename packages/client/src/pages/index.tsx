@@ -13,6 +13,7 @@ import { useMeQuery, usePostsQuery } from "../generated/graphql";
 import { withApollo } from "../util/withApollo";
 
 const Index = () => {
+  console.log("index.tsx");
   const { data: meData, loading: meLoading } = useMeQuery(); //this is renaming synta when destructing data => meData
 
   const { data, error, loading, fetchMore, variables } = usePostsQuery({
