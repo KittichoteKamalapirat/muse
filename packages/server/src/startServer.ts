@@ -9,20 +9,8 @@ import session from "express-session";
 import Redis from "ioredis";
 import { buildSchema } from "type-graphql";
 import { COOKIE_NAME, IS_PROD } from "./constants";
-import { AddressResolver } from "./resolvers/address";
-import { CartItemResolver } from "./resolvers/cartItem";
-import { CartItemNotiResolver } from "./resolvers/cartItemNoti";
-import { FollowResolver } from "./resolvers/follow";
-import { ImageResolver } from "./resolvers/image";
-import { MealkitResolver } from "./resolvers/mealkit";
-import { OrderResolver } from "./resolvers/order";
-import { PaymentResolver } from "./resolvers/payment";
-import { PaymentInfoResolver } from "./resolvers/paymentInfo";
 import { PostResolver } from "./resolvers/post";
-import { ReviewResolver } from "./resolvers/review";
-import { TrackingResolver } from "./resolvers/tracking";
 import { UserResolver } from "./resolvers/user";
-import { VideoResolver } from "./resolvers/video";
 import paymentRouter from "./routes/payment";
 import s3Router from "./routes/s3";
 import trackingRouter from "./routes/tracking";
@@ -30,7 +18,6 @@ import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
-import { S3Resolver } from "./utils/resolvers/s3";
 // import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
 // //  comment to tigger circleci
 
@@ -153,24 +140,7 @@ export const startServer = async () => {
 
   try {
     const schema = await buildSchema({
-      resolvers: [
-        UserResolver,
-        PostResolver,
-        AddressResolver,
-        MealkitResolver,
-        CartItemResolver,
-        CartItemNotiResolver,
-        PaymentResolver,
-        OrderResolver,
-        FollowResolver,
-        PaymentInfoResolver,
-        TrackingResolver,
-        S3Resolver,
-        ReviewResolver,
-        PostResolver,
-        VideoResolver,
-        ImageResolver,
-      ],
+      resolvers: [UserResolver, PostResolver, PostResolver],
       validate: false,
     });
 
