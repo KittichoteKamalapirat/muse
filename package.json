@@ -5,6 +5,8 @@
       "packages/*"
     ],
     "nohoist": [
+      "**/expo/**",
+      "**/expo",
       "**/typeorm/**",
       "**/typeorm",
       "**/typeorm-seeding/**",
