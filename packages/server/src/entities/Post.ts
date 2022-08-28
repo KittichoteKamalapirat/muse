@@ -1,16 +1,15 @@
 import { Field, Int, ObjectType } from "type-graphql";
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
   BaseEntity,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
   ManyToOne,
   OneToMany,
-  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
-import { Mealkit, Upvote, User, Ingredient, Video, Image } from ".";
+import { Upvote, User } from ".";
 import Cooktime from "./utils/post/ObjectType/Cooktime";
 
 @ObjectType()
@@ -75,30 +74,6 @@ class Post extends BaseEntity {
 
   @OneToMany(() => Upvote, (upvote) => upvote.post, { cascade: true })
   upvotes: Upvote[];
-
-  @Field(() => [Ingredient])
-  @Column("jsonb")
-  ingredients: Ingredient[];
-  // @Column({type: 'jsonb', array: true, nullable: true})
-  // testJson: object[];
-
-  @Field(() => [Mealkit], { nullable: true })
-  @OneToMany(() => Mealkit, (mealkit) => mealkit.post, {
-    cascade: true,
-  })
-  mealkits: Mealkit[];
-
-  @Field(() => Video)
-  @OneToOne(() => Video, (video) => video.post, {
-    cascade: true,
-  })
-  video: Video;
-
-  @Field(() => Image)
-  @OneToOne(() => Image, (image) => image.post, {
-    cascade: true,
-  })
-  image: Image;
 
   @Field(() => String)
   @CreateDateColumn()

@@ -1,17 +1,3 @@
 export { default as User } from "./User";
-export { default as Address } from "./Address";
-export { default as Ingredient } from "./Ingredient";
 export { default as Post } from "./Post";
-export { default as Mealkit } from "./Mealkit";
-export { default as CartItem } from "./CartItem";
-export { default as CartItemNoti } from "./CartItemNoti";
-export { default as Payment } from "./Payment";
-export { default as Order } from "./Order";
-export { default as Follow } from "./Follow";
-export { default as PaymentInfo } from "./PaymentInfo";
-export { default as Tracking } from "./Tracking";
 export { default as Upvote } from "./Upvote";
-export { default as Review } from "./Review";
-export { default as Video } from "./Video";
-export { default as Image } from "./Image";
-export { default as MealkitFile } from "./MealkitFile";
