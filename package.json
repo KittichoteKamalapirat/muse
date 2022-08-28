@@ -24,5 +24,6 @@
     "docker:push": "docker push kittishane/muse:$VERSION",
     "ci:docker": "yarn docker:build && yarn docker:login && yarn docker:push",
     "ci:dokku": "ssh shane@128.199.205.119 && docker pull kittishane/muse:$VERSION && docker tag kittishane/muse:$VERSION dokku/server:latest && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server latest"
-  }
+  },
+  "dependencies": {}
 }

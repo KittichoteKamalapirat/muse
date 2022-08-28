@@ -1,0 +1,14 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon dist/index.js",
+    "watch": "tsc -w"
+  },
+  "author": "Shane",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^4.5.1"
+  }
+}
