@@ -13,14 +13,12 @@ import {
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { rollbar } from "../config/initializers/rollbar";
-import { s3Bucket } from "../constants";
-import { Image, Post, Upvote, User, Video } from "../entities";
-import { PaginatedPosts, SignedS3 } from "../entities/utils";
+import { Post, Upvote, User } from "../entities";
+import { PaginatedPosts } from "../entities/utils";
 import { PostInput } from "../entities/utils/post/InputType/PostInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
 import getPosts from "../utils/getPosts";
-import { s3, s3Params } from "../utils/s3";
 
 @Resolver(Post)
 export class PostResolver {
@@ -81,18 +79,15 @@ export class PostResolver {
     };
   }
 
-  // to provide the return type.
-  // Since the method is async, the reflection metadata system shows the return type as a Promise,
-  // so we have to add the decorator's parameter as returns => [Recipe] to declare it resolves to an array of Recipe object types.
-  @Mutation(() => Boolean) // return Boolean -> vote returns boolean vote is an argument for Mutation()?
-  @UseMiddleware(isAuth) // to protect the routh
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
   async vote(
     @Arg("postId", () => Int) postId: number,
     @Arg("value", () => Int) value: number,
     @Ctx() { req }: MyContext
   ) {
-    const { userId } = req.session; // userId = req.session.userId
-    const isUpvote = value !== 0; // happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
+    const { userId } = req.session;
+    const isUpvote = value !== 0;
     const realValue = isUpvote ? 1 : -1;
 
     const upvoted = await Upvote.findOne({ where: { postId, userId } });
@@ -162,9 +157,6 @@ export class PostResolver {
     };
   }
 
-  //   @Query(() => Post)
-  //   post(@Arg("id", () => Int) id: number) {}
-
   @Query(() => [Post])
   async postsByCreator(
     @Arg("userId") userId: string
@@ -197,15 +189,11 @@ export class PostResolver {
     @Arg("imageId", () => Int) imageId: number,
     @Ctx() { req }: MyContext
   ): Promise<Post | Error> {
-    // 2 sql queries one to insert and one to select
     try {
-      // TODO create transaction
       const post = await Post.create({
         ...input,
         creatorId: req.session.userId,
       }).save();
-      await Video.update({ id: videoId }, { postId: post.id });
-      await Image.update({ id: imageId }, { postId: post.id });
       return post;
     } catch (error) {
       rollbar.log(error);
@@ -218,30 +206,13 @@ export class PostResolver {
   @UseMiddleware(isAuth) // have to log in to update a post
   async updatePost(
     @Arg("input") input: PostInput,
-    @Arg("newImageUrl") newImageUrl: string,
     @Arg("id", () => Int) id: number,
-    // @Arg("title") title: string,
-    // @Arg("text") text: string,
-    // @Arg("videoUrl") videoUrl: string,
-    // @Arg("ingredients", () => [IngredientInput]) ingredients: IngredientInput[],
+
     @Ctx() { req }: MyContext
   ): Promise<Post | Error | undefined> {
-    // const result = await getConnection()
-    //   .createQueryBuilder()
-    //   .update(Post)
-    //   .set(input)
-    //   .where('id = :id and "creatorId" = :creatorId', {
-    //     id,
-    //     creatorId: req.session.userId,
-    //   })
-    //   .returning("*")
-    //   .execute();
-
     try {
       await Post.update({ id, creatorId: req.session.userId }, { ...input });
       const post = await Post.findOne(id);
-
-      await Image.update({ postId: id }, { url: newImageUrl });
 
       return post;
     } catch (error) {
@@ -258,37 +229,8 @@ export class PostResolver {
     @Arg("id", () => Int) id: number,
     @Ctx() { req }: MyContext
   ): Promise<boolean> {
-    // only the owner can delete her post
-
-    // Not casecade way
-    // const post = await Post.findOne(id)
-    // if(!post){
-    //   return false
-    // }
-
-    // if(post.creatorId !== req.session.userId ){
-    //   throw new Error('not authorized')
-    // }
-    // await Upvote.delete({postId: id})
-    // await Post.delete({id: id})
-
     await Post.delete({ id, creatorId: req.session.userId });
     return true;
-  }
-
-  @Mutation(() => SignedS3)
-  async signAvatarS3(
-    @Arg("name") name: string,
-    @Arg("filetype") filetype: string
-  ): Promise<SignedS3> {
-    const s3AvatarParams = s3Params(name, filetype);
-    const signedRequest = await s3.getSignedUrl("putObject", s3AvatarParams);
-
-    const url = `https://${s3Bucket}.s3.amazonaws.com/${name}`;
-    return {
-      signedRequest,
-      url,
-    };
   }
 
   @UseMiddleware(isAuth)

@@ -15,8 +15,7 @@ import { getConnection } from "typeorm";
 import { v4 } from "uuid";
 import { rollbar } from "../config/initializers/rollbar";
 import { COOKIE_NAME, FORGET_PASSWORD_PREFIX, IS_PROD } from "../constants";
-import { Mealkit, User } from "../entities";
-import Follow from "../entities/Follow";
+import { User } from "../entities";
 import {
   UserInput,
   UsernamePasswordInput,
@@ -25,8 +24,6 @@ import {
 } from "../entities/utils";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
-import thanksForRegister from "../utils/notifications/emailContents/register";
-import { sendEmail } from "../utils/sendEmail";
 import { validateRegister } from "../utils/validateRegister";
 
 // Resolver starts
@@ -40,19 +37,6 @@ export class UserResolver {
     }
     // current user watns to see someone elses email
     return "";
-  }
-
-  @UseMiddleware(isAuth)
-  @FieldResolver(() => Boolean)
-  async isFollowed(@Root() parent: User, @Ctx() { req }: MyContext) {
-    const isFollowing = await Follow.findOne({
-      where: { userId: parent.id, followerId: req.session.userId },
-    });
-
-    if (isFollowing) {
-      return true;
-    }
-    return false;
   }
 
   @Mutation(() => UserResponse)
@@ -135,32 +119,7 @@ export class UserResolver {
       1000 * 60 * 60 * 24 * 3
     ); // 3days
 
-    await sendEmail(
-      email,
-      "🔑 Reset your password",
-      `<a href="http://localhost:3000/change-password/${token}">Reset Password</a>`
-    );
     return true;
-  }
-
-  @FieldResolver(() => UserReview)
-  async userReview(@Root() user: User): Promise<UserReview | Error> {
-    try {
-      const mealkits = await Mealkit.find({ where: { creatorId: user.id } });
-      let sum: number = 0;
-      let counter: number = 0;
-      mealkits.forEach((mealkit) => {
-        sum += mealkit.reviewsSum;
-        counter += mealkit.reviewsCounter;
-      });
-
-      const avg = sum / counter || counter;
-
-      return { reviewCounter: counter, reviewScore: avg };
-    } catch (error) {
-      rollbar.log(error);
-      return new Error("cannot find");
-    }
   }
 
   @Query(() => [User])
@@ -273,14 +232,6 @@ export class UserResolver {
     // automatically logged in after register
     // set a cookie on the user
     req.session.userId = user.id;
-
-    // TODO cron jobs?
-    await sendEmail(
-      data.email,
-      "Hello from Cookknow ",
-      thanksForRegister(data.username)
-    );
-
     return { user };
   }
 
