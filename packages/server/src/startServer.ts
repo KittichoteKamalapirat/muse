@@ -16,7 +16,7 @@ import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
-// import { useMeQuery, shitColor, primaryColor } from "@cookknow/shared-package";
+// import { useMeQuery, shitColor, primaryColor } from "@muse/shared-package";
 // //  comment to tigger circleci
 
 // determine which .env file to use
@@ -71,7 +71,7 @@ export const startServer = async () => {
   // sendEmail(
   //   "kittichoteshane@gmail.com",
   //   "subject",
-  //   ` Go to <a href="https://cookknow.com/"> cookknow</a>`
+  //   ` Go to <a href="https://muse.com/"> muse</a>`
   // );
   // generateQr();
   // generateQr();
@@ -114,7 +114,7 @@ export const startServer = async () => {
         httpOnly: true, // so that Javascript's front end can't access cookie
         sameSite: "lax", // csrf
         secure: IS_PROD, // cookie onl works in https
-        domain: IS_PROD ? ".cookknow.com" : undefined, // no need if in development
+        domain: IS_PROD ? ".muse.com" : undefined, // no need if in development
       },
       saveUninitialized: false,
       secret: process.env.SESSION_SECRET,

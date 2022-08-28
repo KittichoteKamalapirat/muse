@@ -20,7 +20,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: chain123
-          POSTGRES_DB: cookknowdb_test
+          POSTGRES_DB: musedb_test
 
       - image: cimg/redis:6.2.6
         auth:
@@ -101,7 +101,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: chain123
-          POSTGRES_DB: cookknowdb_test
+          POSTGRES_DB: musedb_test
       - image: cimg/redis:6.2.6
         auth:
           username: $DOCKERHUB_USERNAME
@@ -153,9 +153,9 @@ jobs:
       - run:
           name: Build docker image and push to docker hub
           command: |
-            docker build -t kittishane/cookknow-test:$VERSION .
+            docker build -t kittishane/muse-test:$VERSION .
             docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-            docker push kittishane/cookknow-test:$VERSION
+            docker push kittishane/muse-test:$VERSION
 
       # this part differs from deploy prod
       - add_ssh_keys:
@@ -165,7 +165,7 @@ jobs:
       # this part differs from deploy prod
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
-          command: ssh root@139.59.110.114 " docker pull kittishane/cookknow-test:$VERSION && docker tag kittishane/cookknow-test:$VERSION dokku/test-api:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
+          command: ssh root@139.59.110.114 " docker pull kittishane/muse-test:$VERSION && docker tag kittishane/muse-test:$VERSION dokku/test-api:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
 
       - slack/notify:
           event: fail
@@ -184,7 +184,7 @@ jobs:
         environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: chain123
-          POSTGRES_DB: cookknowdb_test
+          POSTGRES_DB: musedb_test
       - image: cimg/redis:6.2.6
         auth:
           username: $DOCKERHUB_USERNAME
@@ -251,7 +251,7 @@ jobs:
           # working_directory: packages/server
           command: yarn ci:docker
 
-      # circleci_digital_ocean_cookknow private ssh key
+      # circleci_digital_ocean_muse private ssh key
       - add_ssh_keys:
           fingerprints:
             - "8f:6b:c1:a9:7c:d6:e6:cc:e7:c7:61:07:f9:30:35:93"
@@ -259,7 +259,7 @@ jobs:
       # run from root
       - run:
           name: ssh into dokku, pull from hub, tag, and deploy
-          command: ssh shane@128.199.205.119 " docker pull kittishane/cookknow:$VERSION && docker tag kittishane/cookknow:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
+          command: ssh shane@128.199.205.119 " docker pull kittishane/muse:$VERSION && docker tag kittishane/muse:$VERSION dokku/server:$VERSION && echo $DOKKU_PASSWORD | sudo -S dokku tags:deploy server $VERSION"
 
       - slack/notify:
           event: fail
@@ -310,7 +310,7 @@ workflows:
                 event: always
 
       - server-deploy-test:
-          name: 🚀 Deploy to test.cookknow
+          name: 🚀 Deploy to test.muse
           requires:
             - 🧪  Run jest and cypress
             # - server-successful-build-slack-notification

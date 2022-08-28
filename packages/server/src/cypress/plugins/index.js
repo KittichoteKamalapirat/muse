@@ -20,7 +20,7 @@ const getConnectionOptions = (dropSchema) => ({
   logging: true,
   synchronize: true,
   // url: Cypress.env("dbUrl"),
-  url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
+  url: "postgresql://postgres:chain123@localhost:5432/musedb_test",
 });
 
 // eslint-disable-next-line no-unused-vars
@@ -100,7 +100,7 @@ module.exports = (on, config) => {
         const videoData = {
           name: "video1.mp4",
           fileType: "video/mp4",
-          url: "https://cookknow.s3.amazonaws.com/video1.mp4",
+          url: "https://muse.s3.amazonaws.com/video1.mp4",
           postId: post.id,
         };
 
@@ -109,7 +109,7 @@ module.exports = (on, config) => {
         const imageData = {
           name: "thumbnail1.png",
           fileType: "image/png",
-          url: "https://cookknow.s3.amazonaws.com/thumbnail1.png",
+          url: "https://muse.s3.amazonaws.com/thumbnail1.png",
           postId: post.id,
         };
         imageRepository.save(imageData);
@@ -117,7 +117,7 @@ module.exports = (on, config) => {
         const mealkitInput = {
           name: "Marinara Mealkit",
           items: [],
-          images: ["https://cookknow.s3.amazonaws.com/thumbnail1.png"],
+          images: ["https://muse.s3.amazonaws.com/thumbnail1.png"],
           price: 100,
           portion: 1,
           postId: post.id,
@@ -130,7 +130,7 @@ module.exports = (on, config) => {
         const mealkitFileData = {
           name: "thumbnail1.png",
           fileType: "image/png",
-          url: "https://cookknow.s3.amazonaws.com/thumbnail1.png",
+          url: "https://muse.s3.amazonaws.com/thumbnail1.png",
           mealkitId: mealkit.id,
         };
 

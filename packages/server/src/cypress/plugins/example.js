@@ -25,7 +25,7 @@ module.exports = (on, config) => {
           logging: false,
           synchronize: true,
           // url: Cypress.env("dbUrl"),
-          url: "postgresql://postgres:chain123@localhost:5432/cookknowdb_test",
+          url: "postgresql://postgres:chain123@localhost:5432/musedb_test",
         })
         .then(async (connection) => {
           const uuid = uuidv4();
