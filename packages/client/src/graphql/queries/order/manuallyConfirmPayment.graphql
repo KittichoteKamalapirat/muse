@@ -1,3 +1,0 @@
-query manuallyConfirmPayment($paymentId: Int!) {
-  manuallyConfirmPayment(paymentId: $paymentId)
-}

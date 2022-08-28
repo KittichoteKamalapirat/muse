@@ -1,3 +1,0 @@
-mutation deleteAddress($id: Int!) {
-  deleteAddress(id: $id)
-}

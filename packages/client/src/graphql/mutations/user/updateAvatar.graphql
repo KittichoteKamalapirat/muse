@@ -1,6 +1,0 @@
-mutation updateAvatar($newAvatar: String!) {
-  updateAvatar(newAvatar: $newAvatar) {
-    id
-    avatar
-  }
-}

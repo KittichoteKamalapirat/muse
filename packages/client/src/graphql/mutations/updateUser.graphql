@@ -1,8 +1,0 @@
-mutation updateUser($input: UserInput!) {
-  updateUser(input: $input) {
-    id
-    email
-    phonenumber
-    about
-  }
-}

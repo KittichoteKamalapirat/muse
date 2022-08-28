@@ -1,4 +1,0 @@
-# Write your query or mutation here
-mutation receivedCartItem($id: Int!) {
-  receivedCartItem(id: $id)
-}

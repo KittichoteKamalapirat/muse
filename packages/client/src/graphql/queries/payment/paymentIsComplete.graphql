@@ -1,3 +1,0 @@
-query PaymentIsComplete($paymentId: Int!) {
-  paymentIsComplete(paymentId: $paymentId)
-}

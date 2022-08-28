@@ -1,9 +1,0 @@
-.label {
-  font-weight: bold;
-}
-
-.required::after {
-  content: "*";
-  color: red;
-  margin-left: 2px;
-}

@@ -1,6 +1,0 @@
-mutation adminUpdateCartItemStatus($id: Int!, $status: CartItemStatus!) {
-  adminUpdateCartItemStatus(id: $id, status: $status) {
-    id
-    status
-  }
-}

@@ -1,3 +1,0 @@
-mutation uploadSlip($paymentId: Int!, $slipUrl: String!) {
-  uploadSlip(paymentId: $paymentId, slipUrl: $slipUrl)
-}

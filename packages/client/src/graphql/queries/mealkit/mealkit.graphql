@@ -1,5 +1,0 @@
-query mealkit($id: Int!) {
-  mealkit(id: $id) {
-    ...MealkitSnippet
-  }
-}

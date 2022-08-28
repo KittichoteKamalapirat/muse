@@ -1,8 +1,0 @@
-query paymentInfo {
-  paymentInfo {
-    id
-    userId
-    bankCode
-    bankAccount
-  }
-}

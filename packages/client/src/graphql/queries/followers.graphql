@@ -1,9 +1,0 @@
-query followers($userId: String!) {
-  followers(userId: $userId) {
-    id
-    followerId
-    follower {
-      username
-    }
-  }
-}

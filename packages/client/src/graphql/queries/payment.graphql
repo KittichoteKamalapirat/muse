@@ -1,8 +1,0 @@
-query payment($id: Int!) {
-  payment(id: $id) {
-    id
-    qrUrl
-    slipUrl
-    amount
-  }
-}
