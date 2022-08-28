@@ -7,6 +7,7 @@ export const createTypeORMConn = async (nodeEnv?: string) => {
     ? await getConnectionOptions(nodeEnv)
     : await getConnectionOptions("development"); // refer to 1.ormconfig.json whether dev or test option 2.NODE_ENV=xxx in package.json
 
+  console.log("process.env.DATABASE_URL", process.env.DATABASE_URL);
   return createConnection({
     ...connectionOptions,
     url: process.env.DATABASE_URL, // this can't be set in ormconfig due to dynamic value

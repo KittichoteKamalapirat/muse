@@ -16,17 +16,7 @@ import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
-// import { useMeQuery, shitColor, primaryColor } from "@muse/shared-package";
-// //  comment to tigger circleci
-
-// determine which .env file to use
-// if production -> dockerfile copy and put in .env
-
-// if (process.env.NODE_ENV==="test") {
-//   dotenv.config({ path: `${__dirname}/../.env.${process.env.NODE_ENV}` });
-// } else {
-//   dotenv.config();
-// }
+import { Server } from "socket.io";
 
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
@@ -60,21 +50,7 @@ export const startServer = async () => {
 
   const conn = await createTypeORMConn(process.env.NODE_ENV);
 
-  // rollbar.error("ccc");
-
-  // rollbar.log("Hello from server!");
-  // await conn.runMigrations();
   const app = express();
-
-  // console.log(process.memoryUsage())
-  // sendSMS();
-  // sendEmail(
-  //   "kittichoteshane@gmail.com",
-  //   "subject",
-  //   ` Go to <a href="https://muse.com/"> muse</a>`
-  // );
-  // generateQr();
-  // generateQr();
 
   app.use(
     express.urlencoded({
@@ -99,8 +75,6 @@ export const startServer = async () => {
       credentials: true,
     })
   );
-
-  // app.use(rollbar.errorHandler());
 
   app.use(
     session({
@@ -140,21 +114,33 @@ export const startServer = async () => {
       }), // so that we can access session because session is stick with request
     });
 
-    // const apolloServer = new ApolloServer({
-    //     schema: await buildSchema({
-    //         resolvers: [HelloResolver],
-    //         validate: false,
-    //     })
-    // })
-
     apolloServer.applyMiddleware({ app, cors: false });
-    // console.log(process.memoryUsage());
 
-    //   const PORT = process.env.NODE_ENV === "test" ? 0 : parseInt(process.env.PORT);
     const PORT = parseInt(process.env.PORT, 10);
     const server = app.listen(PORT, () => {
       console.log(`server started on port ${PORT}`);
     });
+
+    // web socket start -----------------------------------
+    const io = new Server(server, {
+      cors: {
+        origin: ["http://localhost:19000", "http://localhost:19001"],
+      },
+    });
+
+    io.on("connection", (socket) => {
+      console.log("id", socket.id);
+      console.log("socket started");
+      socket.on("incrementUpvote", (placeId, songId, upvotesNum) => {
+        console.log("placeId", placeId);
+        console.log("songId", songId);
+        console.log("upvotesNum", upvotesNum);
+        io.emit("broadcastIncrementUpvote", placeId, songId, upvotesNum + 1);
+      });
+    });
+
+    // seb socket ends ----------------------------------------
+
     return { server, connection: conn };
   } catch (error) {
     console.log(error);
