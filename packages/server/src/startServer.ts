@@ -11,9 +11,7 @@ import { buildSchema } from "type-graphql";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { PostResolver } from "./resolvers/post";
 import { UserResolver } from "./resolvers/user";
-import paymentRouter from "./routes/payment";
-import s3Router from "./routes/s3";
-import trackingRouter from "./routes/tracking";
+
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
@@ -62,8 +60,6 @@ export const startServer = async () => {
 
   const conn = await createTypeORMConn(process.env.NODE_ENV);
 
-  console.log("1");
-
   // rollbar.error("ccc");
 
   // rollbar.log("Hello from server!");
@@ -79,8 +75,6 @@ export const startServer = async () => {
   // );
   // generateQr();
   // generateQr();
-  // console.log(shitColor);
-  // console.log(primaryColor);
 
   app.use(
     express.urlencoded({
@@ -88,13 +82,10 @@ export const startServer = async () => {
     })
   );
 
-  console.log("2");
   app.use(express.json());
 
   const RedisStore = connectRedis(session);
   const redis = new Redis(process.env.REDIS_URL);
-
-  console.log("3");
 
   app.set("trust proxy", 1); // make cookie working in a proxy environment since Nginx will be sitting infront of our api(server), 1 -> we have 1 proxy
   app.use(
@@ -108,12 +99,6 @@ export const startServer = async () => {
       credentials: true,
     })
   );
-
-  console.log("4");
-
-  app.use("/api/payment", paymentRouter);
-  app.use("/api/tracking", trackingRouter);
-  app.use("/api/s3", s3Router);
 
   // app.use(rollbar.errorHandler());
 
@@ -136,7 +121,6 @@ export const startServer = async () => {
       resave: false,
     })
   );
-  console.log("5");
 
   try {
     const schema = await buildSchema({
@@ -156,9 +140,6 @@ export const startServer = async () => {
       }), // so that we can access session because session is stick with request
     });
 
-    console.log("graphql path");
-
-    console.log(apolloServer.graphqlPath);
     // const apolloServer = new ApolloServer({
     //     schema: await buildSchema({
     //         resolvers: [HelloResolver],
