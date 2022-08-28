@@ -3492,6 +3492,11 @@
   resolved "https://registry.npmjs.org/@types/node/-/node-10.17.60.tgz"
   integrity sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==
 
+"@types/node@^14.11.2":
+  version "14.18.26"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.18.26.tgz#239e19f8b4ea1a9eb710528061c1d733dc561996"
+  integrity sha512-0b+utRBSYj8L7XAp0d+DX7lI4cSmowNaaTkk6/1SKzbKkG+doLuPusB9EOvzLJ8ahJSk03bTLIL6cWaEd4dBKA==
+
 "@types/node@^14.14.31":
   version "14.18.12"
   resolved "https://registry.npmjs.org/@types/node/-/node-14.18.12.tgz"
@@ -13724,6 +13729,11 @@ react-native-web@~0.18.7:
     normalize-css-color "^1.0.2"
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
+
+react-native-wind@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-wind/-/react-native-wind-1.1.4.tgz#67e4e707ffaa31891acf51e85b592876661de429"
+  integrity sha512-dyPjmlqIiMz4INSSP2bFqnD+rFu8719ptfYxnoX02QzCg8e3dayOmunuBFyGlNESHw6UtVx11f8WttrHvYuM6w==
 
 react-native@0.69.5:
   version "0.69.5"
