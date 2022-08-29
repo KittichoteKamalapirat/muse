@@ -7,6 +7,10 @@
     "nohoist": [
       "**/expo/**",
       "**/expo",
+      "**/expo-auth-session/**",
+      "**/expo-auth-session",
+      "**/expo-auth-session/**",
+      "**/expo-auth-session",
       "**/typeorm/**",
       "**/typeorm",
       "**/typeorm-seeding/**",
