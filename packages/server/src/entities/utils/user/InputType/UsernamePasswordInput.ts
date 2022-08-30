@@ -11,7 +11,7 @@ class UsernamePasswordInput {
   email: string;
 
   @Field()
-  phonenumber: string;
+  phoneNumber: string;
 
   @Field({ nullable: true })
   password: string;

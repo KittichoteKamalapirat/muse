@@ -30,7 +30,7 @@ describe("db tests", () => {
     const data = {
       username: "test user 1",
       email: "user1@gmail.com",
-      phonenumber: "0900000000",
+      phoneNumber: "0900000000",
       password: "123",
       isCreator: false,
       avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,

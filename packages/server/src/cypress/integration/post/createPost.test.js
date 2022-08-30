@@ -4,7 +4,7 @@ describe("post", () => {
   Cypress.on("uncaught:exception", () => false);
   xit("creator can create a post", () => {
     // login a user and redirect to homepage
-    // cy.createUserInDbAndLogin(usernameOrEmailOrPhonenumber, password);
+    // cy.createUserInDbAndLogin(usernameOrEmailOrPhoneNumber, password);
     cy.url().should("eq", `${Cypress.env("clientUrl")}/`);
 
     // go to my account page

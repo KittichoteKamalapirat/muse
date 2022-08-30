@@ -5,15 +5,15 @@ import "cypress-file-upload";
 
 Cypress.Commands.add(
   "createUserInDbAndLogin",
-  (usernameOrEmailOrPhonenumber, password) => {
+  (usernameOrEmailOrPhoneNumber, password) => {
     // create a user in db first
     cy.task("createAUserInDb");
     cy.wait(1000);
 
     // visit login [age]
     cy.visit("/login");
-    cy.get('input[name="usernameOrEmailOrPhonenumber"]').type(
-      usernameOrEmailOrPhonenumber,
+    cy.get('input[name="usernameOrEmailOrPhoneNumber"]').type(
+      usernameOrEmailOrPhoneNumber,
       {
         force: true,
       }

@@ -3,7 +3,7 @@
 const username = "luffy";
 const email = "luffy@gmail.com";
 const password = "3d2y";
-const phonenumber = "0900000000";
+const phoneNumber = "0900000000";
 
 describe("user", () => {
   it.skip("can register a user", () => {
@@ -13,7 +13,7 @@ describe("user", () => {
     // fill in the form
     cy.get('input[name="username"]').type(username);
     cy.get('input[name="email"]').type(email);
-    cy.get('input[name="phonenumber"]').type(phonenumber);
+    cy.get('input[name="phoneNumber"]').type(phoneNumber);
     cy.get('input[name="password"]').type(password);
 
     // submit button

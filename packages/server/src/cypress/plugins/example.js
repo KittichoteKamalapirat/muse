@@ -33,7 +33,7 @@ module.exports = (on, config) => {
           const data = {
             username: "luffy",
             email: "luffy@gmail.com",
-            phonenumber: "0900000000",
+            phoneNumber: "0900000000",
             password: hash,
             isCreator: true,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,

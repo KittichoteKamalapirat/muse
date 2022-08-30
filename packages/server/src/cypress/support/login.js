@@ -5,13 +5,13 @@ Cypress.Cookies.defaults({
   preserve: "qidRedis",
 });
 
-const usernameOrEmailOrPhonenumber = "luffy";
+const usernameOrEmailOrPhoneNumber = "luffy";
 const password = "3d2y";
 
 beforeEach(() => {
   cy.visit("/login");
-  cy.get('input[name="usernameOrEmailOrPhonenumber"]').type(
-    usernameOrEmailOrPhonenumber,
+  cy.get('input[name="usernameOrEmailOrPhoneNumber"]').type(
+    usernameOrEmailOrPhoneNumber,
     {
       force: true,
     }

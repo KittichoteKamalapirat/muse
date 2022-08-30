@@ -164,12 +164,12 @@ export class UserResolver {
     //   password: hash,
     // });
 
-    let { phonenumber } = data;
+    let { phoneNumber } = data;
 
-    if (/^[+66\d+]{12}$/.test(phonenumber)) {
-      phonenumber = phonenumber.slice(3);
-    } else if (/^[0\d+]{10}$/.test(phonenumber)) {
-      phonenumber = phonenumber.substring(1);
+    if (/^[+66\d+]{12}$/.test(phoneNumber)) {
+      phoneNumber = phoneNumber.slice(3);
+    } else if (/^[0\d+]{10}$/.test(phoneNumber)) {
+      phoneNumber = phoneNumber.substring(1);
     }
 
     let user;
@@ -184,7 +184,7 @@ export class UserResolver {
             id: uuid,
             username: data.username,
             email: data.email,
-            phonenumber,
+            phoneNumber,
             password: hash,
             isCreator: data.isCreator,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
@@ -218,12 +218,12 @@ export class UserResolver {
           ],
         };
       }
-      if (error.detail.includes("phonenumber")) {
+      if (error.detail.includes("phoneNumber")) {
         return {
           errors: [
             {
-              field: "phonenumber",
-              message: "phonenumber already taken",
+              field: "phoneNumber",
+              message: "phoneNumber already taken",
             },
           ],
         };
@@ -256,32 +256,32 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async login(
     // @Arg("data") data: UsernamePasswordInput,
-    @Arg("usernameOrEmailOrPhonenumber") usernameOrEmailOrPhonenumber: string,
+    @Arg("usernameOrEmailOrPhoneNumber") usernameOrEmailOrPhoneNumber: string,
     @Arg("password") password: string,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     // 1) includes @ -> email
-    // 2) all numbers -> phonenumber
+    // 2) all numbers -> phoneNumber
     // 3) else -> username
 
     // check if starts with  +66 and length = 12
-    if (/^[+66\d+]{12}$/.test(usernameOrEmailOrPhonenumber)) {
-      usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.slice(3);
+    if (/^[+66\d+]{12}$/.test(usernameOrEmailOrPhoneNumber)) {
+      usernameOrEmailOrPhoneNumber = usernameOrEmailOrPhoneNumber.slice(3);
     } // check if starts with  0 and length = 10
-    else if (/^[0\d+]{10}$/.test(usernameOrEmailOrPhonenumber)) {
-      usernameOrEmailOrPhonenumber = usernameOrEmailOrPhonenumber.substring(1);
+    else if (/^[0\d+]{10}$/.test(usernameOrEmailOrPhoneNumber)) {
+      usernameOrEmailOrPhoneNumber = usernameOrEmailOrPhoneNumber.substring(1);
     }
 
     let user: User | undefined;
-    if (usernameOrEmailOrPhonenumber.includes("@")) {
-      user = await User.findOne({ email: usernameOrEmailOrPhonenumber });
+    if (usernameOrEmailOrPhoneNumber.includes("@")) {
+      user = await User.findOne({ email: usernameOrEmailOrPhoneNumber });
     } else if (
-      /^\d+$/.test(usernameOrEmailOrPhonenumber) &&
-      usernameOrEmailOrPhonenumber.length === 9
+      /^\d+$/.test(usernameOrEmailOrPhoneNumber) &&
+      usernameOrEmailOrPhoneNumber.length === 9
     ) {
-      user = await User.findOne({ phonenumber: usernameOrEmailOrPhonenumber });
+      user = await User.findOne({ phoneNumber: usernameOrEmailOrPhoneNumber });
     } else {
-      user = await User.findOne({ username: usernameOrEmailOrPhonenumber });
+      user = await User.findOne({ username: usernameOrEmailOrPhoneNumber });
     }
 
     if (!user) {
@@ -289,7 +289,7 @@ export class UserResolver {
       return {
         errors: [
           {
-            field: "usernameOrEmailOrPhonenumber",
+            field: "usernameOrEmailOrPhoneNumber",
             message: "The username, email, or phone number does not exist",
           },
         ],

@@ -27,7 +27,7 @@ class User extends BaseEntity {
 
   @Column({ unique: true })
   @Field()
-  phonenumber!: string;
+  phoneNumber!: string;
 
   @Column("boolean", { default: false })
   @Field()

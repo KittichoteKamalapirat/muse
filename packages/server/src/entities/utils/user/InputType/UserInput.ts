@@ -9,7 +9,7 @@ class UserInput {
   email: string;
 
   @Field()
-  phonenumber: string;
+  phoneNumber: string;
 
   @Field()
   about?: string;

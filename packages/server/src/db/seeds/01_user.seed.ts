@@ -17,7 +17,7 @@ export default class CreateUsers implements Seeder {
     const userData = {
       username: "kittishane",
       email: "kittichoteshane@gmail.com",
-      phonenumber: "0961489046",
+      phoneNumber: "0961489046",
       isCreator: true,
       avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
       password: hash,
