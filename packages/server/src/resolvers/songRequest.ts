@@ -85,7 +85,8 @@ export class SongRequestResolver {
         `,
           [realValue, songRequestId, userId]
         );
-        if (realValue == 1) {
+        if (realValue === 1) {
+          // toggle vote case
           if (upvoted.value === 1) {
             await tm.query(
               `
@@ -95,7 +96,8 @@ export class SongRequestResolver {
             `,
               [-1, songRequestId]
             );
-          } else if (upvoted.value == -1) {
+            // toggled once and now upvote case
+          } else if (upvoted.value == 0) {
             await tm.query(
               `
             update song_request
@@ -105,6 +107,7 @@ export class SongRequestResolver {
               [1, songRequestId]
             );
           } else {
+            // downvoted once and now upvote case
             await tm.query(
               `
             update song_request
@@ -112,6 +115,39 @@ export class SongRequestResolver {
             where id = $2;
             `,
               [2, songRequestId]
+            );
+          }
+          // realValue === -1
+        } else {
+          // previously upvote but now downvote case
+          if (upvoted.value === 1) {
+            await tm.query(
+              `
+            update song_request
+            set counts = counts + $1
+            where id = $2;
+            `,
+              [-2, songRequestId]
+            );
+            // previously toggled and now downvote case
+          } else if (upvoted.value == 0) {
+            await tm.query(
+              `
+            update song_request
+            set counts = counts + $1
+            where id = $2;
+            `,
+              [-1, songRequestId]
+            );
+          } else {
+            // previously downvote and toggle back
+            await tm.query(
+              `
+            update song_request
+            set counts = counts + $1
+            where id = $2;
+            `,
+              [+1, songRequestId]
             );
           }
         }
