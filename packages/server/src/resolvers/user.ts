@@ -235,6 +235,35 @@ export class UserResolver {
     return { user };
   }
 
+  @Mutation(() => UserResponse)
+  async guestLogin(@Ctx() { req }: MyContext): Promise<UserResponse> {
+    const uuid = v4();
+    try {
+      const user = await User.create({
+        id: uuid,
+        username: uuid,
+        email: uuid,
+        phoneNumber: uuid,
+        avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
+      }).save();
+
+      req.session.userId = user.id;
+      return { user };
+    } catch (error) {
+      console.log("err", error);
+      return {
+        errors: [
+          {
+            field: "guest",
+            message: "cannot log in as a guest",
+          },
+        ],
+      };
+    }
+    // automatically logged in after register
+    // set a cookie on the user
+  }
+
   @UseMiddleware(isAuth)
   @Mutation(() => User)
   async updateUser(

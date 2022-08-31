@@ -15,9 +15,9 @@ import Cooktime from "./utils/post/ObjectType/Cooktime";
 @ObjectType()
 @Entity()
 class Post extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
-  id: number;
+  id: string;
 
   @Column()
   @Field()

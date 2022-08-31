@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post, Upvote } from ".";
+import { Post, Upvote, Box } from ".";
 
 @ObjectType()
 @Entity()
@@ -29,10 +29,6 @@ class User extends BaseEntity {
   @Field()
   phoneNumber!: string;
 
-  @Column("boolean", { default: false })
-  @Field()
-  isCreator!: boolean;
-
   @Column()
   @Field()
   avatar: string;
@@ -49,6 +45,11 @@ class User extends BaseEntity {
     cascade: true,
   })
   posts: Post[];
+
+  @OneToMany(() => Box, (box) => box.creator, {
+    cascade: true,
+  })
+  boxes: Box[];
 
   // .posts have to be matched what in the Post.ts
 

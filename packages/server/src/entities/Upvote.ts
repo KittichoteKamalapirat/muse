@@ -8,12 +8,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post, User } from ".";
+import { SongRequest, User } from ".";
 
 // many to many
-// user <-> posts
-// user -> join table <- posts
-// user -> upvote <- posts
+// user <-> SongRequests
+// user -> join table <- SongRequests
+// user -> upvote <- SongRequests
 
 @ObjectType()
 @Entity()
@@ -32,13 +32,13 @@ class Upvote extends BaseEntity {
 
   @Field()
   @PrimaryColumn()
-  postId: number;
+  songRequestId: string;
 
-  @Field(() => Post)
-  @ManyToOne(() => Post, (post) => post.upvotes, {
+  @Field(() => SongRequest)
+  @ManyToOne(() => SongRequest, (songRequest) => songRequest.upvotes, {
     onDelete: "CASCADE",
   })
-  post: Post;
+  songRequest: SongRequest;
 
   @Field(() => String)
   @CreateDateColumn()

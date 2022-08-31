@@ -7,16 +7,19 @@ import dotenv from "dotenv-safe";
 import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
+import { Server } from "socket.io";
 import { buildSchema } from "type-graphql";
 import { COOKIE_NAME, IS_PROD } from "./constants";
+import { AddressResolver } from "./resolvers/address";
+import { BoxResolver } from "./resolvers/box";
 import { PostResolver } from "./resolvers/post";
+import { SongResolver } from "./resolvers/song";
+import { SongRequestResolver } from "./resolvers/songRequest";
 import { UserResolver } from "./resolvers/user";
-
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
-import { Server } from "socket.io";
 
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
@@ -98,7 +101,14 @@ export const startServer = async () => {
 
   try {
     const schema = await buildSchema({
-      resolvers: [UserResolver, PostResolver, PostResolver],
+      resolvers: [
+        UserResolver,
+        PostResolver,
+        BoxResolver,
+        AddressResolver,
+        SongResolver,
+        SongRequestResolver,
+      ],
       validate: false,
     });
 
