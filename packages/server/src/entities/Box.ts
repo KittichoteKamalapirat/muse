@@ -13,6 +13,15 @@ import { User } from ".";
 import Address from "./Address";
 import SongRequest from "./SongRequest";
 
+export enum BoxTypeEnum {
+  DANCE_CLUB = "danceClub",
+  BAR = "bar",
+  RESTAURANT = "restaurant",
+  WEDDING = "wedding",
+  MUSIC_EVENT = "musicEvent",
+  OTHER = "other",
+}
+
 @ObjectType()
 @Entity()
 class Box extends BaseEntity {
@@ -23,6 +32,10 @@ class Box extends BaseEntity {
   @Column()
   @Field()
   name: string;
+
+  @Column()
+  @Field()
+  type: BoxTypeEnum;
 
   @Column({ nullable: true })
   @Field()

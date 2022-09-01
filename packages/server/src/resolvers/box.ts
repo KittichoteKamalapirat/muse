@@ -5,14 +5,20 @@ import {
   Int,
   Mutation,
   Query,
+  registerEnumType,
   Resolver,
   Root,
   UseMiddleware,
 } from "type-graphql";
 import { Box, Address } from "../entities";
+import { BoxTypeEnum } from "../entities/Box";
 import BoxInput from "../entities/utils/box/BoxInput";
 import { isAuth } from "../middlware/isAuth";
 import { MyContext } from "../types";
+
+registerEnumType(BoxTypeEnum, {
+  name: "BoxTypeEnum",
+});
 
 @Resolver(Box)
 export class BoxResolver {
