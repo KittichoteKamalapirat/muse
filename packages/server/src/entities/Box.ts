@@ -5,11 +5,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from ".";
 import Address from "./Address";
+import SongRequest from "./SongRequest";
 
 @ObjectType()
 @Entity()
@@ -46,6 +48,13 @@ class Box extends BaseEntity {
     onDelete: "CASCADE",
   })
   address: Address;
+
+  // one box can have many song requests
+  @Field(() => [SongRequest])
+  @OneToMany(() => SongRequest, (songRequest) => songRequest.box, {
+    cascade: true,
+  })
+  songRequests: SongRequest[];
 
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   @Field()

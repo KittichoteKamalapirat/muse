@@ -20,6 +20,10 @@ class Song extends BaseEntity {
 
   @Column()
   @Field()
+  spotifyTrackId: string;
+
+  @Column()
+  @Field()
   name: string;
 
   @Column()
@@ -28,7 +32,7 @@ class Song extends BaseEntity {
 
   @Column()
   @Field()
-  albumImage: string;
+  albumImageUrl: string;
 
   @Column()
   @Field()

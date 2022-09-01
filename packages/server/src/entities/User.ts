@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Post, Upvote, Box } from ".";
+import SongRequest from "./SongRequest";
 
 @ObjectType()
 @Entity()
@@ -66,6 +67,13 @@ class User extends BaseEntity {
   @Column({ default: false })
   @Field()
   isAdmin: boolean;
+
+  // One user can have many song requests
+  @Field(() => [SongRequest])
+  @OneToMany(() => SongRequest, (songRequest) => songRequest.requester, {
+    cascade: true,
+  })
+  songRequests: SongRequest[];
 
   @CreateDateColumn()
   @Field()

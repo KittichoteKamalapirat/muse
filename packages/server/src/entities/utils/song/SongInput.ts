@@ -9,7 +9,7 @@ export class SongInput {
   albumName: string;
 
   @Field()
-  albumImage: string;
+  albumImageUrl: string;
 
   @Field()
   artistName: string;

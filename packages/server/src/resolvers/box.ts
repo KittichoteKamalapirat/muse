@@ -20,7 +20,7 @@ export class BoxResolver {
   async boxes(): Promise<Box[]> {
     try {
       console.log("finding boxes");
-      const events = await Box.find();
+      const events = await Box.find({ relations: ["address"] });
       return events;
     } catch (error) {
       console.log(error);
