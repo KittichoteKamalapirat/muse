@@ -8,20 +8,16 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { SongRequest, User } from ".";
+import { Box, User } from ".";
 
 // many to many
-// user <-> SongRequests
-// user -> join table <- SongRequests
-// user -> upvote <- SongRequests
+// user <-> boxs
+// user -> join table <- boxs
+// user -> upvote <- boxs
 
 @ObjectType()
 @Entity()
-class Upvote extends BaseEntity {
-  @Field()
-  @Column({ type: "int" })
-  value: number; // will be 1 or -1
-
+class JoinBox extends BaseEntity {
   @Field()
   @PrimaryColumn()
   userId: string;
@@ -32,13 +28,13 @@ class Upvote extends BaseEntity {
 
   @Field()
   @PrimaryColumn()
-  songRequestId: string;
+  boxId: string;
 
-  @Field(() => SongRequest)
-  @ManyToOne(() => SongRequest, (songRequest) => songRequest.upvotes, {
+  @Field(() => Box)
+  @ManyToOne(() => Box, (box) => box.joinBoxes, {
     onDelete: "CASCADE",
   })
-  songRequest: SongRequest;
+  box: Box;
 
   @Field(() => String)
   @CreateDateColumn()
@@ -49,4 +45,4 @@ class Upvote extends BaseEntity {
   updatedAt: Date;
 }
 
-export default Upvote;
+export default JoinBox;

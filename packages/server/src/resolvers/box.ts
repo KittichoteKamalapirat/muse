@@ -10,7 +10,7 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
-import { Box, Address } from "../entities";
+import { Box, Address, JoinBox } from "../entities";
 import { BoxTypeEnum } from "../entities/Box";
 import BoxInput from "../entities/utils/box/BoxInput";
 import { isAuth } from "../middlware/isAuth";
@@ -22,11 +22,31 @@ registerEnumType(BoxTypeEnum, {
 
 @Resolver(Box)
 export class BoxResolver {
+  @FieldResolver(() => Boolean, { nullable: true })
+  async isJoined(@Root() box: Box, @Ctx() { req }: MyContext) {
+    if (!req.session.userId) {
+      return null;
+    }
+
+    const { userId } = req.session;
+    const boxId = box.id;
+    const matchedJoinBox = await JoinBox.findOne({ where: { userId, boxId } });
+    if (!matchedJoinBox) return false;
+    return true;
+  }
+
   @Query(() => [Box])
   async boxes(): Promise<Box[]> {
     try {
       console.log("finding boxes");
-      const events = await Box.find({ relations: ["address"] });
+      const events = await Box.find({
+        relations: [
+          "address",
+          "songRequests",
+          "songRequests.song",
+          "songRequests.requester",
+        ],
+      });
       return events;
     } catch (error) {
       console.log(error);
@@ -39,7 +59,12 @@ export class BoxResolver {
     try {
       const box = await Box.findOne({
         where: { id },
-        relations: [],
+        relations: [
+          "address",
+          "songRequests",
+          "songRequests.song",
+          "songRequests.requester",
+        ],
       });
       return box;
     } catch (error) {
@@ -91,6 +116,46 @@ export class BoxResolver {
     } catch (error) {
       //   rollbar.log(error);
       throw new Error("cannot create a box");
+    }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async joinBox(
+    @Arg("boxId") boxId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Boolean | Error> {
+    try {
+      const { userId } = req.session;
+      await JoinBox.create({
+        boxId,
+        userId,
+      }).save();
+
+      return true;
+    } catch (error) {
+      //   rollbar.log(error);
+      throw new Error("cannot join this event");
+    }
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async unjoinBox(
+    @Arg("boxId") boxId: string,
+    @Ctx() { req }: MyContext
+  ): Promise<Boolean | Error> {
+    try {
+      const { userId } = req.session;
+      await JoinBox.delete({
+        boxId,
+        userId,
+      });
+
+      return true;
+    } catch (error) {
+      //   rollbar.log(error);
+      throw new Error("cannot join this event");
     }
   }
 }

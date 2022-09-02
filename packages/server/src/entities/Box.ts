@@ -9,9 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { User } from ".";
-import Address from "./Address";
-import SongRequest from "./SongRequest";
+import { User, Address, JoinBox, SongRequest } from ".";
 
 export enum BoxTypeEnum {
   DANCE_CLUB = "danceClub",
@@ -76,6 +74,10 @@ class Box extends BaseEntity {
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   @Field()
   endTime: Date;
+
+  // one box can have many joinBoxes
+  @OneToMany(() => JoinBox, (joinBox) => joinBox.box, { cascade: true })
+  joinBoxes: JoinBox[];
 
   @Field(() => String)
   @CreateDateColumn()

@@ -8,8 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Post, Upvote, Box } from ".";
-import SongRequest from "./SongRequest";
+import { Post, Upvote, Box, SongRequest, JoinBox } from ".";
 
 @ObjectType()
 @Entity()
@@ -56,6 +55,10 @@ class User extends BaseEntity {
 
   @OneToMany(() => Upvote, (upvote) => upvote.user)
   upvotes: Upvote[];
+
+  // one usesr can join many boxes
+  @OneToMany(() => JoinBox, (joinBox) => joinBox.user)
+  joinBoxes: JoinBox[];
 
   @Column({ type: "int", default: 0 })
   @Field()

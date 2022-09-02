@@ -5,3 +5,4 @@ export { default as Box } from "./Box";
 export { default as Address } from "./Address";
 export { default as Song } from "./Song";
 export { default as SongRequest } from "./SongRequest";
+export { default as JoinBox } from "./JoinBox";
