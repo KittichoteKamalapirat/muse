@@ -15,6 +15,7 @@ import { BoxResolver } from "./resolvers/box";
 import { PostResolver } from "./resolvers/post";
 import { SongResolver } from "./resolvers/song";
 import { SongRequestResolver } from "./resolvers/songRequest";
+import { SpotifyResolver } from "./resolvers/spotify";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
@@ -108,6 +109,7 @@ export const startServer = async () => {
         AddressResolver,
         SongResolver,
         SongRequestResolver,
+        SpotifyResolver,
       ],
       validate: false,
     });
