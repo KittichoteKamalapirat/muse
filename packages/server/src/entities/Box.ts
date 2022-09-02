@@ -52,11 +52,11 @@ class Box extends BaseEntity {
   creator: User;
 
   // Many boxes can belong to one location
-  @Column()
+  @Column({ nullable: true }) // todo make this not nullable
   @Field()
   addressId: string;
 
-  @Field(() => Address)
+  @Field(() => Address, { nullable: true }) // TODO make not nullable
   @ManyToOne(() => Address, (address) => address.boxes, {
     onDelete: "CASCADE",
   })

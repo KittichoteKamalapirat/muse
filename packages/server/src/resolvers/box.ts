@@ -47,26 +47,46 @@ export class BoxResolver {
       return null;
     }
   }
+  // TODO: use link with location
+  // @Mutation(() => Box)
+  // @UseMiddleware(isAuth)
+  // async createBox(
+  //   @Arg("input") input: BoxInput,
+  //   @Arg("addressId", () => String) addressId: string,
+  //   @Ctx() { req }: MyContext
+  // ): Promise<Box | Error> {
+  //   try {
+  //     if (!input.name) {
+  //       console.log("name is empty");
+  //       const address = await Address.findOne(addressId);
+  //       if (address) input.name = address.name;
+  //     }
+  //     console.log("name is not empty");
+  //     const box = await Box.create({
+  //       ...input,
+  //       creatorId: req.session.userId,
+  //       addressId,
+  //     }).save();
+  //     return box;
+  //   } catch (error) {
+  //     //   rollbar.log(error);
+  //     throw new Error("cannot create a box");
+  //   }
+  // }
 
+  // TODO remove this later
   @Mutation(() => Box)
   @UseMiddleware(isAuth)
   async createBox(
     @Arg("input") input: BoxInput,
-    @Arg("addressId", () => String) addressId: string,
     @Ctx() { req }: MyContext
   ): Promise<Box | Error> {
     try {
-      if (!input.name) {
-        console.log("name is empty");
-        const address = await Address.findOne(addressId);
-        if (address) input.name = address.name;
-      }
-      console.log("name is not empty");
       const box = await Box.create({
         ...input,
         creatorId: req.session.userId,
-        addressId,
       }).save();
+
       return box;
     } catch (error) {
       //   rollbar.log(error);

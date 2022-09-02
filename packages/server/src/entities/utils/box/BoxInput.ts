@@ -1,4 +1,5 @@
 import { Field, InputType } from "type-graphql";
+import { BoxTypeEnum } from "../../Box";
 
 @InputType()
 export class BoxInput {
@@ -7,6 +8,13 @@ export class BoxInput {
 
   @Field({ nullable: true })
   description: string;
+
+  // TODO: remove this later
+  @Field()
+  addressName: string;
+
+  @Field(() => BoxTypeEnum)
+  type: BoxTypeEnum;
 
   @Field({ nullable: true })
   startTime: Date;
