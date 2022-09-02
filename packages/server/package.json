@@ -87,6 +87,7 @@
     "promptpay-qr": "^0.4.4",
     "qrcode": "^1.4.4",
     "reflect-metadata": "^0.1.13",
+    "spotify-web-api-node": "^5.0.2",
     "twilio": "^3.68.0",
     "type-graphql": "^1.1.1",
     "typeorm": "^0.2.37",

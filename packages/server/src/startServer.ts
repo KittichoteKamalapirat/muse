@@ -139,7 +139,6 @@ export const startServer = async () => {
     });
 
     io.on("connection", (socket) => {
-      console.log("id", socket.id);
       console.log("socket started");
       socket.on("incrementUpvote", (placeId, songId, upvotesNum) => {
         console.log("placeId", placeId);
