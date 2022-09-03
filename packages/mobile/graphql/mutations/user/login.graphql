@@ -1,0 +1,8 @@
+mutation Login($usernameOrEmailOrPhoneNumber: String!, $password: String!) {
+  login(
+    usernameOrEmailOrPhoneNumber: $usernameOrEmailOrPhoneNumber
+    password: $password
+  ) {
+    ...RegularUserResponse
+  }
+}

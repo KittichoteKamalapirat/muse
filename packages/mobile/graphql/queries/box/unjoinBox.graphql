@@ -1,0 +1,3 @@
+mutation UnjoinBox($boxId: String!) {
+  unjoinBox(boxId: $boxId)
+}

@@ -1,0 +1,12 @@
+query JoinedBoxes {
+  joinedBoxes {
+    id
+    name
+    description
+    isJoined
+    address {
+      id
+      name
+    }
+  }
+}

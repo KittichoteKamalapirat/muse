@@ -1,0 +1,6 @@
+query GetSpotifyAccessToken {
+  getSpotifyAccessToken {
+    accessToken
+    expiresIn
+  }
+}

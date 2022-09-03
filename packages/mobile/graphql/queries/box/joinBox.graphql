@@ -1,0 +1,3 @@
+mutation JoinBox($boxId: String!) {
+  joinBox(boxId: $boxId)
+}

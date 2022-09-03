@@ -1,0 +1,10 @@
+mutation CreateBox($input: BoxInput!) {
+  createBox(input: $input) {
+    id
+    name
+    description
+    type
+    startTime
+    endTime
+  }
+}

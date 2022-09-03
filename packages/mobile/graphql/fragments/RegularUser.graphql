@@ -1,0 +1,8 @@
+# So later on when I want to add a field, no need to update every one that query for id and usermame, and xxx
+fragment RegularUser on User {
+  id
+  username
+  email
+  phoneNumber
+  # avatar
+}

@@ -1,0 +1,10 @@
+fragment RegularUserResponse on UserResponse {
+  errors {
+    ...RegularError
+  }
+  user {
+    ...RegularUser
+  }
+}
+
+# the name UserResponse match ObjectType UserResponse in /resolvers/user.ts

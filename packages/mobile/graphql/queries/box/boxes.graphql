@@ -1,0 +1,14 @@
+query Boxes {
+  boxes {
+    id
+    name
+    isJoined
+    description
+    startTime
+    endTime
+    address {
+      id
+      name
+    }
+  }
+}

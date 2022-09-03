@@ -1,0 +1,16 @@
+mutation AddSongRequest(
+  $spotifyTrackId: String!
+  $songInput: SongInput!
+  $boxId: String!
+) {
+  addSongRequest(
+    spotifyTrackId: $spotifyTrackId
+    songInput: $songInput
+    boxId: $boxId
+  ) {
+    id
+    songId
+    boxId
+    counts
+  }
+}

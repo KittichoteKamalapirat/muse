@@ -1,0 +1,3 @@
+mutation Vote($value: Int!, $songRequestId: String!) {
+  vote(value: $value, songRequestId: $songRequestId)
+}

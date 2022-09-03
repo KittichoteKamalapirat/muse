@@ -1,0 +1,29 @@
+query Box($id: String!) {
+  box(id: $id) {
+    id
+    name
+    description
+    isJoined
+    address {
+      id
+      name
+    }
+    songRequests {
+      id
+      voteStatus
+      isRequested
+      requesterId
+      requester {
+        id
+      }
+      songId
+      song {
+        name
+        artistName
+        albumName
+        albumImageUrl
+      }
+      counts
+    }
+  }
+}

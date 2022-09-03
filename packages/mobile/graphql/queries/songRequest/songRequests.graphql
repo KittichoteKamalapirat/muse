@@ -1,0 +1,28 @@
+query SongRequests($boxId: String!) {
+  songRequests(boxId: $boxId) {
+    id
+    voteStatus
+    isRequested
+    requesterId
+    requester {
+      id
+    }
+    songId
+    song {
+      name
+      artistName
+      albumName
+      albumImageUrl
+      spotifyTrackId
+    }
+    boxId
+    box {
+      id
+      name
+      description
+      startTime
+      endTime
+    }
+    counts
+  }
+}

@@ -1,0 +1,9 @@
+mutation CreateSong($input: SongInput!) {
+  createSong(input: $input) {
+    id
+    name
+    albumName
+    albumImageUrl
+    artistName
+  }
+}
