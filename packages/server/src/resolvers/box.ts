@@ -10,6 +10,7 @@ import {
   Root,
   UseMiddleware,
 } from "type-graphql";
+import { In } from "typeorm";
 import { Box, Address, JoinBox } from "../entities";
 import { BoxTypeEnum } from "../entities/Box";
 import BoxInput from "../entities/utils/box/BoxInput";
@@ -52,6 +53,20 @@ export class BoxResolver {
       console.log(error);
       return [];
     }
+  }
+
+  @Query(() => [Box])
+  @UseMiddleware(isAuth)
+  async joinedBoxes(@Ctx() { req }: MyContext): Promise<Box[]> {
+    const joinBoxes = await JoinBox.find({
+      where: { userId: req.session.userId },
+    });
+
+    const joinedBoxesIds: string[] = joinBoxes.map((u) => u.boxId);
+
+    const joinedBoxes = await Box.find({ where: { id: In(joinedBoxesIds) } });
+
+    return joinedBoxes;
   }
 
   @Query(() => Box)
