@@ -73,6 +73,7 @@ const Login = ({ navigation }: Props) => {
 
   // redirect if already logged in
   if (currentUser) {
+    console.log("there is current user ");
     // without the following line, push to / even when there is next param
     const nextScreen = route.params?.next;
     if (typeof nextScreen === "string") {
@@ -80,12 +81,12 @@ const Login = ({ navigation }: Props) => {
         from: "Login",
       });
     } else {
-      navigation.navigate("Home" as never);
+      navigation.navigate("Home");
     }
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
+    console.log("logging in");
 
     const response = await login({
       variables: data,
@@ -111,6 +112,7 @@ const Login = ({ navigation }: Props) => {
         setGenericErrorMessage
       );
     }
+    navigation.navigate("Home");
   };
 
   return (
