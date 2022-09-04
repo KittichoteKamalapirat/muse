@@ -1,6 +1,8 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import tw from "../../lib/tailwind";
+import { grey0 } from "../../theme/style";
+import { Button as RNButton } from "react-native";
 
 export enum ButtonTypes {
   PRIMARY = "primary",
@@ -32,11 +34,13 @@ interface ClassProps {
 // <Button label={ButtonTypes.SECONDARY} type={ButtonTypes.SECONDARY} />
 // <Button label={ButtonTypes.OUTLINED} type={ButtonTypes.OUTLINED} />
 
-const useButtonStyle = ({ type }: ClassProps) => {
-  const commonStyle = "rounded-full";
+const useButtonStyle = ({ type, fontColor }: ClassProps) => {
+  const commonStyle = "rounded-full mt-2";
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `${commonStyle} border-solid border-1 border-primary`;
+      return `${commonStyle} border-solid border-1 ${
+        fontColor ? `border-${fontColor}` : "border-primary"
+      }`;
 
     case ButtonTypes.SECONDARY:
       return `${commonStyle} bg-grey-0 hover:bg-grey-50`;
@@ -54,17 +58,19 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
   const commonStyle = "mx-4 my-2 text-center";
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `${commonStyle} text-primary`;
+      return `${commonStyle} ${
+        fontColor ? `text-${fontColor}` : "text-primary"
+      }`;
 
     case ButtonTypes.SECONDARY:
-      return `${commonStyle} text-bg-color`;
+      return `${commonStyle} text-bg-color `;
 
     case ButtonTypes.TEXT:
-      return `${commonStyle} text-primary ${fontColor}`;
+      return `${commonStyle} ${fontColor || "text-grey-0"}`;
 
     case ButtonTypes.PRIMARY:
     default:
-      return `${commonStyle} text-bg-color`;
+      return `${commonStyle}  text-bg-color`;
   }
 };
 
@@ -76,10 +82,16 @@ const Button = ({
 }: Props) => {
   const buttonStyle = useButtonStyle({ type, fontColor });
   const textStyle = useTextStyle({ type, fontColor });
-  return (
+
+  const button = (
     <TouchableOpacity style={tw`${buttonStyle}`} onPress={onPress}>
       <Text style={tw`${textStyle}`}>{label}</Text>
     </TouchableOpacity>
+  );
+  return type === ButtonTypes.TEXT ? (
+    <RNButton title={label} onPress={onPress} color={grey0} />
+  ) : (
+    button
   );
 };
 

@@ -71,16 +71,19 @@ const RegisterScreen = ({ navigation }: Props) => {
     );
   }
 
+  console.log("current user", currentUser);
+
   // redirect if already logged in
   if (currentUser) {
     // without the following line, push to / even when there is next param
     const nextScreen = route.params?.next;
+    console.log("next screen", nextScreen);
     if (typeof nextScreen === "string") {
       navigation.navigate(nextScreen, {
         from: "Login",
       });
     } else {
-      navigation.navigate("Home" as never);
+      navigation.navigate("Home");
     }
   }
 
