@@ -16,7 +16,6 @@ import screenImage1 from "../assets/images/onboard-screen-1.jpg";
 import screenImage2 from "../assets/images/onboard-screen-2.jpg";
 import screenImage3 from "../assets/images/onboard-screen-3.jpg";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
-import ScreenLayout from "../components/layouts/ScreenLayout";
 import tw from "../lib/tailwind";
 import { bgColor, grey0, grey500, primaryColor } from "../theme/style";
 

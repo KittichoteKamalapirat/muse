@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
-import { useMeQuery } from "../graphql/generated/graphql";
-import { NavigationScreenProp } from "react-navigation";
-import { RouteProp, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
 
-interface Props {
-  navigation: NavigationScreenProp<any, any>;
-}
-
-export const useIsFirstLaunch = ({ navigation }: Props) => {
+export const useIsFirstLaunch = () => {
   const [isFirstLaunch, setIsFirstLaunch] = useState<boolean>(true); // have to be string
 
   useEffect(() => {
-    AsyncStorage.getItem("isFirstLaunch").then((value) => {
-      if (value === "true") {
-        AsyncStorage.setItem("isFirstLaunch", "false");
+    AsyncStorage.getItem("alreadyLaunched").then((value) => {
+      // alreadyLaunched is null
+      if (value === null) {
+        AsyncStorage.setItem("alreadyLaunched", "true");
+        setIsFirstLaunch(true);
+      } else {
+        // alreadyLaunched is "true"
         setIsFirstLaunch(false);
       }
     });
