@@ -14,6 +14,7 @@ import {
 } from "../graphql/generated/graphql";
 import { apolloClient } from "../lib/apollo";
 import tw from "../lib/tailwind";
+import useSetUserContext from "../util/useSetUserContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -22,6 +23,7 @@ interface Props {
 const Tab = createBottomTabNavigator();
 
 const JoinedBoxesScreen = ({ navigation }: Props) => {
+  useSetUserContext();
   console.log("joined box screen");
   const { setCurrentUser } = useContext(UserContext);
   const {
@@ -30,7 +32,6 @@ const JoinedBoxesScreen = ({ navigation }: Props) => {
     error: boxesError,
   } = useJoinedBoxesQuery();
 
-  const { currentUser } = useContext(UserContext);
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
 
   const handleLogout = async () => {
@@ -55,18 +56,6 @@ const JoinedBoxesScreen = ({ navigation }: Props) => {
           loading={boxesLoading}
           error={boxesError}
         />
-        {currentUser ? (
-          <Button label="Logout" onPress={handleLogout} />
-        ) : (
-          <Button
-            label="Login"
-            onPress={() =>
-              navigation.navigate("Login", {
-                next: "Home",
-              })
-            }
-          />
-        )}
       </View>
     </ScreenLayout>
   );

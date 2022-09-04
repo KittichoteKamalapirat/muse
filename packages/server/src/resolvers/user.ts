@@ -187,7 +187,7 @@ export class UserResolver {
             phoneNumber,
             password: hash,
             isCreator: data.isCreator,
-            avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
+            avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.png`,
           },
         ])
         .returning("*") // RETURNING is sql statement

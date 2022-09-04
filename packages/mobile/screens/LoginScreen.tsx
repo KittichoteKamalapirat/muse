@@ -19,6 +19,7 @@ import {
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
+import useSetUserContext from "../util/useSetUserContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -44,6 +45,7 @@ const defaultValues: FormValues = {
   password: "",
 };
 const Login = ({ navigation }: Props) => {
+  useSetUserContext();
   console.log("login screen");
   const { currentUser } = useContext(UserContext);
   const [genericErrorMessage, setGenericErrorMessage] = useState("");

@@ -22,9 +22,7 @@ export default function App() {
 
 const AppWithoutApollo = () => {
   console.log("app.tsx");
-  useSetUserContext();
-
-  const [currentUser, setCurrentUser] = useState<User | null>();
+  const { currentUser, setCurrentUser } = useSetUserContext();
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>

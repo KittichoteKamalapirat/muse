@@ -1,20 +1,24 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext } from "react";
 import { Text } from "react-native";
+import { NavigationScreenProp } from "react-navigation";
+import Button, { ButtonTypes } from "../components/Buttons/Button";
+import IconButton from "../components/Buttons/IconButton";
 import { UserContext } from "../context/UserContext";
 import {
-  HomeScreen,
   BoxScreen,
-  LoginScreen,
-  SearchScreen,
   CreateBoxScreen,
+  HomeScreen,
+  LoginScreen,
   RegisterScreen,
+  SearchScreen,
+  SettingScreen,
 } from "../screens";
 import AuthScreen from "../screens/AuthScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
-import { grey0, bgColor } from "../theme/style";
-import { clearAsyncStorage } from "../util/clearAsyncStorage";
+import { bgColor, grey0 } from "../theme/style";
 import { useIsFirstLaunch } from "../util/useIsFirstLaunch";
 
 const HomeStack = createNativeStackNavigator();
@@ -22,6 +26,7 @@ const HomeStack = createNativeStackNavigator();
 const HomeStackScreen = () => {
   const isFirstLaunch = useIsFirstLaunch();
   const { currentUser } = useContext(UserContext);
+  const navigation: NavigationScreenProp<any, any> = useNavigation();
 
   // clearAsyncStorage();
 
@@ -58,7 +63,15 @@ const HomeStackScreen = () => {
         component={HomeScreen}
         options={{
           headerTitleAlign: "left",
-          headerTitle: () => <Text>hi</Text>,
+          headerRight: () => (
+            <IconButton
+              icon={
+                <Ionicons name="settings-outline" size={24} color={grey0} />
+              }
+              type={ButtonTypes.TEXT}
+              onPress={() => navigation.navigate("Setting")}
+            />
+          ),
         }}
       />
       <HomeStack.Screen
@@ -75,6 +88,7 @@ const HomeStackScreen = () => {
       <HomeStack.Screen name="CreateBox" component={CreateBoxScreen} />
 
       <HomeStack.Screen name="Search" component={SearchScreen} />
+      <HomeStack.Screen name="Setting" component={SettingScreen} />
     </HomeStack.Navigator>
   );
 };

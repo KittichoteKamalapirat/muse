@@ -1,10 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
-import Button from "../components/Buttons/Button";
+import Button, { ButtonTypes } from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
+import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
 import { useLogoutMutation } from "../graphql/generated/graphql";
 import { apolloClient } from "../lib/apollo";
@@ -17,6 +18,7 @@ interface Props {
 const Tab = createBottomTabNavigator();
 
 const SettingScreen = ({ navigation }: Props) => {
+  console.log("setting screen");
   const { setCurrentUser } = useContext(UserContext);
   const { currentUser } = useContext(UserContext);
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
@@ -36,9 +38,35 @@ const SettingScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ScreenLayout>
-      <Text>Login</Text>
-      <Text>Log out</Text>
+    <ScreenLayout justifyContent="justify-start">
+      <View>
+        {currentUser ? (
+          <View style={tw`align-left`}>
+            <View style={tw`flex-row items-center`}>
+              <Image
+                style={tw`w-20 h-20 rounded-full`}
+                source={{ uri: currentUser?.avatar }}
+              />
+              <MyText>{currentUser.username}</MyText>
+            </View>
+
+            <Button
+              label="Logout"
+              onPress={handleLogout}
+              type={ButtonTypes.TEXT}
+            />
+          </View>
+        ) : (
+          <Button
+            label="Login"
+            onPress={() =>
+              navigation.navigate("Login", {
+                next: "Home",
+              })
+            }
+          />
+        )}
+      </View>
     </ScreenLayout>
   );
 };

@@ -4,5 +4,5 @@ fragment RegularUser on User {
   username
   email
   phoneNumber
-  # avatar
+  avatar
 }

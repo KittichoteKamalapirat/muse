@@ -13,7 +13,7 @@ export enum ButtonTypes {
 
 interface Props {
   onPress?: () => void;
-  label: string;
+  icon: ReactNode;
   type?: ButtonTypes;
   fontColor?: string;
 }
@@ -74,8 +74,8 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
   }
 };
 
-const Button = ({
-  label,
+const IconButton = ({
+  icon,
   type = ButtonTypes.PRIMARY,
   onPress,
   fontColor = "",
@@ -83,16 +83,11 @@ const Button = ({
   const buttonStyle = useButtonStyle({ type, fontColor });
   const textStyle = useTextStyle({ type, fontColor });
 
-  const button = (
+  return (
     <TouchableOpacity style={tw`${buttonStyle}`} onPress={onPress}>
-      <Text style={tw`${textStyle}`}>{label}</Text>
+      {icon}
     </TouchableOpacity>
-  );
-  return type === ButtonTypes.TEXT ? (
-    <RNButton title={label} onPress={onPress} color={grey0} />
-  ) : (
-    button
   );
 };
 
-export default Button;
+export default IconButton;

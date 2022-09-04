@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { ActivityIndicator } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useMemo, useState } from "react";
 import { useMeQuery, User } from "../graphql/generated/graphql";
 
 const useSetUserContext = () => {
@@ -52,10 +51,12 @@ const useSetUserContext = () => {
 
   // set Item
   useEffect(() => {
+    console.log("store data ", currentUser);
     storeData(currentUser);
   }, [currentUser, data?.me?.id]);
 
   // if (loading) return <ActivityIndicator />;
+  return { currentUser, setCurrentUser };
 };
 
 export default useSetUserContext;
