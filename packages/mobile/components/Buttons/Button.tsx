@@ -32,11 +32,13 @@ interface ClassProps {
 // <Button label={ButtonTypes.SECONDARY} type={ButtonTypes.SECONDARY} />
 // <Button label={ButtonTypes.OUTLINED} type={ButtonTypes.OUTLINED} />
 
-const useButtonStyle = ({ type }: ClassProps) => {
-  const commonStyle = "rounded-full";
+const useButtonStyle = ({ type, fontColor }: ClassProps) => {
+  const commonStyle = "rounded-full mt-2";
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `${commonStyle} border-solid border-1 border-primary`;
+      return `${commonStyle} border-solid border-1 ${
+        fontColor ? `border-${fontColor}` : "border-primary"
+      }`;
 
     case ButtonTypes.SECONDARY:
       return `${commonStyle} bg-grey-0 hover:bg-grey-50`;
@@ -54,10 +56,12 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
   const commonStyle = "mx-4 my-2 text-center";
   switch (type) {
     case ButtonTypes.OUTLINED:
-      return `${commonStyle} text-primary`;
+      return `${commonStyle} ${
+        fontColor ? `text-${fontColor}` : "text-primary"
+      }`;
 
     case ButtonTypes.SECONDARY:
-      return `${commonStyle} text-bg-color`;
+      return `${commonStyle} text-bg-color `;
 
     case ButtonTypes.TEXT:
       return `${commonStyle} text-primary ${fontColor}`;
