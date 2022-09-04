@@ -11,15 +11,19 @@ import {
   CreateBoxScreen,
   RegisterScreen,
 } from "../screens";
+import AuthScreen from "../screens/AuthScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import { grey0, bgColor } from "../theme/style";
+import { clearAsyncStorage } from "../util/clearAsyncStorage";
 import { useIsFirstLaunch } from "../util/useIsFirstLaunch";
 
 const HomeStack = createNativeStackNavigator();
 
 const HomeStackScreen = () => {
-  // const isFirstLaunch = useIsFirstLaunch();
+  const isFirstLaunch = useIsFirstLaunch();
   const { currentUser } = useContext(UserContext);
+
+  // clearAsyncStorage();
 
   console.log("current user", currentUser);
 
@@ -33,10 +37,18 @@ const HomeStackScreen = () => {
         headerStyle: { backgroundColor: bgColor },
       }}
     >
-      {!currentUser ? (
+      {isFirstLaunch ? (
         <HomeStack.Screen
           name="Onboarding"
           component={OnboardingScreen}
+          options={{ headerShown: false }}
+        />
+      ) : null}
+
+      {!currentUser ? (
+        <HomeStack.Screen
+          name="Auth"
+          component={AuthScreen}
           options={{ headerShown: false }}
         />
       ) : null}

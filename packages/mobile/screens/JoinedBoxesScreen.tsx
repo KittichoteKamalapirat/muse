@@ -39,7 +39,7 @@ const JoinedBoxesScreen = ({ navigation }: Props) => {
       setCurrentUser(null); //remove use context and trigger useEffect
 
       await logout(); //redis removed -> meQuery wouldn't work now
-      navigation.navigate("Home");
+      navigation.navigate("Auth");
       await apolloClient.resetStore();
       setCurrentUser(null);
     } catch (error) {

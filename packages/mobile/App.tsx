@@ -11,8 +11,10 @@ import { SpotifyToken, useMeQuery, User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 
 import TabNavigator from "./navigations/TabNavigator";
+import AuthScreen from "./screens/AuthScreen";
 
 const AuthStack = createNativeStackNavigator();
+const AppStack = createNativeStackNavigator();
 
 export default function App() {
   return (
@@ -96,6 +98,13 @@ const AppWithoutApollo = () => {
         }}
       >
         <NavigationContainer>
+          {/* <AppStack.Navigator> */}
+          {/* <AppStack.Screen name="Auth" component={AuthScreen} /> */}
+          {/* <AppStack.Screen name="Home" component={TabNavigator} /> */}
+
+          {/* <AppStack.Screen name="Settings" component={Settings} /> */}
+          {/* </AppStack.Navigator> */}
+
           <TabNavigator />
           {/* <DrawerNavigator /> */}
           <StatusBar style="auto" />
