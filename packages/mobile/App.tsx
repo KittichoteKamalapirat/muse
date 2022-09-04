@@ -21,6 +21,7 @@ export default function App() {
 }
 
 const AppWithoutApollo = () => {
+  console.log("app.tsx");
   const { currentUser, setCurrentUser } = useSetUserContext();
 
   return (
