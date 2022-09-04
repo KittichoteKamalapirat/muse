@@ -87,7 +87,7 @@ const BoxScreen = ({ navigation }: Props) => {
     if (!response.errors) console.log("response", response);
   };
   if (boxLoading) return <ActivityIndicator />;
-  if (boxError) return <Error errorMessage={error.message} />;
+  if (boxError) return <Error errorMessage={boxError.message} />;
 
   return (
     <ScreenLayout justifyContent="justify-start">

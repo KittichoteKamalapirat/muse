@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "musebox",
+    "slug": "musebox",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,9 +14,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kittishane.musebox"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +33,10 @@
     "extra": {
       "SPOTIFY_CLIENT_ID": "8a5aef0bf8874c639b18c37e625afa29",
       "SPOTIFY_CLIENT_SECRET": "e8cb16ae8d2a4ebe89454368137eaf3e",
-      "PUBLIC_SERVER_URL": "http://localhost:4000"
+      "PUBLIC_SERVER_URL": "http://localhost:4000",
+      "eas": {
+        "projectId": "e7d4f43c-394a-4cf6-8f42-5369f011921f"
+      }
     }
   }
 }

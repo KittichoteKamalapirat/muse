@@ -1,6 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text } from "react-native";
-import { HomeScreen, BoxScreen, SearchScreen } from "../screens";
+import {
+  HomeScreen,
+  BoxScreen,
+  LoginScreen,
+  SearchScreen,
+  CreateBoxScreen,
+} from "../screens";
 import { grey0, bgColor } from "../theme/style";
 
 const HomeStack = createNativeStackNavigator();
@@ -27,6 +33,11 @@ const HomeStackScreen = () => (
         title: route.params?.name,
       })}
     />
+
+    <HomeStack.Screen name="Login" component={LoginScreen} />
+
+    <HomeStack.Screen name="CreateBox" component={CreateBoxScreen} />
+
     <HomeStack.Screen name="Search" component={SearchScreen} />
   </HomeStack.Navigator>
 );

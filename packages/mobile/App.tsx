@@ -9,6 +9,7 @@ import { SpotifyTokenContext } from "./context/SpotifyTokenContext";
 import { UserContext } from "./context/UserContext";
 import { SpotifyToken, useMeQuery, User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
+
 import TabNavigator from "./navigations/TabNavigator";
 
 const AuthStack = createNativeStackNavigator();

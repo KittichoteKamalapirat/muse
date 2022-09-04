@@ -1,4 +1,9 @@
 export { default as HomeScreen } from "./HomeScreen";
 export { default as BoxScreen } from "./BoxScreen";
-export { default as LoginScreen } from "./BoxScreen";
-export { default as SearchScreen } from "./BoxScreen";
+export { default as LoginScreen } from "./LoginScreen";
+export { default as RegisterScreen } from "./RegisterScreen";
+export { default as SearchScreen } from "./SearchScreen";
+export { default as CreateBoxScreen } from "./CreateBoxScreen";
+export { default as JoinedBoxScreen } from "./JoinedBoxScreen";
+export { default as JoinedBoxesScreen } from "./JoinedBoxesScreen";
+export { default as SettingScreen } from "./SettingScreen";
