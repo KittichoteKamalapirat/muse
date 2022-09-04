@@ -59,6 +59,7 @@ const AppWithoutApollo = () => {
   };
 
   const storeData = async (value: User | null | undefined) => {
+    console.log("store data");
     try {
       const jsonValue = JSON.stringify(value);
       // set data for persist storage
