@@ -10,13 +10,21 @@ import HomeStackScreen from "./HomeStackScreen";
 
 const Tabs = createBottomTabNavigator();
 
-const TabNavigator = () => {
+interface Props {
+  routeName: string;
+}
+
+const TabNavigator = ({ routeName }: Props) => {
+  console.log("route name", routeName);
+  const hideBottomTab = routeName === "Onboarding"; // hide if onboarding
+
   return (
     <Tabs.Navigator
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
           backgroundColor: bgColor,
+          display: hideBottomTab ? "none" : "flex",
         },
         tabBarActiveTintColor: primaryColor,
       }}
@@ -27,6 +35,7 @@ const TabNavigator = () => {
         options={{
           title: "Home",
           tabBarShowLabel: false,
+          // tabBarStyle: { display: hideBottomTab ? "none" : "flex" },
           tabBarIcon: ({ focused }) => (
             <View style={tw`flex items-center justify-center`}>
               <EvilIcons

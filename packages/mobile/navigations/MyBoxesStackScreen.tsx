@@ -7,7 +7,12 @@ import { grey0, bgColor } from "../theme/style";
 const MyBoxesStack = createNativeStackNavigator();
 
 const MyBoxesStackScreen = () => (
-  <MyBoxesStack.Navigator>
+  <MyBoxesStack.Navigator
+    screenOptions={{
+      headerTintColor: grey0,
+      headerStyle: { backgroundColor: bgColor },
+    }}
+  >
     <MyBoxesStack.Screen
       name="MyBoxes"
       component={JoinedBoxesScreen}

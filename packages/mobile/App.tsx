@@ -1,5 +1,8 @@
 import { ApolloProvider } from "@apollo/client";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  createNavigationContainerRef,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
@@ -24,18 +27,26 @@ const AppWithoutApollo = () => {
   console.log("app.tsx");
   const { currentUser, setCurrentUser } = useSetUserContext();
 
+  // for hiding tab in onboarding screen
+  const [routeName, setRouteName] = useState("");
+  const ref = createNavigationContainerRef();
+
+  console.log("ref", ref.getCurrentRoute);
+
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      <NavigationContainer>
-        {/* <AppStack.Navigator> */}
-        {/* <AppStack.Screen name="Auth" component={AuthScreen} /> */}
-        {/* <AppStack.Screen name="Home" component={TabNavigator} /> */}
-
-        {/* <AppStack.Screen name="Settings" component={Settings} /> */}
-        {/* </AppStack.Navigator> */}
-
-        <TabNavigator />
-        {/* <DrawerNavigator /> */}
+      <NavigationContainer
+        ref={ref}
+        onReady={() => {
+          setRouteName(ref.getCurrentRoute().name);
+        }}
+        onStateChange={async () => {
+          const previousRouteName = routeName;
+          const currentRouteName = ref.getCurrentRoute().name;
+          setRouteName(currentRouteName);
+        }}
+      >
+        <TabNavigator routeName={routeName} />
         <StatusBar style="auto" />
       </NavigationContainer>
     </UserContext.Provider>
