@@ -6,7 +6,7 @@ const useSetUserContext = () => {
   console.log("user set user context");
   const [currentUser, setCurrentUser] = useState<User | null>();
   console.log("curreent user in useSetUserContent", currentUser);
-  const { data, loading } = useMeQuery();
+  const { data, loading } = useMeQuery(); // cache is updated when logged in
   const value = useMemo(
     () => ({ currentUser, setCurrentUser }),
     [currentUser, setCurrentUser]
@@ -38,10 +38,10 @@ const useSetUserContext = () => {
       // set data for persist storage
       await AsyncStorage.setItem("user", jsonValue);
 
-      if (data?.me) {
-        // set data for UserContext
-        setCurrentUser(data?.me as User);
-      }
+      // if (data?.me) {
+      //   // set data for UserContext
+      //   setCurrentUser(data?.me as User); // IMPORTANT this was set again when logout
+      // }
     } catch (e) {
       console.log("error setting current user");
     }
@@ -55,9 +55,8 @@ const useSetUserContext = () => {
 
   // set Item
   useEffect(() => {
-    console.log("storeData useEffect");
     storeData(currentUser);
-  }, [currentUser, data?.me?.id]);
+  }, [currentUser, data?.me]);
 
   // if (loading) return <ActivityIndicator />;
   return { currentUser, setCurrentUser };

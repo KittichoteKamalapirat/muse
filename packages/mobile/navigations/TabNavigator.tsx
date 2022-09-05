@@ -15,7 +15,11 @@ interface Props {
 }
 
 const TabNavigator = ({ routeName }: Props) => {
-  const hideBottomTab = routeName === "Onboarding"; // hide if onboarding
+  const hideBottomTab =
+    routeName === "Onboarding" ||
+    routeName === "Auth" ||
+    routeName === "Login" ||
+    routeName === "Register"; // hide if onboarding
 
   return (
     <Tabs.Navigator

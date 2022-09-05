@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Controller,
   FieldValues,
@@ -16,6 +16,7 @@ import {
   MeQuery,
   useLoginMutation,
   useMeQuery,
+  User,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
@@ -47,7 +48,7 @@ const defaultValues: FormValues = {
 const Login = ({ navigation }: Props) => {
   useSetUserContext();
   console.log("login screen");
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
     control,
@@ -59,7 +60,7 @@ const Login = ({ navigation }: Props) => {
   });
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
-  const { data, loading: loading } = useMeQuery();
+  const { data: meData, loading: loading } = useMeQuery();
 
   const [login] = useLoginMutation();
 
@@ -95,7 +96,7 @@ const Login = ({ navigation }: Props) => {
             me: data?.login.user,
           },
         });
-        cache.evict({ fieldName: "posts:{}" });
+        cache.evict({ fieldName: "boxes" }); // TODO do I need this?
       },
     });
     // └ has to match what defined in graphqlmutation
@@ -109,8 +110,13 @@ const Login = ({ navigation }: Props) => {
         setGenericErrorMessage
       );
     }
+
     navigation.navigate("Home");
   };
+
+  useEffect(() => {
+    if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
+  }, [meData?.me]);
 
   return (
     <ScreenLayout>

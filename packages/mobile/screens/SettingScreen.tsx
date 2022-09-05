@@ -7,7 +7,11 @@ import Button, { ButtonTypes } from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
-import { useLogoutMutation } from "../graphql/generated/graphql";
+import {
+  MeDocument,
+  MeQuery,
+  useLogoutMutation,
+} from "../graphql/generated/graphql";
 import { apolloClient } from "../lib/apollo";
 import tw from "../lib/tailwind";
 
@@ -30,10 +34,14 @@ const SettingScreen = ({ navigation }: Props) => {
       setCurrentUser(null); //remove currentUser in Context which trigger useEffect
       await AsyncStorage.setItem("user", "null"); // remove persisted data
       console.log("current user in handle logout 1", currentUser);
-      const result = await logout(); //redis removed -> meQuery wouldn't work now
+      const result = await logout({
+        update: (cache) => {
+          cache.evict({ fieldName: "me" }); // TODO do I need this?
+        },
+      }); //redis removed -> meQuery wouldn't work now
       const cacheResult = await apolloClient.resetStore();
       console.log("cache result", cacheResult);
-      if (result.data?.logout) navigation.navigate("Home");
+      if (result.data?.logout) navigation.navigate("Auth");
 
       console.log("current user in handle logout 2", currentUser);
     } catch (error) {

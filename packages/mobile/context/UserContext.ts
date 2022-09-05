@@ -5,7 +5,7 @@ export interface UserContextType {}
 
 interface Props {
   currentUser: User | null;
-  setCurrentUser: React.Dispatch<React.SetStateAction<string>> | null;
+  setCurrentUser: React.Dispatch<React.SetStateAction<User>> | null;
 }
 
 export const UserContext = createContext<Props>({
