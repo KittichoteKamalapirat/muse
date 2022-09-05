@@ -1,3 +1,11 @@
+import { createServer } from "http";
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} from "apollo-server-core";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+import { Server as WebSocketServer } from "ws";
+import { useServer } from "graphql-ws/lib/use/ws";
 /* eslint-disable no-console */
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
@@ -114,6 +122,17 @@ export const startServer = async () => {
       validate: false,
     });
 
+    // zone ------------------
+    const httpServer = createServer(app);
+
+    // Creating the WebSocket server
+    const wsServer = new WebSocketServer({
+      server: httpServer,
+      path: "/graphql",
+    });
+
+    const serverCleanup = useServer({ schema }, wsServer);
+
     const apolloServer = new ApolloServer({
       schema,
       context: ({ req, res }): MyContext => ({
@@ -124,12 +143,28 @@ export const startServer = async () => {
         // upvoteLoader: createUpvoteLoader(),
         upvoteLoader: upvoteLoader(),
       }), // so that we can access session because session is stick with request
+      plugins: [
+        // Proper shutdown for the HTTP server.
+        ApolloServerPluginDrainHttpServer({ httpServer }),
+
+        // Proper shutdown for the WebSocket server.
+        {
+          async serverWillStart() {
+            return {
+              async drainServer() {
+                await serverCleanup.dispose();
+              },
+            };
+          },
+        },
+        ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      ],
     });
 
-    apolloServer.applyMiddleware({ app, cors: false });
+    apolloServer.applyMiddleware({ app, path: "/graphql", cors: false });
 
     const PORT = parseInt(process.env.PORT, 10);
-    const server = app.listen(PORT, () => {
+    const server = httpServer.listen(PORT, () => {
       console.log(`server started on port ${PORT}`);
     });
 
