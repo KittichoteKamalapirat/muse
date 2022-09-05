@@ -1,5 +1,5 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import SettingStackScreen from "./SettingNavigator";
+import SettingStackScreen from "./SettingNavigator(not using)";
 import TabNavigator from "./TabNavigator";
 
 const Drawer = createDrawerNavigator();
