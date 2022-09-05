@@ -44,7 +44,7 @@ const defaultValues: FormValues = {
   password: "",
 };
 const RegisterScreen = ({ navigation }: Props) => {
-  console.log("login screen");
+  console.log("register screen");
   const { currentUser } = useContext(UserContext);
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
@@ -59,8 +59,6 @@ const RegisterScreen = ({ navigation }: Props) => {
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
   const { data, loading: loading } = useMeQuery();
 
-  console.log("data", data);
-
   const [login] = useLoginMutation();
 
   if (loading) {
@@ -71,13 +69,11 @@ const RegisterScreen = ({ navigation }: Props) => {
     );
   }
 
-  console.log("current user", currentUser);
-
   // redirect if already logged in
   if (currentUser) {
     // without the following line, push to / even when there is next param
     const nextScreen = route.params?.next;
-    console.log("next screen", nextScreen);
+
     if (typeof nextScreen === "string") {
       navigation.navigate(nextScreen, {
         from: "Login",
@@ -88,8 +84,6 @@ const RegisterScreen = ({ navigation }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log(data);
-
     const response = await login({
       variables: data,
       update: (cache, { data }) => {

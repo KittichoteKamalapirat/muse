@@ -355,7 +355,6 @@ export class UserResolver {
           secure: IS_PROD,
         });
         if (err) {
-          // console.log(err);
           resolve(false);
           return;
         }

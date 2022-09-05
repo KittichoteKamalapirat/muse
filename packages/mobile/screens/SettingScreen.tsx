@@ -19,19 +19,23 @@ const Tab = createBottomTabNavigator();
 
 const SettingScreen = ({ navigation }: Props) => {
   console.log("setting screen");
-  const { setCurrentUser } = useContext(UserContext);
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  console.log("current user in setting", currentUser);
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {
+      console.log("-----------------------------------");
+      console.log("handle log out");
+      setCurrentUser(null); //remove currentUser in Context which trigger useEffect
       await AsyncStorage.setItem("user", "null"); // remove persisted data
-      setCurrentUser(null); //remove use context and trigger useEffect
+      console.log("current user in handle logout 1", currentUser);
+      const result = await logout(); //redis removed -> meQuery wouldn't work now
+      const cacheResult = await apolloClient.resetStore();
+      console.log("cache result", cacheResult);
+      if (result.data?.logout) navigation.navigate("Home");
 
-      await logout(); //redis removed -> meQuery wouldn't work now
-      navigation.navigate("Home");
-      await apolloClient.resetStore();
-      setCurrentUser(null);
+      console.log("current user in handle logout 2", currentUser);
     } catch (error) {
       console.log("error logging out");
     }

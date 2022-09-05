@@ -15,18 +15,12 @@ const useSpotifyAuth = () => {
   const { accessToken, expiresIn } = tokenData?.getSpotifyAccessToken || {};
 
   useEffect(() => {
-    console.log("useEffect is run");
-    console.log("accessToken", accessToken);
-    console.log("setToken", setToken);
-
     if (accessToken && setToken) {
-      console.log("set token");
       setToken({
         accessToken,
         expiresIn,
       });
     }
-    console.log("--------------------------------");
   }, [setToken, accessToken]);
 
   // return ;

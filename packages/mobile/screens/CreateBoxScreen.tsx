@@ -59,7 +59,6 @@ const CreateBoxScreen = ({ navigation }: Props) => {
     defaultValues,
   });
 
-  console.log("errors", errors);
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       const response = await createBox({
@@ -70,7 +69,6 @@ const CreateBoxScreen = ({ navigation }: Props) => {
           cache.evict({ fieldName: "boxes" });
         },
       });
-      console.log(response);
 
       if (!response.errors)
         navigation.navigate("Box", {

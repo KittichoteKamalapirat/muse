@@ -119,8 +119,6 @@ const MusicSearch = ({ SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET }: Props) => {
   //   refreshToken();
   // }, [data]);
 
-  console.log();
-
   return (
     <Container>
       <SearchBar

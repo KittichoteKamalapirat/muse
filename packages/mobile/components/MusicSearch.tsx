@@ -44,7 +44,6 @@ const MusicSearch = () => {
   const [data, setData] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const { token: tokenContext } = useContext(SpotifyTokenContext);
-  console.log("tokenContext", tokenContext);
 
   const { songs, offset, isFetching, isEmpty } = data;
 
@@ -55,7 +54,6 @@ const MusicSearch = () => {
         debounce(() => setData({ ...data, isEmpty: true, songs: [] }))();
       } else {
         debounce(async () => {
-          console.log("in debounce", tokenContext.accessToken);
           const newSongs = await spotifySearch({
             offset: offset.toString(),
             limit: PAGE.toString(),
@@ -107,8 +105,6 @@ const MusicSearch = () => {
   const handleEndReached = async () => {
     await loadNextPage();
   };
-
-  console.log();
 
   return (
     <Container>

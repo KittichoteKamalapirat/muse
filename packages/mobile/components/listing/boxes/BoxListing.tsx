@@ -8,7 +8,7 @@ import Error from "../../layouts/Error";
 import MyText from "../../MyTexts/MyText";
 import SearchBar from "../../SearchBar";
 import BoxItem from "./BoxItem";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { ApolloError } from "@apollo/client";
 
 interface Props {
@@ -18,7 +18,9 @@ interface Props {
 }
 const BoxListing = ({ boxes, loading, error }: Props) => {
   const navigation = useNavigation();
+  const route = useRoute();
 
+  const isHomeRoute = route.name === "Home";
   const [matchedBoxes, setMatchedBoxes] = useState<Box[]>();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -33,7 +35,6 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
       );
 
     setMatchedBoxes(newMatched);
-    console.log("newMatched", newMatched);
   }, 500);
 
   const search = (query: string) => {
@@ -58,20 +59,24 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
     <View>
       <View style={tw`flex-row justify-between`}>
         <MyText size="text-2xl" extraStyle="font-bold">
-          Find an event
+          {isHomeRoute ? "Find an event" : "My Events"}
         </MyText>
 
-        <Button
-          label="Create"
-          onPress={() => navigation.navigate("CreateBox" as never)}
-        />
+        {isHomeRoute ? (
+          <Button
+            label="Create"
+            onPress={() => navigation.navigate("CreateBox" as never)}
+          />
+        ) : null}
       </View>
+      {isHomeRoute ? (
+        <SearchBar
+          onChange={(input: string) => search(input)}
+          placeholder="Search for an event"
+          searchText={searchQuery}
+        />
+      ) : null}
 
-      <SearchBar
-        onChange={(input: string) => search(input)}
-        placeholder="Search for an event"
-        searchText={searchQuery}
-      />
       <FlatList
         data={matchedBoxes}
         renderItem={({ item }) => <BoxItem box={item as Box} />}

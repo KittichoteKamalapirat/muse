@@ -61,8 +61,6 @@ const Login = ({ navigation }: Props) => {
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
   const { data, loading: loading } = useMeQuery();
 
-  console.log("data", data);
-
   const [login] = useLoginMutation();
 
   if (loading) {
@@ -75,7 +73,6 @@ const Login = ({ navigation }: Props) => {
 
   // redirect if already logged in
   if (currentUser) {
-    console.log("there is current user ");
     // without the following line, push to / even when there is next param
     const nextScreen = route.params?.next;
     if (typeof nextScreen === "string") {
@@ -88,8 +85,6 @@ const Login = ({ navigation }: Props) => {
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("logging in");
-
     const response = await login({
       variables: data,
       update: (cache, { data }) => {

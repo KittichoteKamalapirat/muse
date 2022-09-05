@@ -32,22 +32,6 @@ const JoinedBoxesScreen = ({ navigation }: Props) => {
     error: boxesError,
   } = useJoinedBoxesQuery();
 
-  const [logout, { loading: logoutLoading }] = useLogoutMutation();
-
-  const handleLogout = async () => {
-    try {
-      await AsyncStorage.setItem("user", "null"); // remove persisted data
-      setCurrentUser(null); //remove use context and trigger useEffect
-
-      await logout(); //redis removed -> meQuery wouldn't work now
-      navigation.navigate("Auth");
-      await apolloClient.resetStore();
-      setCurrentUser(null);
-    } catch (error) {
-      console.log("error logging out");
-    }
-  };
-
   return (
     <ScreenLayout>
       <View style={tw`h-full`}>

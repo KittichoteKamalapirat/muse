@@ -6,7 +6,6 @@ export const updateCacheAfterVote = (
   songRequestId: string,
   cache: ApolloCache<VoteMutation>
 ) => {
-  console.log("update after vote");
   const data = cache.readFragment<{
     id: number;
     counts: number;
@@ -24,7 +23,6 @@ export const updateCacheAfterVote = (
 
   // vote status could be null if have never voted yet
 
-  console.log("data", data);
   if (data) {
     const prevVoteStatus = data.voteStatus; // -1, 0, 1
 

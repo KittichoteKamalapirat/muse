@@ -7,7 +7,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { UserContext } from "./context/UserContext";
-import { User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
 import useSetUserContext from "./util/useSetUserContext";
@@ -25,13 +24,12 @@ export default function App() {
 
 const AppWithoutApollo = () => {
   console.log("app.tsx");
+
   const { currentUser, setCurrentUser } = useSetUserContext();
 
   // for hiding tab in onboarding screen
   const [routeName, setRouteName] = useState("");
   const ref = createNavigationContainerRef();
-
-  console.log("ref", ref.getCurrentRoute);
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>

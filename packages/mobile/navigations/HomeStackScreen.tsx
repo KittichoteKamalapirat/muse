@@ -30,14 +30,12 @@ const HomeStackScreen = () => {
 
   // clearAsyncStorage();
 
-  console.log("current user", currentUser);
-
   return (
     <HomeStack.Navigator
       screenOptions={{
         // headerShown: false,
         headerTintColor: grey0,
-        // headerTitleAlign: "left",
+        headerTitleAlign: "left", // todo not working
         headerStyle: { backgroundColor: bgColor },
       }}
     >
