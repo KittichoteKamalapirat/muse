@@ -41,7 +41,7 @@ const SettingScreen = ({ navigation }: Props) => {
     <ScreenLayout justifyContent="justify-start">
       <View>
         {currentUser ? (
-          <View style={tw`align-left`}>
+          <View>
             <View style={tw`flex-row items-center`}>
               <Image
                 style={tw`w-20 h-20 rounded-full`}
