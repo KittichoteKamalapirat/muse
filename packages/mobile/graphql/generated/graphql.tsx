@@ -251,6 +251,16 @@ export type SpotifyToken = {
   expiresIn?: Maybe<Scalars['Int']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  songRequestsSubs: Array<SongRequest>;
+};
+
+
+export type SubscriptionSongRequestsSubsArgs = {
+  boxId: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   about?: Maybe<Scalars['String']>;
@@ -381,6 +391,13 @@ export type SongRequestsQueryVariables = Exact<{
 
 
 export type SongRequestsQuery = { __typename?: 'Query', songRequests: Array<{ __typename?: 'SongRequest', id: string, voteStatus?: number | null, isRequested?: boolean | null, requesterId: string, songId: string, boxId: string, counts: number, requester: { __typename?: 'User', id: string }, song: { __typename?: 'Song', name: string, artistName: string, albumName: string, albumImageUrl: string, spotifyTrackId: string }, box: { __typename?: 'Box', id: string, name: string, description: string, startTime: any, endTime: any } }> };
+
+export type SongRequestsSubsSubscriptionVariables = Exact<{
+  boxId: Scalars['String'];
+}>;
+
+
+export type SongRequestsSubsSubscription = { __typename?: 'Subscription', songRequestsSubs: Array<{ __typename?: 'SongRequest', id: string, songId: string, boxId: string, counts: number, song: { __typename?: 'Song', name: string, artistName: string, albumName: string, albumImageUrl: string, spotifyTrackId: string }, box: { __typename?: 'Box', id: string, name: string, description: string, startTime: any, endTime: any } }> };
 
 export type GetSpotifyAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -926,6 +943,53 @@ export function useSongRequestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type SongRequestsQueryHookResult = ReturnType<typeof useSongRequestsQuery>;
 export type SongRequestsLazyQueryHookResult = ReturnType<typeof useSongRequestsLazyQuery>;
 export type SongRequestsQueryResult = Apollo.QueryResult<SongRequestsQuery, SongRequestsQueryVariables>;
+export const SongRequestsSubsDocument = gql`
+    subscription SongRequestsSubs($boxId: String!) {
+  songRequestsSubs(boxId: $boxId) {
+    id
+    songId
+    song {
+      name
+      artistName
+      albumName
+      albumImageUrl
+      spotifyTrackId
+    }
+    boxId
+    box {
+      id
+      name
+      description
+      startTime
+      endTime
+    }
+    counts
+  }
+}
+    `;
+
+/**
+ * __useSongRequestsSubsSubscription__
+ *
+ * To run a query within a React component, call `useSongRequestsSubsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSongRequestsSubsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSongRequestsSubsSubscription({
+ *   variables: {
+ *      boxId: // value for 'boxId'
+ *   },
+ * });
+ */
+export function useSongRequestsSubsSubscription(baseOptions: Apollo.SubscriptionHookOptions<SongRequestsSubsSubscription, SongRequestsSubsSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<SongRequestsSubsSubscription, SongRequestsSubsSubscriptionVariables>(SongRequestsSubsDocument, options);
+      }
+export type SongRequestsSubsSubscriptionHookResult = ReturnType<typeof useSongRequestsSubsSubscription>;
+export type SongRequestsSubsSubscriptionResult = Apollo.SubscriptionResult<SongRequestsSubsSubscription>;
 export const GetSpotifyAccessTokenDocument = gql`
     query GetSpotifyAccessToken {
   getSpotifyAccessToken {

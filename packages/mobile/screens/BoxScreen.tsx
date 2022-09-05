@@ -13,6 +13,7 @@ import {
   SongRequest,
   useBoxQuery,
   useJoinBoxMutation,
+  useSongRequestsSubsSubscription,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 // import { places } from "../mockData";
@@ -29,10 +30,18 @@ const BoxScreen = ({ navigation }: Props) => {
   const boxId = route.params.boxId;
   const [joinBox] = useJoinBoxMutation();
 
-  // const { data: songRequestsData, songRequestsLoading, ssongRequestsError } = useSongRequestsQuery({
-  //   variables: { boxId },
-  // });
+  const {
+    data: songRequestsData,
+    loading: songRequestsLoading,
+    error: songRequestsError,
+  } = useSongRequestsSubsSubscription({
+    variables: { boxId },
+  });
 
+  console.log("------------");
+  console.log("songRequestsData", songRequestsData);
+  console.log("songRequestsLoading", songRequestsLoading);
+  console.log("songRequestsError", songRequestsError);
   const {
     data: boxData,
     loading: boxLoading,
@@ -86,6 +95,11 @@ const BoxScreen = ({ navigation }: Props) => {
     });
     if (!response.errors) console.log("response", response);
   };
+
+  useEffect(() => {
+    console.log("DATA CHANGES!", songRequestsData?.songRequestsSubs);
+  }, [songRequestsData?.songRequestsSubs]);
+
   if (boxLoading) return <ActivityIndicator />;
   if (boxError) return <Error errorMessage={boxError.message} />;
 

@@ -1,12 +1,15 @@
+import { PubSubEngine } from "graphql-subscriptions";
 import {
   Arg,
   Ctx,
   FieldResolver,
   Int,
   Mutation,
+  PubSub,
   Query,
   Resolver,
   Root,
+  Subscription,
 } from "type-graphql";
 import { getConnection } from "typeorm";
 import { Song, SongRequest, Upvote } from "../entities";
@@ -86,6 +89,7 @@ export class SongRequestResolver {
     @Arg("spotifyTrackId") spotifyTrackId: string,
     @Arg("songInput", () => SongInput) songInput: SongInput,
     @Arg("boxId") boxId: string,
+    @PubSub() pubSub: PubSubEngine,
     @Ctx() { req }: MyContext
   ): Promise<SongRequest | Error> {
     try {
@@ -104,6 +108,8 @@ export class SongRequestResolver {
         requesterId: req.session.userId,
       }).save();
 
+      const payload = "this is payload";
+      await pubSub.publish("SONG_REQUESTS", payload);
       return songRequest;
     } catch (error) {
       //   rollbar.log(error);
@@ -247,5 +253,22 @@ export class SongRequestResolver {
     }
 
     return true;
+  }
+
+  @Subscription(() => [SongRequest], {
+    topics: "SONG_REQUESTS",
+    // filter: ({ payload, args }) => args.priorities.includes(payload.priority),
+  })
+  async songRequestsSubs(@Arg("boxId") boxId: string): Promise<SongRequest[]> {
+    try {
+      const requests = await SongRequest.find({
+        where: { boxId },
+        relations: ["song", "box", "requester"],
+      });
+      return requests;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   }
 }
