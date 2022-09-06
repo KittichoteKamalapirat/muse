@@ -13,6 +13,7 @@ import {
   SongRequest,
   useBoxQuery,
   useJoinBoxMutation,
+  useSongRequestsQuery,
   useSongRequestsSubsSubscription,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
@@ -34,12 +35,21 @@ const BoxScreen = ({ navigation }: Props) => {
     data: songRequestsData,
     loading: songRequestsLoading,
     error: songRequestsError,
+  } = useSongRequestsQuery({
+    variables: { boxId },
+  });
+
+  const {
+    data: songRequestsSubsData,
+    loading: songRequestsSubsLoading,
+    error: songRequestsSubsError,
   } = useSongRequestsSubsSubscription({
     variables: { boxId },
   });
 
   console.log("------------");
-  console.log("songRequestsData", songRequestsData);
+  console.log("data", songRequestsData?.songRequests.length);
+  console.log("sub", songRequestsSubsData?.songRequestsSubs.length);
   console.log("songRequestsLoading", songRequestsLoading);
   console.log("songRequestsError", songRequestsError);
   const {
@@ -97,8 +107,8 @@ const BoxScreen = ({ navigation }: Props) => {
   };
 
   useEffect(() => {
-    console.log("DATA CHANGES!", songRequestsData?.songRequestsSubs);
-  }, [songRequestsData?.songRequestsSubs]);
+    console.log("DATA CHANGES!", songRequestsSubsData?.songRequestsSubs);
+  }, [songRequestsSubsData?.songRequestsSubs]);
 
   if (boxLoading) return <ActivityIndicator />;
   if (boxError) return <Error errorMessage={boxError.message} />;
@@ -122,7 +132,14 @@ const BoxScreen = ({ navigation }: Props) => {
               )
             }
           />
-          <VoteListing songRequests={box.songRequests as SongRequest[]} />
+          <VoteListing
+            songRequests={
+              songRequestsSubsData?.songRequestsSubs === undefined ||
+              songRequestsSubsData?.songRequestsSubs.length === 0
+                ? (songRequestsData?.songRequests as SongRequest[])
+                : (songRequestsSubsData?.songRequestsSubs as SongRequest[])
+            }
+          />
         </View>
       )}
     </ScreenLayout>

@@ -121,7 +121,8 @@ export class SongRequestResolver {
   async vote(
     @Arg("songRequestId", () => String) songRequestId: string,
     @Arg("value", () => Int) value: number,
-    @Ctx() { req }: MyContext
+    @Ctx() { req }: MyContext,
+    @PubSub() pubSub: PubSubEngine
   ) {
     const { userId } = req.session;
     const isUpvote = value !== 0;
@@ -251,7 +252,7 @@ export class SongRequestResolver {
         );
       });
     }
-
+    await pubSub.publish("SONG_REQUESTS", "payload");
     return true;
   }
 
