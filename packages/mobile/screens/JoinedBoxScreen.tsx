@@ -3,7 +3,7 @@ import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
-import { io } from "socket.io-client";
+
 import Button from "../components/Buttons/Button";
 import Error from "../components/layouts/Error";
 import ScreenLayout from "../components/layouts/ScreenLayout";
@@ -16,8 +16,6 @@ import {
 } from "../graphql/generated/graphql";
 // import { places } from "../mockData";
 import { Place, Song } from "../types";
-
-const socket = io("http://localhost:4000");
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
