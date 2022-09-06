@@ -17,6 +17,7 @@ interface Props {
 }
 
 const VoteItem = ({ item, voteStatus }: Props) => {
+  console.log("vote status in item", item.song.name, voteStatus);
   const [vote] = useVoteMutation();
 
   const handleVote = async (songRequestId: string, value: number) => {

@@ -73,6 +73,8 @@ export const updateCacheAfterVote = (
       default:
         break;
     }
+
+    console.log("current vote status", currVoteStatus);
     const newCounts = (data.counts as number) + delta;
     cache.writeFragment({
       id: "SongRequest:" + songRequestId,

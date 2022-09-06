@@ -120,12 +120,12 @@ export class SongRequestResolver {
   @Mutation(() => Boolean)
   async vote(
     @Arg("songRequestId", () => String) songRequestId: string,
-    @Arg("value", () => Int) value: number,
+    @Arg("value", () => Int) value: number, // 1 or -1
     @Ctx() { req }: MyContext,
     @PubSub() pubSub: PubSubEngine
   ) {
     const { userId } = req.session;
-    const isUpvote = value !== 0;
+    const isUpvote = value !== -1;
     const realValue = isUpvote ? 1 : -1; // if happen to pass in value = 12 -> make it 1 or -1, -12 will be 1 anyway
 
     const upvoted = await Upvote.findOne({ where: { songRequestId, userId } });
@@ -238,7 +238,7 @@ export class SongRequestResolver {
       insert into upvote ("userId","songRequestId","value")
       values ($1,$2,$3);
       `,
-          [userId, songRequestId, 1]
+          [userId, songRequestId, realValue]
         );
 
         await tm.query(
