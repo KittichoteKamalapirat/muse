@@ -28,7 +28,7 @@ const AppWithoutApollo = () => {
 
   const { currentUser, setCurrentUser } = useSetUserContext();
 
-  const [token, setToken] = useState();
+  const [token, setToken] = useState<SpotifyToken>();
 
   // for hiding tab in onboarding screen
   const [routeName, setRouteName] = useState("");
@@ -36,7 +36,7 @@ const AppWithoutApollo = () => {
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      <SpotifyTokenContext.Provider value={{ token, setCursetTokenrentUser }}>
+      <SpotifyTokenContext.Provider value={{ token, setToken }}>
         <NavigationContainer
           ref={ref}
           onReady={() => {
