@@ -1,25 +1,20 @@
-import { createServer } from "http";
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
-import { makeExecutableSchema } from "@graphql-tools/schema";
-import { Server as WebSocketServer } from "ws";
-import { useServer } from "graphql-ws/lib/use/ws";
 /* eslint-disable no-console */
-import {
-  ApolloServer,
-  checkForResolveTypeResolver,
-} from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
 // import "dotenv-safe/config";
 import dotenv from "dotenv-safe";
 import express from "express";
 import session from "express-session";
+import { useServer } from "graphql-ws/lib/use/ws";
+import { createServer } from "http";
 import Redis from "ioredis";
-import { Server } from "socket.io";
-import { buildSchema, PubSub } from "type-graphql";
+import { buildSchema } from "type-graphql";
+import { Server as WebSocketServer } from "ws";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { BoxResolver } from "./resolvers/box";
@@ -32,8 +27,6 @@ import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
-import { SimpleConsoleLogger } from "typeorm";
-import { disconnect } from "process";
 
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
@@ -177,7 +170,6 @@ export const startServer = async () => {
       plugins: [
         // Proper shutdown for the HTTP server.
         ApolloServerPluginDrainHttpServer({ httpServer }),
-
         // Proper shutdown for the WebSocket server.
         {
           async serverWillStart() {
@@ -203,25 +195,6 @@ export const startServer = async () => {
     const server = httpServer.listen(PORT, () => {
       console.log(`server started on port ${PORT}`);
     });
-
-    // web socket start -----------------------------------
-    const io = new Server(server, {
-      cors: {
-        origin: ["http://localhost:19000", "http://localhost:19001"],
-      },
-    });
-
-    io.on("connection", (socket) => {
-      console.log("io socket started");
-      socket.on("incrementUpvote", (placeId, songId, upvotesNum) => {
-        console.log("placeId", placeId);
-        console.log("songId", songId);
-        console.log("upvotesNum", upvotesNum);
-        io.emit("broadcastIncrementUpvote", placeId, songId, upvotesNum + 1);
-      });
-    });
-
-    // seb socket ends ----------------------------------------
 
     return { server, connection: conn };
   } catch (error) {
