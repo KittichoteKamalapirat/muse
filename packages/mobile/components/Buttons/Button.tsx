@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import { Text, TouchableOpacity } from "react-native";
 import tw from "../../lib/tailwind";
-import { grey0 } from "../../theme/style";
+import { grey0, grey100 } from "../../theme/style";
 import { Button as RNButton } from "react-native";
 
 export enum ButtonTypes {
@@ -63,7 +63,7 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
       }`;
 
     case ButtonTypes.SECONDARY:
-      return `${commonStyle} text-bg-color `;
+      return `${commonStyle} text-bg-color`;
 
     case ButtonTypes.TEXT:
       return `${commonStyle} ${fontColor || "text-grey-0"} `;
@@ -83,15 +83,10 @@ const Button = ({
   const buttonStyle = useButtonStyle({ type, fontColor });
   const textStyle = useTextStyle({ type, fontColor });
 
-  const button = (
+  return (
     <TouchableOpacity style={tw`${buttonStyle}`} onPress={onPress}>
       <Text style={tw`${textStyle}`}>{label}</Text>
     </TouchableOpacity>
-  );
-  return type === ButtonTypes.TEXT ? (
-    <RNButton title={label} onPress={onPress} color={grey0} />
-  ) : (
-    button
   );
 };
 
