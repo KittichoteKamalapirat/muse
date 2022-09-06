@@ -1,12 +1,12 @@
 subscription SongRequestsSubs($boxId: String!) {
   songRequestsSubs(boxId: $boxId) {
     id
-    # voteStatus
-    # isRequested
-    # requesterId
-    # requester {
-    #   id
-    # }
+    voteStatus
+    isRequested
+    requesterId
+    requester {
+      id
+    }
     songId
     song {
       name

@@ -7,7 +7,10 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { Server as WebSocketServer } from "ws";
 import { useServer } from "graphql-ws/lib/use/ws";
 /* eslint-disable no-console */
-import { ApolloServer } from "apollo-server-express";
+import {
+  ApolloServer,
+  checkForResolveTypeResolver,
+} from "apollo-server-express";
 import connectRedis from "connect-redis";
 import cors from "cors";
 // import "dotenv-safe/config";
@@ -16,7 +19,7 @@ import express from "express";
 import session from "express-session";
 import Redis from "ioredis";
 import { Server } from "socket.io";
-import { buildSchema } from "type-graphql";
+import { buildSchema, PubSub } from "type-graphql";
 import { COOKIE_NAME, IS_PROD } from "./constants";
 import { AddressResolver } from "./resolvers/address";
 import { BoxResolver } from "./resolvers/box";
@@ -29,6 +32,8 @@ import { MyContext } from "./types";
 import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
+import { SimpleConsoleLogger } from "typeorm";
+import { disconnect } from "process";
 
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
@@ -88,25 +93,25 @@ export const startServer = async () => {
     })
   );
 
-  app.use(
-    session({
-      name: COOKIE_NAME,
-      store: new RedisStore({
-        client: redis,
-        disableTouch: true,
-      }),
-      cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
-        httpOnly: true, // so that Javascript's front end can't access cookie
-        sameSite: "lax", // csrf
-        secure: IS_PROD, // cookie onl works in https
-        domain: IS_PROD ? ".muse.com" : undefined, // no need if in development
-      },
-      saveUninitialized: false,
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-    })
-  );
+  const sessionMiddleware = session({
+    name: COOKIE_NAME,
+    store: new RedisStore({
+      client: redis,
+      disableTouch: true,
+    }),
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
+      httpOnly: true, // so that Javascript's front end can't access cookie
+      sameSite: "lax", // csrf
+      secure: IS_PROD, // cookie onl works in https
+      domain: IS_PROD ? ".muse.com" : undefined, // no need if in development
+    },
+    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+  });
+
+  app.use(sessionMiddleware); // cookie passed automatically in req.session (for query and mutation)
 
   try {
     const schema = await buildSchema({
@@ -131,9 +136,35 @@ export const startServer = async () => {
       path: "/graphql",
     });
 
-    const serverCleanup = useServer({ schema }, wsServer);
+    // console.log(sessionMiddleware())
+
+    const serverCleanup = useServer(
+      {
+        schema,
+        context: (ctx, msg, args) => ({
+          req: ctx.extra.request,
+          userLoader: createUserLoader(),
+          upvoteLoader: upvoteLoader(),
+        }),
+        onConnect: async (ctx) => {
+          console.log("socket connected");
+          // manually add session object to request
+          sessionMiddleware(ctx.extra.request as any, {} as any, () => {
+            console.log("session added");
+          });
+        },
+        onDisconnect() {
+          console.log("socket disconnected");
+        },
+      },
+      wsServer
+    );
+    console.log("1");
 
     const apolloServer = new ApolloServer({
+      // playground: {
+      //   subscriptionEndpoint: "ws://localhost:4000/subscriptions",
+      // },
       schema,
       context: ({ req, res }): MyContext => ({
         req,
@@ -159,9 +190,14 @@ export const startServer = async () => {
         },
         ApolloServerPluginLandingPageLocalDefault({ embed: true }),
       ],
+      subscriptions: {
+        path: "/graphql",
+      },
     });
 
+    console.log("2");
     apolloServer.applyMiddleware({ app, path: "/graphql", cors: false });
+    console.log("3");
 
     const PORT = parseInt(process.env.PORT, 10);
     const server = httpServer.listen(PORT, () => {
@@ -176,7 +212,7 @@ export const startServer = async () => {
     });
 
     io.on("connection", (socket) => {
-      console.log("socket started");
+      console.log("io socket started");
       socket.on("incrementUpvote", (placeId, songId, upvotesNum) => {
         console.log("placeId", placeId);
         console.log("songId", songId);

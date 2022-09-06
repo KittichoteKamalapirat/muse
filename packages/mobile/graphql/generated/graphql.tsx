@@ -397,7 +397,7 @@ export type SongRequestsSubsSubscriptionVariables = Exact<{
 }>;
 
 
-export type SongRequestsSubsSubscription = { __typename?: 'Subscription', songRequestsSubs: Array<{ __typename?: 'SongRequest', id: string, songId: string, boxId: string, counts: number, song: { __typename?: 'Song', name: string, artistName: string, albumName: string, albumImageUrl: string, spotifyTrackId: string }, box: { __typename?: 'Box', id: string, name: string, description: string, startTime: any, endTime: any } }> };
+export type SongRequestsSubsSubscription = { __typename?: 'Subscription', songRequestsSubs: Array<{ __typename?: 'SongRequest', id: string, voteStatus?: number | null, isRequested?: boolean | null, requesterId: string, songId: string, boxId: string, counts: number, requester: { __typename?: 'User', id: string }, song: { __typename?: 'Song', name: string, artistName: string, albumName: string, albumImageUrl: string, spotifyTrackId: string }, box: { __typename?: 'Box', id: string, name: string, description: string, startTime: any, endTime: any } }> };
 
 export type GetSpotifyAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -947,6 +947,12 @@ export const SongRequestsSubsDocument = gql`
     subscription SongRequestsSubs($boxId: String!) {
   songRequestsSubs(boxId: $boxId) {
     id
+    voteStatus
+    isRequested
+    requesterId
+    requester {
+      id
+    }
     songId
     song {
       name

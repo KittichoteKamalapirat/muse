@@ -258,14 +258,33 @@ export class SongRequestResolver {
 
   @Subscription(() => [SongRequest], {
     topics: "SONG_REQUESTS",
+
     // filter: ({ payload, args }) => args.priorities.includes(payload.priority),
   })
-  async songRequestsSubs(@Arg("boxId") boxId: string): Promise<SongRequest[]> {
+  async songRequestsSubs(
+    @Arg("boxId") boxId: string,
+
+    @Ctx() { req, res, redis, userLoader, upvoteLoader }: MyContext
+  ): Promise<SongRequest[]> {
     try {
+      // need access to voteStatus and isRequested
+      //  vote status needs => @Ctx() { upvoteLoader, req }: MyContext
+
+      // seems like when subscription called this => no access to @Ctx()
+      console.log("subscribing");
+      console.log("req", req);
+      console.log("res", res);
+      console.log("redis", redis);
+
+      console.log("userLoader", userLoader);
+      console.log("upvoteLoader", upvoteLoader);
+
       const requests = await SongRequest.find({
         where: { boxId },
         relations: ["song", "box", "requester"],
       });
+
+      // console.log("requests", requests);
       return requests;
     } catch (error) {
       console.log(error);
