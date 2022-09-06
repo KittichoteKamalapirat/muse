@@ -8,7 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useState } from "react";
 import { SpotifyTokenContext } from "./context/SpotifyTokenContext";
 import { UserContext } from "./context/UserContext";
-import { SpotifyToken } from "./graphql/generated/graphql";
+import { SpotifyToken, User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
 import useSetUserContext from "./util/useSetUserContext";
@@ -27,13 +27,19 @@ export default function App() {
 const AppWithoutApollo = () => {
   console.log("app.tsx");
 
-  const { currentUser, setCurrentUser } = useSetUserContext();
+  useSetUserContext();
+
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [token, setToken] = useState<SpotifyToken>({
     accessToken: "",
     expiresIn: 0,
   });
 
+  const userProviderValue = useMemo(
+    () => ({ currentUser, setCurrentUser }),
+    [currentUser, setCurrentUser]
+  );
   const tokenProviderValue = useMemo(
     () => ({ token, setToken }),
     [token, setToken]
