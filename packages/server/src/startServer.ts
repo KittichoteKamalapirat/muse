@@ -129,8 +129,6 @@ export const startServer = async () => {
       path: "/graphql",
     });
 
-    // console.log(sessionMiddleware())
-
     const serverCleanup = useServer(
       {
         schema,
@@ -152,7 +150,6 @@ export const startServer = async () => {
       },
       wsServer
     );
-    console.log("1");
 
     const apolloServer = new ApolloServer({
       // playground: {
@@ -187,9 +184,7 @@ export const startServer = async () => {
       },
     });
 
-    console.log("2");
     apolloServer.applyMiddleware({ app, path: "/graphql", cors: false });
-    console.log("3");
 
     const PORT = parseInt(process.env.PORT, 10);
     const server = httpServer.listen(PORT, () => {
