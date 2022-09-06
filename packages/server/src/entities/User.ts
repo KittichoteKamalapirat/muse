@@ -17,6 +17,10 @@ class User extends BaseEntity {
   @Field()
   id!: string;
 
+  @Column({ default: false })
+  @Field()
+  isGuest: boolean;
+
   @Column({ unique: true })
   @Field()
   username!: string;

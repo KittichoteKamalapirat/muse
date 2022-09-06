@@ -235,15 +235,18 @@ export class UserResolver {
     return { user };
   }
 
+  // create random username, email,
   @Mutation(() => UserResponse)
   async guestLogin(@Ctx() { req }: MyContext): Promise<UserResponse> {
     const uuid = v4();
     try {
       const user = await User.create({
         id: uuid,
+        isGuest: true,
         username: uuid,
         email: uuid,
         phoneNumber: uuid,
+        password: uuid,
         avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
       }).save();
 

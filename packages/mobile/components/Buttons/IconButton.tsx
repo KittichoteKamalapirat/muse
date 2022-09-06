@@ -1,15 +1,7 @@
 import React, { ReactNode } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import tw from "../../lib/tailwind";
-import { grey0 } from "../../theme/style";
-import { Button as RNButton } from "react-native";
-
-export enum ButtonTypes {
-  PRIMARY = "primary",
-  SECONDARY = "secondary",
-  OUTLINED = "outlined",
-  TEXT = "text",
-}
+import { ButtonTypes } from "./Button";
 
 interface Props {
   onPress?: () => void;

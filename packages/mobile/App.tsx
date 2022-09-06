@@ -50,7 +50,7 @@ const AppWithoutApollo = () => {
   const ref = createNavigationContainerRef();
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser }}>
+    <UserContext.Provider value={userProviderValue}>
       <SpotifyTokenContext.Provider value={tokenProviderValue}>
         <NavigationContainer
           ref={ref}

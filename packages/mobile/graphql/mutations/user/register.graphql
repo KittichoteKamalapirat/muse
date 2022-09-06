@@ -1,0 +1,5 @@
+mutation Register($data: UsernamePasswordInput!) {
+  register(data: $data) {
+    ...RegularUserResponse
+  }
+}

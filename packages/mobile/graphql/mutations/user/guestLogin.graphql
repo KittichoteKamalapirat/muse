@@ -1,0 +1,5 @@
+mutation GuestLogin {
+  guestLogin {
+    ...RegularUserResponse
+  }
+}

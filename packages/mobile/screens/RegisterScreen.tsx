@@ -7,9 +7,11 @@ import {
   useForm,
   UseFormSetError,
 } from "react-hook-form";
-import { Button, Text, TextInput, View } from "react-native";
+import { Text, TextInput, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
+import Button, { ButtonTypes } from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
+import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
 import {
   MeDocument,
@@ -154,7 +156,16 @@ const RegisterScreen = ({ navigation }: Props) => {
       {errors.password && <Text>This is required.</Text>}
 
       <View>
-        <Button title="Login" onPress={handleSubmit(onSubmit)} />
+        <Button label="Login" onPress={handleSubmit(onSubmit)} />
+      </View>
+
+      <View>
+        <MyText>Already have an account?</MyText>
+        <Button
+          label="Log in"
+          type={ButtonTypes.TEXT}
+          onPress={() => navigation.navigate("Login")}
+        />
       </View>
     </ScreenLayout>
   );
