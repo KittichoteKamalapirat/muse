@@ -5,9 +5,10 @@ import {
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { SpotifyTokenContext } from "./context/SpotifyTokenContext";
 import { UserContext } from "./context/UserContext";
+import { SpotifyToken } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
 import useSetUserContext from "./util/useSetUserContext";
@@ -28,7 +29,15 @@ const AppWithoutApollo = () => {
 
   const { currentUser, setCurrentUser } = useSetUserContext();
 
-  const [token, setToken] = useState<SpotifyToken>();
+  const [token, setToken] = useState<SpotifyToken>({
+    accessToken: "",
+    expiresIn: 0,
+  });
+
+  const tokenProviderValue = useMemo(
+    () => ({ token, setToken }),
+    [token, setToken]
+  );
 
   // for hiding tab in onboarding screen
   const [routeName, setRouteName] = useState("");
@@ -36,7 +45,7 @@ const AppWithoutApollo = () => {
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      <SpotifyTokenContext.Provider value={{ token, setToken }}>
+      <SpotifyTokenContext.Provider value={tokenProviderValue}>
         <NavigationContainer
           ref={ref}
           onReady={() => {
