@@ -3,11 +3,10 @@ import { SafeAreaView, View } from "react-native";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MusicSearch from "../components/MusicSearch";
 import tw from "../lib/tailwind";
-
-import { useIsSpotifyuAuth } from "../util/useSpotifyAuthAuthorizationFlow";
+import useSpotifyAuth from "../util/useSpotifyAuthClientCredentialFlow";
 
 const SearchScreen = () => {
-  useIsSpotifyuAuth();
+  useSpotifyAuth();
 
   return (
     <ScreenLayout>

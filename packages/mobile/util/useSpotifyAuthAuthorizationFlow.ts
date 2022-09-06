@@ -41,6 +41,7 @@ const scopes = [
 ];
 
 export const useIsSpotifyuAuth = () => {
+  console.log("get spotify token hook ");
   const { token, setToken } = useContext(SpotifyTokenContext);
 
   const [request, response, promptAsync] = useAuthRequest(

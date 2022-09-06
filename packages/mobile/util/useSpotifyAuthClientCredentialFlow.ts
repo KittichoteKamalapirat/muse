@@ -4,6 +4,7 @@ import { SpotifyTokenContext } from "../context/SpotifyTokenContext";
 import { useGetSpotifyAccessTokenQuery } from "../graphql/generated/graphql";
 
 const useSpotifyAuth = () => {
+  console.log("client crediential flow");
   const { token, setToken } = useContext(SpotifyTokenContext);
 
   const {
@@ -14,21 +15,20 @@ const useSpotifyAuth = () => {
 
   const { accessToken, expiresIn } = tokenData?.getSpotifyAccessToken || {};
 
+  console.log("access token", tokenData?.getSpotifyAccessToken.accessToken);
+  console.log(setToken);
+  if (tokenLoading) console.log("loading");
+  if (tokenError) console.log(tokenError);
+
   useEffect(() => {
     if (accessToken && setToken) {
+      console.log("🥇 set token in context!");
       setToken({
         accessToken,
         expiresIn,
       });
     }
   }, [setToken, accessToken]);
-
-  // return ;
-  // useEffect(() => {
-  //   if (!token.expiresIn) return;
-
-  //   setTimeout(() => {}, (token.expiresIn - 60) * 1000); //59mins * 1000 ครบ 59 นาทีแล้ว fetch ใหม่
-  // });
 };
 
 export default useSpotifyAuth;

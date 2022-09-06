@@ -6,6 +6,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { SpotifyTokenContext } from "./context/SpotifyTokenContext";
 import { UserContext } from "./context/UserContext";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
@@ -27,26 +28,30 @@ const AppWithoutApollo = () => {
 
   const { currentUser, setCurrentUser } = useSetUserContext();
 
+  const [token, setToken] = useState();
+
   // for hiding tab in onboarding screen
   const [routeName, setRouteName] = useState("");
   const ref = createNavigationContainerRef();
 
   return (
     <UserContext.Provider value={{ currentUser, setCurrentUser }}>
-      <NavigationContainer
-        ref={ref}
-        onReady={() => {
-          setRouteName(ref.getCurrentRoute().name);
-        }}
-        onStateChange={async () => {
-          const previousRouteName = routeName;
-          const currentRouteName = ref.getCurrentRoute().name;
-          setRouteName(currentRouteName);
-        }}
-      >
-        <TabNavigator routeName={routeName} />
-        <StatusBar style="auto" />
-      </NavigationContainer>
+      <SpotifyTokenContext.Provider value={{ token, setCursetTokenrentUser }}>
+        <NavigationContainer
+          ref={ref}
+          onReady={() => {
+            setRouteName(ref.getCurrentRoute().name);
+          }}
+          onStateChange={async () => {
+            const previousRouteName = routeName;
+            const currentRouteName = ref.getCurrentRoute().name;
+            setRouteName(currentRouteName);
+          }}
+        >
+          <TabNavigator routeName={routeName} />
+          <StatusBar style="auto" />
+        </NavigationContainer>
+      </SpotifyTokenContext.Provider>
     </UserContext.Provider>
   );
 };
