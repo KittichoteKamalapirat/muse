@@ -4,7 +4,7 @@ import { NavigationScreenProp } from "react-navigation";
 import { RouteProp, useRoute } from "@react-navigation/native";
 
 interface Props {
-  navigation: NavigationScreenProp<any, any>;
+  navigation?: NavigationScreenProp<any, any>;
 }
 
 export const useIsAuth = ({ navigation }: Props) => {

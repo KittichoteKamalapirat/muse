@@ -81,6 +81,10 @@ export const startServer = async () => {
         process.env.CORS_ORIGIN_PROD,
         process.env.CORS_ORIGIN_TEST,
         "http://localhost:19006",
+        "http://localhost:19000",
+        "exp://192.168.1.66:19001",
+        "exp://192.168.1.66:19000",
+        "http://localhost:19001",
       ], // localhost 3000 and mobile
       credentials: true,
     })

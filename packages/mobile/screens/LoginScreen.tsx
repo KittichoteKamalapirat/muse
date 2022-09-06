@@ -64,6 +64,61 @@ const Login = ({ navigation }: Props) => {
 
   const [login] = useLoginMutation();
 
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    try {
+      console.log("---------------------");
+      console.log("trying to login");
+      const response = await login({
+        variables: data,
+        update: (cache, { data }) => {
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              __typename: "Query",
+              me: data?.login.user,
+            },
+          });
+          cache.evict({ fieldName: "boxes" }); // TODO do I need this?
+        },
+      });
+
+      // └ has to match what defined in graphqlmutation
+      const gqlErrors = response.data?.login.errors;
+      if (gqlErrors) {
+        // setErrors(toErrorMap(response.data.login.errors));
+        const resultUserErrors = handleGraphqlErrors(
+          data,
+          gqlErrors,
+          setError as unknown as UseFormSetError<FieldValues>,
+          setGenericErrorMessage
+        );
+      }
+
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(" ⛔ catch block", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("runnnnnn");
+    if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
+  }, [meData?.me, setCurrentUser]);
+
+  useEffect(() => {
+    // redirect if already logged in
+    if (currentUser) {
+      const nextScreen = route.params?.next;
+      if (typeof nextScreen === "string") {
+        navigation.navigate(nextScreen, {
+          from: "Login",
+        });
+      } else {
+        navigation.navigate("Home");
+      }
+    }
+  }, [currentUser]);
+
   if (loading) {
     return (
       <ScreenLayout>
@@ -71,52 +126,6 @@ const Login = ({ navigation }: Props) => {
       </ScreenLayout>
     );
   }
-
-  // redirect if already logged in
-  if (currentUser) {
-    // without the following line, push to / even when there is next param
-    const nextScreen = route.params?.next;
-    if (typeof nextScreen === "string") {
-      navigation.navigate(nextScreen, {
-        from: "Login",
-      });
-    } else {
-      navigation.navigate("Home");
-    }
-  }
-
-  const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await login({
-      variables: data,
-      update: (cache, { data }) => {
-        cache.writeQuery<MeQuery>({
-          query: MeDocument,
-          data: {
-            __typename: "Query",
-            me: data?.login.user,
-          },
-        });
-        cache.evict({ fieldName: "boxes" }); // TODO do I need this?
-      },
-    });
-    // └ has to match what defined in graphqlmutation
-    const gqlErrors = response.data?.login.errors;
-    if (gqlErrors) {
-      // setErrors(toErrorMap(response.data.login.errors));
-      const resultUserErrors = handleGraphqlErrors(
-        data,
-        gqlErrors,
-        setError as unknown as UseFormSetError<FieldValues>,
-        setGenericErrorMessage
-      );
-    }
-
-    navigation.navigate("Home");
-  };
-
-  useEffect(() => {
-    if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
-  }, [meData?.me]);
 
   return (
     <ScreenLayout>
