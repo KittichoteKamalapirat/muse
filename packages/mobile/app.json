@@ -14,16 +14,19 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.kittishane.musebox"
+      "bundleIdentifier": "com.kittishane.jocky"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FDAE5B"
-      }
+      },
+      "package": "com.kittishane.jocky"
     },
     "androidStatusBar": {
       "backgroundColor": "#121212"
@@ -36,7 +39,6 @@
       "SPOTIFY_CLIENT_SECRET": "e8cb16ae8d2a4ebe89454368137eaf3e",
       "PUBLIC_SERVER_URL": "http://192.168.1.66:4000",
       "PUBLIC_WS_SERVER_URL": "ws://192.168.1.66:4000",
-
       "eas": {
         "projectId": "e7d4f43c-394a-4cf6-8f42-5369f011921f"
       }

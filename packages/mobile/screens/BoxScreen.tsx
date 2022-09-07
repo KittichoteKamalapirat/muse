@@ -71,10 +71,8 @@ const BoxScreen = ({ navigation }: Props) => {
     if (!response.errors) console.log("response", response);
   };
 
-  if (boxLoading || songRequestsLoading || songRequestsSubsLoading)
-    return <ActivityIndicator />;
-  if (boxError || songRequestsError || songRequestsSubsError)
-    return <Error errorMessage="Error" />;
+  if (boxLoading) return <ActivityIndicator />;
+  if (boxError) return <Error errorMessage="Error" />;
 
   return (
     <ScreenLayout justifyContent="justify-start">
