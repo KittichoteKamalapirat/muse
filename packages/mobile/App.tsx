@@ -3,7 +3,6 @@ import {
   createNavigationContainerRef,
   NavigationContainer,
 } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useState } from "react";
 import { SpotifyTokenContext } from "./context/SpotifyTokenContext";
@@ -12,9 +11,6 @@ import { SpotifyToken, User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
 import useSetUserContext from "./util/useSetUserContext";
-
-const AuthStack = createNativeStackNavigator();
-const AppStack = createNativeStackNavigator();
 
 export default function App() {
   return (
