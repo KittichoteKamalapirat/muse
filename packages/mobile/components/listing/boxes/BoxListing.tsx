@@ -1,6 +1,13 @@
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  View,
+  LogBox,
+} from "react-native";
 import { Box, useBoxesQuery } from "../../../graphql/generated/graphql";
 import tw from "../../../lib/tailwind";
 import { debounce } from "../../../util/debounce";
@@ -11,6 +18,7 @@ import SearchBar from "../../SearchBar";
 import BoxItem from "./BoxItem";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ApolloError } from "@apollo/client";
+import { Divider } from "react-native-paper";
 
 interface Props {
   boxes: Box[];
@@ -67,16 +75,21 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
     }
   }, [loading, boxes]);
 
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
+
   if (loading) return <ActivityIndicator />;
   if (error) return <Error errorMessage={error.message} />;
 
-  matchedBoxes?.forEach((box) => console.log("raw", box.startTime));
-  matchedBoxes?.forEach((box) =>
-    console.log("moment", moment(box.startTime).isSame(new Date(), "day"))
+  const noEvents = (
+    <View style={tw`mb-4`}>
+      <MyText extraStyle="text-center">No events</MyText>
+    </View>
   );
 
   return (
-    <View>
+    <ScrollView>
       <View style={tw`flex-row justify-between items-center mb-2`}>
         <MyText size="text-2xl" extraStyle="font-bold">
           {isHomeRoute ? "Find an event" : "My Events"}
@@ -100,11 +113,11 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
       <View style={tw`mt-2`}>
         <View>
           {/* today */}
-          <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
+          <MyText size="text-xl" weight="font-bold" extraStyle="m-2">
             Today
           </MyText>
           {!todayBoxes.length ? (
-            <MyText>No events today</MyText>
+            noEvents
           ) : (
             <FlatList
               // data={matchedBoxes?.filter(box => box.startTime)}
@@ -116,13 +129,14 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
         </View>
 
         {/* tomorrow */}
+        <Divider style={tw`border-solid border-t-2 border-grey-700`} />
         <View>
           <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
             Tomorrow
           </MyText>
 
           {!tomorrowBoxes.length ? (
-            <MyText extraStyle="text-center">No events tomorrow</MyText>
+            noEvents
           ) : (
             <FlatList
               data={tomorrowBoxes}
@@ -131,19 +145,24 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
             />
           )}
         </View>
-
+        <Divider style={tw`border-solid border-t-2 border-grey-700`} />
         <View>
           <MyText size="text-xl" weight="font-bold" extraStyle="my-2 ">
             Others
           </MyText>
-          <FlatList
-            data={otherBoxes}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <BoxItem box={item as Box} />}
-          />
+
+          {!otherBoxes.length ? (
+            noEvents
+          ) : (
+            <FlatList
+              data={otherBoxes}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <BoxItem box={item as Box} />}
+            />
+          )}
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
