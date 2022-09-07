@@ -102,7 +102,7 @@ const CreateBoxScreen = ({ navigation }: Props) => {
             autoCapitalize="none"
             onChangeText={onChange}
             value={value}
-            style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
           />
         )}
         name={FormNames.NAME}
@@ -117,7 +117,7 @@ const CreateBoxScreen = ({ navigation }: Props) => {
             onChangeText={onChange}
             autoCapitalize="none"
             value={value}
-            style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
           />
         )}
         name={FormNames.DESCRIPTION}
@@ -136,7 +136,7 @@ const CreateBoxScreen = ({ navigation }: Props) => {
             onChangeText={onChange}
             autoCapitalize="none"
             value={value}
-            style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
           />
         )}
         name={FormNames.ADDRESS_NAME}

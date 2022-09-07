@@ -16,6 +16,7 @@ interface Props {
   label: string;
   type?: ButtonTypes;
   fontColor?: string;
+  size?: string;
 }
 
 interface ClassProps {
@@ -46,7 +47,7 @@ const useButtonStyle = ({ type, fontColor }: ClassProps) => {
       return `${commonStyle} bg-grey-0 hover:bg-grey-50`;
 
     case ButtonTypes.TEXT:
-      return `${commonStyle}`;
+      return ``;
 
     case ButtonTypes.PRIMARY:
     default:
@@ -66,7 +67,7 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
       return `${commonStyle} text-bg-color`;
 
     case ButtonTypes.TEXT:
-      return `${commonStyle} ${fontColor || "text-grey-0"} `;
+      return ` ${fontColor || "text-grey-0"} `;
 
     case ButtonTypes.PRIMARY:
     default:
@@ -79,13 +80,14 @@ const Button = ({
   type = ButtonTypes.PRIMARY,
   onPress,
   fontColor = "",
+  size = "",
 }: Props) => {
   const buttonStyle = useButtonStyle({ type, fontColor });
   const textStyle = useTextStyle({ type, fontColor });
 
   return (
     <TouchableOpacity style={tw`${buttonStyle}`} onPress={onPress}>
-      <Text style={tw`${textStyle}`}>{label}</Text>
+      <Text style={tw`${textStyle} ${size}`}>{label}</Text>
     </TouchableOpacity>
   );
 };

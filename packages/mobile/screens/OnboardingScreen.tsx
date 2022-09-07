@@ -16,6 +16,7 @@ import screenImage1 from "../assets/images/onboard-screen-1.jpg";
 import screenImage2 from "../assets/images/onboard-screen-2.jpg";
 import screenImage3 from "../assets/images/onboard-screen-3.jpg";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
+import MyText from "../components/MyTexts/MyText";
 import tw from "../lib/tailwind";
 import { bgColor, grey0, grey500, primaryColor } from "../theme/style";
 
@@ -86,15 +87,13 @@ const Slide = ({ item, navigation }: SlideProps) => {
           }}
         >
           <Image source={item.image} style={tw`w-20 h-20`} />
-          <Text
-            style={{
-              color: primaryColor,
-              fontSize: 24,
-              fontWeight: "bold",
-            }}
+          <MyText
+            fontColor="text-primary"
+            size="text-3xl"
+            extraStyle="font-serif"
           >
             Jocky
-          </Text>
+          </MyText>
           <Text style={styles.title}>{item?.title}</Text>
         </View>
 
@@ -113,11 +112,14 @@ const Slide = ({ item, navigation }: SlideProps) => {
             fontColor="grey-100"
             onPress={() => navigation.navigate("Login")}
           />
-          <Button
-            label="Log in as Guest"
-            type={ButtonTypes.TEXT}
-            fontColor="text-grey-0"
-          />
+
+          <View style={tw`w-full flex items-center mt-4`}>
+            <Button
+              label="Log in as Guest"
+              type={ButtonTypes.TEXT}
+              fontColor="text-grey-0"
+            />
+          </View>
 
           <Text style={styles.subtitle}>{item?.subtitle}</Text>
         </View>
@@ -203,7 +205,7 @@ const OnboardingScreen = ({ navigation }: Props) => {
       <FlatList
         ref={ref}
         onMomentumScrollEnd={updateCurrentSlideIndex}
-        contentContainerStyle={{ height: height * 0.75 }}
+        contentContainerStyle={{ height: height * 0.85 }}
         showsHorizontalScrollIndicator={false}
         horizontal
         data={slides}

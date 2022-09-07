@@ -27,23 +27,9 @@ const HomeScreen = ({ navigation }: Props) => {
           loading={boxesLoading}
           error={boxesError}
         />
-        {/* {currentUser ? (
-          <Button label="Logout" onPress={handleLogout} />
-        ) : (
-          <Button
-            label="Login"
-            onPress={() =>
-              navigation.navigate("Login", {
-                next: "Home",
-              })
-            }
-          />
-        )} */}
       </View>
     </ScreenLayout>
   );
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({});

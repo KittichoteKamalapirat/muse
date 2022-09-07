@@ -68,7 +68,7 @@ const useTextStyle = ({ type, fontColor }: ClassProps) => {
 
 const IconButton = ({
   icon,
-  type = ButtonTypes.PRIMARY,
+  type = ButtonTypes.TEXT,
   onPress,
   fontColor = "",
 }: Props) => {

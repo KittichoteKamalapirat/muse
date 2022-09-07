@@ -12,6 +12,7 @@ interface Props {
     | "justify-around"
     | "justify-evenly";
   alignItems?:
+    | ""
     | "items-start"
     | "items-end"
     | "items-center"

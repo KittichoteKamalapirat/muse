@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -10,6 +11,7 @@ import {
 import { Text, TextInput, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
+import IconButton from "../components/Buttons/IconButton";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
@@ -21,6 +23,7 @@ import {
   User,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
+import { grey0, grey100, grey300 } from "../theme/style";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
 import useSetUserContext from "../util/useSetUserContext";
 
@@ -50,8 +53,10 @@ const defaultValues: FormValues = {
 const Login = ({ navigation }: Props) => {
   useSetUserContext();
   console.log("login screen");
+
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const { data: meData, loading: loading } = useMeQuery();
+  const [passwordIsShown, setPasswordIsShown] = useState(false);
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
     control,
@@ -65,6 +70,10 @@ const Login = ({ navigation }: Props) => {
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
 
   const [login] = useLoginMutation();
+
+  const togglepasswordIsShown = () => {
+    setPasswordIsShown(!passwordIsShown);
+  };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
@@ -132,59 +141,89 @@ const Login = ({ navigation }: Props) => {
   }
 
   return (
-    <ScreenLayout>
-      <Text style={tw`text-white`}>email, phone, username</Text>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            autoCapitalize="none"
-            onChangeText={onChange}
-            value={value}
-            style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+    <ScreenLayout alignItems="items-center">
+      <View style={tw`w-3/4`}>
+        <MyText size="text-2xl" weight="font-bold" extraStyle="mb-4">
+          Log in
+        </MyText>
+
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Email or Username</Text>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Email or Username"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.USERNAME_OR_EMAIL_OR_PHONE_NUMBER}
           />
-        )}
-        name={FormNames.USERNAME_OR_EMAIL_OR_PHONE_NUMBER}
-      />
-      {errors.usernameOrEmailOrPhoneNumber ? (
-        <Text>This is required.</Text>
-      ) : null}
+          {errors.usernameOrEmailOrPhoneNumber ? (
+            <Text>This is required.</Text>
+          ) : null}
+        </View>
 
-      <Text style={tw`text-white`}>Password</Text>
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Password</Text>
 
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 100,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            autoCapitalize="none"
-            value={value}
-            style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+          <View style={tw`items-end`}>
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  autoCapitalize="none"
+                  value={value}
+                  placeholder="Password"
+                  placeholderTextColor={grey100}
+                  secureTextEntry={!passwordIsShown}
+                  style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+                />
+              )}
+              name={FormNames.PASSWORD}
+            />
+            <IconButton
+              icon={
+                <Entypo
+                  name={passwordIsShown ? "eye-with-line" : "eye"}
+                  size={16}
+                  color={grey0}
+                  onPress={togglepasswordIsShown}
+                />
+              }
+            />
+          </View>
+
+          {errors.password && <Text>This is required.</Text>}
+        </View>
+
+        <View style={tw`mt-6`}>
+          <Button label="Login" onPress={handleSubmit(onSubmit)} />
+        </View>
+
+        <View style={tw`flex-row justify-center mt-2`}>
+          <MyText>Don't have an account yet? </MyText>
+          <Button
+            label="Create account"
+            type={ButtonTypes.TEXT}
+            onPress={() => navigation.navigate("Register")}
+            size="text-md"
+            fontColor="text-primary"
           />
-        )}
-        name={FormNames.PASSWORD}
-      />
-      {errors.password && <Text>This is required.</Text>}
-
-      <View>
-        <Button label="Login" onPress={handleSubmit(onSubmit)} />
-      </View>
-
-      <View>
-        <MyText>Don't have an account yet</MyText>
-        <Button
-          label="Create account"
-          type={ButtonTypes.TEXT}
-          onPress={() => navigation.navigate("Register")}
-        />
+        </View>
       </View>
     </ScreenLayout>
   );

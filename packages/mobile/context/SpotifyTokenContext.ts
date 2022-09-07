@@ -5,6 +5,7 @@ interface Props {
   token: SpotifyToken;
   setToken: React.Dispatch<React.SetStateAction<SpotifyToken>> | null;
 }
+
 export const SpotifyTokenContext = createContext<Props>({
   token: {
     accessToken: "",

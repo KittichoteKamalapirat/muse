@@ -1,10 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
-
 import { useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useContext } from "react";
 import { NavigationScreenProp } from "react-navigation";
-import Button, { ButtonTypes } from "../components/Buttons/Button";
+import { ButtonTypes } from "../components/Buttons/Button";
 import IconButton from "../components/Buttons/IconButton";
 import { UserContext } from "../context/UserContext";
 import {
@@ -19,7 +18,6 @@ import {
 import AuthScreen from "../screens/AuthScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import { bgColor, grey0 } from "../theme/style";
-import { clearAsyncStorage } from "../util/clearAsyncStorage";
 import { useIsFirstLaunch } from "../util/useIsFirstLaunch";
 
 const HomeStack = createNativeStackNavigator();
@@ -61,6 +59,7 @@ const HomeStackScreen = () => {
         component={HomeScreen}
         options={{
           headerTitleAlign: "left",
+          headerBackVisible: false,
           headerRight: () => (
             <IconButton
               icon={

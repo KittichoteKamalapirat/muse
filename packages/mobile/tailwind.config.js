@@ -17,9 +17,9 @@ const grey900 = "#121212";
 const bgColor = grey900;
 
 // font family
-const sansFamily = ["TTCommonsRegular", "Arial", "sans-serif"];
-const serifFamily = ["TTCommonsMedium", "Arial", "sans-serif"];
-const monoFamily = ["Nunito", "Montserrat", "Arial", "sans-serif"];
+const sansFamily = ["Arial", "sans-serif"];
+const serifFamily = ["Arial", "sans-serif"];
+const monoFamily = ["Montserrat", "Arial", "sans-serif"];
 
 // font size
 const fontSizeXS = "8px";
@@ -135,7 +135,7 @@ module.exports = {
       },
       fontFamily: {
         sans: sansFamily,
-        serid: serifFamily,
+        serif: serifFamily,
         mono: monoFamily,
       },
       // 8 10 12 16 20 24 32

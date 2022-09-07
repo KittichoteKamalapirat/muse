@@ -1,7 +1,7 @@
+import { Entypo } from "@expo/vector-icons";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
-  Control,
   Controller,
   FieldValues,
   SubmitHandler,
@@ -9,21 +9,22 @@ import {
   UseFormSetError,
 } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
+
 import { NavigationScreenProp } from "react-navigation";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
-import TextField, { TextFieldTypes } from "../components/forms/TextField";
+import IconButton from "../components/Buttons/IconButton";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
 import {
   MeDocument,
   MeQuery,
-  useLoginMutation,
   useMeQuery,
   User,
   useRegisterMutation,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
+import { grey0, grey100 } from "../theme/style";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
 
 interface Props {
@@ -58,6 +59,8 @@ const defaultValues: FormValues = {
 const RegisterScreen = ({ navigation }: Props) => {
   console.log("register screen");
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const [passwordIsShown, setPasswordIsShown] = useState(false);
+
   const { data: meData, loading: loading } = useMeQuery();
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
@@ -71,6 +74,10 @@ const RegisterScreen = ({ navigation }: Props) => {
   });
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
+
+  const togglepasswordIsShown = () => {
+    setPasswordIsShown(!passwordIsShown);
+  };
 
   const [register] = useRegisterMutation();
 
@@ -140,112 +147,143 @@ const RegisterScreen = ({ navigation }: Props) => {
     }
   }, [currentUser]);
   return (
-    <ScreenLayout>
-      <View>
-        <MyText>Username</MyText>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              autoCapitalize="none"
-              onChangeText={onChange}
-              value={value}
-              style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+    <ScreenLayout alignItems="items-center">
+      <View style={tw`w-3/4`}>
+        <MyText size="text-2xl" weight="font-bold" extraStyle="mb-4">
+          Create Account
+        </MyText>
+        <View style={tw`mt-2`}>
+          <MyText>Username</MyText>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Username"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.USERNAME}
+          />
+
+          {errors.username ? <MyText>This is required.</MyText> : null}
+        </View>
+
+        <View style={tw`mt-2`}>
+          <MyText>Email</MyText>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Email"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.EMAIL}
+          />
+          {errors.email ? (
+            <Text style={tw`text-grey-0`}>{errors.email?.message}</Text>
+          ) : null}
+        </View>
+
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Password</Text>
+
+          <Controller
+            control={control}
+            rules={{
+              maxLength: 100,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                autoCapitalize="none"
+                value={value}
+                placeholder="Password"
+                placeholderTextColor={grey100}
+                secureTextEntry={true}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.PASSWORD}
+          />
+
+          {errors.password && <Text>This is required.</Text>}
+        </View>
+
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Confirm Password</Text>
+
+          <View style={tw`items-end`}>
+            <Controller
+              control={control}
+              rules={{
+                maxLength: 100,
+                validate: (val: string) => {
+                  if (watch("password") != val) {
+                    return "Your passwords do no match";
+                  }
+                },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  autoCapitalize="none"
+                  value={value}
+                  placeholder="Confirm Password"
+                  placeholderTextColor={grey100}
+                  secureTextEntry={true}
+                  style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+                />
+              )}
+              name={FormNames.CONFIRM_PASSWORD}
             />
-          )}
-          name={FormNames.USERNAME}
-        />
-
-        {errors.username ? <MyText>This is required.</MyText> : null}
-      </View>
-
-      <View>
-        <MyText>Email</MyText>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              autoCapitalize="none"
-              onChangeText={onChange}
-              value={value}
-              style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
-            />
-          )}
-          name={FormNames.EMAIL}
-        />
-        {errors.email ? (
-          <Text style={tw`text-grey-0`}>{errors.email?.message}</Text>
-        ) : null}
-      </View>
-
-      <View>
-        <MyText>Password</MyText>
-
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              autoCapitalize="none"
-              value={value}
-              style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
-            />
-          )}
-          name={FormNames.PASSWORD}
-        />
-        {errors.password ? <MyText>This is required.</MyText> : null}
-      </View>
-
-      <View>
-        <MyText>Confirm Password</MyText>
-
-        <Controller
-          control={control}
-          rules={{
-            maxLength: 100,
-            validate: (val: string) => {
-              if (watch("password") != val) {
-                return "Your passwords do no match";
+            <IconButton
+              icon={
+                <Entypo
+                  name={passwordIsShown ? "eye-with-line" : "eye"}
+                  size={16}
+                  color={grey0}
+                  onPress={togglepasswordIsShown}
+                />
               }
-            },
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              onBlur={onBlur}
-              onChangeText={onChange}
-              autoCapitalize="none"
-              value={value}
-              style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
             />
-          )}
-          name={FormNames.CONFIRM_PASSWORD}
-        />
-        {errors.confirmPassword && <MyText>Password does not match.</MyText>}
-      </View>
+          </View>
 
-      <View>
-        <Button label="Create account" onPress={handleSubmit(onSubmit)} />
-      </View>
+          {errors.confirmPassword && <MyText>Password does not match.</MyText>}
+        </View>
 
-      <View>
-        <MyText>Already have an account?</MyText>
-        <Button
-          label="Log in"
-          type={ButtonTypes.TEXT}
-          onPress={() => navigation.navigate("Login")}
-        />
+        <View style={tw`mt-6`}>
+          <Button label="Create account" onPress={handleSubmit(onSubmit)} />
+        </View>
+
+        <View style={tw`flex-row justify-center mt-2`}>
+          <MyText>Already have an account? </MyText>
+          <Button
+            label="Log in"
+            type={ButtonTypes.TEXT}
+            onPress={() => navigation.navigate("Login")}
+            size="text-md"
+            fontColor="text-primary"
+          />
+        </View>
       </View>
     </ScreenLayout>
   );

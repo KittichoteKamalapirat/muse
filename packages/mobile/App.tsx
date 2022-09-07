@@ -49,6 +49,8 @@ const AppWithoutApollo = () => {
   const [routeName, setRouteName] = useState("");
   const ref = createNavigationContainerRef();
 
+  // load fonts
+
   return (
     <UserContext.Provider value={userProviderValue}>
       <SpotifyTokenContext.Provider value={tokenProviderValue}>

@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, View } from "react-native";
 import { Box, useBoxesQuery } from "../../../graphql/generated/graphql";
@@ -21,7 +22,21 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
   const route = useRoute();
 
   const isHomeRoute = route.name === "Home";
-  const [matchedBoxes, setMatchedBoxes] = useState<Box[]>();
+  const [matchedBoxes, setMatchedBoxes] = useState<Box[]>([]);
+
+  const todayBoxes = matchedBoxes.filter((box) =>
+    moment(box.startTime).isSame(new Date(), "day")
+  );
+
+  // startDate -1 = today MEANS startDate is tomorrow
+  const tomorrowBoxes = matchedBoxes.filter((box) =>
+    moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
+  );
+  const otherBoxes = matchedBoxes
+    .filter((box) =>
+      moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
+    )
+    .filter((box) => moment(box.startTime).isSame(new Date(), "day"));
 
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -55,9 +70,14 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
   if (loading) return <ActivityIndicator />;
   if (error) return <Error errorMessage={error.message} />;
 
+  matchedBoxes?.forEach((box) => console.log("raw", box.startTime));
+  matchedBoxes?.forEach((box) =>
+    console.log("moment", moment(box.startTime).isSame(new Date(), "day"))
+  );
+
   return (
     <View>
-      <View style={tw`flex-row justify-between`}>
+      <View style={tw`flex-row justify-between items-center mb-2`}>
         <MyText size="text-2xl" extraStyle="font-bold">
           {isHomeRoute ? "Find an event" : "My Events"}
         </MyText>
@@ -77,14 +97,51 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
         />
       ) : null}
 
-      <FlatList
-        data={matchedBoxes}
-        renderItem={({ item }) => <BoxItem box={item as Box} />}
-      />
+      <View style={tw`mt-2`}>
+        <View>
+          {/* today */}
+          <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
+            Today
+          </MyText>
+          {!todayBoxes.length ? (
+            <MyText>No events today</MyText>
+          ) : (
+            <FlatList
+              // data={matchedBoxes?.filter(box => box.startTime)}
+              data={todayBoxes}
+              renderItem={({ item }) => <BoxItem box={item as Box} />}
+            />
+          )}
+        </View>
+
+        {/* tomorrow */}
+        <View>
+          <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
+            Tomorrow
+          </MyText>
+
+          {!tomorrowBoxes.length ? (
+            <MyText extraStyle="text-center">No events tomorrow</MyText>
+          ) : (
+            <FlatList
+              data={tomorrowBoxes}
+              renderItem={({ item }) => <BoxItem box={item as Box} />}
+            />
+          )}
+        </View>
+
+        <View>
+          <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
+            Others
+          </MyText>
+          <FlatList
+            data={otherBoxes}
+            renderItem={({ item }) => <BoxItem box={item as Box} />}
+          />
+        </View>
+      </View>
     </View>
   );
 };
 
 export default BoxListing;
-
-const styles = StyleSheet.create({});

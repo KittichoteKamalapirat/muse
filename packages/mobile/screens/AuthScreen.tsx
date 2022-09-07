@@ -79,12 +79,15 @@ const AuthScreen = ({ navigation }: Props) => {
           fontColor="grey-100"
           onPress={() => navigation.navigate("Login")}
         />
-        <Button
-          label="Log in as Guest"
-          type={ButtonTypes.TEXT}
-          fontColor="text-grey-0"
-          onPress={handleGuestLogin}
-        />
+
+        <View style={tw`w-full flex items-center mt-4`}>
+          <Button
+            label="Log in as Guest"
+            type={ButtonTypes.TEXT}
+            fontColor="text-grey-0"
+            onPress={handleGuestLogin}
+          />
+        </View>
       </View>
     </ScreenLayout>
   );
