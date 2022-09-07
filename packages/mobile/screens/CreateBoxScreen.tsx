@@ -81,8 +81,9 @@ const CreateBoxScreen = ({ navigation }: Props) => {
 
       console.log("response", response);
       if (!response.errors)
-        navigation.navigate("Box", {
-          boxId: response.data?.createBox.id,
+        navigation.navigate("MyBoxesStack", {
+          screen: "MyBox",
+          params: { boxId: response.data?.createBox.id },
         });
     } catch (error) {
       console.log("error", error);
