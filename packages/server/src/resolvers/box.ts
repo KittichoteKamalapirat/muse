@@ -122,8 +122,18 @@ export class BoxResolver {
     @Ctx() { req }: MyContext
   ): Promise<Box | Error> {
     try {
+      const address = await Address.create({
+        name: input.addressName,
+      }).save();
+
+      const { name, type, description, startTime, endTime } = input;
       const box = await Box.create({
-        ...input,
+        name,
+        type,
+        description,
+        startTime,
+        endTime,
+        addressId: address.id,
         creatorId: req.session.userId,
       }).save();
 
