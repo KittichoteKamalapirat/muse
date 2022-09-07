@@ -156,7 +156,7 @@ const RegisterScreen = ({ navigation }: Props) => {
       {errors.password && <Text>This is required.</Text>}
 
       <View>
-        <Button label="Login" onPress={handleSubmit(onSubmit)} />
+        <Button label="Create account" onPress={handleSubmit(onSubmit)} />
       </View>
 
       <View>
