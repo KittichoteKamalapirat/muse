@@ -140,7 +140,10 @@ const CreateBoxScreen = ({ navigation }: Props) => {
                 value={value}
                 placeholder="Details"
                 placeholderTextColor={grey100}
-                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+                style={tw`text-grey-0 bg-grey-500 w-full p-2 rounded-sm m-auto my-2`}
               />
             )}
             name={FormNames.DESCRIPTION}
