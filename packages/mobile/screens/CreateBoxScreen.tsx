@@ -186,10 +186,19 @@ const CreateBoxScreen = ({ navigation }: Props) => {
             }) => (
               <RNPickerSelect
                 onValueChange={onChange}
-                placeholder={{ label: "Select an event type" }}
+                placeholder={{
+                  label: "Select an event type",
+                  value: BoxTypeEnum.MusicEvent,
+                }}
+                useNativeAndroidPickerStyle={false}
                 style={{
                   placeholder: { color: grey0, fontSize: 14 },
                   inputIOS: {
+                    color: grey0,
+                    backgroundColor: grey500,
+                    fontSize: 16,
+                  },
+                  inputAndroid: {
                     color: grey0,
                     backgroundColor: grey500,
                     fontSize: 16,
@@ -198,6 +207,12 @@ const CreateBoxScreen = ({ navigation }: Props) => {
                     borderColor: grey500,
                     borderRadius: 2,
                     borderWidth: 10,
+                  },
+                  inputAndroidContainer: {
+                    marginTop: 8,
+                    borderColor: grey500,
+                    borderRadius: 1,
+                    borderWidth: 3,
                   },
                 }}
                 items={[
