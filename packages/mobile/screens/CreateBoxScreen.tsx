@@ -1,26 +1,17 @@
-import RNPickerSelect, { defaultStyles } from "react-native-picker-select";
 import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 import { NavigationScreenProp } from "react-navigation";
 import Button from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
-import tw from "../lib/tailwind";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import MyText from "../components/MyTexts/MyText";
 import {
   BoxTypeEnum,
   useCreateBoxMutation,
 } from "../graphql/generated/graphql";
-import {
-  bgColor,
-  fontSizeMD,
-  fontSizeSM,
-  fontSizeXS,
-  grey0,
-  grey100,
-  grey500,
-} from "../theme/style";
-import MyText from "../components/MyTexts/MyText";
+import tw from "../lib/tailwind";
+import { grey0, grey100, grey500 } from "../theme/style";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;

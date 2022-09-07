@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import moment from "moment";
-import React, { useEffect } from "react";
+import React from "react";
 import { ActivityIndicator, ScrollView, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button from "../components/Buttons/Button";
@@ -71,8 +71,10 @@ const BoxScreen = ({ navigation }: Props) => {
     if (!response.errors) console.log("response", response);
   };
 
-  if (boxLoading) return <ActivityIndicator />;
-  if (boxError) return <Error errorMessage={boxError.message} />;
+  if (boxLoading || songRequestsLoading || songRequestsSubsLoading)
+    return <ActivityIndicator />;
+  if (boxError || songRequestsError || songRequestsSubsError)
+    return <Error errorMessage="Error" />;
 
   return (
     <ScreenLayout justifyContent="justify-start">
