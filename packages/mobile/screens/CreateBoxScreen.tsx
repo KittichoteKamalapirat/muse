@@ -11,7 +11,16 @@ import {
   BoxTypeEnum,
   useCreateBoxMutation,
 } from "../graphql/generated/graphql";
-import { bgColor, fontSizeMD, grey0 } from "../theme/style";
+import {
+  bgColor,
+  fontSizeMD,
+  fontSizeSM,
+  fontSizeXS,
+  grey0,
+  grey100,
+  grey500,
+} from "../theme/style";
+import MyText from "../components/MyTexts/MyText";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -92,97 +101,123 @@ const CreateBoxScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ScreenLayout>
-      <Text style={tw`text-white`}>Event Name</Text>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            autoCapitalize="none"
-            onChangeText={onChange}
-            value={value}
-            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
-          />
-        )}
-        name={FormNames.NAME}
-      />
+    <ScreenLayout alignItems="items-center">
+      <View style={tw`w-3/4`}>
+        <MyText size="text-2xl" weight="font-bold" extraStyle="mb-4">
+          Create an event
+        </MyText>
 
-      <Text style={tw`text-white`}>Description</Text>
-      <Controller
-        control={control}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            autoCapitalize="none"
-            value={value}
-            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+        {/* event name */}
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Event Name</Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+                placeholder="Event Name"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.NAME}
           />
-        )}
-        name={FormNames.DESCRIPTION}
-      />
+        </View>
 
-      <Text style={tw`text-white`}>Name of Location</Text>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-          maxLength: 100,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            autoCapitalize="none"
-            value={value}
-            style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+        {/* description */}
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Description</Text>
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                autoCapitalize="none"
+                value={value}
+                placeholder="Details"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.DESCRIPTION}
           />
-        )}
-        name={FormNames.ADDRESS_NAME}
-      />
-      <Text style={tw`text-white`}>What type of event is it?</Text>
-
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 100,
-          required: true,
-        }}
-        render={({
-          field: { onChange, onBlur, value },
-          fieldState: { invalid, isTouched, isDirty, error },
-        }) => (
-          <RNPickerSelect
-            onValueChange={onChange}
-            placeholder="Select an event type"
-            style={{
-              placeholder: { color: bgColor },
-              inputIOS: {
-                color: bgColor,
-                backgroundColor: "white",
-                fontSize: 16,
-              },
-              inputIOSContainer: {
-                borderColor: "white",
-                borderRadius: 10,
-                borderWidth: 10,
-              },
+        </View>
+        {/* Location name */}
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>Name of Location</Text>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              maxLength: 100,
             }}
-            items={[
-              { label: "Bar", value: BoxTypeEnum.Bar },
-              { label: "Baseball", value: BoxTypeEnum.DanceClub },
-              { label: "Music Event", value: BoxTypeEnum.MusicEvent },
-              { label: "Wedding", value: BoxTypeEnum.Wedding },
-              { label: "Restaurant", value: BoxTypeEnum.Restaurant },
-              { label: "Other", value: BoxTypeEnum.Other },
-            ]}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                onBlur={onBlur}
+                onChangeText={onChange}
+                autoCapitalize="none"
+                value={value}
+                placeholder="Location Name"
+                placeholderTextColor={grey100}
+                style={tw`text-grey-0 bg-grey-500 w-full h-8 p-2 rounded-sm m-auto my-2`}
+              />
+            )}
+            name={FormNames.ADDRESS_NAME}
           />
-        )}
-        name={FormNames.TYPE}
-      />
+        </View>
 
-      <Button label="Create" onPress={handleSubmit(onSubmit)} />
+        {/* Event type */}
+        <View style={tw`mt-2`}>
+          <Text style={tw`text-white`}>What type of event is it?</Text>
+
+          <Controller
+            control={control}
+            rules={{
+              maxLength: 100,
+              required: true,
+            }}
+            render={({
+              field: { onChange, onBlur, value },
+              fieldState: { invalid, isTouched, isDirty, error },
+            }) => (
+              <RNPickerSelect
+                onValueChange={onChange}
+                placeholder={{ label: "Select an event type" }}
+                style={{
+                  placeholder: { color: grey0, fontSize: 14 },
+                  inputIOS: {
+                    color: grey0,
+                    backgroundColor: grey500,
+                    fontSize: 16,
+                  },
+                  inputIOSContainer: {
+                    borderColor: grey500,
+                    borderRadius: 2,
+                    borderWidth: 10,
+                  },
+                }}
+                items={[
+                  { label: "Bar", value: BoxTypeEnum.Bar },
+                  { label: "Baseball", value: BoxTypeEnum.DanceClub },
+                  { label: "Music Event", value: BoxTypeEnum.MusicEvent },
+                  { label: "Wedding", value: BoxTypeEnum.Wedding },
+                  { label: "Restaurant", value: BoxTypeEnum.Restaurant },
+                  { label: "Other", value: BoxTypeEnum.Other },
+                ]}
+              />
+            )}
+            name={FormNames.TYPE}
+          />
+        </View>
+
+        <View style={tw`mt-6`}>
+          <Button label="Create" onPress={handleSubmit(onSubmit)} />
+        </View>
+      </View>
     </ScreenLayout>
   );
 };

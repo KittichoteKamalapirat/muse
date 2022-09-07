@@ -12,16 +12,6 @@ export const useIsAuth = () => {
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
 
-  if (meLoading) {
-    console.log("me loading error");
-    return "loading";
-  }
-
-  if (meError) {
-    console.log("me error");
-    return "error";
-  }
-
   console.log("meData", meData);
   console.log("meLoading", meLoading);
   console.log("meError", meError);

@@ -12,6 +12,7 @@ const grey100 = "#E0E0E0";
 const grey300 = "#8F8F8F";
 const grey500 = "#666666";
 const grey700 = "#3D3D3D";
+const grey850 = "#1F1F1F";
 const grey900 = "#121212";
 
 const bgColor = grey900;
@@ -157,6 +158,7 @@ module.exports = {
           300: grey300,
           500: grey500,
           700: grey700,
+          850: grey850,
           900: grey900,
         },
         primary: primaryColor,

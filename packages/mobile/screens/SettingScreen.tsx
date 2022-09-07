@@ -1,17 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
+import { Container } from "../components/containers/Container";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
-import {
-  MeDocument,
-  MeQuery,
-  useLogoutMutation,
-} from "../graphql/generated/graphql";
+import { useLogoutMutation } from "../graphql/generated/graphql";
 import { apolloClient } from "../lib/apollo";
 import tw from "../lib/tailwind";
 
@@ -49,40 +46,51 @@ const SettingScreen = ({ navigation }: Props) => {
     }
   };
 
+  const loggedInBody = (
+    <View>
+      <View style={tw`bg-grey-850`}>
+        <View style={tw`flex-row items-center m-2`}>
+          <Image
+            style={tw`w-20 h-20 rounded-full bg-grey-500 mr-2`}
+            source={{ uri: currentUser?.avatar }}
+          />
+          <View>
+            <MyText fontColor="text-grey-300">
+              username: <MyText>{currentUser?.username}</MyText>
+            </MyText>
+
+            <MyText fontColor="text-grey-300" extraStyle="mt-2">
+              email: <MyText>{currentUser?.email}</MyText>
+            </MyText>
+          </View>
+        </View>
+      </View>
+      <View style={tw`mt-4`}>
+        <Button label="Logout" onPress={handleLogout} type={ButtonTypes.TEXT} />
+      </View>
+    </View>
+  );
+
   return (
     <ScreenLayout justifyContent="justify-start">
-      <View>
-        {currentUser ? (
-          <View>
-            <View style={tw`flex-row items-center`}>
-              <Image
-                style={tw`w-20 h-20 rounded-full`}
-                source={{ uri: currentUser?.avatar }}
-              />
-              <MyText>{currentUser.username}</MyText>
-            </View>
-
+      <Container>
+        <View>
+          {currentUser ? (
+            loggedInBody
+          ) : (
             <Button
-              label="Logout"
-              onPress={handleLogout}
-              type={ButtonTypes.TEXT}
+              label="Login"
+              onPress={() =>
+                navigation.navigate("Login", {
+                  next: "Home",
+                })
+              }
             />
-          </View>
-        ) : (
-          <Button
-            label="Login"
-            onPress={() =>
-              navigation.navigate("Login", {
-                next: "Home",
-              })
-            }
-          />
-        )}
-      </View>
+          )}
+        </View>
+      </Container>
     </ScreenLayout>
   );
 };
 
 export default SettingScreen;
-
-const styles = StyleSheet.create({});
