@@ -1,9 +1,11 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
 import { useAddSongRequestMutation } from "../../../graphql/generated/graphql";
 import tw from "../../../lib/tailwind";
+import Button, { ButtonTypes } from "../../Buttons/Button";
+import MyText from "../../MyTexts/MyText";
 
 const Flex = styled.View`
   display: flex;
@@ -87,35 +89,40 @@ const ListItem = ({ item, isRequested, isOwner }: Props) => {
   };
 
   return (
-    <Flex>
-      <Card>
-        <CardImage source={{ uri: item.albumImageUrl }} />
+    <View style={tw`flex-row justify-between`}>
+      {/* album and song details */}
+      <View style={tw`flex-row justify-start items-center my-1`}>
+        {/* image */}
+        <Image style={tw`w-12 h-12`} source={{ uri: item.albumImageUrl }} />
 
-        <CardContent>
-          <CartTitle>{item.name}</CartTitle>
-          <CartSubtitle>
-            {item.albumName + " - " + item.artistName}
-          </CartSubtitle>
-        </CardContent>
-      </Card>
+        {/* content */}
+        <View style={tw`ml-2`}>
+          <MyText extraStyle="font-bold mb-2">{item.name}</MyText>
+          <MyText fontColor="text-grey-100" size="text-sm">
+            {item.artistName}
+          </MyText>
+        </View>
+      </View>
 
       <View>
-        <TouchableOpacity
-          style={tw`rounded-full ${
-            isRequested ? "border-primary border-2" : "bg-primary"
-          }`}
-          onPress={() => handleAddSongRequest(item)}
-        >
-          <Text
-            style={tw`text-sm mx-2 my-1 ${
-              isRequested ? "text-primary" : "text-grey-900"
-            }`}
-          >
-            {isRequested ? "Requested" : "Request"}
-          </Text>
-        </TouchableOpacity>
+        {isRequested ? (
+          <Button
+            type={ButtonTypes.OUTLINED}
+            // onPress={() => handleAddSongRequest(item)}
+            label="Requested"
+            fontColor="grey-0"
+            size="text-sm"
+          />
+        ) : (
+          <Button
+            type={isRequested ? ButtonTypes.OUTLINED : ButtonTypes.PRIMARY}
+            onPress={() => handleAddSongRequest(item)}
+            label={isRequested ? "Requested" : "Request"}
+            size="text-sm"
+          />
+        )}
       </View>
-    </Flex>
+    </View>
   );
 };
 

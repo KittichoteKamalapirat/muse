@@ -2,6 +2,7 @@ query Boxes {
   boxes {
     id
     name
+    type
     isJoined
     description
     startTime

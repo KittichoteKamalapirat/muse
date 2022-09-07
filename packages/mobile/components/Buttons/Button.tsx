@@ -15,13 +15,14 @@ interface Props {
   onPress?: () => void;
   label: string;
   type?: ButtonTypes;
-  fontColor?: string;
+  fontColor?: string; // TODO => change to color since border also changes, not only font
   size?: string;
 }
 
 interface ClassProps {
   type: ButtonTypes;
   fontColor: string;
+  size: string;
 }
 
 // PRIMARY: bg => primary , border => none, text: black
@@ -55,8 +56,18 @@ const useButtonStyle = ({ type, fontColor }: ClassProps) => {
   }
 };
 
-const useTextStyle = ({ type, fontColor }: ClassProps) => {
-  const commonStyle = "mx-4 my-2 text-center";
+const useTextStyle = ({ type, fontColor, size }: ClassProps) => {
+  const sizeStyle = (() => {
+    switch (size) {
+      case "text-sm":
+        return "mx-2 my-1";
+      default:
+        return "mx-4 my-2";
+    }
+  })();
+
+  const commonStyle = `${sizeStyle} text-center`;
+
   switch (type) {
     case ButtonTypes.OUTLINED:
       return `${commonStyle} ${
@@ -82,8 +93,8 @@ const Button = ({
   fontColor = "",
   size = "",
 }: Props) => {
-  const buttonStyle = useButtonStyle({ type, fontColor });
-  const textStyle = useTextStyle({ type, fontColor });
+  const buttonStyle = useButtonStyle({ type, fontColor, size });
+  const textStyle = useTextStyle({ type, fontColor, size });
 
   return (
     <TouchableOpacity style={tw`${buttonStyle}`} onPress={onPress}>

@@ -2,8 +2,11 @@ query JoinedBoxes {
   joinedBoxes {
     id
     name
-    description
+    type
     isJoined
+    description
+    startTime
+    endTime
     address {
       id
       name

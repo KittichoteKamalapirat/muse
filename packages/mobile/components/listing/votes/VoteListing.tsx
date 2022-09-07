@@ -1,8 +1,5 @@
-import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
 import React from "react";
-import tw from "../../../lib/tailwind";
-import { primaryColor, grey50, grey0 } from "../../../theme/style";
-import MyText from "../../MyTexts/MyText";
+import { FlatList } from "react-native";
 import { SongRequest } from "../../../graphql/generated/graphql";
 import VoteItem from "./VoteItem";
 

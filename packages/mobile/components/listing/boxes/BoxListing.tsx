@@ -33,10 +33,10 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
     moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
   );
   const otherBoxes = matchedBoxes
-    .filter((box) =>
-      moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
+    .filter(
+      (box) => !moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
     )
-    .filter((box) => moment(box.startTime).isSame(new Date(), "day"));
+    .filter((box) => !moment(box.startTime).isSame(new Date(), "day"));
 
   const [searchQuery, setSearchQuery] = useState<string>("");
 
@@ -109,6 +109,7 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
             <FlatList
               // data={matchedBoxes?.filter(box => box.startTime)}
               data={todayBoxes}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => <BoxItem box={item as Box} />}
             />
           )}
@@ -125,17 +126,19 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
           ) : (
             <FlatList
               data={tomorrowBoxes}
+              keyExtractor={(item) => item.id}
               renderItem={({ item }) => <BoxItem box={item as Box} />}
             />
           )}
         </View>
 
         <View>
-          <MyText size="text-xl" weight="font-bold" extraStyle="my-2">
+          <MyText size="text-xl" weight="font-bold" extraStyle="my-2 ">
             Others
           </MyText>
           <FlatList
             data={otherBoxes}
+            keyExtractor={(item) => item.id}
             renderItem={({ item }) => <BoxItem box={item as Box} />}
           />
         </View>

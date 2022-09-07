@@ -28,7 +28,7 @@ const ScreenLayout = ({
 }: Props) => {
   return (
     <SafeAreaView
-      style={tw`flex-1 h-full w-full bg-grey-900 ${justifyContent} ${alignItems} ${extraStyle}`}
+      style={tw`flex-1 h-full w-full bg-grey-900  ${justifyContent} ${alignItems} ${extraStyle}`}
     >
       {children}
     </SafeAreaView>

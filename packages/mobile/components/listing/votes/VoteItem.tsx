@@ -31,16 +31,16 @@ const VoteItem = ({ item, voteStatus }: Props) => {
 
   return (
     <View style={tw`flex-row justify-between`}>
-      <View style={tw`flex-row justify-start`}>
+      <View style={tw`flex-row justify-start items-center my-1`}>
         {/* image */}
         <Image
-          style={tw`w-20 h-20`}
+          style={tw`w-12 h-12`}
           source={{ uri: item.song.albumImageUrl }}
         />
 
         {/* content */}
-        <View>
-          <MyText extraStyle="font-bold">{item.song.name}</MyText>
+        <View style={tw`ml-2`}>
+          <MyText extraStyle="font-bold mb-2">{item.song.name}</MyText>
           <MyText fontColor="text-grey-100" size="text-sm">
             {item.song.artistName}
           </MyText>
@@ -48,20 +48,25 @@ const VoteItem = ({ item, voteStatus }: Props) => {
       </View>
 
       {/* vote */}
-
-      <View style={tw`flex items-center`}>
-        <TouchableOpacity onPress={() => handleVote(item.id, 1)}>
+      <View style={tw`flex-row items-center`}>
+        <TouchableOpacity
+          onPress={() => handleVote(item.id, 1)}
+          style={tw`mx-2 mt-0.5`}
+        >
           <AntDesign
             name="caretup"
-            size={16}
+            size={14}
             color={voteStatus === 1 ? primaryColor : grey50}
           />
         </TouchableOpacity>
-        <MyText size="text-lg">{item.counts}</MyText>
-        <TouchableOpacity onPress={() => handleVote(item.id, -1)}>
+        <MyText size="text-md">{item.counts}</MyText>
+        <TouchableOpacity
+          onPress={() => handleVote(item.id, -1)}
+          style={tw`mx-2 mb-0.5`}
+        >
           <AntDesign
             name="caretdown"
-            size={16}
+            size={14}
             color={voteStatus === -1 ? primaryColor : grey50}
           />
         </TouchableOpacity>

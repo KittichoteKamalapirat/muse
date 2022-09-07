@@ -66,7 +66,7 @@ const AppWithoutApollo = () => {
           }}
         >
           <TabNavigator routeName={routeName} />
-          <StatusBar style="auto" />
+          <StatusBar style="light" />
         </NavigationContainer>
       </SpotifyTokenContext.Provider>
     </UserContext.Provider>

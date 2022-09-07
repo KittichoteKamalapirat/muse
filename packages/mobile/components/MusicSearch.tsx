@@ -10,6 +10,7 @@ import useSpotifyAuth from "../util/useSpotifyAuthClientCredentialFlow";
 
 import { Container } from "./containers/Container";
 import SongListing from "./listing/songSearches/SongListing";
+import MyText from "./MyTexts/MyText";
 import SearchBar from "./SearchBar";
 
 const PAGE = 20;
@@ -108,6 +109,10 @@ const MusicSearch = () => {
 
   return (
     <Container>
+      <MyText size="text-2xl" weight="font-bold" extraStyle="my-2">
+        Request a song
+      </MyText>
+
       <SearchBar
         onChange={(text: string) => handleSearch(text)}
         searchText={searchQuery}

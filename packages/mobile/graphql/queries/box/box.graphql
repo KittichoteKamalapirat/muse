@@ -4,6 +4,9 @@ query Box($id: String!) {
     name
     description
     isJoined
+    type
+    startTime
+    endTime
     address {
       id
       name
