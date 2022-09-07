@@ -1,41 +1,49 @@
+import { useNavigation, useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  ScrollView,
-  StyleSheet,
-  View,
   LogBox,
+  RefreshControl,
+  ScrollView,
+  View,
 } from "react-native";
+import { Divider } from "react-native-paper";
 import { Box, useBoxesQuery } from "../../../graphql/generated/graphql";
 import tw from "../../../lib/tailwind";
+import { grey0 } from "../../../theme/style";
 import { debounce } from "../../../util/debounce";
 import Button from "../../Buttons/Button";
 import Error from "../../layouts/Error";
 import MyText from "../../MyTexts/MyText";
 import SearchBar from "../../SearchBar";
 import BoxItem from "./BoxItem";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { ApolloError } from "@apollo/client";
-import { Divider } from "react-native-paper";
 
-interface Props {
-  boxes: Box[];
-  loading: boolean;
-  error: ApolloError | undefined;
-}
-const BoxListing = ({ boxes, loading, error }: Props) => {
+const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
+const BoxListing = () => {
+  // HOOKS
   const navigation = useNavigation();
   const route = useRoute();
-
-  const isHomeRoute = route.name === "Home";
+  const [refreshing, setRefreshing] = React.useState(false);
   const [matchedBoxes, setMatchedBoxes] = useState<Box[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const {
+    data: boxesData,
+    loading: boxesLoading,
+    error: boxesError,
+    refetch,
+  } = useBoxesQuery();
 
+  // DESTRUCTURE AND CONSTANTS
+  const boxes = boxesData?.boxes;
+  const isHomeRoute = route.name === "Home";
   const todayBoxes = matchedBoxes.filter((box) =>
     moment(box.startTime).isSame(new Date(), "day")
   );
-
   // startDate -1 = today MEANS startDate is tomorrow
   const tomorrowBoxes = matchedBoxes.filter((box) =>
     moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
@@ -46,7 +54,12 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
     )
     .filter((box) => !moment(box.startTime).isSame(new Date(), "day"));
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  // FUNCTIONS
+  const handleRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    const response = await refetch();
+    if (response) setRefreshing(false);
+  }, []);
 
   const updateDebounceText = debounce((inputQeury: string) => {
     const newMatched = matchedBoxes
@@ -69,18 +82,19 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
     }
   };
 
+  // USE EFFECTS
   useEffect(() => {
-    if (!loading && boxes.length !== 0) {
+    if (!boxesLoading && boxes?.length !== 0) {
       setMatchedBoxes(boxes as Box[]);
     }
-  }, [loading, boxes]);
+  }, [boxesLoading, boxes]);
 
   useEffect(() => {
     LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
   }, []);
 
-  if (loading) return <ActivityIndicator />;
-  if (error) return <Error errorMessage={error.message} />;
+  if (boxesLoading) return <ActivityIndicator />;
+  if (boxesError) return <Error errorMessage={boxesError.message} />;
 
   const noEvents = (
     <View style={tw`mb-4`}>
@@ -89,7 +103,19 @@ const BoxListing = ({ boxes, loading, error }: Props) => {
   );
 
   return (
-    <ScrollView>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          colors={[grey0]} // android
+          progressBackgroundColor={grey0} // android
+          tintColor={grey0} //ios
+          title="Refreshing..." //ios
+          titleColor={grey0} //ios
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      }
+    >
       <View style={tw`flex-row justify-between items-center mb-2`}>
         <MyText size="text-2xl" extraStyle="font-bold">
           {isHomeRoute ? "Find an event" : "My Events"}

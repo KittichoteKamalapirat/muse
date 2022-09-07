@@ -79,12 +79,13 @@ const CreateBoxScreen = ({ navigation }: Props) => {
         },
       });
 
+      console.log("response", response);
       if (!response.errors)
         navigation.navigate("Box", {
           boxId: response.data?.createBox.id,
         });
     } catch (error) {
-      console.log("error: cannot create");
+      console.log("error", error);
     }
 
     // └ has to match what defined in graphqlmutation
@@ -220,7 +221,7 @@ const CreateBoxScreen = ({ navigation }: Props) => {
                 }}
                 items={[
                   { label: "Bar", value: BoxTypeEnum.Bar },
-                  { label: "Baseball", value: BoxTypeEnum.DanceClub },
+                  { label: "Dance Club", value: BoxTypeEnum.DanceClub },
                   { label: "Music Event", value: BoxTypeEnum.MusicEvent },
                   { label: "Wedding", value: BoxTypeEnum.Wedding },
                   { label: "Restaurant", value: BoxTypeEnum.Restaurant },

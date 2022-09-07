@@ -17,7 +17,7 @@ class Address extends BaseEntity {
   @Field()
   id!: string;
 
-  @Column({ unique: true })
+  @Column() // TODO make unique?
   @Field()
   name!: string;
 
