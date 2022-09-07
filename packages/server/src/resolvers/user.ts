@@ -156,21 +156,6 @@ export class UserResolver {
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(data.password, salt);
-    // const hash = await argon2.hash(data.password);
-
-    // const newUser = User.create({
-    //   username: data.username,
-    //   email: data.email,
-    //   password: hash,
-    // });
-
-    let { phoneNumber } = data;
-
-    if (/^[+66\d+]{12}$/.test(phoneNumber)) {
-      phoneNumber = phoneNumber.slice(3);
-    } else if (/^[0\d+]{10}$/.test(phoneNumber)) {
-      phoneNumber = phoneNumber.substring(1);
-    }
 
     let user;
     const uuid = v4();
@@ -184,9 +169,9 @@ export class UserResolver {
             id: uuid,
             username: data.username,
             email: data.email,
-            phoneNumber,
             password: hash,
-            isCreator: data.isCreator,
+            isMusician: data.isMusician,
+            isGuest: false,
             avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.png`,
           },
         ])
@@ -245,7 +230,6 @@ export class UserResolver {
         isGuest: true,
         username: uuid,
         email: uuid,
-        phoneNumber: uuid,
         password: uuid,
         avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
       }).save();
@@ -369,13 +353,13 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Boolean)
   async switchAccountType(
-    @Arg("becomeCreator") becomeCreator: boolean,
+    @Arg("becomeMusician") becomeMusician: boolean,
     @Ctx() { req }: MyContext
   ) {
     await User.update(
       { id: req.session.userId },
       {
-        isCreator: becomeCreator,
+        isMusician: becomeMusician,
       }
     );
     return true;

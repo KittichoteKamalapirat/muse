@@ -1,6 +1,7 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
+  Control,
   Controller,
   FieldValues,
   SubmitHandler,
@@ -10,6 +11,7 @@ import {
 import { Text, TextInput, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
+import TextField, { TextFieldTypes } from "../components/forms/TextField";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
@@ -18,6 +20,8 @@ import {
   MeQuery,
   useLoginMutation,
   useMeQuery,
+  User,
+  useRegisterMutation,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
@@ -27,13 +31,17 @@ interface Props {
 }
 
 enum FormNames {
-  USERNAME_OR_EMAIL_OR_PHONE_NUMBER = "usernameOrEmailOrPhoneNumber",
+  USERNAME = "username",
+  EMAIL = "email",
   PASSWORD = "password",
+  CONFIRM_PASSWORD = "confirmPassword",
 }
 
 interface FormValues {
-  usernameOrEmailOrPhoneNumber: string;
-  password: string;
+  [FormNames.USERNAME]: string;
+  [FormNames.EMAIL]: string;
+  [FormNames.PASSWORD]: string;
+  [FormNames.CONFIRM_PASSWORD]: string;
 }
 
 interface UserError {
@@ -42,118 +50,192 @@ interface UserError {
 }
 
 const defaultValues: FormValues = {
-  usernameOrEmailOrPhoneNumber: "",
+  username: "",
+  email: "",
   password: "",
+  confirmPassword: "",
 };
 const RegisterScreen = ({ navigation }: Props) => {
   console.log("register screen");
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { data: meData, loading: loading } = useMeQuery();
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
     control,
     handleSubmit,
     setError,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues,
   });
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
-  const { data, loading: loading } = useMeQuery();
 
-  const [login] = useLoginMutation();
-
-  if (loading) {
-    return (
-      <ScreenLayout>
-        <Text>loading...</Text>
-      </ScreenLayout>
-    );
-  }
-
-  // redirect if already logged in
-  if (currentUser) {
-    // without the following line, push to / even when there is next param
-    const nextScreen = route.params?.next;
-
-    if (typeof nextScreen === "string") {
-      navigation.navigate(nextScreen, {
-        from: "Login",
-      });
-    } else {
-      navigation.navigate("Home");
-    }
-  }
+  const [register] = useRegisterMutation();
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    const response = await login({
-      variables: data,
-      update: (cache, { data }) => {
-        cache.writeQuery<MeQuery>({
-          query: MeDocument,
+    try {
+      const { username, email, password } = data;
+      const response = await register({
+        variables: {
           data: {
-            __typename: "Query",
-            me: data?.login.user,
+            username,
+            email,
+            password,
+            isMusician: false,
           },
-        });
-        cache.evict({ fieldName: "posts:{}" });
-      },
-    });
-    // └ has to match what defined in graphqlmutation
-    const gqlErrors = response.data?.login.errors;
-    if (gqlErrors) {
-      // setErrors(toErrorMap(response.data.login.errors));
-      const resultUserErrors = handleGraphqlErrors(
-        data,
-        gqlErrors,
-        setError as unknown as UseFormSetError<FieldValues>,
-        setGenericErrorMessage
-      );
+        },
+        update: (cache, { data }) => {
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              __typename: "Query",
+              me: data?.register.user,
+            },
+          });
+          cache.evict({ fieldName: "boxes" }); // TODO do I need this?
+        },
+      });
+      // └ has to match what defined in graphqlmutation
+
+      if (response) {
+        const gqlErrors = response.data?.register.errors;
+
+        const resultUserErrors = handleGraphqlErrors(
+          data,
+          gqlErrors,
+          setError as unknown as UseFormSetError<FieldValues>,
+          setGenericErrorMessage
+        );
+
+        const userId = response.data?.register.user?.id;
+        if (resultUserErrors.length === 0 && userId) {
+          navigation.navigate("Home");
+        }
+      }
+    } catch (error) {
+      console.log("error registering");
     }
   };
 
+  console.log("rhf errors", errors.email?.message);
+
+  // manuall set user in context
+  useEffect(() => {
+    if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
+  }, [meData?.me, setCurrentUser]);
+
+  useEffect(() => {
+    // redirect if already logged in
+    if (currentUser) {
+      // without the following line, push to / even when there is next param
+      const nextScreen = route.params?.next;
+
+      if (typeof nextScreen === "string") {
+        navigation.navigate(nextScreen, {
+          from: "Login",
+        });
+      } else {
+        navigation.navigate("Home");
+      }
+    }
+  }, []);
   return (
     <ScreenLayout>
-      <Text style={tw`text-white`}>email, phone, username</Text>
-      <Controller
-        control={control}
-        rules={{
-          required: true,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            autoCapitalize="none"
-            onChangeText={onChange}
-            value={value}
-            style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
-          />
-        )}
-        name={FormNames.USERNAME_OR_EMAIL_OR_PHONE_NUMBER}
-      />
-      {errors.usernameOrEmailOrPhoneNumber ? (
-        <Text>This is required.</Text>
-      ) : null}
+      <View>
+        <MyText>Username</MyText>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onBlur={onBlur}
+              autoCapitalize="none"
+              onChangeText={onChange}
+              value={value}
+              style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            />
+          )}
+          name={FormNames.USERNAME}
+        />
 
-      <Text style={tw`text-white`}>Password</Text>
+        {errors.username ? <MyText>This is required.</MyText> : null}
+      </View>
 
-      <Controller
-        control={control}
-        rules={{
-          maxLength: 100,
-        }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            onBlur={onBlur}
-            onChangeText={onChange}
-            autoCapitalize="none"
-            value={value}
-            style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
-          />
-        )}
-        name={FormNames.PASSWORD}
-      />
-      {errors.password && <Text>This is required.</Text>}
+      <View>
+        <MyText>Email</MyText>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onBlur={onBlur}
+              autoCapitalize="none"
+              onChangeText={onChange}
+              value={value}
+              style={tw`bg-white w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            />
+          )}
+          name={FormNames.EMAIL}
+        />
+        {errors.email ? (
+          <Text style={tw`text-grey-0`}>{errors.email?.message}</Text>
+        ) : null}
+      </View>
+
+      <View>
+        <MyText>Password</MyText>
+
+        <Controller
+          control={control}
+          rules={{
+            maxLength: 100,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onBlur={onBlur}
+              onChangeText={onChange}
+              autoCapitalize="none"
+              value={value}
+              style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            />
+          )}
+          name={FormNames.PASSWORD}
+        />
+        {errors.password ? <MyText>This is required.</MyText> : null}
+      </View>
+
+      <View>
+        <MyText>Confirm Password</MyText>
+
+        <Controller
+          control={control}
+          rules={{
+            maxLength: 100,
+            validate: (val: string) => {
+              if (watch("password") != val) {
+                return "Your passwords do no match";
+              }
+            },
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              onBlur={onBlur}
+              onChangeText={onChange}
+              autoCapitalize="none"
+              value={value}
+              style={tw`bg-white  w-3/4 h-8 p-2 rounded-md m-auto my-2`}
+            />
+          )}
+          name={FormNames.CONFIRM_PASSWORD}
+        />
+        {errors.confirmPassword && <MyText>Password does not match.</MyText>}
+      </View>
 
       <View>
         <Button label="Create account" onPress={handleSubmit(onSubmit)} />

@@ -10,14 +10,14 @@ class UsernamePasswordInput {
   @Field()
   email: string;
 
-  @Field()
-  phoneNumber: string;
+  // @Field()
+  // phoneNumber: string;
 
   @Field({ nullable: true })
   password: string;
 
   @Field({ nullable: true })
-  isCreator?: boolean;
+  isMusician?: boolean;
 }
 
 export default UsernamePasswordInput;

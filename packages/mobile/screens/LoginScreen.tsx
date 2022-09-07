@@ -68,8 +68,6 @@ const Login = ({ navigation }: Props) => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      console.log("---------------------");
-      console.log("trying to login");
       const response = await login({
         variables: data,
         update: (cache, { data }) => {

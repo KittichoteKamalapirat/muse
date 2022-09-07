@@ -8,8 +8,8 @@ class UserInput {
   @Field()
   email: string;
 
-  @Field()
-  phoneNumber: string;
+  // @Field()
+  // phoneNumber: string;
 
   @Field()
   about?: string;

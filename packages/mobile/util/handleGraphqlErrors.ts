@@ -31,12 +31,13 @@ function handleGraphqlErrors(
   setError: UseFormSetError<FieldValues>,
   setGenericErrorMessage: Dispatch<SetStateAction<string>>
 ) {
+  console.log("-------------------");
   const resultUserErrors = (errors || []) as UserErrorItem[];
 
   let newGenericErrorMessage = "";
 
   resultUserErrors.map(({ field, message }) => {
-    const camelKey = snakeToCamelCase(key as string);
+    const camelKey = snakeToCamelCase(field as string);
     const errorKey: string | null = Object.keys(data).find(
       (formField) => camelKey === formField
     )
@@ -44,7 +45,10 @@ function handleGraphqlErrors(
       : null;
     if (errorKey) {
       // Error is related to a specific field
+      console.log("error key", errorKey);
+      console.log("message", message);
       setError(errorKey, { message, type: "server" });
+      // setError("email", { message: "custom mesge" });
     } else {
       // Error is not related to a specific field and is generic
       newGenericErrorMessage += `${field} ${message}\n`;

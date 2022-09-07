@@ -5,7 +5,7 @@ export const validateRegister = (data: UsernamePasswordInput) => {
     return [
       {
         field: "email",
-        message: " invalid email",
+        message: "invalid email",
       },
     ];
   }

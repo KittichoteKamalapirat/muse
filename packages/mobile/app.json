@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "musebox",
-    "slug": "musebox",
+    "name": "jocky",
+    "slug": "jocky",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

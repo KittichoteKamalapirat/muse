@@ -21,6 +21,10 @@ class User extends BaseEntity {
   @Field()
   isGuest: boolean;
 
+  @Column({ default: false })
+  @Field()
+  isMusician: boolean;
+
   @Column({ unique: true })
   @Field()
   username!: string;
@@ -28,10 +32,6 @@ class User extends BaseEntity {
   @Column({ unique: true })
   @Field()
   email!: string;
-
-  @Column({ unique: true })
-  @Field()
-  phoneNumber!: string;
 
   @Column()
   @Field()
