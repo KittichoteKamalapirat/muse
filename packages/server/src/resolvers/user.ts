@@ -231,7 +231,7 @@ export class UserResolver {
         username: uuid,
         email: uuid,
         password: uuid,
-        avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.svg`,
+        avatar: `https://avatars.dicebear.com/api/open-peeps/${uuid}.png`,
       }).save();
 
       req.session.userId = user.id;

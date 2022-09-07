@@ -115,11 +115,9 @@ const RegisterScreen = ({ navigation }: Props) => {
         }
       }
     } catch (error) {
-      console.log("error registering");
+      console.log("⛔  error registering");
     }
   };
-
-  console.log("rhf errors", errors.email?.message);
 
   // manuall set user in context
   useEffect(() => {
@@ -140,7 +138,7 @@ const RegisterScreen = ({ navigation }: Props) => {
         navigation.navigate("Home");
       }
     }
-  }, []);
+  }, [currentUser]);
   return (
     <ScreenLayout>
       <View>

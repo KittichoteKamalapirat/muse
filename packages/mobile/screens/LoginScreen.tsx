@@ -51,6 +51,7 @@ const Login = ({ navigation }: Props) => {
   useSetUserContext();
   console.log("login screen");
   const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { data: meData, loading: loading } = useMeQuery();
   const [genericErrorMessage, setGenericErrorMessage] = useState("");
   const {
     control,
@@ -62,7 +63,6 @@ const Login = ({ navigation }: Props) => {
   });
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
-  const { data: meData, loading: loading } = useMeQuery();
 
   const [login] = useLoginMutation();
 
@@ -83,25 +83,29 @@ const Login = ({ navigation }: Props) => {
       });
 
       // └ has to match what defined in graphqlmutation
-      const gqlErrors = response.data?.login.errors;
-      if (gqlErrors) {
-        // setErrors(toErrorMap(response.data.login.errors));
+
+      if (response) {
+        const gqlErrors = response.data?.login.errors;
+
         const resultUserErrors = handleGraphqlErrors(
           data,
           gqlErrors,
           setError as unknown as UseFormSetError<FieldValues>,
           setGenericErrorMessage
         );
-      }
 
-      navigation.navigate("Home");
+        const userId = response.data?.login.user?.id;
+        if (resultUserErrors.length === 0 && userId) {
+          navigation.navigate("Home");
+        }
+      }
     } catch (error) {
-      console.log(" ⛔ catch block", error);
+      console.log("⛔ catch block", error);
     }
   };
 
+  // manuall set user in context
   useEffect(() => {
-    console.log("runnnnnn");
     if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
   }, [meData?.me, setCurrentUser]);
 
