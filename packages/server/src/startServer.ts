@@ -168,7 +168,7 @@ export const startServer = async () => {
       }), // so that we can access session because session is stick with request
       plugins: [
         // Proper shutdown for the HTTP server.
-        ApolloServerPluginDrainHttpServer({ httpServer }),
+        ApolloServerPluginDrainHttpServer({ httpServer }) as any,
         // Proper shutdown for the WebSocket server.
         {
           async serverWillStart() {

@@ -295,7 +295,7 @@ export class UserResolver {
       /^\d+$/.test(usernameOrEmailOrPhoneNumber) &&
       usernameOrEmailOrPhoneNumber.length === 9
     ) {
-      user = await User.findOne({ phoneNumber: usernameOrEmailOrPhoneNumber });
+      // user = await User.findOne({ phoneNumber: usernameOrEmailOrPhoneNumber });
     } else {
       user = await User.findOne({ username: usernameOrEmailOrPhoneNumber });
     }
