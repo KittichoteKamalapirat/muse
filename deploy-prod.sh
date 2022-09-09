@@ -12,3 +12,9 @@ docker build -t kittishane/jocky:$VERSION .
 docker push kittishane/jocky:$VERSION     
 
 ssh root@68.183.179.134 "docker pull kittishane/jocky:$VERSION && docker tag kittishane/jocky:$VERSION dokku/api:$VERSION && echo $PASSWORD | sudo -S dokku tags:deploy api $VERSION"
+# ssh root@139.59.110.114 "docker pull kittishane/jocky:$VERSION && docker tag kittishane/jocky:$VERSION dokku/test-api:$VERSION && echo $PASSWORD | sudo -S dokku tags:deploy test-api $VERSION"
+
+
+
+
+
