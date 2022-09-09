@@ -4,7 +4,7 @@
     "type": "postgres",
     "entities": ["dist/entities/*.js"],
     "migrations": ["dist/migrations/*.js"],
-    "logging": true,
+    "logging": false,
     "synchronize": false
   },
   {
@@ -17,7 +17,7 @@
     "seeds": ["dist/db/seeds/**/*{.js}"],
     "factories": ["dist/factories/**/*{.js}"],
     "logging": false,
-    "synchronize": true
+    "synchronize": false
   },
   {
     "name": "test",
@@ -28,6 +28,19 @@
     "dropSchema": true,
     "migrations": ["src/migrations/*.js"],
     "logging": false,
-    "synchronize": true
+    "synchronize": false
+  },
+  {
+    "name": "forMigrationOfRemoteProductionDb",
+    "type": "postgres",
+    "host": "68.183.179.134",
+    "port": "30303",
+    "username": "postgres",
+    "password": "32946651fa3a3d50a877224679989e47",
+    "database": "pizza",
+    "entities": ["dist/entities/*.js"],
+    "migrations": ["src/migrations/prod/*.ts"],
+    "logging": true,
+    "synchronize": false
   }
 ]
