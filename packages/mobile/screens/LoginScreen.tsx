@@ -23,7 +23,7 @@ import {
   User,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
-import { grey0, grey100, grey300 } from "../theme/style";
+import { grey0, grey100 } from "../theme/style";
 import handleGraphqlErrors from "../util/handleGraphqlErrors";
 import useSetUserContext from "../util/useSetUserContext";
 
@@ -134,8 +134,8 @@ const Login = ({ navigation }: Props) => {
 
   if (loading) {
     return (
-      <ScreenLayout>
-        <Text>loading...</Text>
+      <ScreenLayout alignItems="items-center">
+        <MyText>loading...</MyText>
       </ScreenLayout>
     );
   }

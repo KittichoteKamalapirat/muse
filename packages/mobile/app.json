@@ -9,14 +9,12 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#121212"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.kittishane.jocky"
@@ -37,8 +35,8 @@
     "extra": {
       "SPOTIFY_CLIENT_ID": "8a5aef0bf8874c639b18c37e625afa29",
       "SPOTIFY_CLIENT_SECRET": "e8cb16ae8d2a4ebe89454368137eaf3e",
-      "PUBLIC_SERVER_URL": "http://192.168.1.66:4000",
-      "PUBLIC_WS_SERVER_URL": "ws://192.168.1.66:4000",
+      "PUBLIC_SERVER_URL": "https://api.jocky.app",
+      "PUBLIC_WS_SERVER_URL": "ws://api.jocky.app",
       "eas": {
         "projectId": "e7d4f43c-394a-4cf6-8f42-5369f011921f"
       }

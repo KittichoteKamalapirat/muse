@@ -126,6 +126,14 @@ const RegisterScreen = ({ navigation }: Props) => {
     }
   };
 
+  if (loading) {
+    return (
+      <ScreenLayout alignItems="items-center">
+        <MyText>loading...</MyText>
+      </ScreenLayout>
+    );
+  }
+
   // manuall set user in context
   useEffect(() => {
     if (meData?.me && setCurrentUser) setCurrentUser(meData.me as User);
