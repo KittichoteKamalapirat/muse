@@ -28,6 +28,8 @@ import { createTypeORMConn } from "./utils/createTypeORMConn";
 import { upvoteLoader } from "./utils/createUpvoteLoader";
 import { createUserLoader } from "./utils/createUserLoader";
 
+console.log("node_env", process.env.NODE_ENV);
+
 if (process.env.NODE_ENV) {
   switch (process.env.NODE_ENV) {
     case "test":

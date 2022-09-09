@@ -6,8 +6,7 @@ COPY package.json ./
 COPY ./packages/server/package.json ./packages/server/
 COPY yarn.lock ./
 
-# so it doesn't error There appears to be trouble with your network connection. Retrying...
-#100,000 seconds                                                                                                                                                                                      
+#add 100,000 seconds so it doesn't error There appears to be trouble with your network connection. Retrying...                                                                                                                                                                                      
 RUN yarn install --network-timeout 100000 
 
 COPY ./packages/server ./packages/server
