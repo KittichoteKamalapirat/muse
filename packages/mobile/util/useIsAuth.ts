@@ -5,7 +5,6 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { UserContext } from "../context/UserContext";
 
 export const useIsAuth = () => {
-  console.log("useIsAuth");
   const navigation: NavigationScreenProp<any, any> = useNavigation();
   const { data: meData, loading: meLoading, error: meError } = useMeQuery();
   const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -30,7 +29,9 @@ export const useIsAuth = () => {
           from: "Login",
         });
       } else {
-        navigation.navigate("Auth");
+        navigation.navigate("HomeStack", {
+          screen: "Auth",
+        });
       }
     }
   }, [currentUser]);

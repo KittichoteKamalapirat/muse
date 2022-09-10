@@ -122,6 +122,8 @@ export class BoxResolver {
     @Ctx() { req }: MyContext
   ): Promise<Box | Error> {
     try {
+      console.log("create box input", input);
+      console.log("req session", req.session);
       const address = await Address.create({
         name: input.addressName,
       }).save();

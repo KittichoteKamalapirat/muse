@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
@@ -6,10 +6,10 @@ import { NavigationScreenProp } from "react-navigation";
 import Button from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
-import { UserContext } from "../context/UserContext";
 import {
   BoxTypeEnum,
   useCreateBoxMutation,
+  useMeQuery,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import { grey0, grey100, grey500 } from "../theme/style";
@@ -53,9 +53,11 @@ const defaultValues: FormValues = {
 const CreateBoxScreen = ({ navigation }: Props) => {
   useIsAuth();
   const [createBox] = useCreateBoxMutation();
-  const { currentUser } = useContext(UserContext);
 
-  console.log("current user in create box screen", currentUser);
+  const { data: meData, loading: meLoading, error: meError } = useMeQuery();
+
+  console.log("meData", meData);
+
   const {
     control,
     handleSubmit,

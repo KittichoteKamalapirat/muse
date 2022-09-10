@@ -99,7 +99,7 @@ export const startServer = async () => {
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true, // so that Javascript's front end can't access cookie
-      sameSite: "lax", // csrf
+      sameSite: "none", // so mobile cann access? (lax => only same site and works in dev (both localhost))
       secure: IS_PROD, // cookie onl works in https
       domain: IS_PROD ? ".muse.com" : undefined, // no need if in development
     },

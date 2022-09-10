@@ -5,7 +5,6 @@ import { useMeQuery, User } from "../graphql/generated/graphql";
 const useSetUserContext = () => {
   console.log("user set user context");
   const [currentUser, setCurrentUser] = useState<User | null>();
-  console.log("curreent user in useSetUserContent", currentUser);
   const { data, loading } = useMeQuery(); // cache is updated when logged in
   const value = useMemo(
     () => ({ currentUser, setCurrentUser }),
@@ -14,7 +13,6 @@ const useSetUserContext = () => {
 
   const getData = async () => {
     try {
-      console.log("getData is called");
       const user = await AsyncStorage.getItem("user");
       let userObj = null;
 
@@ -32,7 +30,6 @@ const useSetUserContext = () => {
   };
 
   const storeData = async (value: User | null | undefined) => {
-    console.log("storeData is called");
     try {
       const jsonValue = JSON.stringify(value);
       // set data for persist storage
@@ -46,13 +43,11 @@ const useSetUserContext = () => {
 
   // retrieve item
   useEffect(() => {
-    console.log("getData useEffect");
     getData();
   }, []);
 
   // set Item
   useEffect(() => {
-    console.log("-----triggered-------");
     if (data?.me) storeData(data.me as User);
   }, [currentUser, data?.me]);
 
