@@ -101,7 +101,7 @@ export const startServer = async () => {
       httpOnly: true, // so that Javascript's front end can't access cookie
       sameSite: "none", // so mobile cann access? (lax => only same site and works in dev (both localhost))
       secure: IS_PROD, // cookie onl works in https
-      domain: IS_PROD ? ".muse.com" : undefined, // no need if in development
+      // domain: IS_PROD ? ".jocky.com" : undefined, // no need if in development
     },
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
