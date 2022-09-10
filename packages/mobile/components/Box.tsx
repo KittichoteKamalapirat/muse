@@ -2,7 +2,12 @@ import { gql } from "@apollo/client";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import moment from "moment";
 import React from "react";
-import { ActivityIndicator, ScrollView, View } from "react-native";
+import {
+  ActivityIndicator,
+  RefreshControl,
+  ScrollView,
+  View,
+} from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button from "../components/Buttons/Button";
 import { Container } from "../components/containers/Container";
@@ -18,6 +23,8 @@ import {
   useSongRequestsSubsSubscription,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
+import { grey0 } from "../theme/style";
+import { useRefreshControl } from "../util/useRefreshControl";
 
 const Box = () => {
   const route: RouteProp<{ params: { boxId: string } }> = useRoute();
@@ -29,10 +36,13 @@ const Box = () => {
     data: songRequestsData,
     loading: songRequestsLoading,
     error: songRequestsError,
+    refetch,
   } = useSongRequestsQuery({
     variables: { boxId },
     fetchPolicy: "cache-and-network",
   });
+
+  const { refreshing, handleRefresh } = useRefreshControl(refetch);
 
   const {
     data: songRequestsSubsData,
@@ -41,6 +51,10 @@ const Box = () => {
   } = useSongRequestsSubsSubscription({
     variables: { boxId },
   });
+
+  console.log("songRequestsSubsData", songRequestsSubsData);
+  console.log("songRequestsSubsLoading", songRequestsSubsLoading);
+  console.log("songRequestsSubsError", songRequestsSubsError);
 
   const {
     data: boxData,
@@ -76,7 +90,19 @@ const Box = () => {
       <Container>
         {/* Box Details */}
         <View style={{ flex: 1 }}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                colors={[grey0]} // android
+                progressBackgroundColor={grey0} // android
+                tintColor={grey0} //ios
+                title="Refreshing..." //ios
+                titleColor={grey0} //ios
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+              />
+            }
+          >
             <View>
               <MyText size="text-2xl" weight="font-bold" extraStyle="my-2">
                 {box?.address?.name}

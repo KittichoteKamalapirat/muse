@@ -174,8 +174,10 @@ export const startServer = async () => {
         // Proper shutdown for the WebSocket server.
         {
           async serverWillStart() {
+            console.log("web socket server will start");
             return {
               async drainServer() {
+                console.log("drain");
                 await serverCleanup.dispose();
               },
             };

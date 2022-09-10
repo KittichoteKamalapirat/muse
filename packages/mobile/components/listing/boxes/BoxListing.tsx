@@ -14,6 +14,7 @@ import { Box, useBoxesQuery } from "../../../graphql/generated/graphql";
 import tw from "../../../lib/tailwind";
 import { grey0 } from "../../../theme/style";
 import { debounce } from "../../../util/debounce";
+import { useRefreshControl } from "../../../util/useRefreshControl";
 import Button from "../../Buttons/Button";
 import Error from "../../layouts/Error";
 import MyText from "../../MyTexts/MyText";
@@ -28,7 +29,7 @@ const BoxListing = () => {
   // HOOKS
   const navigation = useNavigation();
   const route = useRoute();
-  const [refreshing, setRefreshing] = React.useState(false);
+
   const [matchedBoxes, setMatchedBoxes] = useState<Box[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const {
@@ -37,6 +38,8 @@ const BoxListing = () => {
     error: boxesError,
     refetch,
   } = useBoxesQuery();
+
+  const { refreshing, handleRefresh } = useRefreshControl(refetch);
 
   // DESTRUCTURE AND CONSTANTS
   const boxes = boxesData?.boxes;
@@ -53,13 +56,6 @@ const BoxListing = () => {
       (box) => !moment(box.startTime).add(-1, "days").isSame(new Date(), "day")
     )
     .filter((box) => !moment(box.startTime).isSame(new Date(), "day"));
-
-  // FUNCTIONS
-  const handleRefresh = React.useCallback(async () => {
-    setRefreshing(true);
-    const response = await refetch();
-    if (response) setRefreshing(false);
-  }, []);
 
   const updateDebounceText = debounce((inputQeury: string) => {
     const newMatched = matchedBoxes

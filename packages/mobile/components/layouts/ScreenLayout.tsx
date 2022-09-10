@@ -1,5 +1,5 @@
-import React, { ReactNode } from "react";
-import { SafeAreaView } from "react-native";
+import React, { ReactNode, useEffect } from "react";
+import { LogBox, SafeAreaView } from "react-native";
 import tw from "../../lib/tailwind";
 
 interface Props {
@@ -26,6 +26,10 @@ const ScreenLayout = ({
   alignItems = "",
   extraStyle = "",
 }: Props) => {
+  useEffect(() => {
+    LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+  }, []);
+
   return (
     <SafeAreaView
       style={tw`flex-1 h-full w-full bg-grey-900  ${justifyContent} ${alignItems} ${extraStyle}`}
