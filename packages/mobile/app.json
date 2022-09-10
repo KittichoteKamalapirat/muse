@@ -2,7 +2,7 @@
   "expo": {
     "name": "jocky",
     "slug": "jocky",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -36,7 +36,7 @@
       "SPOTIFY_CLIENT_ID": "8a5aef0bf8874c639b18c37e625afa29",
       "SPOTIFY_CLIENT_SECRET": "e8cb16ae8d2a4ebe89454368137eaf3e",
       "PUBLIC_SERVER_URL": "http://api.jocky.app",
-      "PUBLIC_WS_SERVER_URL": "ws://api.jocky.app but this don't work, can't use ip address since it can't be access from outside",
+      "PUBLIC_WS_SERVER_URL": "wss://api.jocky.app",
       "eas": {
         "projectId": "e7d4f43c-394a-4cf6-8f42-5369f011921f"
       }

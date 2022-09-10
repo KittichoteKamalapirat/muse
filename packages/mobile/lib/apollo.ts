@@ -8,6 +8,8 @@ const httpLink = new HttpLink({
   uri: urlResolver.graphql(),
 });
 
+console.log("--------------------------------------------------");
+console.log("socket endpoint", urlResolver.graphqlSocket());
 const wsLink = new GraphQLWsLink(
   createClient({
     url: urlResolver.graphqlSocket(),
