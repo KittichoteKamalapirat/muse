@@ -12,12 +12,6 @@ export const useIsAuth = () => {
 
   const route: RouteProp<{ params: { next: string | null } }> = useRoute();
 
-  console.log("meData", meData);
-  console.log("meLoading", meLoading);
-  console.log("meError", meError);
-  console.log("currentUser", currentUser);
-  console.log("setCurrentUser", setCurrentUser);
-
   // manuall set user in context
   useEffect(() => {
     console.log("hook 1");
@@ -36,9 +30,8 @@ export const useIsAuth = () => {
           from: "Login",
         });
       } else {
-        navigation.navigate("Home");
+        navigation.navigate("Auth");
       }
     }
-    console.log("hook 2 after");
   }, [currentUser]);
 };

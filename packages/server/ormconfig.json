@@ -17,7 +17,7 @@
     "seeds": ["dist/db/seeds/**/*{.js}"],
     "factories": ["dist/factories/**/*{.js}"],
     "logging": false,
-    "synchronize": false
+    "synchronize": true
   },
   {
     "name": "test",

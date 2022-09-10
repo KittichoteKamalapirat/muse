@@ -52,7 +52,6 @@ const defaultValues: FormValues = {
 };
 const Login = ({ navigation }: Props) => {
   useSetUserContext();
-  console.log("login screen");
 
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const { data: meData, loading: loading } = useMeQuery();
@@ -92,6 +91,8 @@ const Login = ({ navigation }: Props) => {
       });
 
       // └ has to match what defined in graphqlmutation
+
+      console.log("response log in", response);
 
       if (response) {
         const gqlErrors = response.data?.login.errors;

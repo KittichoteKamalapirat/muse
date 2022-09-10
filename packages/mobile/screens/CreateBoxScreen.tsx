@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Text, TextInput, View } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
@@ -6,12 +6,14 @@ import { NavigationScreenProp } from "react-navigation";
 import Button from "../components/Buttons/Button";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
+import { UserContext } from "../context/UserContext";
 import {
   BoxTypeEnum,
   useCreateBoxMutation,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import { grey0, grey100, grey500 } from "../theme/style";
+import { useIsAuth } from "../util/useIsAuth";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -49,7 +51,11 @@ const defaultValues: FormValues = {
   type: null,
 };
 const CreateBoxScreen = ({ navigation }: Props) => {
+  useIsAuth();
   const [createBox] = useCreateBoxMutation();
+  const { currentUser } = useContext(UserContext);
+
+  console.log("current user in create box screen", currentUser);
   const {
     control,
     handleSubmit,
@@ -74,7 +80,10 @@ const CreateBoxScreen = ({ navigation }: Props) => {
       if (!response.errors)
         navigation.navigate("MyBoxesStack", {
           screen: "MyBox",
-          params: { boxId: response.data?.createBox.id },
+          params: {
+            boxId: response.data?.createBox.id,
+            name: response.data?.createBox.name,
+          },
         });
     } catch (error) {
       console.log("error", error);

@@ -23,7 +23,14 @@ const MyBoxesStackScreen = () => {
         component={JoinedBoxesScreen}
         options={{ title: "My events" }}
       />
-      <MyBoxesStack.Screen name="MyBox" component={JoinedBoxScreen} />
+      <MyBoxesStack.Screen
+        name="MyBox"
+        component={JoinedBoxScreen}
+        options={({ route }) => ({
+          title: route.params?.name,
+          headerBackVisible: true,
+        })}
+      />
       <MyBoxesStack.Screen name="Search" component={SearchScreen} />
     </MyBoxesStack.Navigator>
   );

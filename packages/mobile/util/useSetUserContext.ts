@@ -37,11 +37,8 @@ const useSetUserContext = () => {
       const jsonValue = JSON.stringify(value);
       // set data for persist storage
       await AsyncStorage.setItem("user", jsonValue);
-
-      // if (data?.me) {
-      //   // set data for UserContext
-      //   setCurrentUser(data?.me as User); // IMPORTANT this was set again when logout
-      // }
+      // set data for UserContext
+      setCurrentUser(value); // IMPORTANT this was set again when logout
     } catch (e) {
       console.log("error setting current user");
     }
@@ -55,7 +52,8 @@ const useSetUserContext = () => {
 
   // set Item
   useEffect(() => {
-    storeData(currentUser);
+    console.log("-----triggered-------");
+    if (data?.me) storeData(data.me as User);
   }, [currentUser, data?.me]);
 
   // if (loading) return <ActivityIndicator />;
