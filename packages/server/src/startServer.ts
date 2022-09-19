@@ -1,7 +1,7 @@
-import {
-  ApolloServerPluginDrainHttpServer,
-  ApolloServerPluginLandingPageLocalDefault,
-} from "apollo-server-core";
+// import {
+//   ApolloServerPluginDrainHttpServer,
+//   ApolloServerPluginLandingPageLocalDefault,
+// } from "apollo-server-core";
 /* eslint-disable no-console */
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
@@ -99,7 +99,9 @@ export const startServer = async () => {
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 365 * 10, // 10 years
       httpOnly: true, // so that Javascript's front end can't access cookie
-      sameSite: "none", // so mobile cann access? (lax => only same site and works in dev (both localhost))
+      // TODO if "none" => cookie is passed in socket subscription session but not in rest => because none requires secure? and localhost is not secure => that's why it works in production?
+      // TODO if "lax" => vice versa
+      sameSite: "none", // so mobile cann access? (lax => only same site and works in dev (both localhost)) !IMPORTANT
       secure: IS_PROD, // cookie onl works in https
       // domain: IS_PROD ? ".jocky.com" : undefined, // no need if in development
     },
@@ -156,35 +158,31 @@ export const startServer = async () => {
     );
 
     const apolloServer = new ApolloServer({
-      // playground: {
-      //   subscriptionEndpoint: "ws://localhost:4000/subscriptions",
-      // },
       schema,
       context: ({ req, res }): MyContext => ({
         req,
         res,
         redis,
         userLoader: createUserLoader(),
-        // upvoteLoader: createUpvoteLoader(),
         upvoteLoader: upvoteLoader(),
       }), // so that we can access session because session is stick with request
-      plugins: [
-        // Proper shutdown for the HTTP server.
-        ApolloServerPluginDrainHttpServer({ httpServer }) as any,
-        // Proper shutdown for the WebSocket server.
-        {
-          async serverWillStart() {
-            console.log("web socket server will start");
-            return {
-              async drainServer() {
-                console.log("drain");
-                await serverCleanup.dispose();
-              },
-            };
-          },
-        },
-        ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-      ],
+      // plugins: [
+      //   // Proper shutdown for the HTTP server.
+      //   ApolloServerPluginDrainHttpServer({ httpServer }) as any,
+      //   // Proper shutdown for the WebSocket server.
+      //   {
+      //     async serverWillStart() {
+      //       console.log("web socket server will start");
+      //       return {
+      //         async drainServer() {
+      //           console.log("drain");
+      //           await serverCleanup.dispose();
+      //         },
+      //       };
+      //     },
+      //   },
+      //   ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      // ],
       subscriptions: {
         path: "/graphql",
       },

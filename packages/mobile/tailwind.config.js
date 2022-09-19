@@ -4,6 +4,7 @@ const primaryColor = "#FDAE5B";
 const primaryHoveredColor = "#FEBA72";
 const green = "#57B65F";
 const blue = "#4E97F3";
+const red = "#FF2D2D";
 
 // white grey and black
 const grey0 = "#FFFFFF";
@@ -166,6 +167,7 @@ module.exports = {
         "bg-color": bgColor,
         green: green,
         blue: blue,
+        red: red,
       },
     },
   },

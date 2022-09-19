@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import { ApolloProvider } from "@apollo/client";
 import {
   createNavigationContainerRef,
@@ -11,7 +12,12 @@ import { SpotifyToken, User } from "./graphql/generated/graphql";
 import { apolloClient } from "./lib/apollo";
 import TabNavigator from "./navigations/TabNavigator";
 import useSetUserContext from "./util/useSetUserContext";
+import { clearAsyncStorage } from "./util/clearAsyncStorage";
 
+console.log("server", Constants.manifest?.extra?.PUBLIC_SERVER_URL);
+console.log("server socket", Constants.manifest?.extra?.PUBLIC_WS_SERVER_URL);
+
+clearAsyncStorage();
 export default function App() {
   return (
     <ApolloProvider client={apolloClient}>

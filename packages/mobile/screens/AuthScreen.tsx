@@ -21,7 +21,7 @@ interface Props {
 }
 
 const AuthScreen = ({ navigation }: Props) => {
-  useIsAuth();
+  useIsAuth(); // !IMPORTTANT need this to set cookie when meQuery changes
 
   const [guestLogin] = useGuestLoginMutation();
 

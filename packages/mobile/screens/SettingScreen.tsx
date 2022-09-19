@@ -1,14 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext } from "react";
-import { Image, View } from "react-native";
+import { Alert, Image, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
 import { Container } from "../components/containers/Container";
 import ScreenLayout from "../components/layouts/ScreenLayout";
 import MyText from "../components/MyTexts/MyText";
 import { UserContext } from "../context/UserContext";
-import { useLogoutMutation } from "../graphql/generated/graphql";
+import {
+  useDeleteUserMutation,
+  useLogoutMutation,
+} from "../graphql/generated/graphql";
 import { apolloClient } from "../lib/apollo";
 import tw from "../lib/tailwind";
 
@@ -23,11 +26,40 @@ const SettingScreen = ({ navigation }: Props) => {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   console.log("current user in setting", currentUser);
   const [logout, { loading: logoutLoading }] = useLogoutMutation();
+  const [deleteUser] = useDeleteUserMutation();
+
+  const createTwoButtonAlert = () =>
+    Alert.alert("Are you sure?", "This action cannot be undone", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => handleDeleteUser(),
+      },
+    ]);
+
+  const handleDeleteUser = async () => {
+    try {
+      setCurrentUser(null); //remove currentUser in Context which trigger useEffect
+      await AsyncStorage.setItem("user", "null"); // remove persisted data
+      const result = await deleteUser({
+        update: (cache) => {
+          cache.evict({ fieldName: "me" }); // TODO do I need this?
+        },
+      }); //redis removed -> meQuery wouldn't work now
+      const cacheResult = await apolloClient.resetStore();
+      console.log("-------result-------", result.data);
+      if (result.data?.deleteUser) navigation.navigate("Auth");
+    } catch (error) {
+      console.log("error deleting user", error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
-      console.log("-----------------------------------");
-      console.log("handle log out");
       setCurrentUser(null); //remove currentUser in Context which trigger useEffect
       await AsyncStorage.setItem("user", "null"); // remove persisted data
       console.log("current user in handle logout 1", currentUser);
@@ -56,17 +88,34 @@ const SettingScreen = ({ navigation }: Props) => {
           />
           <View>
             <MyText fontColor="text-grey-300">
-              username: <MyText>{currentUser?.username}</MyText>
+              username:{" "}
+              <MyText>
+                {currentUser?.isGuest
+                  ? `Guest-${currentUser.username.slice(0, 6)}`
+                  : currentUser?.username}
+              </MyText>
             </MyText>
 
             <MyText fontColor="text-grey-300" extraStyle="mt-2">
-              email: <MyText>{currentUser?.email}</MyText>
+              email:{" "}
+              <MyText>
+                {currentUser?.isGuest ? "No email" : currentUser?.email}
+              </MyText>
             </MyText>
           </View>
         </View>
       </View>
       <View style={tw`mt-4`}>
         <Button label="Logout" onPress={handleLogout} type={ButtonTypes.TEXT} />
+      </View>
+
+      <View style={tw`mt-4`}>
+        <Button
+          label="Delete Account"
+          onPress={createTwoButtonAlert}
+          type={ButtonTypes.TEXT}
+          fontColor="text-red"
+        />
       </View>
     </View>
   );

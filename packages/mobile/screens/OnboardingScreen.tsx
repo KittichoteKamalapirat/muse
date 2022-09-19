@@ -17,8 +17,14 @@ import screenImage2 from "../assets/images/onboard-screen-2.jpg";
 import screenImage3 from "../assets/images/onboard-screen-3.jpg";
 import Button, { ButtonTypes } from "../components/Buttons/Button";
 import MyText from "../components/MyTexts/MyText";
+import {
+  MeDocument,
+  MeQuery,
+  useGuestLoginMutation,
+} from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
 import { bgColor, grey0, grey500, primaryColor } from "../theme/style";
+import { useIsAuth } from "../util/useIsAuth";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -69,6 +75,36 @@ interface SlideProps {
   navigation: NavigationScreenProp<any, any>;
 }
 const Slide = ({ item, navigation }: SlideProps) => {
+  useIsAuth(); // !IMPORTTANT need this to set cookie when meQuery changes
+  const [guestLogin] = useGuestLoginMutation();
+
+  const handleGuestLogin = async () => {
+    try {
+      const response = await guestLogin({
+        update: (cache, { data }) => {
+          cache.writeQuery<MeQuery>({
+            query: MeDocument,
+            data: {
+              __typename: "Query",
+              me: data?.guestLogin.user,
+            },
+          });
+          cache.evict({ fieldName: "boxes" }); // TODO do I need this?
+        },
+      });
+      // └ has to match what defined in graphqlmutation
+
+      if (response) {
+        const userId = response.data?.guestLogin.user?.id;
+        if (userId) {
+          navigation.navigate("Home");
+        }
+      }
+    } catch (error) {
+      console.log("⛔  error registering");
+    }
+  };
+
   if (item.id === "4")
     return (
       <View
@@ -118,6 +154,7 @@ const Slide = ({ item, navigation }: SlideProps) => {
               label="Log in as Guest"
               type={ButtonTypes.TEXT}
               fontColor="text-grey-0"
+              onPress={handleGuestLogin}
             />
           </View>
 

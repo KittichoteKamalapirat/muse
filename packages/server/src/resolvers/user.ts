@@ -135,11 +135,14 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
     // Destructure the parameter array to req
+    console.log("req", req);
     if (!req.session.userId) {
       return null;
     }
 
     // no need to await, why?
+
+    console.log("req", req.session.userId);
     return User.findOne(req.session.userId);
   }
 
@@ -235,6 +238,7 @@ export class UserResolver {
       }).save();
 
       req.session.userId = user.id;
+
       return { user };
     } catch (error) {
       console.log("err", error);
@@ -380,6 +384,39 @@ export class UserResolver {
     } catch (error) {
       rollbar.log(error);
       return Error("cannot update avatar");
+    }
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Boolean)
+  async deleteUser(@Ctx() { req, res }: MyContext): Promise<Boolean> {
+    try {
+      console.log("1");
+      const userId = req.session.userId;
+      console.log("user", req.session.userId);
+      await User.delete({ id: userId });
+      console.log("3");
+
+      return new Promise((resolve) => {
+        // remove the session in redis`
+        req.session.destroy((err) => {
+          res.clearCookie(COOKIE_NAME, {
+            // maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+            httpOnly: true,
+            sameSite: "lax",
+            secure: IS_PROD,
+          });
+          if (err) {
+            console.log(err);
+            resolve(false);
+            return;
+          }
+          resolve(true); // logged out
+        });
+      });
+    } catch (error) {
+      console.log("error", error);
+      return false;
     }
   }
 }
