@@ -1,6 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { UseFormSetError, FieldValues } from "react-hook-form";
 import { Image, View } from "react-native";
 import { NavigationScreenProp } from "react-navigation";
 import logo from "../assets/images/logo.png";
@@ -13,7 +11,6 @@ import {
   useGuestLoginMutation,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
-import handleGraphqlErrors from "../util/handleGraphqlErrors";
 import { useIsAuth } from "../util/useIsAuth";
 
 interface Props {

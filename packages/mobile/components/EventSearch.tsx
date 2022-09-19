@@ -1,8 +1,7 @@
-import { View, Text } from "react-native";
 import React, { useState } from "react";
-import spotifySearch from "../third-parties/spotifySearch";
-import SearchBar from "./SearchBar";
+import { View } from "react-native";
 import { debounce } from "../util/debounce";
+import SearchBar from "./SearchBar";
 
 const EventSearch = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");

@@ -23,7 +23,7 @@ import {
   useGuestLoginMutation,
 } from "../graphql/generated/graphql";
 import tw from "../lib/tailwind";
-import { bgColor, grey0, grey500, primaryColor } from "../theme/style";
+import { bgColor, grey0, grey500 } from "../theme/style";
 import { useIsAuth } from "../util/useIsAuth";
 
 interface Props {
