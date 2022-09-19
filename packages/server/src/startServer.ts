@@ -1,7 +1,8 @@
-// import {
-//   ApolloServerPluginDrainHttpServer,
-//   ApolloServerPluginLandingPageLocalDefault,
-// } from "apollo-server-core";
+// yarn add graphql-ws ws @graphql-tools/schema apollo-server-core
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageLocalDefault,
+} from "apollo-server-core";
 /* eslint-disable no-console */
 import { ApolloServer } from "apollo-server-express";
 import connectRedis from "connect-redis";
@@ -166,23 +167,23 @@ export const startServer = async () => {
         userLoader: createUserLoader(),
         upvoteLoader: upvoteLoader(),
       }), // so that we can access session because session is stick with request
-      // plugins: [
-      //   // Proper shutdown for the HTTP server.
-      //   ApolloServerPluginDrainHttpServer({ httpServer }) as any,
-      //   // Proper shutdown for the WebSocket server.
-      //   {
-      //     async serverWillStart() {
-      //       console.log("web socket server will start");
-      //       return {
-      //         async drainServer() {
-      //           console.log("drain");
-      //           await serverCleanup.dispose();
-      //         },
-      //       };
-      //     },
-      //   },
-      //   ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-      // ],
+      plugins: [
+        // Proper shutdown for the HTTP server.
+        ApolloServerPluginDrainHttpServer({ httpServer }) as any,
+        // Proper shutdown for the WebSocket server.
+        {
+          async serverWillStart() {
+            console.log("web socket server will start");
+            return {
+              async drainServer() {
+                console.log("drain");
+                await serverCleanup.dispose();
+              },
+            };
+          },
+        },
+        ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      ],
       subscriptions: {
         path: "/graphql",
       },
