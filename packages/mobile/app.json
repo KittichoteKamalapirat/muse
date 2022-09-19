@@ -2,7 +2,7 @@
   "expo": {
     "name": "jocky",
     "slug": "jocky",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -35,10 +35,11 @@
     "extra": {
       "SPOTIFY_CLIENT_ID": "8a5aef0bf8874c639b18c37e625afa29",
       "SPOTIFY_CLIENT_SECRET": "e8cb16ae8d2a4ebe89454368137eaf3e",
-      "PUBLIC_SERVER_URLx": "http://api.jocky.app",
-      "PUBLIC_SERVER_URL": "http://localhost:4000",
-
+      "PUBLIC_SERVER_URL": "https://api.jocky.app",
+      "PUBLIC_SERVER_URLx": "http://localhost:4000",
       "PUBLIC_WS_SERVER_URL": "wss://api.jocky.app",
+      "comment": "web socket has to be wss somehow",
+      "PUBLIC_WS_SERVER_URLx": "192.168.1.66 not sure do I need http",
       "eas": {
         "projectId": "e7d4f43c-394a-4cf6-8f42-5369f011921f"
       }
